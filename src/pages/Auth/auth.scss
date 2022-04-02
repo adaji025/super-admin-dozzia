@@ -1,0 +1,79 @@
+.auth-page {
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  .auth-main {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding-top: 100px;
+    @media only screen and (max-width: 780px) {
+      flex-direction: column;
+      padding-top: 50px;
+    }
+    &.center {
+      justify-content: center;
+    }
+    .a-m-left {
+      width: 37%;
+      @media only screen and (max-width: 780px) {
+        display: none;
+      }
+
+      div {
+        font-size: 45px;
+        font-weight: 500;
+        @media only screen and (max-width: 1000px) {
+          font-size: 40px;
+        }
+      }
+    }
+
+    .a-m-right {
+      width: 50%;
+      padding: 80px 20px;
+      max-width: 450px;
+      border-radius: 35px;
+      position: relative;
+      z-index: 11;
+      @media only screen and (max-width: 780px) {
+        width: calc(100% - 40px);
+      }
+
+      .ellipse {
+        position: absolute;
+        bottom: -100px;
+        right: -100px;
+        height: 250px;
+        width: auto;
+        // z-index: 0;
+        transform: rotate(90deg);
+      }
+
+      .form-title {
+        text-align: center;
+        font-size: 38px;
+        font-weight: 500;
+        margin-bottom: 20px;
+      }
+
+      .form-desc {
+        text-align: center;
+        max-width: 350px;
+        margin: 0 auto;
+        margin-bottom: 40px;
+        font-size: 14px;
+        opacity: 0.7;
+      }
+
+      a {
+        text-decoration: none;
+        color: unset;
+      }
+    }
+  }
+}

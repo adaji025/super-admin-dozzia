@@ -1,0 +1,19 @@
+.auth-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 30px;
+  @media only screen and (max-width: 780px) {
+    padding: 10px 20px;
+  }
+}
+
+.app-logo {
+  a {
+    font-size: 30px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    color: unset;
+  }
+}
