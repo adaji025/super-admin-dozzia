@@ -54,7 +54,7 @@ function App() {
           <Paper
             style={{
               borderRadius: "0px",
-              background: colorScheme === "dark" ? "#121212" : "#ffffff",
+              background: colorScheme === "dark" ? "#121212" : "#E5E5E5",
               color: colorScheme === "dark" ? "white" : "black",
             }}
           >
@@ -64,7 +64,7 @@ function App() {
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route
                 path="/*"
-                element={"123" ? <LoggedinContainer /> : <Signin />}
+                element={"ww" ? <LoggedinContainer /> : <Signin />}
               />
             </Routes>
           </Paper>
