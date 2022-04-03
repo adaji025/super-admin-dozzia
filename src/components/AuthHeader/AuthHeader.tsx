@@ -11,7 +11,9 @@ const AuthHeader = () => {
   return (
     <div
       className="auth-header"
-      style={{ borderBottom: `1px solid ${dark ? "#2b2f32" : "#e9ecef"}` }}
+      style={{
+        backgroundColor: dark ? "#070707" : "#f7f7f7",
+      }}
     >
       <div className="app-logo">
         <Link to="/">
