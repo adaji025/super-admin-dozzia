@@ -49,7 +49,7 @@ const Signin = () => {
               <span className="green-text">
                 <Typewriter
                   options={{
-                    strings: ["Students", "Teachers", "Curriculum"],
+                    strings: ["students", "teachers", "curriculum"],
                     autoStart: true,
                     loop: true,
                   }}

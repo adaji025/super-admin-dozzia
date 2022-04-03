@@ -20,6 +20,10 @@
     }
     .a-m-left {
       width: 37%;
+      min-width: 500px;
+      @media only screen and (max-width: 1000px) {
+        min-width: unset;
+      }
       @media only screen and (max-width: 780px) {
         display: none;
       }
