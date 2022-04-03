@@ -10,6 +10,7 @@ import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import Signin from "./pages/Auth/Signin";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
+import LoggedinContainer from "./components/Loggedin";
 import "./App.scss";
 
 function App() {
@@ -58,9 +59,13 @@ function App() {
             }}
           >
             <Routes>
-              <Route path="/" element={<Signin />} />
+              <Route path="/signin" element={<Signin />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
+              <Route
+                path="/*"
+                element={"123" ? <LoggedinContainer /> : <Signin />}
+              />
             </Routes>
           </Paper>
         </MantineProvider>
