@@ -14,3 +14,10 @@ a {
 .green-text {
   color: #33cc33;
 }
+
+.click {
+  cursor: pointer;
+  &:active {
+    opacity: 0.7;
+  }
+}

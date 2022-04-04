@@ -8,7 +8,11 @@
   flex-direction: row;
 
   .sidebar-container {
+    position: relative;
+    z-index: 4;
     padding: 20px 64px;
+    box-shadow: 0 8px 12px rgb(0 0 0 / 4%), 0 2px 4px rgb(0 0 0 / 8%);
+
     .sidebar-inner {
       display: block;
 
@@ -44,6 +48,41 @@
           .nav-icon {
             margin-right: 10px;
             transform: translateY(2px);
+          }
+        }
+      }
+    }
+  }
+
+  .logged-m21 {
+    padding-top: 80px;
+    .loggedin-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      padding: 20px 30px;
+      box-shadow: 0 8px 12px rgb(0 0 0 / 4%), 0 2px 4px rgb(0 0 0 / 8%);
+
+      .header-items {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+
+        .h-item {
+          margin-left: 15px;
+
+          &.user {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-left: 30px;
+
+            .h-name {
+              opacity: 0.8;
+            }
           }
         }
       }
