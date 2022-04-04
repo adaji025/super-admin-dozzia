@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ActionIcon, useMantineColorScheme, Text } from "@mantine/core";
-import { BsMoonStars, BsSun } from "react-icons/bs";
+import { Sun, Moon } from "tabler-icons-react";
 
 import "./auth-header.scss";
 
@@ -23,11 +23,11 @@ const AuthHeader = () => {
 
       <ActionIcon
         variant="transparent"
-        color="green"
+        color={dark ? "yellow" : "green"}
         onClick={() => toggleColorScheme()}
         title="Toggle color scheme"
       >
-        {dark ? <BsSun size={25} /> : <BsMoonStars size={25} />}
+        {dark ? <Sun size={25} /> : <Moon size={25} />}
       </ActionIcon>
     </div>
   );

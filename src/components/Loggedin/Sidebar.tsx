@@ -3,14 +3,14 @@ import { Text, useMantineColorScheme } from "@mantine/core";
 import { NavLink, useLocation } from "react-router-dom";
 
 import {
-  MdOutlineSpaceDashboard,
-  MdOutlineManageAccounts,
-} from "react-icons/md";
-import { CgToolbox } from "react-icons/cg";
-import { HiOutlineSpeakerphone } from "react-icons/hi";
-import { FaRegThumbsDown } from "react-icons/fa";
-import { FiSettings } from "react-icons/fi";
-import { BiLogOut } from "react-icons/bi";
+  LayoutDashboard,
+  Briefcase,
+  Users,
+  Speakerphone,
+  ThumbDown,
+  Settings,
+  Logout,
+} from "tabler-icons-react";
 
 import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 
@@ -22,32 +22,32 @@ const Sidebar = () => {
 
   const routes = [
     {
-      icon: MdOutlineSpaceDashboard,
+      icon: LayoutDashboard,
       name: "General Overview",
       route: "/dashboard",
     },
     {
-      icon: MdOutlineManageAccounts,
+      icon: Briefcase,
       name: "Management",
       route: "/management",
     },
     {
-      icon: CgToolbox,
+      icon: Users,
       name: "Administration",
       route: "/administration",
     },
     {
-      icon: HiOutlineSpeakerphone,
+      icon: Speakerphone,
       name: "Broadcast",
       route: "/broadcast",
     },
     {
-      icon: FaRegThumbsDown,
+      icon: ThumbDown,
       name: "Reports & Complaints",
       route: "/reports",
     },
     {
-      icon: FiSettings,
+      icon: Settings,
       name: "Settings",
       route: "/settings",
     },
@@ -84,7 +84,8 @@ const Sidebar = () => {
                       ? "white"
                       : "black"
                   }
-                  size={22}
+                  size={25}
+                  strokeWidth={1}
                   className="nav-icon"
                 />
               </span>
@@ -94,9 +95,10 @@ const Sidebar = () => {
 
           <div className="nav-item">
             <span>
-              <BiLogOut
+              <Logout
                 color={dark ? "white" : "black"}
-                size={22}
+                size={25}
+                strokeWidth={1}
                 className="nav-icon"
               />
             </span>
