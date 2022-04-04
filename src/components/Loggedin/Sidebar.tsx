@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, useMantineColorScheme } from "@mantine/core";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 import {
   MdOutlineSpaceDashboard,
@@ -17,6 +17,8 @@ import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 const Sidebar = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+
+  const location = useLocation();
 
   const routes = [
     {
@@ -74,7 +76,17 @@ const Sidebar = () => {
               to={item.route}
             >
               <span>
-                <item.icon size={22} className="nav-icon" />
+                <item.icon
+                  color={
+                    location.pathname.includes(item.route)
+                      ? "#33cc33"
+                      : dark
+                      ? "white"
+                      : "black"
+                  }
+                  size={22}
+                  className="nav-icon"
+                />
               </span>
               <Text>{item.name}</Text>
             </NavLink>
@@ -82,7 +94,11 @@ const Sidebar = () => {
 
           <div className="nav-item">
             <span>
-              <BiLogOut size={22} className="nav-icon" />
+              <BiLogOut
+                color={dark ? "white" : "black"}
+                size={22}
+                className="nav-icon"
+              />
             </span>
             <Text>Logout</Text>
           </div>
