@@ -64,7 +64,7 @@ function App() {
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route
                 path="/*"
-                element={"d" ? <LoggedinContainer /> : <Signin />}
+                element={"s" ? <LoggedinContainer /> : <Signin />}
               />
             </Routes>
           </Paper>
