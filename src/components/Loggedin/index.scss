@@ -10,14 +10,44 @@
   .sidebar-container {
     position: relative;
     z-index: 4;
-    padding: 20px 64px;
+    padding: 20px 64px 20px 25px;
     box-shadow: 0 8px 12px rgb(0 0 0 / 4%), 0 2px 4px rgb(0 0 0 / 8%);
 
+    &.is-hidden {
+      @media only screen and (max-width: 1000px) {
+        display: none;
+      }
+    }
+
+    @media only screen and (max-width: 500px) {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+
+    .close-icon {
+      display: none;
+      position: absolute;
+      top: 15px;
+      right: 10px;
+      padding: 3px;
+      opacity: 0.5;
+      @media only screen and (max-width: 1000px) {
+        display: unset;
+      }
+    }
     .sidebar-inner {
       display: block;
 
       .school-logo {
-        text-align: center;
+        padding-left: 40px;
+
+        @media only screen and (max-width: 768px) {
+          height: 70px;
+          width: 80px;
+        }
       }
 
       .school-name {
@@ -56,6 +86,7 @@
 
   .logged-m21 {
     padding-top: 80px;
+
     .loggedin-header {
       position: fixed;
       top: 0;
@@ -65,27 +96,45 @@
       padding: 20px 30px;
       box-shadow: 0 8px 12px rgb(0 0 0 / 4%), 0 2px 4px rgb(0 0 0 / 8%);
 
+      @media only screen and (max-width: 780px) {
+        padding: 20px 20px;
+      }
+
       .header-items {
         display: flex;
         flex-direction: row;
-        justify-content: flex-end;
+        justify-content: space-between;
         align-items: center;
 
-        .h-item {
-          margin-left: 15px;
+        .h-right {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-end;
+          align-items: center;
+          .h-item {
+            margin-left: 15px;
 
-          &.user {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            margin-left: 30px;
+            &.user {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              margin-left: 30px;
 
-            .h-name {
-              opacity: 0.8;
+              @media only screen and (max-width: 780px) {
+                display: none;
+              }
+
+              .h-name {
+                opacity: 0.8;
+              }
             }
           }
         }
       }
+    }
+
+    .main-section {
+      padding: 20px;
     }
   }
 }

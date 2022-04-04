@@ -11,10 +11,16 @@ import {
   Settings,
   Logout,
 } from "tabler-icons-react";
+import { IoClose } from "react-icons/io5";
 
 import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 
-const Sidebar = () => {
+interface SidebarProps {
+  toggleSidebar: () => void;
+  showSidebar: boolean;
+}
+
+const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
 
@@ -55,12 +61,14 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`sidebar-container ${dark ? "dark-card-bg" : "light-card-bg"}`}
+      className={`sidebar-container ${
+        dark ? "dark-card-bg" : "light-card-bg"
+      } ${!showSidebar ? "is-hidden" : ""}`}
     >
+      <IoClose className="close-icon click" size={30} onClick={toggleSidebar} />
+
       <div className="sidebar-inner">
-        <div className="school-logo">
-          <SchoolLogo />
-        </div>
+        <SchoolLogo className="school-logo" />
 
         <Text className="school-name">Gracefield Highschool</Text>
 
@@ -74,6 +82,7 @@ const Sidebar = () => {
                   .join(" ")
               }
               to={item.route}
+              onClick={toggleSidebar}
             >
               <span>
                 <item.icon
@@ -85,7 +94,7 @@ const Sidebar = () => {
                       : "black"
                   }
                   size={25}
-                  strokeWidth={1}
+                  strokeWidth={1.3}
                   className="nav-icon"
                 />
               </span>
@@ -93,12 +102,12 @@ const Sidebar = () => {
             </NavLink>
           ))}
 
-          <div className="nav-item">
+          <div className="nav-item" onClick={toggleSidebar}>
             <span>
               <Logout
                 color={dark ? "white" : "black"}
                 size={25}
-                strokeWidth={1}
+                strokeWidth={1.3}
                 className="nav-icon"
               />
             </span>

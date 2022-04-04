@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Paper, useMantineColorScheme } from "@mantine/core";
 
@@ -12,19 +12,25 @@ const LoggedinContainer = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
 
+  const [showSidebar, setShowSidebar] = useState<boolean>(false);
+
+  const toggleSidebar = () => {
+    setShowSidebar(!showSidebar);
+  };
+
   return (
     <Paper
       style={{
         borderRadius: "0px",
-        background: colorScheme === "dark" ? "#121212" : "#E5E5E5",
-        color: colorScheme === "dark" ? "white" : "black",
+        background: dark ? "#121212" : "#E5E5E5",
+        color: dark ? "white" : "black",
       }}
       className="loggedin-container"
     >
-      <Sidebar />
+      <Sidebar toggleSidebar={toggleSidebar} showSidebar={showSidebar} />
 
       <div className="logged-m21">
-        <Header />
+        <Header toggleSidebar={toggleSidebar} />
 
         <div className="main-section">
           <Routes>
