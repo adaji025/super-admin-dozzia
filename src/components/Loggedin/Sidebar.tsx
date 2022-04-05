@@ -2,6 +2,7 @@ import { useState, Fragment } from "react";
 import { Text, useMantineColorScheme } from "@mantine/core";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { showNotification } from "@mantine/notifications";
 
 import {
   LayoutDashboard,
@@ -248,6 +249,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           <div
             className="nav-item"
             onClick={() => {
+              showNotification({
+                title: "User logged out",
+                message: `${"Sign in to continue "} 😑`,
+                color: "yellow",
+              });
               localStorage.removeItem("token");
               dispatch({ type: "LOGOUT" });
               navigate("/signin");
