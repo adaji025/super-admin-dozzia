@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { Helmet } from "react-helmet";
 import Typewriter from "typewriter-effect";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import {
   Text,
@@ -13,15 +13,19 @@ import {
   useMantineColorScheme,
   LoadingOverlay,
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
-// import { ReactComponent as Ellipse } from "../../assets/svg/ellipse.svg";
+import { login } from "../../services/auth/auth";
 import "./auth.scss";
+// import { ReactComponent as Ellipse } from "../../assets/svg/ellipse.svg";
 
 const Signin = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const navigate = useNavigate();
+
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
   const form = useForm({
@@ -30,6 +34,35 @@ const Signin = () => {
       password: "",
     },
   });
+
+  const submit = (values: { username: string; password: string }) => {
+    setShowLoader(true);
+
+    login(values.username, values.password)
+      .then((res) => {
+        console.log(res);
+        if (res.required_new_password) {
+          localStorage.setItem("reset_code", res?.reset_code);
+          navigate("/reset-password?new=true");
+        } else {
+          // navigate("/dashboard");
+        }
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Error",
+          message: `${
+            error?.response?.data?.message ??
+            "Failed to login, please try again"
+          } 🤥`,
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setShowLoader(false);
+      });
+  };
+
   return (
     <Fragment>
       <Helmet>
@@ -69,7 +102,7 @@ const Signin = () => {
 
             <div className="form">
               <Box sx={{ maxWidth: 300 }} mx="auto">
-                <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                <form onSubmit={form.onSubmit((values) => submit(values))}>
                   <TextInput
                     required
                     label="Username"

@@ -5,6 +5,7 @@ import {
   Paper,
   ColorScheme,
 } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 
 import Signin from "./pages/Auth/Signin";
@@ -51,23 +52,25 @@ function App() {
             },
           }}
         >
-          <Paper
-            style={{
-              borderRadius: "0px",
-              background: colorScheme === "dark" ? "#121212" : "#E5E5E5",
-              color: colorScheme === "dark" ? "white" : "black",
-            }}
-          >
-            <Routes>
-              <Route path="/signin" element={<Signin />} />
-              <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route
-                path="/*"
-                element={"s" ? <LoggedinContainer /> : <Signin />}
-              />
-            </Routes>
-          </Paper>
+          <NotificationsProvider position="top-right" zIndex={2077}>
+            <Paper
+              style={{
+                borderRadius: "0px",
+                background: colorScheme === "dark" ? "#121212" : "#E5E5E5",
+                color: colorScheme === "dark" ? "white" : "black",
+              }}
+            >
+              <Routes>
+                <Route path="/signin" element={<Signin />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route
+                  path="/*"
+                  element={"" ? <LoggedinContainer /> : <Signin />}
+                />
+              </Routes>
+            </Paper>
+          </NotificationsProvider>
         </MantineProvider>
       </ColorSchemeProvider>
     </div>

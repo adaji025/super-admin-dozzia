@@ -18,11 +18,7 @@ const ForgotPassword = () => {
 
   const form = useForm({
     initialValues: {
-      email: "",
-    },
-
-    validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      username: "",
     },
   });
   return (
@@ -42,11 +38,10 @@ const ForgotPassword = () => {
           <div
             className={`a-m-right ${dark ? "dark-card-bg" : "light-card-bg"}`}
           >
-            <div className="form-title">Reset Password</div>
+            <div className="form-title">Forgot Password</div>
 
             <div className="form-desc">
-              Enter your registered email address to get a password reset link
-              from Dozzia
+              Enter your username to get a password reset link from Dozzia
             </div>
 
             <div className="form">
@@ -54,9 +49,9 @@ const ForgotPassword = () => {
                 <form onSubmit={form.onSubmit((values) => console.log(values))}>
                   <TextInput
                     required
-                    label="Email Address"
-                    placeholder="Email"
-                    {...form.getInputProps("email")}
+                    label="Username"
+                    placeholder="Username"
+                    {...form.getInputProps("username")}
                   />
 
                   <Group position="center" mt="lg">

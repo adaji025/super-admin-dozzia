@@ -19,6 +19,7 @@
     "@types/react-redux": "^7.1.23",
     "axios": "0.21.1",
     "dayjs": "^1.11.0",
+    "query-string": "^7.1.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-helmet": "^6.1.0",

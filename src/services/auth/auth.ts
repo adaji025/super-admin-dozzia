@@ -13,3 +13,17 @@ export const login = (username: string, password: string) => {
     return res.data;
   });
 };
+
+export const resetPassword = (
+  reset_code: string,
+  password: string,
+  password_confirmation: string
+) => {
+  return AxoisApi.post(`${APIS.AUTH.RESET_PASSWORD}`, {
+    reset_code,
+    password,
+    password_confirmation,
+  }).then((res) => {
+    return res.data;
+  });
+};

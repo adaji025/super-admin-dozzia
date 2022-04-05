@@ -11,8 +11,8 @@ import {
   Settings,
   Logout,
   ChevronDown,
+  X,
 } from "tabler-icons-react";
-import { IoClose } from "react-icons/io5";
 
 import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 
@@ -124,7 +124,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         dark ? "dark-card-bg" : "light-card-bg"
       } ${!showSidebar ? "is-hidden" : ""}`}
     >
-      <IoClose className="close-icon click" size={30} onClick={toggleSidebar} />
+      <X className="close-icon click" size={25} onClick={toggleSidebar} />
 
       <div className="sidebar-inner">
         <SchoolLogo className="school-logo" />
