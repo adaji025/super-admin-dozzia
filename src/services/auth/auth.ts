@@ -14,6 +14,14 @@ export const login = (username: string, password: string) => {
   });
 };
 
+export const forgotPassword = (username: string) => {
+  return AxoisApi.post(`${APIS.AUTH.FORGOT_PASSWORD}`, {
+    username,
+  }).then((res) => {
+    return res.data;
+  });
+};
+
 export const resetPassword = (
   reset_code: string,
   password: string,

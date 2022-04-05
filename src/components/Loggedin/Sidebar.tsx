@@ -249,7 +249,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             className="nav-item"
             onClick={() => {
               localStorage.removeItem("token");
-              dispatch({ type: "DESTROY_SESSION" });
+              dispatch({ type: "LOGOUT" });
               navigate("/signin");
             }}
           >

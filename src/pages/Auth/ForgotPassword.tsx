@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import {
@@ -7,8 +7,11 @@ import {
   Group,
   Box,
   useMantineColorScheme,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import { forgotPassword } from "../../services/auth/auth";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import "./auth.scss";
@@ -17,6 +20,7 @@ const ForgotPassword = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const navigate = useNavigate();
+  const [showLoader, setShowLoader] = useState<boolean>(false);
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -30,6 +34,34 @@ const ForgotPassword = () => {
       username: "",
     },
   });
+
+  const submit = (values: { username: string }) => {
+    setShowLoader(true);
+
+    forgotPassword(values.username)
+      .then((res) => {
+        showNotification({
+          title: "Reset code sent.",
+          message: `${"Check your inbox or spam for request code"} 👀`,
+          color: "green",
+        });
+        localStorage.removeItem("reset_code");
+        navigate("/reset-password");
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Error",
+          message: `${
+            error?.response?.data?.message ??
+            "An error occured, please try again"
+          } 🤥`,
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setShowLoader(false);
+      });
+  };
   return (
     <Fragment>
       <Helmet>
@@ -42,6 +74,7 @@ const ForgotPassword = () => {
 
       <div className="auth-page">
         <AuthHeader />
+        <LoadingOverlay visible={showLoader} />
 
         <div className="auth-main center">
           <div
@@ -55,7 +88,7 @@ const ForgotPassword = () => {
 
             <div className="form">
               <Box sx={{ maxWidth: 340 }} mx="auto">
-                <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                <form onSubmit={form.onSubmit((values) => submit(values))}>
                   <TextInput
                     required
                     label="Username"
