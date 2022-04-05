@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Helmet } from "react-helmet";
 import Typewriter from "typewriter-effect";
 import { Link } from "react-router-dom";
@@ -11,6 +11,7 @@ import {
   Group,
   Box,
   useMantineColorScheme,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 
@@ -21,6 +22,7 @@ import "./auth.scss";
 const Signin = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const [showLoader, setShowLoader] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -39,6 +41,7 @@ const Signin = () => {
       </Helmet>
 
       <div className="auth-page">
+        <LoadingOverlay visible={showLoader} />
         <AuthHeader />
 
         <div className="auth-main">

@@ -15,7 +15,7 @@ import "./App.scss";
 
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
-    key: "mantine-color-scheme",
+    key: "color-scheme",
     defaultValue: "dark",
   });
 

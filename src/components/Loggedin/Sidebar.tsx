@@ -206,7 +206,13 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                 <NavLink
                   key={item.name}
                   className={({ isActive }) =>
-                    ["nav-item", isActive ? "is-active" : null]
+                    [
+                      "nav-item",
+                      isActive ||
+                      (item.route === "/dashboard" && location.pathname === "/")
+                        ? "is-active"
+                        : null,
+                    ]
                       .filter(Boolean)
                       .join(" ")
                   }
@@ -216,7 +222,9 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                   <span>
                     <item.icon
                       color={
-                        location.pathname.includes(item.route)
+                        location.pathname.includes(item.route) ||
+                        (item.route === "/dashboard" &&
+                          location.pathname === "/")
                           ? "#33cc33"
                           : dark
                           ? "white"
