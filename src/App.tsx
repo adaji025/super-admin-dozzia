@@ -67,7 +67,11 @@ function App() {
             },
           }}
         >
-          <NotificationsProvider position="top-right" zIndex={2077}>
+          <NotificationsProvider
+            position="top-right"
+            zIndex={2077}
+            autoClose={3000}
+          >
             <Paper
               style={{
                 borderRadius: "0px",

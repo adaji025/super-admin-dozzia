@@ -127,7 +127,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         dark ? "dark-card-bg" : "light-card-bg"
       } ${!showSidebar ? "is-hidden" : ""}`}
     >
-      <X className="close-icon click" size={25} onClick={toggleSidebar} />
+      <X className="close-icon click" size={29} onClick={toggleSidebar} />
 
       <div className="sidebar-inner">
         <SchoolLogo className="school-logo" />
@@ -248,7 +248,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           <div
             className="nav-item"
             onClick={() => {
-              localStorage.clear();
+              localStorage.removeItem("token");
               dispatch({ type: "DESTROY_SESSION" });
               navigate("/signin");
             }}
