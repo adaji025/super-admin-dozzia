@@ -29,3 +29,14 @@ a {
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+.r-icon {
+  transition: 0.5s;
+  &.rotate-icon {
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+}
