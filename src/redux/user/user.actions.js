@@ -1,6 +1,6 @@
-export const setUserData = (userData) => ({
+export const setUserData = (userdata) => ({
   type: "SET_USER_DATA",
-  payload: { userData },
+  payload: { userdata },
 });
 
 export const setNotifications = (notifications) => ({

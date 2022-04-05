@@ -1,4 +1,6 @@
-import { Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   ColorSchemeProvider,
   MantineProvider,
@@ -15,10 +17,23 @@ import LoggedinContainer from "./components/Loggedin";
 import "./App.scss";
 
 function App() {
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
+  });
+  const navigate = useNavigate();
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "color-scheme",
     defaultValue: "dark",
   });
+
+  useEffect(() => {
+    if (userdata) {
+      navigate("/dashboard");
+    } else {
+      navigate("/signin");
+    }
+    //eslint-disable-next-line
+  }, [userdata]);
 
   const toggleColorScheme = (value?: ColorScheme) => {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -66,13 +81,7 @@ function App() {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route
                   path="/*"
-                  element={
-                    localStorage.getItem("token") ? (
-                      <LoggedinContainer />
-                    ) : (
-                      <Signin />
-                    )
-                  }
+                  element={userdata ? <LoggedinContainer /> : <Signin />}
                 />
               </Routes>
             </Paper>

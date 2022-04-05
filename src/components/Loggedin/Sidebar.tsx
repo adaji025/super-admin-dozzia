@@ -1,6 +1,7 @@
 import { useState, Fragment } from "react";
 import { Text, useMantineColorScheme } from "@mantine/core";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import {
   LayoutDashboard,
@@ -26,6 +27,8 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   const dark = colorScheme === "dark";
   const [showChildren, setShowChildren] = useState<string>("");
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const routes = [
     {
@@ -242,7 +245,14 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             </Fragment>
           ))}
 
-          <div className="nav-item" onClick={toggleSidebar}>
+          <div
+            className="nav-item"
+            onClick={() => {
+              localStorage.clear();
+              dispatch({ type: "DESTROY_SESSION" });
+              navigate("/signin");
+            }}
+          >
             <span>
               <Logout
                 color={dark ? "white" : "black"}

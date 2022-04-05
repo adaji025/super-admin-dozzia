@@ -1,5 +1,5 @@
 const INITIAL_STATE = {
-  userData: null,
+  userdata: null,
   notifications: [],
 };
 
@@ -8,7 +8,7 @@ const userReducer = (state = INITIAL_STATE, action) => {
     case "SET_USER_DATA":
       return {
         ...state,
-        userData: action.payload.userData,
+        userdata: action.payload.userdata,
       };
     case "SET_NOTIFICATIONS":
       return {
