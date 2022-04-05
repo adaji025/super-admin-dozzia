@@ -1,5 +1,6 @@
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 import {
   TextInput,
   Button,
@@ -15,6 +16,14 @@ import "./auth.scss";
 const ForgotPassword = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/dashboard");
+    }
+    //eslint-disable-next-line
+  }, []);
 
   const form = useForm({
     initialValues: {

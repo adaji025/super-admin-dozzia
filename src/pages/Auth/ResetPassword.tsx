@@ -29,6 +29,10 @@ const ResetPassword = () => {
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
   useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/dashboard");
+    }
+
     let parseddata: any = queryString.parse(location.search);
 
     if (parseddata.new) {

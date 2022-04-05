@@ -66,7 +66,13 @@ function App() {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route
                   path="/*"
-                  element={"" ? <LoggedinContainer /> : <Signin />}
+                  element={
+                    localStorage.getItem("token") ? (
+                      <LoggedinContainer />
+                    ) : (
+                      <Signin />
+                    )
+                  }
                 />
               </Routes>
             </Paper>
