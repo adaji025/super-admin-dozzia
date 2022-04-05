@@ -1,8 +1,8 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import Typewriter from "typewriter-effect";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
 import {
   Text,
   TextInput,
@@ -18,6 +18,7 @@ import { useForm } from "@mantine/form";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { login } from "../../services/auth/auth";
+import { setUserData } from "../../redux/user/user.actions";
 import "./auth.scss";
 // import { ReactComponent as Ellipse } from "../../assets/svg/ellipse.svg";
 
@@ -25,8 +26,15 @@ const Signin = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [showLoader, setShowLoader] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/dashboard");
+    }
+    //eslint-disable-next-line
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -40,12 +48,25 @@ const Signin = () => {
 
     login(values.username, values.password)
       .then((res) => {
-        console.log(res);
         if (res.required_new_password) {
+          showNotification({
+            title: "Password reset required!",
+            message: `${"This is a one-time step."} 🥲`,
+            color: "yellow",
+          });
+
           localStorage.setItem("reset_code", res?.reset_code);
           navigate("/reset-password?new=true");
         } else {
-          // navigate("/dashboard");
+          showNotification({
+            title: "Success",
+            message: `${"Login successful."} 😎`,
+            color: "green",
+          });
+
+          localStorage.setItem("token", res?.access_token);
+          dispatch(setUserData(res.user));
+          navigate("/dashboard");
         }
       })
       .catch((error) => {
