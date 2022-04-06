@@ -29,8 +29,6 @@ function App() {
   useEffect(() => {
     if (userdata) {
       navigate("/dashboard");
-    } else {
-      navigate("/signin");
     }
     //eslint-disable-next-line
   }, [userdata]);
