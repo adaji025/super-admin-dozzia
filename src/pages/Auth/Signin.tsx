@@ -15,6 +15,7 @@ import {
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
+import { Lock, User } from "tabler-icons-react";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { login } from "../../services/auth/auth";
@@ -128,6 +129,8 @@ const Signin = () => {
                     required
                     label="Username"
                     placeholder="Username"
+                    type="text"
+                    icon={<User size={16} />}
                     {...form.getInputProps("username")}
                   />
 
@@ -136,6 +139,8 @@ const Signin = () => {
                     mt="sm"
                     label="Password"
                     placeholder="Password"
+                    type="password"
+                    icon={<Lock size={16} />}
                     {...form.getInputProps("password")}
                   />
 

@@ -11,6 +11,8 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
+import { User } from "tabler-icons-react";
+
 import { forgotPassword } from "../../services/auth/auth";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
@@ -93,6 +95,8 @@ const ForgotPassword = () => {
                     required
                     label="Username"
                     placeholder="Username"
+                    type="text"
+                    icon={<User size={16} />}
                     {...form.getInputProps("username")}
                   />
 

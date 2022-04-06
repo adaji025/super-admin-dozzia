@@ -13,6 +13,7 @@ import {
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import queryString from "query-string";
+import { Lock } from "tabler-icons-react";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { resetPassword } from "../../services/auth/auth";
@@ -51,6 +52,8 @@ const ResetPassword = () => {
     },
 
     validate: {
+      password: (value) =>
+        value.length < 8 ? "Password must be at least 8 characters" : null,
       confirmPassword: (value, values) =>
         value !== values.password ? "Passwords did not match" : null,
     },
@@ -126,7 +129,9 @@ const ResetPassword = () => {
                       required
                       label="Reset code"
                       placeholder="Reset code"
+                      type="number"
                       {...form.getInputProps("reset_code")}
+                      icon={<Lock size={16} />}
                     />
                   )}
 
@@ -135,6 +140,8 @@ const ResetPassword = () => {
                     mt="sm"
                     label="New password"
                     placeholder="Password"
+                    type="password"
+                    icon={<Lock size={16} />}
                     {...form.getInputProps("password")}
                   />
 
@@ -143,6 +150,8 @@ const ResetPassword = () => {
                     mt="sm"
                     label="Confirm new password"
                     placeholder="Confirm password"
+                    type="password"
+                    icon={<Lock size={16} />}
                     {...form.getInputProps("confirmPassword")}
                   />
 
