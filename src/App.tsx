@@ -75,7 +75,7 @@ function App() {
             <Paper
               style={{
                 borderRadius: "0px",
-                background: colorScheme === "dark" ? "#121212" : "#E5E5E5",
+                background: colorScheme === "dark" ? "#121212" : "#f8f9fa",
                 color: colorScheme === "dark" ? "white" : "black",
               }}
             >

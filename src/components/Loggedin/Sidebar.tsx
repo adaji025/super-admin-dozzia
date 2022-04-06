@@ -127,6 +127,9 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       className={`sidebar-container no-select ${
         dark ? "dark-card-bg" : "light-card-bg"
       } ${!showSidebar ? "is-hidden" : ""}`}
+      style={{
+        borderRight: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
+      }}
     >
       <X className="close-icon click" size={29} onClick={toggleSidebar} />
 
@@ -146,7 +149,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                       showChildren !== item.name
                         ? "is-active"
                         : ""
-                    }`}
+                    } ${dark ? "h-dark" : "h-light"}`}
                     key={item.name}
                     onClick={() => {
                       if (showChildren === item.name) {
@@ -164,7 +167,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                             ? "#33cc33"
                             : dark
                             ? "white"
-                            : "black"
+                            : "#495057"
                         }
                         size={25}
                         strokeWidth={1.3}
@@ -172,7 +175,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                       />
                     </span>
 
-                    <Text>{item.name}</Text>
+                    <Text sx={{ fontSize: "14px" }}>{item.name}</Text>
 
                     <ChevronDown
                       color={
@@ -181,7 +184,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                           ? "#33cc33"
                           : dark
                           ? "white"
-                          : "black"
+                          : "#495057"
                       }
                       className={`arrow-down ${
                         showChildren === item.name ? "rotate" : ""
@@ -195,14 +198,19 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                       <NavLink
                         key={child.name}
                         className={({ isActive }) =>
-                          ["nav-item", "child", isActive ? "is-active" : null]
+                          [
+                            "nav-item",
+                            "child",
+                            dark ? "h-dark" : "h-light",
+                            isActive ? "is-active" : null,
+                          ]
                             .filter(Boolean)
                             .join(" ")
                         }
                         to={child.route}
                         onClick={toggleSidebar}
                       >
-                        <Text>{child.name}</Text>
+                        <Text sx={{ fontSize: "14px" }}>{child.name}</Text>
                       </NavLink>
                     ))}
                 </>
@@ -212,6 +220,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                   className={({ isActive }) =>
                     [
                       "nav-item",
+                      dark ? "h-dark" : "h-light",
                       isActive ||
                       (item.route === "/dashboard" && location.pathname === "/")
                         ? "is-active"
@@ -232,7 +241,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                           ? "#33cc33"
                           : dark
                           ? "white"
-                          : "black"
+                          : "#495057"
                       }
                       size={25}
                       strokeWidth={1.3}
@@ -240,14 +249,14 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                     />
                   </span>
 
-                  <Text>{item.name}</Text>
+                  <Text sx={{ fontSize: "14px" }}>{item.name}</Text>
                 </NavLink>
               )}
             </Fragment>
           ))}
 
           <div
-            className="nav-item"
+            className={`nav-item ${dark ? "h-dark" : "h-light"}`}
             onClick={() => {
               showNotification({
                 title: "User logged out",
@@ -261,13 +270,13 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           >
             <span>
               <Logout
-                color={dark ? "white" : "black"}
+                color={dark ? "white" : "#495057"}
                 size={25}
                 strokeWidth={1.3}
                 className="nav-icon"
               />
             </span>
-            <Text>Logout</Text>
+            <Text sx={{ fontSize: "14px" }}>Logout</Text>
           </div>
         </div>
       </div>

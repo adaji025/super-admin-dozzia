@@ -22,8 +22,8 @@ const LoggedinContainer = () => {
     <Paper
       style={{
         borderRadius: "0px",
-        background: dark ? "#121212" : "#E5E5E5",
-        color: dark ? "white" : "black",
+        background: dark ? "#121212" : "#f8f9fa",
+        color: dark ? "white" : "#495057",
       }}
       className="loggedin-container"
     >

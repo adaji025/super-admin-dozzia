@@ -10,9 +10,9 @@ const AuthHeader = () => {
 
   return (
     <div
-      className="auth-header"
+      className={`auth-header ${dark ? "dark-card-bg" : "light-card-bg"}`}
       style={{
-        backgroundColor: dark ? "#070707" : "#f7f7f7",
+        borderBottom: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
       }}
     >
       <div className="app-logo">

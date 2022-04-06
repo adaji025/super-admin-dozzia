@@ -11,9 +11,9 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
 
   return (
     <div
-      className="loggedin-header"
+      className={`loggedin-header ${dark ? "dark-card-bg" : "light-card-bg"}`}
       style={{
-        backgroundColor: dark ? "#1c1c1c" : "#ffffff",
+        borderBottom: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
       }}
     >
       <div className="header-items">
