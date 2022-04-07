@@ -10,4 +10,7 @@ export const APIS = {
     GET_STATE_LIST: `${api}/states`,
     GET_MEDICAL_LIST: `${api}/medicals`,
   },
+  ADMIN: {
+    ONBOARD_STUDENT: `${api}/students`,
+  },
 };

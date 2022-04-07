@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { getMedicalList } from "../services/administration/administration";
+import { getMedicalList } from "../services/admin/admin";
 
-const useAdministration = () => {
+const useAdmin = () => {
   const [medicals, setMedicals] = useState<any>(null);
 
   const getMedicals = () => {
@@ -16,4 +16,4 @@ const useAdministration = () => {
   };
 };
 
-export default useAdministration;
+export default useAdmin;

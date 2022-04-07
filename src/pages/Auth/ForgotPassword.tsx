@@ -64,6 +64,7 @@ const ForgotPassword = () => {
         setShowLoader(false);
       });
   };
+
   return (
     <Fragment>
       <Helmet>

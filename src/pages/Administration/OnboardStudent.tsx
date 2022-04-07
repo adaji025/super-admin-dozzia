@@ -11,23 +11,75 @@ import {
   MultiSelect,
   RadioGroup,
   Radio,
+  Textarea,
+  LoadingOverlay,
 } from "@mantine/core";
+import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
+import moment from "moment";
+import {
+  UserCircle,
+  BuildingHospital,
+  School,
+  CircleCheck,
+} from "tabler-icons-react";
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
-import useAdministration from "../../hooks/useAdministration";
+import { onboardStudent } from "../../services/admin/admin";
+import useAdmin from "../../hooks/useAdmin";
 import "./administration.scss";
 
 const OnboardStudent = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const [active, setActive] = useState<number>(0);
+  const [formData, setFormData] = useState<any>({});
+  const [showLoader, setShowLoader] = useState<boolean>(false);
 
-  const nextStep = () =>
+  const nextStep = (data: any) => {
+    if (active === 2) {
+      return handleSubmit({ ...formData, ...data });
+    }
+
+    if (data) {
+      setFormData({ ...formData, ...data });
+    }
     setActive((current) => (current < 3 ? current + 1 : current));
+  };
+
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
+
+  const handleSubmit = (data: any) => {
+    setShowLoader(true);
+
+    console.log(data);
+
+    onboardStudent(data)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: "Student added successfully 🤗",
+          color: "green",
+        });
+        setActive(0);
+        setFormData({});
+      })
+      .catch((error) => {
+        showNotification({
+          title: "Error",
+          message: `${
+            error?.response?.data?.message ??
+            "An error occured, please try again"
+          } 🤥`,
+          color: "red",
+        });
+      })
+      .finally(() => {
+        setShowLoader(false);
+      });
+  };
 
   return (
     <Fragment>
@@ -38,6 +90,8 @@ const OnboardStudent = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+      <LoadingOverlay visible={showLoader} />
+
       <div className="page-container">
         <div
           className="page-info"
@@ -65,22 +119,38 @@ const OnboardStudent = () => {
           }}
         >
           <div className="pm-inner-wrapper">
-            <Stepper active={active} onStepClick={setActive} breakpoint="sm">
-              <Stepper.Step label="Personal Info" description="First step">
+            <Stepper
+              active={active}
+              onStepClick={setActive}
+              completedIcon={<CircleCheck />}
+              breakpoint="sm"
+            >
+              <Stepper.Step
+                icon={<UserCircle size={18} />}
+                label="Personal Info"
+                description="First step"
+                allowStepSelect={false}
+              >
                 <PersonalInfo {...{ active, nextStep, prevStep }} />
               </Stepper.Step>
 
-              <Stepper.Step label="Health History" description="Second step">
+              <Stepper.Step
+                icon={<BuildingHospital size={18} />}
+                label="Health History"
+                description="Second step"
+                allowStepSelect={false}
+              >
                 <HealthHistory {...{ active, nextStep, prevStep }} />
               </Stepper.Step>
 
-              <Stepper.Step label="Academic History" description="Final step">
-                Step 3 content: Get full access
+              <Stepper.Step
+                icon={<School size={18} />}
+                label="Academic History"
+                description="Final step"
+                allowStepSelect={false}
+              >
+                <AcademicHistory {...{ active, nextStep, prevStep }} />
               </Stepper.Step>
-
-              <Stepper.Completed>
-                Completed, click back button to get to previous step
-              </Stepper.Completed>
             </Stepper>
           </div>
         </div>
@@ -126,9 +196,11 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   const dark = colorScheme === "dark";
 
   const onSave = (values: any) => {
-    console.log(values);
-
-    nextStep();
+    nextStep({
+      ...values,
+      dob: moment(values.dob).format("YYYY-MM-DD"),
+      guardian_phone_number: values.guardian_phone_number.toString(),
+    });
   };
 
   return (
@@ -167,6 +239,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
               />
 
               <DatePicker
+                initialLevel="year"
                 className="form-item"
                 label="Date of Birth"
                 placeholder="Date of birth"
@@ -281,18 +354,18 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
     },
 
     validate: {
-      height: (value) => (value === "" ? "Input first name" : null),
-      weight: (value) => (value === "" ? "Input last name" : null),
-      blood_group: (value) => (value === "" ? "Input middle name" : null),
-      genotype: (value) => (value === "" ? "Enter date of birth" : null),
+      height: (value) => (value === "" ? "Input height" : null),
+      weight: (value) => (value === "" ? "Input weight" : null),
+      blood_group: (value) => (value === "" ? "Input blood group" : null),
+      genotype: (value) => (value === "" ? "Input genotype" : null),
       state_disability: (value) =>
         value === "" && disability === "Yes"
-          ? "Input guardian last name"
+          ? "Please specify disability"
           : null,
     },
   });
 
-  const { getMedicals } = useAdministration();
+  const { getMedicals } = useAdmin();
 
   useEffect(() => {
     getMedicals();
@@ -300,9 +373,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
   }, []);
 
   const onSave = (values: any) => {
-    console.log({ ...values, disability });
-
-    nextStep();
+    nextStep({ ...values, disability });
   };
 
   const data = [
@@ -405,6 +476,109 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 Previous
               </Button>
               <Button type="submit">Save & Continue</Button>
+            </Group>
+          </form>
+        </Box>
+      </div>
+    </div>
+  );
+};
+
+const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
+  const form = useForm({
+    initialValues: {
+      previous_school_name: "",
+      previous_academic_year: "",
+      last_grade: "",
+      entry_test_result: "",
+      reason_leaving_previous_school: "",
+    },
+
+    validate: {
+      previous_academic_year: (value) =>
+        value === "" ? "Provide previous year" : null,
+      last_grade: (value) =>
+        value === "" ? "Last grade scored by student" : null,
+      entry_test_result: (value) => (value === "" ? "Input score" : null),
+    },
+  });
+
+  const onSave = (values: any) => {
+    nextStep({
+      ...values,
+      previous_academic_year: values.previous_academic_year.toString(),
+    });
+  };
+
+  return (
+    <div className="onboard-group">
+      <div className="form">
+        <Box sx={{ maxWidth: 900 }}>
+          <form onSubmit={form.onSubmit((values) => onSave(values))}>
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                label="Previous School Name"
+                placeholder="Enter name"
+                type="text"
+                {...form.getInputProps("previous_school_name")}
+              />
+            </div>
+
+            <div className="form-row">
+              <NumberInput
+                required
+                className="form-item"
+                label="Previous Academic Year:"
+                placeholder="Enter year"
+                type="number"
+                {...form.getInputProps("previous_academic_year")}
+              />
+            </div>
+
+            <div className="form-row">
+              <NumberInput
+                required
+                className="form-item"
+                label="Last Grade (%)"
+                placeholder="Grade"
+                type="number"
+                max={100}
+                min={0}
+                {...form.getInputProps("last_grade")}
+              />
+            </div>
+
+            <div className="form-row">
+              <Textarea
+                className="form-item"
+                label="Reason for leaving previous school"
+                placeholder="Provide a summary"
+                autosize
+                minRows={3}
+                maxRows={5}
+                {...form.getInputProps("reason_leaving_previous_school")}
+              />
+            </div>
+
+            <div className="form-row">
+              <NumberInput
+                className="form-item"
+                required
+                label="Entry Test Score (%)"
+                placeholder="Score"
+                type="number"
+                max={100}
+                min={0}
+                {...form.getInputProps("entry_test_result")}
+              />
+            </div>
+
+            <Group position="left" mt={50}>
+              <Button variant="default" onClick={prevStep} disabled={!active}>
+                Previous
+              </Button>
+              <Button type="submit">Submit</Button>
             </Group>
           </form>
         </Box>
