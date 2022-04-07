@@ -234,7 +234,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
             </div>
 
             <div className="form-row">
-              <div className="form-item">
+              <div className="form-item upload">
                 <div
                   className="custom-title"
                   style={{
