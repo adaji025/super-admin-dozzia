@@ -6,4 +6,8 @@ export const APIS = {
     FORGOT_PASSWORD: `${api}/forgot/password`,
     RESET_PASSWORD: `${api}/reset/password`,
   },
+  LISTS: {
+    GET_STATE_LIST: `${api}/states`,
+    GET_MEDICAL_LIST: `${api}/medicals`,
+  },
 };

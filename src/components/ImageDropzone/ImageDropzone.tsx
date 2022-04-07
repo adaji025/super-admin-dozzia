@@ -69,7 +69,6 @@ const ImageDropzone = ({
       onReject={(files) => console.log("rejected files", files)}
       maxSize={3 * 1024 ** 2}
       accept={IMAGE_MIME_TYPE}
-      disabled
     >
       {(status) => dropzoneChildren(status, theme, filetype, fileLimit)}
     </Dropzone>
