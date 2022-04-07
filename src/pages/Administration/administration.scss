@@ -4,26 +4,39 @@
     @media only screen and (max-width: 768px) {
       padding: 20px;
     }
+
     .page-title {
       font-size: 30px;
       font-weight: 700;
+      @media only screen and (max-width: 768px) {
+        font-size: 27px;
+      }
     }
 
     .page-desc {
       max-width: 700px;
       margin-top: 10px;
       font-size: 18px;
+      @media only screen and (max-width: 768px) {
+        font-size: 15px;
+      }
     }
   }
 
   .page-main {
     padding: 40px 30px 80px 30px;
+    @media only screen and (max-width: 768px) {
+      padding: 30px 20px 80px 20px;
+    }
 
     .pm-inner-wrapper {
       max-width: 900px;
 
       .onboard-group {
         margin-top: 50px;
+        @media only screen and (max-width: 768px) {
+          margin-top: 30px;
+        }
 
         .form-row {
           display: flex;

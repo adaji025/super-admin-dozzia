@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { ActionIcon, useMantineColorScheme, Text, Avatar } from "@mantine/core";
 import { Sun, Moon, Bell, Menu2 } from "tabler-icons-react";
 
@@ -8,6 +9,10 @@ interface HeaderProps {
 const Header = ({ toggleSidebar }: HeaderProps) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+
+  const firstname = useSelector((state: any) => {
+    return state.user.userdata?.profile_details?.first_name;
+  });
 
   return (
     <div
@@ -60,7 +65,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
           <div className="h-item user click">
             <div className="h-name no-select">
               <Text mr="xs" color={dark ? "" : "#515151"}>
-                Hi, Omotunde
+                {`Hi${firstname ? "," : ""} ${firstname ?? "there!"}`}
               </Text>
             </div>
             <Avatar radius="xl" />

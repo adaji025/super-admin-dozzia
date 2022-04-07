@@ -1,4 +1,5 @@
 import { useState, Fragment } from "react";
+import { useSelector } from "react-redux";
 import { Text, useMantineColorScheme } from "@mantine/core";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -30,6 +31,10 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const schoolName = useSelector((state: any) => {
+    return state.user.userdata?.profile_details?.school_name;
+  });
 
   const routes = [
     {
@@ -134,9 +139,19 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       <X className="close-icon click" size={29} onClick={toggleSidebar} />
 
       <div className="sidebar-inner">
-        <SchoolLogo className="school-logo" />
+        <div className="school-logo-wrapper">
+          <SchoolLogo className="school-logo" />
+        </div>
 
-        <Text className="school-name">Gracefield Highschool</Text>
+        <Text
+          className="school-name"
+          style={{
+            borderBottom: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
+            color: dark ? "white" : "#4e4e4e",
+          }}
+        >
+          {schoolName ? schoolName : ""}
+        </Text>
 
         <div className="nav-links">
           {routes.map((item) => (

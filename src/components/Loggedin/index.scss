@@ -45,10 +45,15 @@
     .sidebar-inner {
       display: block;
 
-      .school-logo {
-        padding-left: 65px;
-        height: 70px;
-        width: 70px;
+      .school-logo-wrapper {
+        padding-left: 45px;
+
+        .school-logo {
+          height: 70px;
+          width: 70px;
+          border-radius: 50%;
+          border: 1px solid rgba(134, 134, 134, 0.177);
+        }
       }
 
       .school-name {
@@ -56,10 +61,11 @@
         font-size: 18px;
         font-weight: 500;
         padding-left: 25px;
+        padding-bottom: 10px;
       }
 
       .nav-links {
-        margin-top: 30px;
+        margin-top: 10px;
         overflow-y: scroll;
         height: calc(100vh - 230px);
 
@@ -78,6 +84,7 @@
           margin-bottom: 5px;
           padding: 10px 0 10px 25px;
           cursor: pointer;
+          font-weight: 500;
 
           @media only screen and (max-width: 768px) {
             margin-bottom: 5px;
