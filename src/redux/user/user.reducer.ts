@@ -3,7 +3,7 @@ const INITIAL_STATE = {
   notifications: [],
 };
 
-const userReducer = (state = INITIAL_STATE, action) => {
+const userReducer = (state = INITIAL_STATE, action: any) => {
   switch (action.type) {
     case "SET_USER_DATA":
       return {

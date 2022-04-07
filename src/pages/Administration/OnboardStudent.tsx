@@ -12,8 +12,8 @@ import {
   RadioGroup,
   Radio,
   Textarea,
-  LoadingOverlay,
 } from "@mantine/core";
+import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
 import moment from "moment";
@@ -28,14 +28,16 @@ import { DatePicker } from "@mantine/dates";
 import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
 import { onboardStudent } from "../../services/admin/admin";
 import useAdmin from "../../hooks/useAdmin";
+import { showLoader } from "../../redux/utility/utility.actions";
 import "./administration.scss";
 
 const OnboardStudent = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
+  const dispatch = useDispatch();
+
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
-  const [showLoader, setShowLoader] = useState<boolean>(false);
 
   const nextStep = (data: any) => {
     if (active === 2) {
@@ -52,9 +54,7 @@ const OnboardStudent = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   const handleSubmit = (data: any) => {
-    setShowLoader(true);
-
-    console.log(data);
+    dispatch(showLoader(true));
 
     onboardStudent(data)
       .then((res) => {
@@ -77,7 +77,7 @@ const OnboardStudent = () => {
         });
       })
       .finally(() => {
-        setShowLoader(false);
+        dispatch(showLoader(false));
       });
   };
 
@@ -90,7 +90,6 @@ const OnboardStudent = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
-      <LoadingOverlay visible={showLoader} />
 
       <div className="page-container">
         <div

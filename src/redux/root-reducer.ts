@@ -4,6 +4,7 @@ import storage from "redux-persist/lib/storage";
 
 import userReducer from "./user/user.reducer";
 import dataReducer from "./data/data.reducer";
+import utilityReducer from "./utility/utility.reducer";
 
 const persistConfig = {
   key: "root",
@@ -14,6 +15,7 @@ const persistConfig = {
 const appReducer = combineReducers({
   user: userReducer,
   data: dataReducer,
+  utility: utilityReducer,
 });
 
 const rootReducer = (state: any, action: any) => {

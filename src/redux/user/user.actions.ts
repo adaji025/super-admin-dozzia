@@ -1,9 +1,9 @@
-export const setUserData = (userdata) => ({
+export const setUserData = (userdata: any) => ({
   type: "SET_USER_DATA",
   payload: { userdata },
 });
 
-export const setNotifications = (notifications) => ({
+export const setNotifications = (notifications: any) => ({
   type: "SET_NOTIFICATIONS",
   payload: { notifications },
 });

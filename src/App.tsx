@@ -6,6 +6,7 @@ import {
   MantineProvider,
   Paper,
   ColorScheme,
+  LoadingOverlay,
 } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
@@ -19,6 +20,9 @@ import "./App.scss";
 function App() {
   const userdata = useSelector((state: any) => {
     return state.user.userdata;
+  });
+  const showLoader = useSelector((state: any) => {
+    return state.utility.showLoader;
   });
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -63,6 +67,7 @@ function App() {
             },
           }}
         >
+          <LoadingOverlay visible={showLoader} />
           <NotificationsProvider
             position="top-right"
             zIndex={2077}
