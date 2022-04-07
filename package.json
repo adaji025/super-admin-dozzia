@@ -5,6 +5,7 @@
   "dependencies": {
     "@mantine/core": "^4.1.0",
     "@mantine/dates": "^4.1.0",
+    "@mantine/dropzone": "^4.1.2",
     "@mantine/form": "^4.1.0",
     "@mantine/hooks": "^4.1.0",
     "@mantine/modals": "^4.1.0",
