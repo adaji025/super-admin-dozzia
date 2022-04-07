@@ -5,6 +5,7 @@ import { Paper, useMantineColorScheme } from "@mantine/core";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Dashboard from "../../pages/Dashboard/Dashboard";
+import OnboardStudent from "../../pages/Administration/OnboardStudent";
 
 import "./index.scss";
 
@@ -35,7 +36,8 @@ const LoggedinContainer = () => {
         <div className="main-section">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Dashboard />} />{" "}
+            <Route path="/student-onboarding" element={<OnboardStudent />} />
           </Routes>
         </div>
       </div>

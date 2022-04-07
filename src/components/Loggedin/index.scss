@@ -10,7 +10,7 @@
   .sidebar-container {
     position: relative;
     z-index: 4;
-    padding: 20px 0px 20px 0;
+    padding: 10px 0px 20px 0;
 
     &.is-hidden {
       @media only screen and (max-width: 1000px) {
@@ -188,7 +188,7 @@
       right: 0;
       bottom: 0;
       left: 280px;
-      padding: 20px;
+      overflow-y: scroll;
 
       @media only screen and (max-width: 1000px) {
         left: 0;

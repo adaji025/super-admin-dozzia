@@ -1,0 +1,59 @@
+.page-container {
+  .page-info {
+    padding: 30px 30px;
+    @media only screen and (max-width: 768px) {
+      padding: 20px;
+    }
+    .page-title {
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .page-desc {
+      max-width: 700px;
+      margin-top: 10px;
+      font-size: 18px;
+    }
+  }
+
+  .page-main {
+    padding: 40px 30px 80px 30px;
+
+    .pm-inner-wrapper {
+      max-width: 900px;
+
+      .onboard-group {
+        margin-top: 50px;
+
+        .form-row {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          margin-bottom: 25px;
+          @media only screen and (max-width: 576px) {
+            display: block;
+            margin-bottom: unset;
+          }
+
+          .form-item {
+            width: 47%;
+            @media only screen and (max-width: 576px) {
+              width: 100%;
+              margin-bottom: 20px;
+            }
+
+            .custom-title {
+              font-size: 14px;
+              font-weight: 500;
+              margin-bottom: 6px;
+
+              span {
+                color: #ff6b6b;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
