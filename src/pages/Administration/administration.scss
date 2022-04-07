@@ -24,7 +24,7 @@
   }
 
   .page-main {
-    padding: 40px 30px 80px 30px;
+    padding: 60px 30px 110px 30px;
     @media only screen and (max-width: 768px) {
       padding: 30px 20px 80px 20px;
     }
@@ -42,7 +42,7 @@
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-          margin-bottom: 25px;
+          margin-bottom: 30px;
           @media only screen and (max-width: 576px) {
             display: block;
             margin-bottom: unset;

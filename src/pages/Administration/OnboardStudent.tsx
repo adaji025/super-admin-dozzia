@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, useEffect, Fragment } from "react";
 import {
   Stepper,
   Button,
@@ -8,11 +8,15 @@ import {
   Box,
   Select,
   NumberInput,
+  MultiSelect,
+  RadioGroup,
+  Radio,
 } from "@mantine/core";
 import { Helmet } from "react-helmet";
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
+import useAdministration from "../../hooks/useAdministration";
 import "./administration.scss";
 
 const OnboardStudent = () => {
@@ -57,6 +61,7 @@ const OnboardStudent = () => {
           className="page-main"
           style={{
             background: dark ? "#1a1b1e" : "#ffffff",
+            borderBottom: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
           }}
         >
           <div className="pm-inner-wrapper">
@@ -66,7 +71,7 @@ const OnboardStudent = () => {
               </Stepper.Step>
 
               <Stepper.Step label="Health History" description="Second step">
-                Step 2 content: Verify email
+                <HealthHistory {...{ active, nextStep, prevStep }} />
               </Stepper.Step>
 
               <Stepper.Step label="Academic History" description="Final step">
@@ -252,9 +257,154 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
               <Button variant="default" onClick={prevStep} disabled={!active}>
                 Previous
               </Button>
-              <Button type="submit">
-                {active === 2 ? "Submit" : "Save & Continue"}
+              <Button type="submit">Save & Continue</Button>
+            </Group>
+          </form>
+        </Box>
+      </div>
+    </div>
+  );
+};
+
+const HealthHistory = ({ active, nextStep, prevStep }: any) => {
+  const [disability, setDisability] = useState<string>("No");
+
+  const form = useForm({
+    initialValues: {
+      height: "",
+      weight: "",
+      blood_group: "",
+      genotype: "",
+      existing_conditions: [],
+      hereditary_conditions: [],
+      state_disability: "",
+    },
+
+    validate: {
+      height: (value) => (value === "" ? "Input first name" : null),
+      weight: (value) => (value === "" ? "Input last name" : null),
+      blood_group: (value) => (value === "" ? "Input middle name" : null),
+      genotype: (value) => (value === "" ? "Enter date of birth" : null),
+      state_disability: (value) =>
+        value === "" && disability === "Yes"
+          ? "Input guardian last name"
+          : null,
+    },
+  });
+
+  const { getMedicals } = useAdministration();
+
+  useEffect(() => {
+    getMedicals();
+    //eslint-disable-next-line
+  }, []);
+
+  const onSave = (values: any) => {
+    console.log({ ...values, disability });
+
+    nextStep();
+  };
+
+  const data = [
+    { value: "1", label: "Condition 1" },
+    { value: "2", label: "Condition 2" },
+    { value: "3", label: "Condition 3" },
+  ];
+
+  return (
+    <div className="onboard-group">
+      <div className="form">
+        <Box sx={{ maxWidth: 900 }}>
+          <form onSubmit={form.onSubmit((values) => onSave(values))}>
+            <div className="form-row">
+              <NumberInput
+                className="form-item"
+                required
+                label="Height (cm)"
+                placeholder="Height"
+                type="text"
+                {...form.getInputProps("height")}
+              />
+
+              <NumberInput
+                className="form-item"
+                required
+                label="Weight (kg)"
+                placeholder="Weight"
+                type="text"
+                {...form.getInputProps("weight")}
+              />
+            </div>
+
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                required
+                label="Blood Group"
+                placeholder="Blood group"
+                type="text"
+                {...form.getInputProps("blood_group")}
+              />
+
+              <TextInput
+                className="form-item"
+                required
+                label="Genotype"
+                placeholder="Genotype"
+                type="text"
+                {...form.getInputProps("genotype")}
+              />
+            </div>
+
+            <div className="form-row">
+              <MultiSelect
+                className="form-item"
+                data={data}
+                label="Existing Medical Condition(s)"
+                placeholder="Select all that applies"
+                {...form.getInputProps("existing_conditions")}
+              />
+
+              <MultiSelect
+                className="form-item"
+                data={data}
+                label="Hereditary Health Condition(s)"
+                placeholder="Select all that applies"
+                {...form.getInputProps("hereditary_conditions")}
+              />
+            </div>
+
+            <div className="form-row">
+              <RadioGroup
+                className="form-item"
+                value={disability}
+                onChange={setDisability}
+                label="Any Disability?"
+                required
+              >
+                <Radio value="Yes" label="Yes" />
+                <Radio value="No" label="No" />
+              </RadioGroup>
+            </div>
+
+            {disability === "Yes" && (
+              <div className="form-row">
+                <TextInput
+                  required
+                  className="form-item"
+                  label="State Disability"
+                  placeholder="Disability"
+                  type="text"
+                  {...form.getInputProps("state_disability")}
+                />
+              </div>
+            )}
+
+            <Group position="left" mt={50}>
+              <Button variant="default" onClick={prevStep} disabled={!active}>
+                Previous
               </Button>
+              <Button type="submit">Save & Continue</Button>
             </Group>
           </form>
         </Box>
