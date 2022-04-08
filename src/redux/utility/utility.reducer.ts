@@ -7,7 +7,7 @@ const utilityReducer = (state = INITIAL_STATE, action: any) => {
     case "SHOW_LOADER":
       return {
         ...state,
-        showLoader: action.payload.showLoader,
+        showLoader: action.payload,
       };
     default:
       return state;
