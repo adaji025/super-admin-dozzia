@@ -9,6 +9,7 @@ export const APIS = {
   LISTS: {
     GET_STATE_LIST: `${api}/states`,
     GET_MEDICAL_LIST: `${api}/medicals`,
+    GET_STAFF_ROLE_LIST: `${api}/roles`,
   },
   ADMIN: {
     ONBOARD_STUDENT: `${api}/students`,

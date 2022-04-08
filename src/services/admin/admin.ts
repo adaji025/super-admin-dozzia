@@ -13,6 +13,12 @@ export const getMedicalList = () => {
   });
 };
 
+export const getStaffRoleList = () => {
+  return AxoisApi.get(`${APIS.LISTS.GET_STAFF_ROLE_LIST}`).then((res) => {
+    return res.data;
+  });
+};
+
 export const onboardStudent = (data: any) => {
   return AxoisApi.post(`${APIS.ADMIN.ONBOARD_STUDENT}`, data).then((res) => {
     return res.data;
