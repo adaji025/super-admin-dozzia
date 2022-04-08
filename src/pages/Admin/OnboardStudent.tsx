@@ -170,6 +170,16 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
     },
 
     validate: {
+      first_name: (value) => (value === "" ? "Input first name" : null),
+      last_name: (value) => (value === "" ? "Input last name" : null),
+      middle_name: (value) => (value === "" ? "Input middle name" : null),
+      dob: (value) => (value === "" ? "Enter date of birth" : null),
+      gender: (value) => (value === "" ? "Select student gender" : null),
+      age: (value) => (value === "" ? "Enter student age" : null),
+      guardian_first_name: (value) =>
+        value === "" ? "Input guardian first name" : null,
+      guardian_last_name: (value) =>
+        value === "" ? "Input guardian last name" : null,
       guardian_phone_number: (value) =>
         value.length < 7 ? "Enter valid phone number" : null,
       guardian_email: (value) =>

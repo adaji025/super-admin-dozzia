@@ -186,6 +186,10 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
     },
 
     validate: {
+      role_id: (value) => (value === "" ? "Select staff role" : null),
+      title: (value) => (value === "" ? "Select title" : null),
+      gender: (value) => (value === "" ? "Select gender" : null),
+      religion: (value) => (value === "" ? "Select religion" : null),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       next_of_kin_email: (value) =>
         /^\S+@\S+$/.test(value) ? null : "Invalid email",
