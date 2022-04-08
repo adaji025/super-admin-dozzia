@@ -7,9 +7,9 @@ const Dashboard = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Overview</title>
+        <title>General Overview</title>
         <meta name="description" content="" />
-        <meta property="og:title" content="Overview" />
+        <meta property="og:title" content="General Overview" />
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
