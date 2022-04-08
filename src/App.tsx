@@ -51,6 +51,7 @@ function App() {
           theme={{
             colorScheme,
             primaryColor: "green",
+            fontFamily: "Inter, sans-serif",
             colors: {
               dark: [
                 "#d5d7e0",
