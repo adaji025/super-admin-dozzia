@@ -95,7 +95,14 @@ const OnboardStudent = () => {
             color: dark ? "white" : "#4e4e4e",
           }}
         >
-          <div className="page-title">Onboard Student 🧑‍🎓</div>
+          <div
+            className="page-title"
+            style={{
+              color: dark ? "white" : "black",
+            }}
+          >
+            Onboard Student 🧑‍🎓
+          </div>
           <div
             className="page-desc"
             style={{
