@@ -30,12 +30,14 @@ import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
 import { onboardStaff } from "../../services/admin/admin";
 import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
+import useNotification from "../../hooks/useNotification";
 import "./admin.scss";
 
 const OnboardStaff = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const dispatch = useDispatch();
+  const { handleError } = useNotification();
 
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
@@ -68,14 +70,7 @@ const OnboardStaff = () => {
         setFormData({});
       })
       .catch((error) => {
-        showNotification({
-          title: "Error",
-          message: `${
-            error?.response?.data?.message ??
-            "An error occured, please try again"
-          } 🤥`,
-          color: "red",
-        });
+        handleError(error);
       })
       .finally(() => {
         dispatch(showLoader(false));
@@ -203,7 +198,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   const onSave = (values: any) => {
     nextStep({
       ...values,
-      dob: moment(values.dob).format("DD/MM/YYYY"),
+      dob: moment(values.dob).format("L"),
       phone_number: values.phone_number.toString(),
       next_of_kin_phone_number: values.next_of_kin_phone_number.toString(),
     });
