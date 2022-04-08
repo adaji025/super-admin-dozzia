@@ -14,6 +14,7 @@ import { showNotification } from "@mantine/notifications";
 import { User } from "tabler-icons-react";
 
 import { forgotPassword } from "../../services/auth/auth";
+import useNotification from "../../hooks/useNotification";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import "./auth.scss";
@@ -23,6 +24,7 @@ const ForgotPassword = () => {
   const dark = colorScheme === "dark";
   const navigate = useNavigate();
   const [showLoader, setShowLoader] = useState<boolean>(false);
+  const { handleError } = useNotification();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -51,14 +53,7 @@ const ForgotPassword = () => {
         navigate("/reset-password");
       })
       .catch((error) => {
-        showNotification({
-          title: "Error",
-          message: `${
-            error?.response?.data?.message ??
-            "An error occured, please try again"
-          } 🤥`,
-          color: "red",
-        });
+        handleError(error);
       })
       .finally(() => {
         setShowLoader(false);

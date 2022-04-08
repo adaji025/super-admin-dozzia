@@ -30,12 +30,14 @@ import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
 import { onboardStudent } from "../../services/admin/admin";
 import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
+import useNotification from "../../hooks/useNotification";
 import "./admin.scss";
 
 const OnboardStudent = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const dispatch = useDispatch();
+  const { handleError } = useNotification();
 
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
@@ -68,14 +70,7 @@ const OnboardStudent = () => {
         setFormData({});
       })
       .catch((error) => {
-        showNotification({
-          title: "Error",
-          message: `${
-            error?.response?.data?.message ??
-            "An error occured, please try again"
-          } 🤥`,
-          color: "red",
-        });
+        handleError(error);
       })
       .finally(() => {
         dispatch(showLoader(false));

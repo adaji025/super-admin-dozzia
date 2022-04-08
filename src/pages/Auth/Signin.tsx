@@ -21,6 +21,8 @@ import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { login } from "../../services/auth/auth";
 import { setUserData } from "../../redux/user/user.actions";
 import "./auth.scss";
+import useNotification from "../../hooks/useNotification";
+
 // import { ReactComponent as Ellipse } from "../../assets/svg/ellipse.svg";
 
 const Signin = () => {
@@ -29,6 +31,7 @@ const Signin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showLoader, setShowLoader] = useState<boolean>(false);
+  const { handleError } = useNotification();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -71,14 +74,7 @@ const Signin = () => {
         }
       })
       .catch((error) => {
-        showNotification({
-          title: "Error",
-          message: `${
-            error?.response?.data?.message ??
-            "Failed to login, please try again"
-          } 🤥`,
-          color: "red",
-        });
+        handleError(error);
       })
       .finally(() => {
         setShowLoader(false);

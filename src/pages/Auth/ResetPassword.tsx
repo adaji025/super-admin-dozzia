@@ -17,6 +17,7 @@ import { Lock } from "tabler-icons-react";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { resetPassword } from "../../services/auth/auth";
+import useNotification from "../../hooks/useNotification";
 
 import "./auth.scss";
 
@@ -28,6 +29,7 @@ const ResetPassword = () => {
   const [isNewUser, setIsNewUser] = useState<boolean>(false);
   const [resetCode, setResetCode] = useState<string>("");
   const [showLoader, setShowLoader] = useState<boolean>(false);
+  const { handleError } = useNotification();
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
@@ -79,14 +81,7 @@ const ResetPassword = () => {
         navigate("/signin");
       })
       .catch((error) => {
-        showNotification({
-          title: "Error",
-          message: `${
-            error?.response?.data?.message ??
-            "Password reset failed, please try again"
-          } 🤥`,
-          color: "red",
-        });
+        handleError(error);
       })
       .finally(() => {
         setShowLoader(false);

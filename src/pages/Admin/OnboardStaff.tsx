@@ -63,7 +63,7 @@ const OnboardStaff = () => {
       .then((res) => {
         showNotification({
           title: "Success",
-          message: "Student added successfully 🤗",
+          message: "Staff added successfully 🤗",
           color: "green",
         });
         setActive(0);
@@ -279,11 +279,11 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 label="Marital Status"
                 placeholder="Marital status"
                 data={[
-                  { value: "Single", label: "Single 😎" },
-                  { value: "Married", label: "Married 🥰" },
-                  { value: "Widowed", label: "Widowed 😢" },
-                  { value: "Divorced", label: "Divorced 😏" },
-                  { value: "Separated", label: "Separated 🤨" },
+                  { value: "Single", label: "Single" },
+                  { value: "Married", label: "Married" },
+                  { value: "Widowed", label: "Widowed" },
+                  { value: "Divorced", label: "Divorced" },
+                  { value: "Separated", label: "Separated" },
                 ]}
                 {...form.getInputProps("marital_status")}
               />
