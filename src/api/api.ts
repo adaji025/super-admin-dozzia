@@ -13,5 +13,6 @@ export const APIS = {
   },
   ADMIN: {
     ONBOARD_STUDENT: `${api}/students`,
+    ONBOARD_STAFF: `${api}/staff`,
   },
 };

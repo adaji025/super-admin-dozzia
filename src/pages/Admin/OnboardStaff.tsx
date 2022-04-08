@@ -12,6 +12,7 @@ import {
   RadioGroup,
   Radio,
   Textarea,
+  Divider,
 } from "@mantine/core";
 import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
@@ -20,18 +21,18 @@ import moment from "moment";
 import {
   UserCircle,
   BuildingHospital,
-  School,
+  History,
   CircleCheck,
 } from "tabler-icons-react";
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
-import { onboardStudent } from "../../services/admin/admin";
+import { onboardStaff } from "../../services/admin/admin";
 import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
-import "./administration.scss";
+import "./admin.scss";
 
-const OnboardStudent = () => {
+const OnboardStaff = () => {
   const { colorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ const OnboardStudent = () => {
   const handleSubmit = (data: any) => {
     dispatch(showLoader(true));
 
-    onboardStudent(data)
+    onboardStaff(data)
       .then((res) => {
         showNotification({
           title: "Success",
@@ -84,9 +85,9 @@ const OnboardStudent = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Onboard Student</title>
+        <title>Onboard Staff</title>
         <meta name="description" content="" />
-        <meta property="og:title" content="Onboard Student" />
+        <meta property="og:title" content="Onboard Staff" />
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
@@ -99,7 +100,7 @@ const OnboardStudent = () => {
             color: dark ? "white" : "#4e4e4e",
           }}
         >
-          <div className="page-title">Onboard Student 🧑‍🎓</div>
+          <div className="page-title">Onboard Staff 👩‍🏫</div>
           <div
             className="page-desc"
             style={{
@@ -143,12 +144,12 @@ const OnboardStudent = () => {
               </Stepper.Step>
 
               <Stepper.Step
-                icon={<School size={18} />}
-                label="Academic History"
+                icon={<History size={18} />}
+                label="Work History"
                 description="Final step"
                 allowStepSelect={false}
               >
-                <AcademicHistory {...{ active, nextStep, prevStep }} />
+                <WorkHistory {...{ active, nextStep, prevStep }} />
               </Stepper.Step>
             </Stepper>
           </div>
@@ -159,34 +160,39 @@ const OnboardStudent = () => {
 };
 
 const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
+  const { getStates, getStaffRoles, states, staffRoles } = useAdmin();
+
+  useEffect(() => {
+    getStates();
+    getStaffRoles();
+    //eslint-disable-next-line
+  }, []);
+
   const form = useForm({
     initialValues: {
+      role_id: "",
+      title: "",
       first_name: "",
       last_name: "",
       middle_name: "",
+      email: "",
+      phone_number: "",
+      address: "",
+      postal_code: "",
       dob: "",
       gender: "",
       age: "",
-      guardian_first_name: "",
-      guardian_last_name: "",
-      guardian_phone_number: "",
-      guardian_email: "",
+      marital_status: "",
+      state_of_origin: "",
+      religion: "",
+      next_of_kin_name: "",
+      next_of_kin_phone_number: "",
+      next_of_kin_email: "",
     },
 
     validate: {
-      first_name: (value) => (value === "" ? "Input first name" : null),
-      last_name: (value) => (value === "" ? "Input last name" : null),
-      middle_name: (value) => (value === "" ? "Input middle name" : null),
-      dob: (value) => (value === "" ? "Enter date of birth" : null),
-      gender: (value) => (value === "" ? "Select student gender" : null),
-      age: (value) => (value === "" ? "Enter student age" : null),
-      guardian_first_name: (value) =>
-        value === "" ? "Input guardian first name" : null,
-      guardian_last_name: (value) =>
-        value === "" ? "Input guardian last name" : null,
-      guardian_phone_number: (value) =>
-        value.length < 7 ? "Enter valid phone number" : null,
-      guardian_email: (value) =>
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      next_of_kin_email: (value) =>
         /^\S+@\S+$/.test(value) ? null : "Invalid email",
     },
   });
@@ -197,8 +203,9 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   const onSave = (values: any) => {
     nextStep({
       ...values,
-      dob: moment(values.dob).format("YYYY-MM-DD"),
-      guardian_phone_number: values.guardian_phone_number.toString(),
+      dob: moment(values.dob).format("DD/MM/YYYY"),
+      phone_number: values.phone_number.toString(),
+      next_of_kin_phone_number: values.next_of_kin_phone_number.toString(),
     });
   };
 
@@ -208,6 +215,38 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
         <Box sx={{ maxWidth: 900 }}>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="Staff Role"
+                placeholder="Select role"
+                data={staffRoles.map(
+                  (role: { role_id: string; role_name: string }) => ({
+                    key: role?.role_id,
+                    value: role?.role_id,
+                    label: role.role_name,
+                  })
+                )}
+                {...form.getInputProps("role_id")}
+              />
+            </div>
+
+            <Divider mb="lg" variant="dashed" />
+
+            <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="Title"
+                placeholder="Title"
+                data={[
+                  { value: "Mr", label: "Mr 🧑" },
+                  { value: "Mrs", label: "Mrs 👱‍♀️" },
+                  { value: "Miss", label: "Miss 👩‍🦰" },
+                ]}
+                {...form.getInputProps("title")}
+              />
+
               <TextInput
                 className="form-item"
                 required
@@ -216,7 +255,9 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 type="text"
                 {...form.getInputProps("first_name")}
               />
+            </div>
 
+            <div className="form-row">
               <TextInput
                 className="form-item"
                 required
@@ -225,9 +266,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 type="text"
                 {...form.getInputProps("last_name")}
               />
-            </div>
 
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 required
@@ -235,6 +274,23 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 placeholder="Middle name"
                 type="text"
                 {...form.getInputProps("middle_name")}
+              />
+            </div>
+
+            <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="Marital Status"
+                placeholder="Marital status"
+                data={[
+                  { value: "Single", label: "Single 😎" },
+                  { value: "Married", label: "Married 🥰" },
+                  { value: "Widowed", label: "Widowed 😢" },
+                  { value: "Divorced", label: "Divorced 😏" },
+                  { value: "Separated", label: "Separated 🤨" },
+                ]}
+                {...form.getInputProps("marital_status")}
               />
 
               <DatePicker
@@ -272,22 +328,92 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
             </div>
 
             <div className="form-row">
-              <TextInput
+              <NumberInput
                 className="form-item"
                 required
-                label="Guardian’s First Name"
-                placeholder="Guardian’s first name"
-                type="text"
-                {...form.getInputProps("guardian_first_name")}
+                label="Phone Number"
+                placeholder="Phone number"
+                type="tel"
+                {...form.getInputProps("phone_number")}
               />
 
               <TextInput
                 className="form-item"
                 required
-                label="Guardian’s Last Name"
-                placeholder="Guardian’s last name"
+                label="Email"
+                placeholder="Email"
+                type="email"
+                {...form.getInputProps("email")}
+              />
+            </div>
+
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                required
+                label="House Address"
+                placeholder="Address"
                 type="text"
-                {...form.getInputProps("guardian_last_name")}
+                {...form.getInputProps("address")}
+              />
+
+              <TextInput
+                className="form-item"
+                required
+                label="Postal Code"
+                placeholder="Postal code"
+                type="text"
+                {...form.getInputProps("postal_code")}
+              />
+            </div>
+
+            <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="State of Origin"
+                placeholder="Select State"
+                searchable
+                nothingFound="No option"
+                data={states.map(
+                  (state: { state_id: string; name: string }) => ({
+                    key: state?.state_id,
+                    value: state?.state_id,
+                    label: state.name,
+                  })
+                )}
+                {...form.getInputProps("state_of_origin")}
+              />
+
+              <Select
+                className="form-item"
+                required
+                label="Religion"
+                placeholder="Select religion"
+                data={[
+                  { value: "Christianity", label: "Christianity" },
+                  { value: "Islam", label: "Islam" },
+                  { value: "Other", label: "Other" },
+                ]}
+                {...form.getInputProps("religion")}
+              />
+            </div>
+
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Next of kin"
+              labelPosition="center"
+            />
+
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                required
+                label="Full Name"
+                placeholder="Next of kin"
+                type="text"
+                {...form.getInputProps("next_of_kin_name")}
               />
             </div>
 
@@ -295,20 +421,23 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
               <NumberInput
                 className="form-item"
                 required
-                label="Guardian’s Phone Number"
-                placeholder="Guardian’s phone number"
-                {...form.getInputProps("guardian_phone_number")}
+                type="tel"
+                label="Phone Number"
+                placeholder="Phone number"
+                {...form.getInputProps("next_of_kin_phone_number")}
               />
 
               <TextInput
                 className="form-item"
                 required
-                label="Guardian’s Email"
-                placeholder="Guardian’s email"
+                label="Email"
+                placeholder="Email"
                 type="email"
-                {...form.getInputProps("guardian_email")}
+                {...form.getInputProps("next_of_kin_email")}
               />
             </div>
+
+            <Divider mb="lg" variant="dashed" />
 
             <div className="form-row">
               <div className="form-item upload">
@@ -325,7 +454,9 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
               </div>
             </div>
 
-            <Group position="left" mt={50}>
+            <Divider mb="lg" variant="dashed" />
+
+            <Group position="left" mt="xl">
               <Button variant="default" onClick={prevStep} disabled={!active}>
                 Previous
               </Button>
@@ -346,17 +477,15 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
       height: "",
       weight: "",
       blood_group: "",
-      genotype: "",
+      blood_type: "",
       existing_conditions: [],
       hereditary_conditions: [],
       state_disability: "",
     },
 
     validate: {
-      height: (value) => (value === "" ? "Input height" : null),
-      weight: (value) => (value === "" ? "Input weight" : null),
-      blood_group: (value) => (value === "" ? "Input blood group" : null),
-      genotype: (value) => (value === "" ? "Input genotype" : null),
+      blood_type: (value) =>
+        value.length > 3 ? "Cannot be greater than 3 characters" : null,
       state_disability: (value) =>
         value === "" && disability === "Yes"
           ? "Please specify disability"
@@ -422,7 +551,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 label="Genotype"
                 placeholder="Genotype"
                 type="text"
-                {...form.getInputProps("genotype")}
+                {...form.getInputProps("blood_type")}
               />
             </div>
 
@@ -470,7 +599,9 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
               </div>
             )}
 
-            <Group position="left" mt={50}>
+            <Divider mb="lg" variant="dashed" />
+
+            <Group position="left" mt="xl">
               <Button variant="default" onClick={prevStep} disabled={!active}>
                 Previous
               </Button>
@@ -483,29 +614,23 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
   );
 };
 
-const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
+const WorkHistory = ({ active, nextStep, prevStep }: any) => {
   const form = useForm({
     initialValues: {
-      previous_school_name: "",
-      previous_academic_year: "",
-      last_grade: "",
-      entry_test_result: "",
-      reason_leaving_previous_school: "",
-    },
-
-    validate: {
-      previous_academic_year: (value) =>
-        value === "" ? "Provide previous year" : null,
-      last_grade: (value) =>
-        value === "" ? "Last grade scored by student" : null,
-      entry_test_result: (value) => (value === "" ? "Input score" : null),
+      previous_workplace: "",
+      year_of_experience: "",
+      guarantor_name: "",
+      guarantor_employment_role: "",
+      guarantor_phone_number: "",
+      reason_leaving_previous_workplace: "",
     },
   });
 
   const onSave = (values: any) => {
     nextStep({
       ...values,
-      previous_academic_year: values.previous_academic_year.toString(),
+      year_of_experience: values.year_of_experience.toString(),
+      guarantor_phone_number: values.guarantor_phone_number.toString(),
     });
   };
 
@@ -516,11 +641,12 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
               <TextInput
+                required
                 className="form-item"
-                label="Previous School Name"
+                label="Previous Workplace"
                 placeholder="Enter name"
                 type="text"
-                {...form.getInputProps("previous_school_name")}
+                {...form.getInputProps("previous_workplace")}
               />
             </div>
 
@@ -528,23 +654,10 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
               <NumberInput
                 required
                 className="form-item"
-                label="Previous Academic Year:"
-                placeholder="Enter year"
+                label="Years of Experience"
+                placeholder="Enter number"
                 type="number"
-                {...form.getInputProps("previous_academic_year")}
-              />
-            </div>
-
-            <div className="form-row">
-              <NumberInput
-                required
-                className="form-item"
-                label="Last Grade (%)"
-                placeholder="Grade"
-                type="number"
-                max={100}
-                min={0}
-                {...form.getInputProps("last_grade")}
+                {...form.getInputProps("year_of_experience")}
               />
             </div>
 
@@ -556,7 +669,34 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
                 autosize
                 minRows={3}
                 maxRows={5}
-                {...form.getInputProps("reason_leaving_previous_school")}
+                {...form.getInputProps("reason_leaving_previous_workplace")}
+              />
+            </div>
+
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Guarantor"
+              labelPosition="center"
+            />
+
+            <div className="form-row">
+              <TextInput
+                required
+                className="form-item"
+                label="Guarantor Name"
+                placeholder="Enter name"
+                type="text"
+                {...form.getInputProps("guarantor_name")}
+              />
+
+              <TextInput
+                required
+                className="form-item"
+                label="Employment Role"
+                placeholder="e.g. Architect"
+                type="text"
+                {...form.getInputProps("guarantor_employment_role")}
               />
             </div>
 
@@ -564,16 +704,16 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
               <NumberInput
                 className="form-item"
                 required
-                label="Entry Test Score (%)"
-                placeholder="Score"
-                type="number"
-                max={100}
-                min={0}
-                {...form.getInputProps("entry_test_result")}
+                label="Phone Number"
+                placeholder="Guarantor number"
+                type="tel"
+                {...form.getInputProps("guarantor_phone_number")}
               />
             </div>
 
-            <Group position="left" mt={50}>
+            <Divider mb="lg" variant="dashed" />
+
+            <Group position="left" mt="xl">
               <Button variant="default" onClick={prevStep} disabled={!active}>
                 Previous
               </Button>
@@ -586,4 +726,4 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
   );
 };
 
-export default OnboardStudent;
+export default OnboardStaff;

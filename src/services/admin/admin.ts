@@ -24,3 +24,9 @@ export const onboardStudent = (data: any) => {
     return res.data;
   });
 };
+
+export const onboardStaff = (data: any) => {
+  return AxoisApi.post(`${APIS.ADMIN.ONBOARD_STAFF}`, data).then((res) => {
+    return res.data;
+  });
+};
