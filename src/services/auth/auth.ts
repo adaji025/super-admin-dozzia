@@ -69,3 +69,9 @@ export const changePassword = (
     return res.data;
   });
 };
+
+export const logout = () => {
+  return AxoisApi.post(`${APIS.AUTH.LOGOUT}`).then((res) => {
+    return res.data;
+  });
+};

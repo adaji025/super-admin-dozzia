@@ -16,7 +16,7 @@ import {
   ChevronDown,
   X,
 } from "tabler-icons-react";
-
+import { logout } from "../../services/auth/auth";
 import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 
 interface SidebarProps {
@@ -285,14 +285,17 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           <div
             className={`nav-item ${dark ? "h-dark" : "h-light"}`}
             onClick={() => {
+              logout();
+              dispatch({ type: "LOGOUT" });
+              navigate("/signin");
               showNotification({
                 title: "User logged out",
                 message: `${"Sign in to continue "} 😑`,
                 color: "yellow",
               });
-              localStorage.removeItem("token");
-              dispatch({ type: "LOGOUT" });
-              navigate("/signin");
+              setTimeout(() => {
+                localStorage.removeItem("token");
+              }, 1500);
             }}
           >
             <span>
