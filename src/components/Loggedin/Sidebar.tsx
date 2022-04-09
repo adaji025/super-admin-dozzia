@@ -139,21 +139,34 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       <X className="close-icon click" size={29} onClick={toggleSidebar} />
 
       <div className="sidebar-inner">
-        <div className="school-logo-wrapper">
-          <SchoolLogo className="school-logo" />
-        </div>
-
-        <Text
-          className="school-name"
+        <div
+          className="school-info"
           style={{
             borderBottom: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
-            color: dark ? "white" : "#4e4e4e",
           }}
         >
-          {schoolName ? schoolName : ""}
-        </Text>
+          <div className="school-info-inner">
+            <div className="school-logo-wrapper">
+              <SchoolLogo className="school-logo" />
+            </div>
 
-        <div className="nav-links">
+            <Text
+              className="school-name"
+              style={{
+                color: dark ? "#b0b0b0" : "#5e5e5e",
+              }}
+            >
+              {schoolName ? schoolName : ""}
+            </Text>
+          </div>
+        </div>
+
+        <div
+          className="nav-links"
+          style={{
+            color: dark ? "#b0b0b0" : "#5e5e5e",
+          }}
+        >
           {routes.map((item) => (
             <Fragment key={item.name}>
               {item.children ? (
@@ -181,8 +194,8 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                           showChildren !== item.name
                             ? "#33cc33"
                             : dark
-                            ? "white"
-                            : "#495057"
+                            ? "#b0b0b0"
+                            : "#5e5e5e"
                         }
                         size={25}
                         strokeWidth={1.3}
@@ -198,8 +211,8 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                         showChildren !== item.name
                           ? "#33cc33"
                           : dark
-                          ? "white"
-                          : "#495057"
+                          ? "#b0b0b0"
+                          : "#5e5e5e"
                       }
                       className={`arrow-down ${
                         showChildren === item.name ? "rotate" : ""
@@ -255,8 +268,8 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                           location.pathname === "/")
                           ? "#33cc33"
                           : dark
-                          ? "white"
-                          : "#495057"
+                          ? "#b0b0b0"
+                          : "#5e5e5e"
                       }
                       size={25}
                       strokeWidth={1.3}
@@ -285,7 +298,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           >
             <span>
               <Logout
-                color={dark ? "white" : "#495057"}
+                color={dark ? "#b0b0b0" : "#5e5e5e"}
                 size={25}
                 strokeWidth={1.3}
                 className="nav-icon"

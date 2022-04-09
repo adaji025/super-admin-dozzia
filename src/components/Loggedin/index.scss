@@ -10,7 +10,7 @@
   .sidebar-container {
     position: relative;
     z-index: 4;
-    padding: 10px 0px 20px 0;
+    padding: 20px 0px 20px 0;
 
     &.is-hidden {
       @media only screen and (max-width: 1000px) {
@@ -45,23 +45,29 @@
     .sidebar-inner {
       display: block;
 
-      .school-logo-wrapper {
-        padding-left: 45px;
+      .school-info {
+        .school-info-inner {
+          padding-left: 25px;
+          width: fit-content;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .school-logo-wrapper {
+            .school-logo {
+              height: 60px;
+              width: 60px;
+              border-radius: 50%;
+              border: 1px solid rgba(134, 134, 134, 0.177);
+            }
+          }
 
-        .school-logo {
-          height: 70px;
-          width: 70px;
-          border-radius: 50%;
-          border: 1px solid rgba(134, 134, 134, 0.177);
+          .school-name {
+            margin-top: 3px;
+            font-size: 17px;
+            font-weight: 500;
+            padding-bottom: 10px;
+          }
         }
-      }
-
-      .school-name {
-        margin-top: 10px;
-        font-size: 18px;
-        font-weight: 500;
-        padding-left: 25px;
-        padding-bottom: 20px;
       }
 
       .nav-links {
