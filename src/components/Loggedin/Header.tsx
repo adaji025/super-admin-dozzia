@@ -36,12 +36,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
 
         <div className="h-right">
           <div className="h-item">
-            <ActionIcon
-              variant="light"
-              // onClick={() => toggleColorScheme()}
-              title="Notifications"
-              size="lg"
-            >
+            <ActionIcon variant="light" title="Notifications" size="lg">
               <Bell size={25} strokeWidth={1.4} />
             </ActionIcon>
           </div>
@@ -64,7 +59,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
 
           <div className="h-item user click">
             <div className="h-name no-select">
-              <Text mr="xs" color={dark ? "" : "#515151"}>
+              <Text mr="xs" color={dark ? "" : "#393939"}>
                 {`Hi${firstname ? "," : ""} ${firstname ?? "there!"}`}
               </Text>
             </div>

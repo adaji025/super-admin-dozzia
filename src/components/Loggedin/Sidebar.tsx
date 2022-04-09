@@ -153,7 +153,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             <Text
               className="school-name"
               style={{
-                color: dark ? "#b0b0b0" : "#5e5e5e",
+                color: dark ? "#b0b0b0" : "black",
               }}
             >
               {schoolName ? schoolName : ""}
@@ -164,7 +164,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         <div
           className="nav-links"
           style={{
-            color: dark ? "#b0b0b0" : "#5e5e5e",
+            color: dark ? "#b0b0b0" : "black",
           }}
         >
           {routes.map((item) => (
