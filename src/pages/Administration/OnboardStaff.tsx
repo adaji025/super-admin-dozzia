@@ -190,8 +190,8 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
     nextStep({
       ...values,
       dob: moment(values.dob).format("L"),
-      phone_number: values.phone_number.toString(),
-      next_of_kin_phone_number: values.next_of_kin_phone_number.toString(),
+      phone_number: values.phone_number,
+      next_of_kin_phone_number: values.next_of_kin_phone_number,
     });
   };
 
@@ -314,7 +314,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
             </div>
 
             <div className="form-row">
-              <NumberInput
+              <TextInput
                 className="form-item"
                 required
                 label="Phone Number"
@@ -404,7 +404,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
             </div>
 
             <div className="form-row">
-              <NumberInput
+              <TextInput
                 className="form-item"
                 required
                 type="tel"
@@ -616,7 +616,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
     nextStep({
       ...values,
       year_of_experience: values.year_of_experience.toString(),
-      guarantor_phone_number: values.guarantor_phone_number.toString(),
+      guarantor_phone_number: values.guarantor_phone_number,
     });
   };
 
@@ -687,7 +687,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
             </div>
 
             <div className="form-row">
-              <NumberInput
+              <TextInput
                 className="form-item"
                 required
                 label="Phone Number"

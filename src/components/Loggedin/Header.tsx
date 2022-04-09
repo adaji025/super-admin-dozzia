@@ -57,7 +57,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
             </ActionIcon>
           </div>
 
-          <div className="h-item user click">
+          <div className="h-item user">
             <div className="h-name no-select">
               <Text mr="xs" color={dark ? "" : "#393939"}>
                 {`Hi${firstname ? "," : ""} ${firstname ?? "there!"}`}

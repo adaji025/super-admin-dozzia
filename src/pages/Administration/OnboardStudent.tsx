@@ -181,7 +181,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
     nextStep({
       ...values,
       dob: moment(values.dob).format("YYYY-MM-DD"),
-      guardian_phone_number: values.guardian_phone_number.toString(),
+      guardian_phone_number: values.guardian_phone_number,
     });
   };
 
@@ -282,7 +282,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
             </div>
 
             <div className="form-row">
-              <NumberInput
+              <TextInput
                 className="form-item"
                 required
                 label="Guardian’s Phone Number"
