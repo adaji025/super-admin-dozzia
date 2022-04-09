@@ -7,6 +7,7 @@ export const APIS = {
     RESET_PASSWORD: `${api}/reset/password`,
     UPDATE_PROFILE: `${api}/profile`,
     CHANGE_PASSWORD: `${api}/change/password`,
+    CHANGE_PROFILE_IMAGE: `${api}/picture`,
     LOGOUT: `${api}/logout`,
   },
   LISTS: {

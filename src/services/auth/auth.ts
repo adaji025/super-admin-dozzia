@@ -70,6 +70,14 @@ export const changePassword = (
   });
 };
 
+export const changeProfileImage = (image: any) => {
+  return AxoisApi.post(`${APIS.AUTH.CHANGE_PROFILE_IMAGE}`, image).then(
+    (res) => {
+      return res.data;
+    }
+  );
+};
+
 export const logout = () => {
   return AxoisApi.post(`${APIS.AUTH.LOGOUT}`).then((res) => {
     return res.data;

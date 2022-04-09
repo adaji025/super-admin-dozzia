@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useRef } from "react";
 import { Helmet } from "react-helmet";
 import {
   Avatar,
@@ -9,6 +9,7 @@ import {
   Box,
   Modal,
   Divider,
+  Text,
 } from "@mantine/core";
 import { Lock } from "tabler-icons-react";
 import { useDispatch } from "react-redux";
@@ -16,14 +17,20 @@ import { useForm } from "@mantine/form";
 import { useSelector } from "react-redux";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-import { changePassword, updateProfile } from "../../services/auth/auth";
+import {
+  changePassword,
+  updateProfile,
+  changeProfileImage,
+} from "../../services/auth/auth";
 import { showNotification } from "@mantine/notifications";
 import useNotification from "../../hooks/useNotification";
 import { showLoader } from "../../redux/utility/utility.actions";
 import { setUserData } from "../../redux/user/user.actions";
+
 import "./settings.scss";
 
 const Settings = () => {
+  const inputFile: any = useRef();
   const { dark } = useTheme();
   const dispatch = useDispatch();
   const userdata = useSelector((state: any) => {
@@ -71,6 +78,47 @@ const Settings = () => {
       });
   };
 
+  const onImageButtonClick = () => {
+    inputFile.current.click();
+  };
+
+  const types = ["image/png", "image/jpeg", "image/jpg"];
+
+  const handleImageUpload = (e: any) => {
+    let selectedFile = e.target.files[0];
+
+    if (selectedFile) {
+      if (types.includes(selectedFile.type)) {
+        dispatch(showLoader(true));
+
+        var formData = new FormData();
+        formData.append("image", selectedFile);
+
+        changeProfileImage(formData)
+          .then((res) => {
+            showNotification({
+              title: "Success",
+              message: `${"Profile image changed."} 😶‍🌫️`,
+              color: "green",
+            });
+            console.log(res);
+          })
+          .catch((error) => {
+            handleError(error);
+          })
+          .finally(() => {
+            dispatch(showLoader(false));
+            inputFile.current.value = null;
+          });
+      } else {
+        showNotification({
+          title: "Error",
+          message: `Please select an image file (png or jpg) 🖼️`,
+          color: "red",
+        });
+      }
+    }
+  };
   return (
     <Fragment>
       <Helmet>
@@ -84,7 +132,7 @@ const Settings = () => {
       <Modal
         opened={changePasswordModal}
         onClose={() => setChangePasswordModal(false)}
-        title="Change Password"
+        title={<Text weight={600}>Change Password</Text>}
       >
         <ChangePassword
           closeModal={() => {
@@ -102,7 +150,7 @@ const Settings = () => {
         <div
           className="settings-main"
           style={{
-            background: dark ? "#121212" : "white",
+            background: dark ? "#1a1b1e" : "#ffffff",
           }}
         >
           <div className="image-section">
@@ -113,12 +161,23 @@ const Settings = () => {
                   : null
               }
               radius="xl"
-              size={90}
+              size={120}
             />
 
-            <Button ml="sm" variant="subtle">
+            <Button ml="sm" variant="subtle" onClick={onImageButtonClick}>
               Change picture
             </Button>
+
+            <input
+              type="file"
+              id="file"
+              ref={inputFile}
+              accept="image/*"
+              onChange={(event) => {
+                handleImageUpload(event);
+              }}
+              style={{ display: "none" }}
+            />
           </div>
 
           <Box mt={40} sx={{ maxWidth: 400 }} className="settings-form">
@@ -180,7 +239,7 @@ const Settings = () => {
                 {...form.getInputProps("address")}
               />
 
-              <Group position="left" mt="lg">
+              <Group position="left" mt="xl">
                 <Button type="submit">Update Profile</Button>
                 <Button
                   variant="light"
