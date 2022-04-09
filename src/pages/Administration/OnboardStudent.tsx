@@ -31,6 +31,8 @@ import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
+import PageHeader from "../../components/PageHeader/PageHeader";
+
 import "./administration.scss";
 
 const OnboardStudent = () => {
@@ -87,30 +89,10 @@ const OnboardStudent = () => {
       </Helmet>
 
       <div className="page-container">
-        <div
-          className="page-info"
-          style={{
-            borderBottom: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
-            color: dark ? "white" : "#4e4e4e",
-          }}
-        >
-          <div
-            className="page-title"
-            style={{
-              color: dark ? "white" : "black",
-            }}
-          >
-            Onboard Student 🧑‍🎓
-          </div>
-          <div
-            className="page-desc"
-            style={{
-              color: dark ? "#a6a7ab" : "#868e96",
-            }}
-          >
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </div>
-        </div>
+        <PageHeader
+          title="Onboard Student 🧑‍🎓"
+          desc="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+        />
 
         <div
           className="page-main"

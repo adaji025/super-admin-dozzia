@@ -1,28 +1,4 @@
 .page-container {
-  .page-info {
-    padding: 30px 30px;
-    @media only screen and (max-width: 768px) {
-      padding: 20px;
-    }
-
-    .page-title {
-      font-size: 30px;
-      font-weight: 700;
-      @media only screen and (max-width: 768px) {
-        font-size: 27px;
-      }
-    }
-
-    .page-desc {
-      max-width: 700px;
-      margin-top: 10px;
-      font-size: 18px;
-      @media only screen and (max-width: 768px) {
-        font-size: 15px;
-      }
-    }
-  }
-
   .page-main {
     padding: 60px 30px 110px 30px;
     @media only screen and (max-width: 768px) {
