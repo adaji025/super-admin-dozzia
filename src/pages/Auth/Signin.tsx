@@ -131,7 +131,6 @@ const Signin = () => {
                     mt="sm"
                     label="Password"
                     placeholder="Password"
-                    type="password"
                     icon={<Lock size={16} />}
                     {...form.getInputProps("password")}
                   />

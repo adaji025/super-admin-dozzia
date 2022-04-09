@@ -311,7 +311,6 @@ const ChangePassword = ({ closeModal }: any) => {
           mt="sm"
           label="Current Password"
           placeholder="Current password"
-          type="password"
           icon={<Lock size={16} />}
           {...form.getInputProps("current_password")}
         />
@@ -321,7 +320,6 @@ const ChangePassword = ({ closeModal }: any) => {
           mt="sm"
           label="New Password"
           placeholder="New password"
-          type="password"
           icon={<Lock size={16} />}
           {...form.getInputProps("password")}
         />
@@ -331,7 +329,6 @@ const ChangePassword = ({ closeModal }: any) => {
           mt="sm"
           label="Confirm New Password"
           placeholder="Confirm new password"
-          type="password"
           icon={<Lock size={16} />}
           {...form.getInputProps("password_confirmation")}
         />

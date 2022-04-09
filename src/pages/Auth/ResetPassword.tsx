@@ -122,7 +122,6 @@ const ResetPassword = () => {
                       required
                       label="Reset code"
                       placeholder="Reset code"
-                      type="number"
                       {...form.getInputProps("reset_code")}
                       icon={<Lock size={16} />}
                     />
@@ -133,7 +132,6 @@ const ResetPassword = () => {
                     mt="sm"
                     label="New password"
                     placeholder="Password"
-                    type="password"
                     icon={<Lock size={16} />}
                     {...form.getInputProps("password")}
                   />
@@ -143,7 +141,6 @@ const ResetPassword = () => {
                     mt="sm"
                     label="Confirm new password"
                     placeholder="Confirm password"
-                    type="password"
                     icon={<Lock size={16} />}
                     {...form.getInputProps("confirmPassword")}
                   />
