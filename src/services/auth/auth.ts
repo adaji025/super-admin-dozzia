@@ -55,3 +55,17 @@ export const updateProfile = (
     return res.data;
   });
 };
+
+export const changePassword = (
+  current_password: string,
+  password: string,
+  password_confirmation: string
+) => {
+  return AxoisApi.post(`${APIS.AUTH.CHANGE_PASSWORD}`, {
+    current_password,
+    password,
+    password_confirmation,
+  }).then((res) => {
+    return res.data;
+  });
+};

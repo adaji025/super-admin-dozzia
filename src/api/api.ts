@@ -6,6 +6,7 @@ export const APIS = {
     FORGOT_PASSWORD: `${api}/forgot/password`,
     RESET_PASSWORD: `${api}/reset/password`,
     UPDATE_PROFILE: `${api}/profile`,
+    CHANGE_PASSWORD: `${api}/change/password`,
   },
   LISTS: {
     GET_STATE_LIST: `${api}/states`,

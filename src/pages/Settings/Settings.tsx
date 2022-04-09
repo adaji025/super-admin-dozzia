@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Helmet } from "react-helmet";
 import {
   Avatar,
@@ -7,13 +7,16 @@ import {
   PasswordInput,
   Group,
   Box,
+  Modal,
+  Divider,
 } from "@mantine/core";
+import { Lock } from "tabler-icons-react";
 import { useDispatch } from "react-redux";
 import { useForm } from "@mantine/form";
 import { useSelector } from "react-redux";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-import { updateProfile } from "../../services/auth/auth";
+import { changePassword, updateProfile } from "../../services/auth/auth";
 import { showNotification } from "@mantine/notifications";
 import useNotification from "../../hooks/useNotification";
 import { showLoader } from "../../redux/utility/utility.actions";
@@ -27,6 +30,8 @@ const Settings = () => {
     return state.user.userdata;
   });
   const { handleError } = useNotification();
+  const [changePasswordModal, setChangePasswordModal] =
+    useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -75,6 +80,18 @@ const Settings = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <Modal
+        opened={changePasswordModal}
+        onClose={() => setChangePasswordModal(false)}
+        title="Change Password"
+      >
+        <ChangePassword
+          closeModal={() => {
+            setChangePasswordModal(false);
+          }}
+        />
+      </Modal>
 
       <div className="settings-container">
         <PageHeader
@@ -162,20 +179,17 @@ const Settings = () => {
                 type="text"
                 {...form.getInputProps("address")}
               />
-              {/* 
-            <PasswordInput
-              required
-              mt="sm"
-              label="Password"
-              placeholder="Password"
-              type="password"
-              // icon={<Lock size={16} />}
-              {...form.getInputProps("password")}
-            /> */}
 
               <Group position="left" mt="lg">
                 <Button type="submit">Update Profile</Button>
-                <Button variant="light">Change password</Button>
+                <Button
+                  variant="light"
+                  onClick={() => {
+                    setChangePasswordModal(true);
+                  }}
+                >
+                  Change password
+                </Button>
               </Group>
             </form>
           </Box>
@@ -185,4 +199,92 @@ const Settings = () => {
   );
 };
 
+const ChangePassword = ({ closeModal }: any) => {
+  const dispatch = useDispatch();
+  const { handleError } = useNotification();
+
+  const form = useForm({
+    initialValues: {
+      current_password: "",
+      password: "",
+      password_confirmation: "",
+    },
+
+    validate: {
+      password: (value) =>
+        value.length < 8 ? "Password must be at least 8 characters" : null,
+      password_confirmation: (value, values) =>
+        value !== values.password ? "Passwords did not match" : null,
+    },
+  });
+
+  const submit = (values: any) => {
+    closeModal();
+    dispatch(showLoader(true));
+
+    changePassword(
+      values.current_password,
+      values.password,
+      values.password_confirmation
+    )
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Password changed."} 🔒`,
+          color: "green",
+        });
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
+
+  return (
+    <div>
+      <Divider mb="sm" variant="dashed" />
+
+      <form onSubmit={form.onSubmit((values) => submit(values))}>
+        <PasswordInput
+          required
+          mt="sm"
+          label="Current Password"
+          placeholder="Current password"
+          type="password"
+          icon={<Lock size={16} />}
+          {...form.getInputProps("current_password")}
+        />
+
+        <PasswordInput
+          required
+          mt="sm"
+          label="New Password"
+          placeholder="New password"
+          type="password"
+          icon={<Lock size={16} />}
+          {...form.getInputProps("password")}
+        />
+
+        <PasswordInput
+          required
+          mt="sm"
+          label="Confirm New Password"
+          placeholder="Confirm new password"
+          type="password"
+          icon={<Lock size={16} />}
+          {...form.getInputProps("password_confirmation")}
+        />
+
+        <Group position="right" mt="lg">
+          <Button variant="light" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button type="submit">Change password</Button>
+        </Group>
+      </form>
+    </div>
+  );
+};
 export default Settings;
