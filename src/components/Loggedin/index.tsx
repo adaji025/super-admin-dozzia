@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { Paper, useMantineColorScheme } from "@mantine/core";
+import { Paper } from "@mantine/core";
+import useTheme from "../../hooks/useTheme";
 
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Dashboard from "../../pages/Dashboard/Dashboard";
-import OnboardStudent from "../../pages/Admin/OnboardStudent";
-import OnboardStaff from "../../pages/Admin/OnboardStaff";
-
+import OnboardStudent from "../../pages/Administration/OnboardStudent";
+import OnboardStaff from "../../pages/Administration/OnboardStaff";
+import Settings from "../../pages/Settings/Settings";
 import "./index.scss";
 
 const LoggedinContainer = () => {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark } = useTheme();
 
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
 
@@ -25,7 +25,7 @@ const LoggedinContainer = () => {
       style={{
         borderRadius: "0px",
         background: dark ? "#121212" : "#f8f9fa",
-        color: dark ? "white" : "#495057",
+        color: dark ? "white" : "black",
       }}
       className="loggedin-container"
     >
@@ -40,6 +40,7 @@ const LoggedinContainer = () => {
             <Route path="/dashboard" element={<Dashboard />} />{" "}
             <Route path="/student-onboarding" element={<OnboardStudent />} />
             <Route path="/staff-onboarding" element={<OnboardStaff />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>
       </div>

@@ -1,10 +1,10 @@
 import { useState, Fragment } from "react";
 import { useSelector } from "react-redux";
-import { Text, useMantineColorScheme } from "@mantine/core";
+import { Text } from "@mantine/core";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
-
+import useTheme from "../../hooks/useTheme";
 import {
   LayoutDashboard,
   Briefcase,
@@ -25,8 +25,7 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark } = useTheme();
   const [showChildren, setShowChildren] = useState<string>("");
   const location = useLocation();
   const navigate = useNavigate();

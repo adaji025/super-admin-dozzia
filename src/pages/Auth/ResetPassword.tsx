@@ -7,7 +7,6 @@ import {
   Button,
   Group,
   Box,
-  useMantineColorScheme,
   LoadingOverlay,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
@@ -18,12 +17,11 @@ import { Lock } from "tabler-icons-react";
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { resetPassword } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
-
+import useTheme from "../../hooks/useTheme";
 import "./auth.scss";
 
 const ResetPassword = () => {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark } = useTheme();
   const location: any = useLocation();
   const navigate = useNavigate();
   const [isNewUser, setIsNewUser] = useState<boolean>(false);

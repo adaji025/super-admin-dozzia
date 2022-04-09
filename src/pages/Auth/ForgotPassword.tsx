@@ -1,27 +1,20 @@
 import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import {
-  TextInput,
-  Button,
-  Group,
-  Box,
-  useMantineColorScheme,
-  LoadingOverlay,
-} from "@mantine/core";
+import { TextInput, Button, Group, Box, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { User } from "tabler-icons-react";
 
 import { forgotPassword } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
+import useTheme from "../../hooks/useTheme";
 
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import "./auth.scss";
 
 const ForgotPassword = () => {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark } = useTheme();
   const navigate = useNavigate();
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const { handleError } = useNotification();

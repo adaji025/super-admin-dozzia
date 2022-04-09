@@ -10,7 +10,6 @@ import {
   Button,
   Group,
   Box,
-  useMantineColorScheme,
   LoadingOverlay,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
@@ -22,12 +21,10 @@ import { login } from "../../services/auth/auth";
 import { setUserData } from "../../redux/user/user.actions";
 import "./auth.scss";
 import useNotification from "../../hooks/useNotification";
-
-// import { ReactComponent as Ellipse } from "../../assets/svg/ellipse.svg";
+import useTheme from "../../hooks/useTheme";
 
 const Signin = () => {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark } = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -115,7 +112,6 @@ const Signin = () => {
           <div
             className={`a-m-right ${dark ? "dark-card-bg" : "light-card-bg"}`}
           >
-            {/* <Ellipse className="ellipse" /> */}
             <div className="form-title">Admin</div>
 
             <div className="form">

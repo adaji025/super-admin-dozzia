@@ -3,7 +3,6 @@ import {
   Stepper,
   Button,
   Group,
-  useMantineColorScheme,
   TextInput,
   Box,
   Select,
@@ -31,11 +30,12 @@ import { onboardStaff } from "../../services/admin/admin";
 import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
 import useNotification from "../../hooks/useNotification";
+import useTheme from "../../hooks/useTheme";
+
 import "./administration.scss";
 
 const OnboardStaff = () => {
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark } = useTheme();
   const dispatch = useDispatch();
   const { handleError } = useNotification();
 
@@ -203,8 +203,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
     },
   });
 
-  const { colorScheme } = useMantineColorScheme();
-  const dark = colorScheme === "dark";
+  const { dark } = useTheme();
 
   const onSave = (values: any) => {
     nextStep({
