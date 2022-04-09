@@ -35,3 +35,23 @@ export const resetPassword = (
     return res.data;
   });
 };
+
+export const updateProfile = (
+  first_name: string,
+  last_name: string,
+  middle_name: string,
+  email: string,
+  phone_number: string,
+  address: string
+) => {
+  return AxoisApi.post(`${APIS.AUTH.UPDATE_PROFILE}`, {
+    first_name,
+    last_name,
+    middle_name,
+    email,
+    phone_number,
+    address,
+  }).then((res) => {
+    return res.data;
+  });
+};
