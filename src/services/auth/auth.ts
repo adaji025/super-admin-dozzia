@@ -44,7 +44,7 @@ export const updateProfile = (
   phone_number: string,
   address: string
 ) => {
-  return AxoisApi.post(`${APIS.AUTH.UPDATE_PROFILE}`, {
+  return AxoisApi.post(`${APIS.AUTH.PROFILE}`, {
     first_name,
     last_name,
     middle_name,
@@ -52,6 +52,12 @@ export const updateProfile = (
     phone_number,
     address,
   }).then((res) => {
+    return res.data;
+  });
+};
+
+export const getProfileInfo = () => {
+  return AxoisApi.get(`${APIS.AUTH.PROFILE}`).then((res) => {
     return res.data;
   });
 };

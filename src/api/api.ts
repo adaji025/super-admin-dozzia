@@ -5,7 +5,7 @@ export const APIS = {
     LOGIN: `${api}/login`,
     FORGOT_PASSWORD: `${api}/forgot/password`,
     RESET_PASSWORD: `${api}/reset/password`,
-    UPDATE_PROFILE: `${api}/profile`,
+    PROFILE: `${api}/profile`,
     CHANGE_PASSWORD: `${api}/change/password`,
     CHANGE_PROFILE_IMAGE: `${api}/picture`,
     LOGOUT: `${api}/logout`,
