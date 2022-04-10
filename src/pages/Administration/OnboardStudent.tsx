@@ -358,8 +358,8 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
       weight: "",
       blood_group: "",
       genotype: "",
-      existing_conditions: [],
-      hereditary_conditions: [],
+      existing_medical_condition: [],
+      hereditary_health_condition: [],
       state_disability: "",
     },
 
@@ -373,7 +373,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
     },
   });
 
-  const { getMedicals } = useAdmin();
+  const { getMedicals, medicals } = useAdmin();
 
   useEffect(() => {
     getMedicals();
@@ -383,12 +383,6 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
   const onSave = (values: any) => {
     nextStep({ ...values, disability });
   };
-
-  const data = [
-    { value: "1", label: "Condition 1" },
-    { value: "2", label: "Condition 2" },
-    { value: "3", label: "Condition 3" },
-  ];
 
   return (
     <div className="onboard-group">
@@ -442,20 +436,32 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
             <div className="form-row">
               <MultiSelect
                 className="form-item"
-                data={data}
+                data={medicals.map(
+                  (condition: { medical_id: string; name: string }) => ({
+                    key: condition?.medical_id,
+                    value: condition?.medical_id,
+                    label: condition.name,
+                  })
+                )}
                 label="Existing Medical Condition(s)"
                 placeholder="Select all that applies"
                 variant="filled"
-                {...form.getInputProps("existing_conditions")}
+                {...form.getInputProps("existing_medical_condition")}
               />
 
               <MultiSelect
                 className="form-item"
-                data={data}
+                data={medicals.map(
+                  (condition: { medical_id: string; name: string }) => ({
+                    key: condition?.medical_id,
+                    value: condition?.medical_id,
+                    label: condition.name,
+                  })
+                )}
                 label="Hereditary Health Condition(s)"
                 placeholder="Select all that applies"
                 variant="filled"
-                {...form.getInputProps("hereditary_conditions")}
+                {...form.getInputProps("hereditary_health_condition")}
               />
             </div>
 
