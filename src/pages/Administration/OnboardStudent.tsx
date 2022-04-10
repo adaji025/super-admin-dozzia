@@ -190,12 +190,20 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       <div className="form">
         <Box sx={{ maxWidth: 900 }}>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Personal Info"
+              labelPosition="center"
+            />
+
             <div className="form-row">
               <TextInput
                 className="form-item"
                 required
                 label="First Name"
                 placeholder="First name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("first_name")}
               />
@@ -205,6 +213,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Last Name"
                 placeholder="Last name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("last_name")}
               />
@@ -216,6 +225,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Middle Name"
                 placeholder="Middle name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("middle_name")}
               />
@@ -225,6 +235,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Date of Birth"
                 placeholder="Date of birth"
+                variant="filled"
                 required
                 {...form.getInputProps("dob")}
               />
@@ -236,6 +247,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Gender"
                 placeholder="Gender"
+                variant="filled"
                 data={[
                   { value: "Male", label: "Male 🧑" },
                   { value: "Female", label: "Female 👧" },
@@ -248,6 +260,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Age"
                 placeholder="Age"
+                variant="filled"
                 max={100}
                 min={0}
                 {...form.getInputProps("age")}
@@ -267,6 +280,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Guardian’s First Name"
                 placeholder="Guardian’s first name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("guardian_first_name")}
               />
@@ -276,6 +290,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Guardian’s Last Name"
                 placeholder="Guardian’s last name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("guardian_last_name")}
               />
@@ -287,6 +302,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Guardian’s Phone Number"
                 placeholder="Guardian’s phone number"
+                variant="filled"
                 {...form.getInputProps("guardian_phone_number")}
               />
 
@@ -295,6 +311,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Guardian’s Email"
                 placeholder="Guardian’s email"
+                variant="filled"
                 type="email"
                 {...form.getInputProps("guardian_email")}
               />
@@ -384,6 +401,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Height (cm)"
                 placeholder="Height"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("height")}
               />
@@ -393,6 +411,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Weight (kg)"
                 placeholder="Weight"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("weight")}
               />
@@ -404,6 +423,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Blood Group"
                 placeholder="Blood group"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("blood_group")}
               />
@@ -413,6 +433,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Genotype"
                 placeholder="Genotype"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("genotype")}
               />
@@ -424,6 +445,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 data={data}
                 label="Existing Medical Condition(s)"
                 placeholder="Select all that applies"
+                variant="filled"
                 {...form.getInputProps("existing_conditions")}
               />
 
@@ -432,6 +454,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 data={data}
                 label="Hereditary Health Condition(s)"
                 placeholder="Select all that applies"
+                variant="filled"
                 {...form.getInputProps("hereditary_conditions")}
               />
             </div>
@@ -456,6 +479,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                   className="form-item"
                   label="State Disability"
                   placeholder="Disability"
+                  variant="filled"
                   type="text"
                   {...form.getInputProps("state_disability")}
                 />
@@ -505,6 +529,7 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Previous School Name"
                 placeholder="Enter name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("previous_school_name")}
               />
@@ -516,6 +541,7 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Previous Academic Year"
                 placeholder="Enter year"
+                variant="filled"
                 type="number"
                 {...form.getInputProps("previous_academic_year")}
               />
@@ -527,6 +553,7 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Last Grade (%)"
                 placeholder="Grade"
+                variant="filled"
                 type="number"
                 max={100}
                 min={0}
@@ -539,6 +566,7 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Reason for leaving previous school"
                 placeholder="Provide a summary"
+                variant="filled"
                 autosize
                 minRows={3}
                 maxRows={5}
@@ -552,6 +580,7 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Entry Test Score (%)"
                 placeholder="Score"
+                variant="filled"
                 type="number"
                 max={100}
                 min={0}

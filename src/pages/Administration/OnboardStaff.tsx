@@ -206,6 +206,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Staff Role"
                 placeholder="Select role"
+                variant="filled"
                 data={staffRoles.map(
                   (role: { role_id: string; role_name: string }) => ({
                     key: role?.role_id,
@@ -217,7 +218,12 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
               />
             </div>
 
-            <Divider mb="lg" variant="dashed" />
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Personal Info"
+              labelPosition="center"
+            />
 
             <div className="form-row">
               <Select
@@ -225,6 +231,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Title"
                 placeholder="Title"
+                variant="filled"
                 data={[
                   { value: "Mr", label: "Mr 🧑" },
                   { value: "Mrs", label: "Mrs 👱‍♀️" },
@@ -238,6 +245,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="First Name"
                 placeholder="First name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("first_name")}
               />
@@ -249,6 +257,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Last Name"
                 placeholder="Last name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("last_name")}
               />
@@ -258,6 +267,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Middle Name"
                 placeholder="Middle name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("middle_name")}
               />
@@ -269,6 +279,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Marital Status"
                 placeholder="Marital status"
+                variant="filled"
                 data={[
                   { value: "Single", label: "Single" },
                   { value: "Married", label: "Married" },
@@ -284,6 +295,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Date of Birth"
                 placeholder="Date of birth"
+                variant="filled"
                 required
                 {...form.getInputProps("dob")}
               />
@@ -295,6 +307,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Gender"
                 placeholder="Gender"
+                variant="filled"
                 data={[
                   { value: "Male", label: "Male 🧑" },
                   { value: "Female", label: "Female 👧" },
@@ -307,7 +320,8 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Age"
                 placeholder="Age"
-                max={100}
+                variant="filled"
+                max={130}
                 min={0}
                 {...form.getInputProps("age")}
               />
@@ -319,6 +333,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Phone Number"
                 placeholder="Phone number"
+                variant="filled"
                 type="tel"
                 {...form.getInputProps("phone_number")}
               />
@@ -328,6 +343,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Email"
                 placeholder="Email"
+                variant="filled"
                 type="email"
                 {...form.getInputProps("email")}
               />
@@ -339,6 +355,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="House Address"
                 placeholder="Address"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("address")}
               />
@@ -348,6 +365,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Postal Code"
                 placeholder="Postal code"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("postal_code")}
               />
@@ -359,6 +377,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="State of Origin"
                 placeholder="Select State"
+                variant="filled"
                 searchable
                 nothingFound="No option"
                 data={states.map(
@@ -376,6 +395,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Religion"
                 placeholder="Select religion"
+                variant="filled"
                 data={[
                   { value: "Christianity", label: "Christianity" },
                   { value: "Islam", label: "Islam" },
@@ -398,6 +418,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Full Name"
                 placeholder="Next of kin"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("next_of_kin_name")}
               />
@@ -410,6 +431,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 type="tel"
                 label="Phone Number"
                 placeholder="Phone number"
+                variant="filled"
                 {...form.getInputProps("next_of_kin_phone_number")}
               />
 
@@ -418,6 +440,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Email"
                 placeholder="Email"
+                variant="filled"
                 type="email"
                 {...form.getInputProps("next_of_kin_email")}
               />
@@ -507,6 +530,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Height (cm)"
                 placeholder="Height"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("height")}
               />
@@ -516,6 +540,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Weight (kg)"
                 placeholder="Weight"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("weight")}
               />
@@ -527,6 +552,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Blood Group"
                 placeholder="Blood group"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("blood_group")}
               />
@@ -536,6 +562,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Genotype"
                 placeholder="Genotype"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("blood_type")}
               />
@@ -547,6 +574,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 data={data}
                 label="Existing Medical Condition(s)"
                 placeholder="Select all that applies"
+                variant="filled"
                 {...form.getInputProps("existing_conditions")}
               />
 
@@ -555,6 +583,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                 data={data}
                 label="Hereditary Health Condition(s)"
                 placeholder="Select all that applies"
+                variant="filled"
                 {...form.getInputProps("hereditary_conditions")}
               />
             </div>
@@ -579,6 +608,7 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
                   className="form-item"
                   label="State Disability"
                   placeholder="Disability"
+                  variant="filled"
                   type="text"
                   {...form.getInputProps("state_disability")}
                 />
@@ -631,6 +661,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Previous Workplace"
                 placeholder="Enter name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("previous_workplace")}
               />
@@ -642,6 +673,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Years of Experience"
                 placeholder="Enter number"
+                variant="filled"
                 type="number"
                 {...form.getInputProps("year_of_experience")}
               />
@@ -652,6 +684,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Reason for leaving previous school"
                 placeholder="Provide a summary"
+                variant="filled"
                 autosize
                 minRows={3}
                 maxRows={5}
@@ -672,6 +705,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Guarantor Name"
                 placeholder="Enter name"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("guarantor_name")}
               />
@@ -681,6 +715,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
                 className="form-item"
                 label="Employment Role"
                 placeholder="e.g. Architect"
+                variant="filled"
                 type="text"
                 {...form.getInputProps("guarantor_employment_role")}
               />
@@ -692,6 +727,7 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
                 required
                 label="Phone Number"
                 placeholder="Guarantor number"
+                variant="filled"
                 type="tel"
                 {...form.getInputProps("guarantor_phone_number")}
               />

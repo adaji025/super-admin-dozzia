@@ -180,14 +180,14 @@ const Settings = () => {
             />
           </div>
 
-          <Box mt={40} sx={{ maxWidth: 400 }} className="settings-form">
+          <Box mt={40} sx={{ maxWidth: 430 }} className="settings-form">
             <form onSubmit={form.onSubmit((values) => submit(values))}>
               <TextInput
                 required
                 label="First Name"
                 placeholder="First mame"
                 type="text"
-                // icon={<User size={16} />}
+                variant="filled"
                 {...form.getInputProps("first_name")}
               />
 
@@ -197,7 +197,7 @@ const Settings = () => {
                 label="Last Name"
                 placeholder="Last name"
                 type="text"
-                // icon={<User size={16} />}
+                variant="filled"
                 {...form.getInputProps("last_name")}
               />
 
@@ -208,6 +208,7 @@ const Settings = () => {
                 label="Middle Name"
                 placeholder="Middle name"
                 type="text"
+                variant="filled"
                 {...form.getInputProps("middle_name")}
               />
 
@@ -218,6 +219,7 @@ const Settings = () => {
                 label="Email"
                 placeholder="Email"
                 type="email"
+                variant="filled"
                 {...form.getInputProps("email")}
               />
 
@@ -227,6 +229,7 @@ const Settings = () => {
                 type="tel"
                 label="Phone Number"
                 placeholder="Phone number"
+                variant="filled"
                 {...form.getInputProps("phone_number")}
               />
 
@@ -236,6 +239,7 @@ const Settings = () => {
                 label="Address"
                 placeholder="Address"
                 type="text"
+                variant="filled"
                 {...form.getInputProps("address")}
               />
 
@@ -303,7 +307,7 @@ const ChangePassword = ({ closeModal }: any) => {
 
   return (
     <div>
-      <Divider mb="sm" variant="dashed" />
+      <Divider mb="md" variant="dashed" />
 
       <form onSubmit={form.onSubmit((values) => submit(values))}>
         <PasswordInput

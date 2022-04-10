@@ -84,7 +84,7 @@ const ForgotPassword = () => {
                     required
                     label="Username"
                     placeholder="Username"
-                    type="text"
+                    variant="filled"
                     icon={<User size={16} />}
                     {...form.getInputProps("username")}
                   />

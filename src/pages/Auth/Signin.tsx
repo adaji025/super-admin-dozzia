@@ -121,6 +121,7 @@ const Signin = () => {
                     required
                     label="Username"
                     placeholder="Username"
+                    variant="filled"
                     type="text"
                     icon={<User size={16} />}
                     {...form.getInputProps("username")}
@@ -131,6 +132,7 @@ const Signin = () => {
                     mt="sm"
                     label="Password"
                     placeholder="Password"
+                    variant="filled"
                     icon={<Lock size={16} />}
                     {...form.getInputProps("password")}
                   />
