@@ -101,7 +101,9 @@ const Settings = () => {
               message: `${"Profile image changed."} 😶‍🌫️`,
               color: "green",
             });
-            console.log(res);
+            let data = userdata;
+            data.picture = res.path;
+            dispatch(setUserData(data));
           })
           .catch((error) => {
             handleError(error);
@@ -155,12 +157,8 @@ const Settings = () => {
         >
           <div className="image-section">
             <Avatar
-              src={
-                userdata?.profile_details?.picture
-                  ? userdata?.profile_details?.picture
-                  : null
-              }
-              radius="xl"
+              src={userdata?.picture ? userdata?.picture : null}
+              className="avatar"
               size={120}
             />
 

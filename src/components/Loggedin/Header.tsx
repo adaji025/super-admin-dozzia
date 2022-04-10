@@ -10,8 +10,8 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === "dark";
 
-  const firstname = useSelector((state: any) => {
-    return state.user.userdata?.profile_details?.first_name;
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
   });
 
   return (
@@ -60,10 +60,16 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
           <div className="h-item user">
             <div className="h-name no-select">
               <Text mr="xs" color={dark ? "" : "#393939"}>
-                {`Hi${firstname ? "," : ""} ${firstname ?? "there!"}`}
+                {`Hi${userdata?.profile_details?.first_name ? "," : ""} ${
+                  userdata?.profile_details?.first_name ?? "there!"
+                }`}
               </Text>
             </div>
-            <Avatar radius="xl" />
+            <Avatar
+              className="avatar"
+              src={userdata?.picture ? userdata?.picture : null}
+              radius="xl"
+            />
           </div>
         </div>
       </div>
