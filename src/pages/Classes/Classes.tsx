@@ -148,6 +148,11 @@ const Classes = () => {
                         classroom_id: string;
                         classroom_level: number;
                         classroom_name: string;
+                        classroom_teacher: {
+                          title: string;
+                          first_name: string;
+                          last_name: string;
+                        };
                       },
                       index: number
                     ) => (
@@ -174,7 +179,7 @@ const Classes = () => {
                             color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
-                          {item.classroom_name}
+                          {`${item.classroom_teacher.title} ${item.classroom_teacher.first_name} ${item.classroom_teacher.last_name}`}
                         </td>
                         <td
                           style={{
