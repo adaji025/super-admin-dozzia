@@ -55,12 +55,16 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           route: "/staff",
         },
         {
-          name: "Subjects",
-          route: "/subjects",
+          name: "Classes",
+          route: "/classes",
         },
         {
-          name: "Class",
-          route: "/class",
+          name: "Events",
+          route: "/events",
+        },
+        {
+          name: "Subjects",
+          route: "/subjects",
         },
       ],
     },
@@ -79,24 +83,12 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       ],
       children: [
         {
-          name: "Add Subject",
-          route: "/add-ubject",
-        },
-        {
-          name: "Add Class",
-          route: "/add-class",
-        },
-        {
           name: "Student Onboarding",
           route: "/student-onboarding",
         },
         {
           name: "Staff Onboarding",
           route: "/staff-onboarding",
-        },
-        {
-          name: "Create Events",
-          route: "/create-events",
         },
         {
           name: "Attendance",
