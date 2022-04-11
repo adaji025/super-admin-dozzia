@@ -125,7 +125,7 @@ const AddClass = ({ closeModal }: any) => {
           placeholder="Select class teacher"
           variant="filled"
           searchable
-          nothingFound="No option"
+          nothingFound="No teacher found"
           data={teachersList.map(
             (teacher: {
               staff_id: string;
