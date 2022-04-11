@@ -12,3 +12,21 @@ export const onboardStaff = (data: any) => {
     return res.data;
   });
 };
+
+export const getStaffList = (data: {
+  page: number;
+  perPage: number;
+  query: string;
+  role: string;
+}) => {
+  return AxoisApi.get(
+    `${APIS.STAFF.GET_STAFF_LIST(
+      data.page,
+      data.perPage,
+      data.query,
+      data.role
+    )}`
+  ).then((res) => {
+    return res.data;
+  });
+};

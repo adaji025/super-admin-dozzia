@@ -24,6 +24,7 @@ const Classes = () => {
         opened={addClassModal}
         onClose={() => setAddClassModal(false)}
         title={<Text weight={600}>Add Class</Text>}
+        size="lg"
       >
         <AddClass
           closeModal={() => {

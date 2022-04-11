@@ -15,8 +15,22 @@ export const APIS = {
     GET_MEDICAL_LIST: `${api}/medicals`,
     GET_STAFF_ROLE_LIST: `${api}/roles`,
   },
-  ADMIN: {
-    ONBOARD_STUDENT: `${api}/students`,
+  STAFF: {
     ONBOARD_STAFF: `${api}/staff`,
+    GET_STAFF_LIST: (
+      page: number,
+      perPage: number,
+      query: string,
+      role: string
+    ) =>
+      `${api}/staff?per_page=${perPage}&page=${page}&search_query=${query}&role=${role}`,
+  },
+  STUDENT: {
+    ONBOARD_STUDENT: `${api}/students`,
+  },
+  CLASS: {
+    CLASS: `${api}/classrooms`,
+    GET_CLASS_LIST: (page: number, perPage: number) =>
+      `${api}/classrooms?per_page=${perPage}&page=${page}`,
   },
 };

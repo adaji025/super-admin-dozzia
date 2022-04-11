@@ -59,6 +59,7 @@ const ChangePassword = ({ closeModal }: any) => {
         <PasswordInput
           required
           mt="sm"
+          variant="filled"
           label="Current Password"
           placeholder="Current password"
           icon={<Lock size={16} />}
@@ -68,6 +69,7 @@ const ChangePassword = ({ closeModal }: any) => {
         <PasswordInput
           required
           mt="sm"
+          variant="filled"
           label="New Password"
           placeholder="New password"
           icon={<Lock size={16} />}
@@ -77,6 +79,7 @@ const ChangePassword = ({ closeModal }: any) => {
         <PasswordInput
           required
           mt="sm"
+          variant="filled"
           label="Confirm New Password"
           placeholder="Confirm new password"
           icon={<Lock size={16} />}

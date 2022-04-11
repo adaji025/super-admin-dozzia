@@ -1,29 +1,48 @@
-import React from "react";
-import { Button, PasswordInput, Group, Divider } from "@mantine/core";
+import { useEffect, useState } from "react";
+import {
+  Button,
+  TextInput,
+  Select,
+  Textarea,
+  Group,
+  Divider,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { Lock } from "tabler-icons-react";
-import { changePassword } from "../../services/auth/auth";
+import { addClass } from "../../services/class/class";
 import { useDispatch } from "react-redux";
 import useNotification from "../../hooks/useNotification";
 import { showLoader } from "../../redux/utility/utility.actions";
+import { getStaffList } from "../../services/staff/staff";
 
 const AddClass = ({ closeModal }: any) => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
+  const [teachersList, setTeachersList] = useState([]);
+
+  useEffect(() => {
+    getAllTeachers();
+    //eslint-disable-next-line
+  }, []);
+
+  const getAllTeachers = () => {
+    getStaffList({ page: 1, perPage: 500, query: "", role: "teacher" }).then(
+      (res) => {
+        setTeachersList(res.data);
+      }
+    );
+  };
 
   const form = useForm({
     initialValues: {
-      current_password: "",
-      password: "",
-      password_confirmation: "",
+      classroom_level: "",
+      classroom_name: "",
+      classroom_teacher: "",
+      classroom_description: "",
     },
 
     validate: {
-      password: (value) =>
-        value.length < 8 ? "Password must be at least 8 characters" : null,
-      password_confirmation: (value, values) =>
-        value !== values.password ? "Passwords did not match" : null,
+      classroom_level: (value) => (value === "" ? "Select class level" : null),
     },
   });
 
@@ -31,15 +50,16 @@ const AddClass = ({ closeModal }: any) => {
     closeModal();
     dispatch(showLoader(true));
 
-    changePassword(
-      values.current_password,
-      values.password,
-      values.password_confirmation
-    )
+    addClass({
+      classroom_level: values.classroom_level,
+      classroom_name: values.classroom_name,
+      classroom_teacher: values.classroom_teacher,
+      classroom_description: values.classroom_description,
+    })
       .then((res) => {
         showNotification({
           title: "Success",
-          message: `${"Password changed."} 🔒`,
+          message: `${"Class added successfully."} 🏫`,
           color: "green",
         });
       })
@@ -56,38 +76,77 @@ const AddClass = ({ closeModal }: any) => {
       <Divider mb="md" variant="dashed" />
 
       <form onSubmit={form.onSubmit((values) => submit(values))}>
-        <PasswordInput
+        <TextInput
           required
           mt="sm"
-          label="Current Password"
-          placeholder="Current password"
-          icon={<Lock size={16} />}
-          {...form.getInputProps("current_password")}
+          variant="filled"
+          label="Classroom Name"
+          placeholder="Classroom name"
+          {...form.getInputProps("classroom_name")}
         />
 
-        <PasswordInput
+        <Select
+          mt="md"
           required
-          mt="sm"
-          label="New Password"
-          placeholder="New password"
-          icon={<Lock size={16} />}
-          {...form.getInputProps("password")}
+          label="Classroom Level"
+          placeholder="Select class level"
+          variant="filled"
+          data={[
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
+            { value: "5", label: "5" },
+            { value: "6", label: "6" },
+            { value: "7", label: "7" },
+            { value: "8", label: "8" },
+            { value: "9", label: "9" },
+            { value: "10", label: "10" },
+          ]}
+          {...form.getInputProps("classroom_level")}
         />
 
-        <PasswordInput
+        <Textarea
+          mt="md"
           required
-          mt="sm"
-          label="Confirm New Password"
-          placeholder="Confirm new password"
-          icon={<Lock size={16} />}
-          {...form.getInputProps("password_confirmation")}
+          label="Classroom Description"
+          placeholder="e.g. A class of 20, JSS 2 students."
+          variant="filled"
+          autosize
+          minRows={3}
+          maxRows={5}
+          {...form.getInputProps("classroom_description")}
+        />
+
+        <Select
+          required
+          mt="md"
+          label="Class Teacher"
+          placeholder="Select class teacher"
+          variant="filled"
+          searchable
+          nothingFound="No option"
+          data={teachersList.map(
+            (teacher: {
+              staff_id: string;
+              first_name: string;
+              middle_name: string;
+              last_name: string;
+              title: string;
+            }) => ({
+              key: teacher?.staff_id,
+              value: teacher?.staff_id,
+              label: `${teacher.title} ${teacher.first_name} ${teacher.middle_name} ${teacher.last_name} `,
+            })
+          )}
+          {...form.getInputProps("classroom_teacher")}
         />
 
         <Group position="right" mt="lg">
           <Button variant="light" onClick={closeModal}>
             Cancel
           </Button>
-          <Button type="submit">Change password</Button>
+          <Button type="submit">Submit</Button>
         </Group>
       </form>
     </div>
