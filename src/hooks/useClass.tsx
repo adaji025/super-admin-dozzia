@@ -41,6 +41,7 @@ const useClass = () => {
           message: `${"Class added successfully."} 🏫`,
           color: "green",
         });
+        getClassList(1, 10);
       })
       .catch((error) => {
         handleError(error);

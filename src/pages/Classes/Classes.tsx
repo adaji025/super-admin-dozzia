@@ -20,7 +20,8 @@ import "./classes.scss";
 const Classes = () => {
   const { dark } = useTheme();
   const [addClassModal, setAddClassModal] = useState<boolean>(false);
-  const { getClassList, classes, loading, setLoading } = useClass();
+  const { getClassList, classes, loading, setLoading, handleAddClass } =
+    useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
 
@@ -49,6 +50,7 @@ const Classes = () => {
           closeModal={() => {
             setAddClassModal(false);
           }}
+          submit={handleAddClass}
         />
       </Modal>
 
@@ -179,7 +181,7 @@ const Classes = () => {
                             borderBottom: `1px solid #0000`,
                           }}
                         >
-                          <Badge size="lg" radius="xl" color="grape">
+                          <Badge size="lg" radius="xl" color="red">
                             {item.classroom_level}
                           </Badge>
                         </td>

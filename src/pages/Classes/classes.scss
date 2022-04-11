@@ -1,8 +1,8 @@
 .data-page-container {
-  padding: 30px;
+  padding: 30px 30px 120px 30px;
   height: calc(100vh - 123px);
   @media only screen and (max-width: 768px) {
-    padding: 20px;
+    padding: 20px 20px 80px 20px;
     height: calc(100vh - 103px);
   }
 

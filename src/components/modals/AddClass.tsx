@@ -10,8 +10,8 @@ import {
 import { useForm } from "@mantine/form";
 import useClass from "../../hooks/useClass";
 
-const AddClass = ({ closeModal }: any) => {
-  const { teachers, getTeachers, handleAddClass } = useClass();
+const AddClass = ({ closeModal, submit }: any) => {
+  const { teachers, getTeachers } = useClass();
 
   useEffect(() => {
     getTeachers(1, 500, "", "teacher");
@@ -37,7 +37,7 @@ const AddClass = ({ closeModal }: any) => {
 
       <form
         onSubmit={form.onSubmit((values) => {
-          handleAddClass(values);
+          submit(values);
           closeModal();
         })}
       >
