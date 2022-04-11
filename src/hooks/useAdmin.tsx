@@ -1,9 +1,6 @@
 import { useState } from "react";
-import {
-  getMedicalList,
-  getStatesList,
-  getStaffRoleList,
-} from "../services/admin/admin";
+import { getMedicalList, getStatesList } from "../services/helper/helper";
+import { getStaffRoleList } from "../services/staff/staff";
 
 const useAdmin = () => {
   const [medicals, setMedicals] = useState<any>([]);

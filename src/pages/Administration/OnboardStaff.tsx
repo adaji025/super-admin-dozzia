@@ -26,7 +26,7 @@ import {
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
-import { onboardStaff } from "../../services/admin/admin";
+import { onboardStaff } from "../../services/staff/staff";
 import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
 import useNotification from "../../hooks/useNotification";
