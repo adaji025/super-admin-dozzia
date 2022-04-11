@@ -1,0 +1,35 @@
+.data-page-container {
+  padding: 30px;
+  height: calc(100vh - 123px);
+  @media only screen and (max-width: 768px) {
+    padding: 20px;
+    height: calc(100vh - 103px);
+  }
+
+  .d-p-wrapper {
+    .d-p-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      .d-p-h-left {
+        font-size: 30px;
+        font-weight: 700;
+        @media only screen and (max-width: 768px) {
+          font-size: 25px;
+        }
+      }
+    }
+
+    .d-p-search {
+      padding: 20px 30px;
+      border-radius: 4px;
+      margin: 30px -30px;
+      @media only screen and (max-width: 768px) {
+        padding: 20px;
+        margin: 20px -20px;
+      }
+    }
+  }
+}

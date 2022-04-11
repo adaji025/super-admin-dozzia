@@ -10,6 +10,7 @@ import Dashboard from "../../pages/Dashboard/Dashboard";
 import OnboardStudent from "../../pages/Administration/OnboardStudent";
 import OnboardStaff from "../../pages/Administration/OnboardStaff";
 import Settings from "../../pages/Settings/Settings";
+import Classes from "../../pages/Classes/Classes";
 import "./index.scss";
 
 const LoggedinContainer = () => {
@@ -41,6 +42,7 @@ const LoggedinContainer = () => {
             <Route path="/add-student" element={<OnboardStudent />} />
             <Route path="/add-staff" element={<OnboardStaff />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/classes" element={<Classes />} />
           </Routes>
         </div>
       </div>
