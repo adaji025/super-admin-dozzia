@@ -11,3 +11,11 @@ export const addClass = (data: {
     return res.data;
   });
 };
+
+export const getClasses = (data: { page: number; perPage: number }) => {
+  return AxoisApi.get(
+    `${APIS.CLASS.GET_CLASS_LIST(data.page, data.perPage)}`
+  ).then((res) => {
+    return res.data;
+  });
+};

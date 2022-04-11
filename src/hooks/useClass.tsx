@@ -2,13 +2,15 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getStaffList } from "../services/staff/staff";
 import { showNotification } from "@mantine/notifications";
-import { addClass } from "../services/class/class";
+import { addClass, getClasses } from "../services/class/class";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 
 const useClass = () => {
   const dispatch = useDispatch();
   const [teachers, setTeachers] = useState([]);
+  const [classes, setClasses] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
 
   const getTeachers = (
@@ -17,9 +19,11 @@ const useClass = () => {
     query: "",
     role: string
   ) => {
-    getStaffList({ page, perPage, query, role }).then((res) => {
-      setTeachers(res.data);
-    });
+    getStaffList({ page, perPage, query, role })
+      .then((res) => {
+        setTeachers(res.data);
+      })
+      .catch(() => {});
   };
 
   const handleAddClass = (values: any) => {
@@ -45,10 +49,24 @@ const useClass = () => {
         dispatch(showLoader(false));
       });
   };
+
+  const getClassList = (page: number, perPage: number) => {
+    getClasses({ page, perPage })
+      .then((res) => {
+        setLoading(false);
+        setClasses(res);
+      })
+      .catch(() => {});
+  };
+
   return {
+    classes,
     teachers,
     getTeachers,
     handleAddClass,
+    getClassList,
+    loading,
+    setLoading,
   };
 };
 
