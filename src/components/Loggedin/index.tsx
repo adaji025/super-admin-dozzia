@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import { Paper } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { getProfileInfo } from "../../services/auth/auth";
-import { setUserData } from "../../redux/user/user.actions";
 
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -17,22 +14,10 @@ import "./index.scss";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
-  const dispatch = useDispatch();
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
-  };
-
-  useEffect(() => {
-    getProfile();
-    //eslint-disable-next-line
-  }, []);
-
-  const getProfile = () => {
-    getProfileInfo().then((res) => {
-      dispatch(setUserData(res.user));
-    });
   };
 
   return (

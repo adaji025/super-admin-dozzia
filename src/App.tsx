@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   ColorSchemeProvider,
   MantineProvider,
@@ -15,9 +15,13 @@ import Signin from "./pages/Auth/Signin";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import LoggedinContainer from "./components/Loggedin";
+
+import { getProfileInfo } from "./services/auth/auth";
+import { setUserData } from "./redux/user/user.actions";
 import "./App.scss";
 
 function App() {
+  const dispatch = useDispatch();
   const userdata = useSelector((state: any) => {
     return state.user.userdata;
   });
@@ -31,15 +35,23 @@ function App() {
   });
 
   useEffect(() => {
-    console.log("You know you shouldn't be here 😒");
+    if (userdata) {
+      getProfile();
+    }
     //eslint-disable-next-line
-  }, [userdata]);
+  }, []);
 
   const toggleColorScheme = (value?: ColorScheme) => {
     setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
   };
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
+
+  const getProfile = () => {
+    getProfileInfo().then((res) => {
+      dispatch(setUserData(res.user));
+    });
+  };
 
   return (
     <div className="App">
