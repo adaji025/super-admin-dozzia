@@ -44,7 +44,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Briefcase,
       name: "Management",
       route: "/management",
-      key: ["/students", "/staff", "/subjects", "/class"],
+      key: ["/students", "/staff", "/subjects", "/classes", "/events"],
       children: [
         {
           name: "Students",
@@ -72,15 +72,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Users,
       name: "Administration",
       route: "/administration",
-      key: [
-        "/add-ubject",
-        "/add-class",
-        "/student-onboarding",
-        "/staff-onboarding",
-        "/create-events",
-        "/attendance",
-        "/recycle-bin",
-      ],
+      key: ["/add-student", "/add-staff", "/attendance", "/recycle-bin"],
       children: [
         {
           name: "Add Student",

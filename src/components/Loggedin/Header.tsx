@@ -44,7 +44,6 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
           <div className="h-item">
             <ActionIcon
               variant="light"
-              color={dark ? "yellow" : "green"}
               onClick={() => toggleColorScheme()}
               title="Toggle theme"
               size="lg"
