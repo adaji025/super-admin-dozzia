@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Button,
   TextInput,
@@ -8,30 +8,15 @@ import {
   Divider,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
-import { addClass } from "../../services/class/class";
-import { useDispatch } from "react-redux";
-import useNotification from "../../hooks/useNotification";
-import { showLoader } from "../../redux/utility/utility.actions";
-import { getStaffList } from "../../services/staff/staff";
+import useClass from "../../hooks/useClass";
 
 const AddClass = ({ closeModal }: any) => {
-  const dispatch = useDispatch();
-  const { handleError } = useNotification();
-  const [teachersList, setTeachersList] = useState([]);
+  const { teachers, getTeachers, handleAddClass } = useClass();
 
   useEffect(() => {
-    getAllTeachers();
+    getTeachers(1, 500, "", "teacher");
     //eslint-disable-next-line
   }, []);
-
-  const getAllTeachers = () => {
-    getStaffList({ page: 1, perPage: 500, query: "", role: "teacher" }).then(
-      (res) => {
-        setTeachersList(res.data);
-      }
-    );
-  };
 
   const form = useForm({
     initialValues: {
@@ -46,36 +31,16 @@ const AddClass = ({ closeModal }: any) => {
     },
   });
 
-  const submit = (values: any) => {
-    closeModal();
-    dispatch(showLoader(true));
-
-    addClass({
-      classroom_level: values.classroom_level,
-      classroom_name: values.classroom_name,
-      classroom_teacher: values.classroom_teacher,
-      classroom_description: values.classroom_description,
-    })
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: `${"Class added successfully."} 🏫`,
-          color: "green",
-        });
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        dispatch(showLoader(false));
-      });
-  };
-
   return (
     <div>
       <Divider mb="md" variant="dashed" />
 
-      <form onSubmit={form.onSubmit((values) => submit(values))}>
+      <form
+        onSubmit={form.onSubmit((values) => {
+          handleAddClass(values);
+          closeModal();
+        })}
+      >
         <TextInput
           required
           mt="sm"
@@ -126,7 +91,7 @@ const AddClass = ({ closeModal }: any) => {
           variant="filled"
           searchable
           nothingFound="No teacher found"
-          data={teachersList.map(
+          data={teachers.map(
             (teacher: {
               staff_id: string;
               first_name: string;
