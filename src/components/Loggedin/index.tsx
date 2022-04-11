@@ -38,8 +38,8 @@ const LoggedinContainer = () => {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />{" "}
-            <Route path="/student-onboarding" element={<OnboardStudent />} />
-            <Route path="/staff-onboarding" element={<OnboardStaff />} />
+            <Route path="/add-student" element={<OnboardStudent />} />
+            <Route path="/add-staff" element={<OnboardStaff />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </div>

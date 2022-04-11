@@ -83,12 +83,12 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       ],
       children: [
         {
-          name: "Student Onboarding",
-          route: "/student-onboarding",
+          name: "Add Student",
+          route: "/add-student",
         },
         {
-          name: "Staff Onboarding",
-          route: "/staff-onboarding",
+          name: "Add Staff",
+          route: "/add-staff",
         },
         {
           name: "Attendance",
