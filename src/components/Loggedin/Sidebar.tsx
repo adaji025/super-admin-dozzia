@@ -44,7 +44,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Briefcase,
       name: "Management",
       route: "/management",
-      key: ["/students", "/staff", "/subjects", "/classes", "/events"],
+      key: ["students", "staff", "subjects", "classes", "events"],
       children: [
         {
           name: "Students",
@@ -72,7 +72,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Users,
       name: "Administration",
       route: "/administration",
-      key: ["/add-student", "/add-staff", "/attendance", "/recycle-bin"],
+      key: ["add-student", "add-staff", "attendance", "recycle-bin"],
       children: [
         {
           name: "Add Student",
@@ -155,7 +155,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                 <>
                   <div
                     className={`nav-item ${
-                      item.key.includes(location.pathname) &&
+                      item.key.includes(location.pathname.split("/")[1]) &&
                       showChildren !== item.name
                         ? "is-active"
                         : ""
@@ -166,13 +166,14 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                         setShowChildren("");
                       } else {
                         setShowChildren(item.name);
+                        console.log(location.pathname.split("/")[1]);
                       }
                     }}
                   >
                     <span>
                       <item.icon
                         color={
-                          item.key.includes(location.pathname) &&
+                          item.key.includes(location.pathname.split("/")[1]) &&
                           showChildren !== item.name
                             ? "#33cc33"
                             : dark
@@ -189,7 +190,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
 
                     <ChevronDown
                       color={
-                        item.key.includes(location.pathname) &&
+                        item.key.includes(location.pathname.split("/")[1]) &&
                         showChildren !== item.name
                           ? "#33cc33"
                           : dark
