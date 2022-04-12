@@ -166,7 +166,6 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                         setShowChildren("");
                       } else {
                         setShowChildren(item.name);
-                        console.log(location.pathname.split("/")[1]);
                       }
                     }}
                   >
