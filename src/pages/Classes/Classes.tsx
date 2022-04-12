@@ -24,6 +24,7 @@ const Classes = () => {
     useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
+  const deviceWidth = window.innerWidth;
 
   useEffect(() => {
     getClassList(page, perPage);
@@ -87,7 +88,7 @@ const Classes = () => {
                 maxWidth: "900px",
               }}
               icon={<Search size={16} />}
-              placeholder="Search class"
+              placeholder="Search class (not working yet)"
               rightSection={
                 <AdjustmentsHorizontal
                   strokeWidth={1.4}
@@ -107,7 +108,7 @@ const Classes = () => {
                       style={{
                         borderBottom: `1px solid #0000`,
                       }}
-                      className="table-last head"
+                      className="large-only"
                     ></th>
                     <th
                       style={{
@@ -137,7 +138,7 @@ const Classes = () => {
                       style={{
                         borderBottom: `1px solid #0000`,
                       }}
-                      className="table-last head"
+                      className="table-last head large-only"
                     ></th>
                   </tr>
                 </thead>
@@ -156,12 +157,20 @@ const Classes = () => {
                       },
                       index: number
                     ) => (
-                      <tr key={item.classroom_id}>
+                      <tr
+                        key={item.classroom_id}
+                        onClick={() => {
+                          if (deviceWidth < 576) {
+                            console.log("click-event");
+                          }
+                        }}
+                      >
                         <td
                           style={{
                             borderBottom: `1px solid #0000`,
                             color: dark ? "#b3b7cb" : "#898989",
                           }}
+                          className="large-only"
                         >
                           {index + 1}
                         </td>
@@ -194,9 +203,11 @@ const Classes = () => {
                           style={{
                             borderBottom: `1px solid #0000`,
                           }}
-                          className="table-last"
+                          className="table-last large-only"
                         >
-                          <Button variant="subtle">View Class</Button>
+                          <Button variant="subtle" disabled>
+                            View Class
+                          </Button>
                         </td>
                       </tr>
                     )
