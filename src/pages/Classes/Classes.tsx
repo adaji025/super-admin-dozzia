@@ -218,7 +218,7 @@ const Classes = () => {
                           className="large-only"
                           style={{
                             borderBottom: `1px solid #0000`,
-                            transform: "translateX(20px)",
+                            paddingLeft: "30px",
                             color: dark ? "#b3b7cb" : "#898989",
                             fontWeight: "500",
                           }}
