@@ -10,7 +10,7 @@ import {
 import { useForm } from "@mantine/form";
 import useClass from "../../hooks/useClass";
 
-const AddClass = ({ closeModal, submit }: any) => {
+const AddClass = ({ closeModal, submit, edit }: any) => {
   const { teachers, getTeachers } = useClass();
 
   useEffect(() => {
@@ -20,10 +20,10 @@ const AddClass = ({ closeModal, submit }: any) => {
 
   const form = useForm({
     initialValues: {
-      classroom_level: "",
-      classroom_name: "",
-      classroom_teacher: "",
-      classroom_description: "",
+      classroom_level: edit ? edit.classroom_level : "",
+      classroom_name: edit ? edit.classroom_name : "",
+      classroom_teacher: edit ? edit.classroom_teacher : "",
+      classroom_description: edit ? edit.classroom_description : "",
     },
 
     validate: {
@@ -37,8 +37,12 @@ const AddClass = ({ closeModal, submit }: any) => {
 
       <form
         onSubmit={form.onSubmit((values) => {
-          submit(values);
           closeModal();
+          if (edit) {
+            submit(edit.classroom_id, values);
+          } else {
+            submit(values);
+          }
         })}
       >
         <TextInput

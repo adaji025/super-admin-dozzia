@@ -29,9 +29,9 @@ export const APIS = {
     ONBOARD_STUDENT: `${api}/students`,
   },
   CLASS: {
-    CLASS: `${api}/classrooms`,
+    CREATE_CLASS: `${api}/classrooms`,
     GET_CLASS_LIST: (page: number, perPage: number) =>
       `${api}/classrooms?per_page=${perPage}&page=${page}`,
-    GET_CLASS_INFO: (id: string) => `${api}/classrooms/${id}`,
+    CLASS: (id: string) => `${api}/classrooms/${id}`,
   },
 };

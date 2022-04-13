@@ -2,7 +2,12 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getStaffList } from "../services/staff/staff";
 import { showNotification } from "@mantine/notifications";
-import { addClass, getClasses, getClassInfo } from "../services/class/class";
+import {
+  addClass,
+  getClasses,
+  getClassInfo,
+  updateClass,
+} from "../services/class/class";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 
@@ -64,12 +69,38 @@ const useClass = () => {
   const getClass = (id: string) => {
     getClassInfo(id)
       .then((res) => {
-        console.log(res);
-
         setClassInfo(res);
       })
       .catch((error) => {
         handleError(error);
+      });
+  };
+
+  const handleUpdateClass = (
+    id: string,
+    data: {
+      classroom_level: string;
+      classroom_name: string;
+      classroom_teacher: string;
+      classroom_description: string;
+    }
+  ) => {
+    dispatch(showLoader(true));
+
+    updateClass(id, data)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Class updated successfully."} ✍️`,
+          color: "green",
+        });
+        getClassList(1, 10);
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
       });
   };
 
@@ -83,6 +114,7 @@ const useClass = () => {
     setLoading,
     getClass,
     classInfo,
+    handleUpdateClass,
   };
 };
 

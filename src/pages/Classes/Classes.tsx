@@ -21,6 +21,7 @@ import {
   Users,
   Book,
   Trash,
+  Edit,
 } from "tabler-icons-react";
 import AddClass from "../../components/modals/AddClass";
 import useClass from "../../hooks/useClass";
@@ -29,8 +30,21 @@ import "./classes.scss";
 const Classes = () => {
   const { dark } = useTheme();
   const [addClassModal, setAddClassModal] = useState<boolean>(false);
-  const { getClassList, classes, loading, setLoading, handleAddClass } =
-    useClass();
+  const [editClass, setEditClass] = useState<null | {
+    classroom_id: string;
+    classroom_level: string;
+    classroom_name: string;
+    classroom_teacher: string;
+    classroom_description: string;
+  }>(null);
+  const {
+    getClassList,
+    classes,
+    loading,
+    setLoading,
+    handleAddClass,
+    handleUpdateClass,
+  } = useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
 
@@ -51,7 +65,10 @@ const Classes = () => {
 
       <Modal
         opened={addClassModal}
-        onClose={() => setAddClassModal(false)}
+        onClose={() => {
+          setAddClassModal(false);
+          setEditClass(null);
+        }}
         title={<Text weight={600}>Add Class</Text>}
         size="lg"
       >
@@ -59,7 +76,8 @@ const Classes = () => {
           closeModal={() => {
             setAddClassModal(false);
           }}
-          submit={handleAddClass}
+          edit={editClass}
+          submit={editClass ? handleUpdateClass : handleAddClass}
         />
       </Modal>
 
@@ -159,10 +177,12 @@ const Classes = () => {
                         classroom_id: string;
                         classroom_level: number;
                         classroom_name: string;
+                        classroom_description: string;
                         classroom_teacher: {
                           title: string;
                           first_name: string;
                           last_name: string;
+                          staff_id: string;
                         };
                       },
                       index: number
@@ -210,14 +230,6 @@ const Classes = () => {
                           }}
                           className="table-last"
                         >
-                          {/* <Button
-                            variant="subtle"
-                            component={Link}
-                            to={`/classes/${item.classroom_id}`}
-                            state={{ classId: item.classroom_id }}
-                          >
-                            View Class
-                          </Button> */}
                           <Menu
                             position="right"
                             gutter={15}
@@ -238,8 +250,26 @@ const Classes = () => {
                               Class Wall
                             </Menu.Item>
                             <Divider />
+                            <Menu.Item
+                              icon={<Edit size={14} />}
+                              onClick={() => {
+                                setEditClass({
+                                  classroom_id: item.classroom_id,
+                                  classroom_name: item.classroom_name,
+                                  classroom_level:
+                                    item.classroom_level.toString(),
+                                  classroom_description:
+                                    item.classroom_description,
+                                  classroom_teacher:
+                                    item.classroom_teacher.staff_id,
+                                });
+                                setAddClassModal(true);
+                              }}
+                            >
+                              Edit Class
+                            </Menu.Item>
                             <Menu.Item color="red" icon={<Trash size={14} />}>
-                              Delete class
+                              Delete Class
                             </Menu.Item>
                           </Menu>
                         </td>
@@ -280,3 +310,15 @@ const Classes = () => {
 };
 
 export default Classes;
+
+// eslint-disable-next-line no-lone-blocks
+{
+  /* <Button
+  variant="subtle"
+  component={Link}
+  to={`/classes/${item.classroom_id}`}
+  state={{ classId: item.classroom_id }}
+>
+  View Class
+</Button>; */
+}
