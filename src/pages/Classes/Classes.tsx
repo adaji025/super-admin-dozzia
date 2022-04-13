@@ -233,7 +233,7 @@ const Classes = () => {
                           className="table-last"
                         >
                           <Menu
-                            position={deviceWidth < 576 ? "bottom" : "right"}
+                            position={deviceWidth < 576 ? "left" : "right"}
                             gutter={15}
                             withArrow
                             size="sm"
