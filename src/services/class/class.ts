@@ -19,3 +19,9 @@ export const getClasses = (data: { page: number; perPage: number }) => {
     return res.data;
   });
 };
+
+export const getClassInfo = (id: string) => {
+  return AxoisApi.get(`${APIS.CLASS.GET_CLASS_INFO(id)}`).then((res) => {
+    return res.data;
+  });
+};

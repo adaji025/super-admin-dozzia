@@ -10,9 +10,18 @@ import {
   Skeleton,
   Pagination,
   Badge,
+  Menu,
+  Divider,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { AdjustmentsHorizontal, Search } from "tabler-icons-react";
+import {
+  AdjustmentsHorizontal,
+  Search,
+  ClipboardList,
+  Users,
+  Book,
+  Trash,
+} from "tabler-icons-react";
 import AddClass from "../../components/modals/AddClass";
 import useClass from "../../hooks/useClass";
 import "./classes.scss";
@@ -24,7 +33,6 @@ const Classes = () => {
     useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
-  const deviceWidth = window.innerWidth;
 
   useEffect(() => {
     getClassList(page, perPage);
@@ -127,6 +135,7 @@ const Classes = () => {
                       Class Teacher
                     </th>
                     <th
+                      className="large-only"
                       style={{
                         borderBottom: `1px solid #0000`,
                         color: dark ? "#b3b7cb" : "#898989",
@@ -137,6 +146,7 @@ const Classes = () => {
                     <th
                       style={{
                         borderBottom: `1px solid #0000`,
+                        width: "1px",
                       }}
                       className="table-last head large-only"
                     ></th>
@@ -157,14 +167,7 @@ const Classes = () => {
                       },
                       index: number
                     ) => (
-                      <tr
-                        key={item.classroom_id}
-                        onClick={() => {
-                          if (deviceWidth < 576) {
-                            console.log("click-event");
-                          }
-                        }}
-                      >
+                      <tr key={item.classroom_id}>
                         <td
                           style={{
                             borderBottom: `1px solid #0000`,
@@ -191,6 +194,7 @@ const Classes = () => {
                           {`${item.classroom_teacher.title} ${item.classroom_teacher.first_name} ${item.classroom_teacher.last_name}`}
                         </td>
                         <td
+                          className="large-only"
                           style={{
                             borderBottom: `1px solid #0000`,
                           }}
@@ -202,12 +206,42 @@ const Classes = () => {
                         <td
                           style={{
                             borderBottom: `1px solid #0000`,
+                            width: "20px",
                           }}
-                          className="table-last large-only"
+                          className="table-last"
                         >
-                          <Button variant="subtle" disabled>
+                          {/* <Button
+                            variant="subtle"
+                            component={Link}
+                            to={`/classes/${item.classroom_id}`}
+                            state={{ classId: item.classroom_id }}
+                          >
                             View Class
-                          </Button>
+                          </Button> */}
+                          <Menu
+                            position="right"
+                            gutter={15}
+                            withArrow
+                            size="sm"
+                          >
+                            <Menu.Label>Class Menu</Menu.Label>
+                            <Menu.Item icon={<Users size={14} />}>
+                              Students
+                            </Menu.Item>
+                            <Menu.Item icon={<Book size={14} />}>
+                              Subjects
+                            </Menu.Item>
+                            <Menu.Item icon={<Users size={14} />}>
+                              Teachers
+                            </Menu.Item>
+                            <Menu.Item icon={<ClipboardList size={14} />}>
+                              Class Wall
+                            </Menu.Item>
+                            <Divider />
+                            <Menu.Item color="red" icon={<Trash size={14} />}>
+                              Delete class
+                            </Menu.Item>
+                          </Menu>
                         </td>
                       </tr>
                     )
