@@ -244,9 +244,6 @@ const Classes = () => {
                             <Menu.Item icon={<Book size={14} />}>
                               Subjects
                             </Menu.Item>
-                            <Menu.Item icon={<Users size={14} />}>
-                              Teachers
-                            </Menu.Item>
                             <Menu.Item icon={<ClipboardList size={14} />}>
                               Class Wall
                             </Menu.Item>
