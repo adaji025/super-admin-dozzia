@@ -9,7 +9,6 @@ import {
   Box,
   Skeleton,
   Pagination,
-  Badge,
   Menu,
   Divider,
 } from "@mantine/core";
@@ -47,6 +46,7 @@ const Classes = () => {
   } = useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
+  const deviceWidth = window.innerWidth;
 
   useEffect(() => {
     getClassList(page, perPage);
@@ -218,11 +218,12 @@ const Classes = () => {
                           className="large-only"
                           style={{
                             borderBottom: `1px solid #0000`,
+                            transform: "translateX(20px)",
+                            color: dark ? "#b3b7cb" : "#898989",
+                            fontWeight: "500",
                           }}
                         >
-                          <Badge size="lg" radius="xl" color="red">
-                            {item.classroom_level}
-                          </Badge>
+                          {item.classroom_level}
                         </td>
                         <td
                           style={{
@@ -232,7 +233,7 @@ const Classes = () => {
                           className="table-last"
                         >
                           <Menu
-                            position="right"
+                            position={deviceWidth < 576 ? "bottom" : "right"}
                             gutter={15}
                             withArrow
                             size="sm"

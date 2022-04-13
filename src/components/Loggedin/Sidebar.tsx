@@ -135,7 +135,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             <Text
               className="school-name"
               style={{
-                color: dark ? "#b0b0b0" : "black",
+                color: dark ? "white" : "black",
               }}
             >
               {schoolName ? schoolName : ""}
@@ -146,7 +146,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         <div
           className="nav-links"
           style={{
-            color: dark ? "#b0b0b0" : "black",
+            color: dark ? "white" : "black",
           }}
         >
           {routes.map((item) => (
@@ -176,7 +176,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                           showChildren !== item.name
                             ? "#33cc33"
                             : dark
-                            ? "#b0b0b0"
+                            ? "white"
                             : "#5e5e5e"
                         }
                         size={25}
@@ -193,7 +193,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                         showChildren !== item.name
                           ? "#33cc33"
                           : dark
-                          ? "#b0b0b0"
+                          ? "white"
                           : "#5e5e5e"
                       }
                       className={`arrow-down ${
@@ -250,7 +250,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                           location.pathname === "/")
                           ? "#33cc33"
                           : dark
-                          ? "#b0b0b0"
+                          ? "white"
                           : "#5e5e5e"
                       }
                       size={25}
@@ -280,7 +280,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           >
             <span>
               <Logout
-                color={dark ? "#b0b0b0" : "#5e5e5e"}
+                color={dark ? "white" : "#5e5e5e"}
                 size={25}
                 strokeWidth={1.3}
                 className="nav-icon"
