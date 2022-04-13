@@ -32,5 +32,6 @@ export const APIS = {
     CLASS: `${api}/classrooms`,
     GET_CLASS_LIST: (page: number, perPage: number) =>
       `${api}/classrooms?per_page=${perPage}&page=${page}`,
+    GET_CLASS_INFO: (id: string) => `${api}/classrooms/${id}`,
   },
 };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getStaffList } from "../services/staff/staff";
 import { showNotification } from "@mantine/notifications";
-import { addClass, getClasses } from "../services/class/class";
+import { addClass, getClasses, getClassInfo } from "../services/class/class";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 
@@ -10,6 +10,7 @@ const useClass = () => {
   const dispatch = useDispatch();
   const [teachers, setTeachers] = useState([]);
   const [classes, setClasses] = useState<any>([]);
+  const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
 
@@ -60,6 +61,18 @@ const useClass = () => {
       .catch(() => {});
   };
 
+  const getClass = (id: string) => {
+    getClassInfo(id)
+      .then((res) => {
+        console.log(res);
+
+        setClassInfo(res);
+      })
+      .catch((error) => {
+        handleError(error);
+      });
+  };
+
   return {
     classes,
     teachers,
@@ -68,6 +81,8 @@ const useClass = () => {
     getClassList,
     loading,
     setLoading,
+    getClass,
+    classInfo,
   };
 };
 
