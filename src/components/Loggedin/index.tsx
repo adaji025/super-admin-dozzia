@@ -12,6 +12,8 @@ import OnboardStaff from "../../pages/Administration/OnboardStaff";
 import Settings from "../../pages/Settings/Settings";
 import Classes from "../../pages/Classes/Classes";
 import ClassesInfo from "../../pages/Classes/ClassInfo";
+import Subjects from "../../pages/Subjects/Subjects";
+
 import "./index.scss";
 
 const LoggedinContainer = () => {
@@ -45,6 +47,7 @@ const LoggedinContainer = () => {
             <Route path="/settings" element={<Settings />} />
             <Route path="/classes" element={<Classes />} />
             <Route path="/classes/:id" element={<ClassesInfo />} />
+            <Route path="/subjects" element={<Subjects />} />
           </Routes>
         </div>
       </div>
