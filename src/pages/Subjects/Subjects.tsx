@@ -16,7 +16,7 @@ import useTheme from "../../hooks/useTheme";
 import {
   AdjustmentsHorizontal,
   Search,
-  ClipboardList,
+  CheckupList,
   Users,
   Book,
   Edit,
@@ -209,17 +209,17 @@ const Subjects = () => {
                             position={deviceWidth < 576 ? "left" : "right"}
                             gutter={15}
                             withArrow
-                            size="sm"
+                            size="md"
                           >
-                            <Menu.Label>Class Menu</Menu.Label>
+                            <Menu.Label>Subject Menu</Menu.Label>
                             <Menu.Item icon={<Users size={14} />}>
-                              Students
+                              Teachers
                             </Menu.Item>
                             <Menu.Item icon={<Book size={14} />}>
-                              Subjects
+                              Classes
                             </Menu.Item>
-                            <Menu.Item icon={<ClipboardList size={14} />}>
-                              Class Wall
+                            <Menu.Item icon={<CheckupList size={14} />}>
+                              Assign to class
                             </Menu.Item>
                             <Divider />
                             <Menu.Item
