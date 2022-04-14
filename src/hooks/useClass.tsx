@@ -7,6 +7,7 @@ import {
   getClasses,
   getClassInfo,
   updateClass,
+  getClassStudents,
 } from "../services/class/class";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -18,6 +19,7 @@ const useClass = () => {
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
+  const [classStudents, setClassStudents] = useState<any[]>([]);
 
   const getTeachers = (
     page: number,
@@ -109,6 +111,17 @@ const useClass = () => {
       });
   };
 
+  const handleGetClassStudents = (id: string) => {
+    getClassStudents(id)
+      .then((res) => {
+        setClassStudents(res);
+        console.log(res);
+      })
+      .catch((error) => {
+        handleError(error);
+      });
+  };
+
   return {
     classes,
     teachers,
@@ -120,6 +133,8 @@ const useClass = () => {
     getClass,
     classInfo,
     handleUpdateClass,
+    handleGetClassStudents,
+    classStudents,
   };
 };
 

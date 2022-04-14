@@ -39,3 +39,9 @@ export const updateClass = (
     return res.data;
   });
 };
+
+export const getClassStudents = (id: string) => {
+  return AxoisApi.get(`${APIS.CLASS.GET_CLASS_STUDENTS(id)}`).then((res) => {
+    return res.data;
+  });
+};
