@@ -32,7 +32,12 @@ const useClass = () => {
       .catch(() => {});
   };
 
-  const handleAddClass = (values: any) => {
+  const handleAddClass = (values: {
+    classroom_level: string;
+    classroom_name: string;
+    classroom_teacher: string;
+    classroom_description: string;
+  }) => {
     dispatch(showLoader(true));
 
     addClass({
