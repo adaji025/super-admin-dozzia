@@ -19,7 +19,6 @@ import {
   ClipboardList,
   Users,
   Book,
-  Trash,
   Edit,
 } from "tabler-icons-react";
 import AddClass from "../../components/modals/AddClass";
@@ -266,9 +265,6 @@ const Classes = () => {
                               }}
                             >
                               Edit Class
-                            </Menu.Item>
-                            <Menu.Item color="red" icon={<Trash size={14} />}>
-                              Delete Class
                             </Menu.Item>
                           </Menu>
                         </td>
