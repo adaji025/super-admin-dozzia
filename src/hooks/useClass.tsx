@@ -15,7 +15,7 @@ import { showLoader } from "../redux/utility/utility.actions";
 const useClass = () => {
   const dispatch = useDispatch();
   const [teachers, setTeachers] = useState<any>([]);
-  const [classes, setClasses] = useState<any>([]);
+  const [classes, setClasses] = useState<any>({});
   const [allClasses, setAllClasses] = useState<any>([]);
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
