@@ -27,6 +27,10 @@ export const APIS = {
   },
   STUDENT: {
     ONBOARD_STUDENT: `${api}/students`,
+    GET_STUDENT_LIST: (page: number, perPage: number) =>
+      `${api}/students?per_page=${perPage}&page=${page}`,
+    ADD_STUDENT_TO_CLASS: (studentId: string, classId: string) =>
+      `${api}/subjects/${studentId}/classroom/${classId}`,
   },
   CLASS: {
     CREATE_CLASS: `${api}/classrooms`,

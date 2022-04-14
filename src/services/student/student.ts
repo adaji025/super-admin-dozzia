@@ -6,3 +6,11 @@ export const onboardStudent = (data: any) => {
     return res.data;
   });
 };
+
+export const getStudents = (data: { page: number; perPage: number }) => {
+  return AxoisApi.get(
+    `${APIS.STUDENT.GET_STUDENT_LIST(data.page, data.perPage)}`
+  ).then((res) => {
+    return res.data;
+  });
+};

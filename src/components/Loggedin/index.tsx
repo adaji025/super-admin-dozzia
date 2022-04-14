@@ -13,6 +13,7 @@ import Settings from "../../pages/Settings/Settings";
 import Classes from "../../pages/Classes/Classes";
 import ClassesInfo from "../../pages/Classes/ClassInfo";
 import Subjects from "../../pages/Subjects/Subjects";
+import Students from "../../pages/Students/Students";
 
 import "./index.scss";
 
@@ -48,6 +49,7 @@ const LoggedinContainer = () => {
             <Route path="/classes" element={<Classes />} />
             <Route path="/classes/:id" element={<ClassesInfo />} />
             <Route path="/subjects" element={<Subjects />} />
+            <Route path="/students" element={<Students />} />
           </Routes>
         </div>
       </div>
