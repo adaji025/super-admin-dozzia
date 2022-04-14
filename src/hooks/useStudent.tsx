@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
-import { getStudents } from "../services/student/student";
+import { getStudents, addStudentToClass } from "../services/student/student";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 
@@ -19,11 +19,31 @@ const useStudent = () => {
       .catch(() => {});
   };
 
+  const addToClass = (values: { studentId: string; classId: string }) => {
+    dispatch(showLoader(true));
+
+    addStudentToClass(values.studentId, values.classId)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Student added to class."} 🏫`,
+          color: "green",
+        });
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
+
   return {
     students,
     handleGetStudents,
     loading,
     setLoading,
+    addToClass,
   };
 };
 

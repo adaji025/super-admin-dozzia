@@ -16,6 +16,7 @@ const useClass = () => {
   const dispatch = useDispatch();
   const [teachers, setTeachers] = useState<any>([]);
   const [classes, setClasses] = useState<any>([]);
+  const [allClasses, setAllClasses] = useState<any>([]);
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
@@ -64,11 +65,15 @@ const useClass = () => {
       });
   };
 
-  const getClassList = (page: number, perPage: number) => {
+  const getClassList = (page: number, perPage: number, all?: boolean) => {
     getClasses({ page, perPage })
       .then((res) => {
         setLoading(false);
-        setClasses(res);
+        if (all) {
+          setAllClasses(res.data);
+        } else {
+          setClasses(res);
+        }
       })
       .catch(() => {});
   };
@@ -115,7 +120,6 @@ const useClass = () => {
     getClassStudents(id)
       .then((res) => {
         setClassStudents(res);
-        console.log(res);
       })
       .catch((error) => {
         handleError(error);
@@ -135,6 +139,7 @@ const useClass = () => {
     handleUpdateClass,
     handleGetClassStudents,
     classStudents,
+    allClasses,
   };
 };
 

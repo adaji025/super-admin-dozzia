@@ -11,63 +11,66 @@ import {
   Skeleton,
   Pagination,
   Menu,
-  Divider,
   Avatar,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import {
   AdjustmentsHorizontal,
   Search,
-  ClipboardList,
-  Users,
-  Book,
-  Edit,
+  UserPlus,
+  UserCircle,
 } from "tabler-icons-react";
-import ClassStudents from "../../components/modals/Class/ClassStudents";
+import AddStudentToClass from "../../components/modals/Student/AddStudentToClass";
 import useStudent from "../../hooks/useStudent";
+import useClass from "../../hooks/useClass";
 
-const Classes = () => {
+const Students = () => {
   const { dark } = useTheme();
-  const [classStudentsModal, setClassStudentsModal] = useState<boolean>(false);
-
+  const [addToClassModal, setAddToClassModal] = useState<boolean>(false);
   const { students, handleGetStudents, loading, setLoading } = useStudent();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
-  const [classId, setClassId] = useState<string>("");
-  const [className, setClassName] = useState<string>("");
+  const [studentInfo, setStudentInfo] = useState<{
+    fullName: string;
+    studentId: string;
+    username: string;
+  } | null>(null);
   const deviceWidth = window.innerWidth;
+  const { allClasses, getClassList } = useClass();
 
   useEffect(() => {
     handleGetStudents(page, perPage);
+    getClassList(1, 200, true);
     //eslint-disable-next-line
   }, [page]);
 
   return (
     <Fragment>
       <Helmet>
-        <title>Classes</title>
+        <title>Students</title>
         <meta name="description" content="" />
-        <meta property="og:title" content="Classes" />
+        <meta property="og:title" content="Students" />
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
 
       <Modal
-        opened={classStudentsModal}
+        opened={addToClassModal}
         onClose={() => {
-          setClassStudentsModal(false);
-          setClassId("");
+          setAddToClassModal(false);
+          setStudentInfo(null);
         }}
-        title={<Text weight={600}>{className ?? "Class"} Students</Text>}
+        title={<Text weight={600}>Add to Class</Text>}
         size="lg"
       >
-        <ClassStudents
+        <AddStudentToClass
           closeModal={() => {
-            setClassStudentsModal(false);
-            setClassId("");
+            setAddToClassModal(false);
+            setStudentInfo(null);
           }}
-          classId={classId}
-          modalActive={classStudentsModal}
+          student={studentInfo}
+          modalActive={addToClassModal}
+          allClasses={allClasses}
         />
       </Modal>
 
@@ -217,26 +220,29 @@ const Classes = () => {
                             withArrow
                             size="sm"
                           >
-                            <Menu.Label>Class Menu</Menu.Label>
+                            <Menu.Label>Menu</Menu.Label>
                             <Menu.Item
-                              icon={<Users size={14} />}
+                              icon={<UserCircle size={14} />}
                               // onClick={() => {
                               //   setClassName(item.classroom_name);
                               //   setClassId(item.classroom_id);
                               //   setClassStudentsModal(true);
                               // }}
                             >
-                              Students
+                              View Student
                             </Menu.Item>
-                            <Menu.Item icon={<Book size={14} />}>
-                              Subjects
-                            </Menu.Item>
-                            <Menu.Item icon={<ClipboardList size={14} />}>
-                              Class Wall
-                            </Menu.Item>
-                            <Divider />
-                            <Menu.Item icon={<Edit size={14} />}>
-                              Edit Class
+                            <Menu.Item
+                              icon={<UserPlus size={14} />}
+                              onClick={() => {
+                                setStudentInfo({
+                                  fullName: `${item.first_name} ${item.last_name}`,
+                                  studentId: item.student_id,
+                                  username: item.username,
+                                });
+                                setAddToClassModal(true);
+                              }}
+                            >
+                              Add to Class
                             </Menu.Item>
                           </Menu>
                         </td>
@@ -276,16 +282,4 @@ const Classes = () => {
   );
 };
 
-export default Classes;
-
-// eslint-disable-next-line no-lone-blocks
-{
-  /* <Button
-  variant="subtle"
-  component={Link}
-  to={`/classes/${item.classroom_id}`}
-  state={{ classId: item.classroom_id }}
->
-  View Class
-</Button>; */
-}
+export default Students;

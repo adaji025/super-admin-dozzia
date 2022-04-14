@@ -29,8 +29,6 @@ const AddSubject = ({ closeModal, submit, edit }: any) => {
         onSubmit={form.onSubmit((values) => {
           closeModal();
           if (edit) {
-            console.log(123);
-
             submit(edit.subject_id, values);
           } else {
             submit(values);

@@ -14,3 +14,11 @@ export const getStudents = (data: { page: number; perPage: number }) => {
     return res.data;
   });
 };
+
+export const addStudentToClass = (studentId: string, classId: string) => {
+  return AxoisApi.get(
+    `${APIS.STUDENT.ADD_STUDENT_TO_CLASS(studentId, classId)}`
+  ).then((res) => {
+    return res.data;
+  });
+};
