@@ -21,7 +21,7 @@ import {
   Book,
   Edit,
 } from "tabler-icons-react";
-import AddSubject from "../../components/modals/AddSubject";
+import AddSubject from "../../components/modals/Subject/AddSubject";
 import useSubject from "../../hooks/useSubject";
 
 const Subjects = () => {

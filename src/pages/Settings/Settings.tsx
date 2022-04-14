@@ -19,7 +19,7 @@ import { showNotification } from "@mantine/notifications";
 import useNotification from "../../hooks/useNotification";
 import { showLoader } from "../../redux/utility/utility.actions";
 import { setUserData } from "../../redux/user/user.actions";
-import ChangePassword from "../../components/modals/ChangePassword";
+import ChangePassword from "../../components/modals/Auth/ChangePassword";
 import "./settings.scss";
 
 const Settings = () => {

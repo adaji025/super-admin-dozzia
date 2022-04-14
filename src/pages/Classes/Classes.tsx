@@ -21,13 +21,15 @@ import {
   Book,
   Edit,
 } from "tabler-icons-react";
-import AddClass from "../../components/modals/AddClass";
+import AddClass from "../../components/modals/Class/AddClass";
+import ClassStudents from "../../components/modals/Class/ClassStudents";
 import useClass from "../../hooks/useClass";
 import "./classes.scss";
 
 const Classes = () => {
   const { dark } = useTheme();
   const [addClassModal, setAddClassModal] = useState<boolean>(false);
+  const [classStudentsModal, setClassStudentsModal] = useState<boolean>(false);
   const [editClass, setEditClass] = useState<null | {
     classroom_id: string;
     classroom_level: string;
@@ -45,6 +47,8 @@ const Classes = () => {
   } = useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
+  const [classId, setClassId] = useState<string>("");
+  const [className, setClassName] = useState<string>("");
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
@@ -78,6 +82,26 @@ const Classes = () => {
           }}
           edit={editClass}
           submit={editClass ? handleUpdateClass : handleAddClass}
+          modalActive={addClassModal}
+        />
+      </Modal>
+
+      <Modal
+        opened={classStudentsModal}
+        onClose={() => {
+          setClassStudentsModal(false);
+          setClassId("");
+        }}
+        title={<Text weight={600}>{className ?? "Class"} Students</Text>}
+        size="lg"
+      >
+        <ClassStudents
+          closeModal={() => {
+            setClassStudentsModal(false);
+            setClassId("");
+          }}
+          classId={classId}
+          modalActive={classStudentsModal}
         />
       </Modal>
 
@@ -238,7 +262,14 @@ const Classes = () => {
                             size="sm"
                           >
                             <Menu.Label>Class Menu</Menu.Label>
-                            <Menu.Item icon={<Users size={14} />}>
+                            <Menu.Item
+                              icon={<Users size={14} />}
+                              onClick={() => {
+                                setClassName(item.classroom_name);
+                                setClassId(item.classroom_id);
+                                setClassStudentsModal(true);
+                              }}
+                            >
                               Students
                             </Menu.Item>
                             <Menu.Item icon={<Book size={14} />}>

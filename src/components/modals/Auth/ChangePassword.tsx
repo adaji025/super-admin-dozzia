@@ -3,10 +3,10 @@ import { Button, PasswordInput, Group, Divider } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { Lock } from "tabler-icons-react";
-import { changePassword } from "../../services/auth/auth";
+import { changePassword } from "../../../services/auth/auth";
 import { useDispatch } from "react-redux";
-import useNotification from "../../hooks/useNotification";
-import { showLoader } from "../../redux/utility/utility.actions";
+import useNotification from "../../../hooks/useNotification";
+import { showLoader } from "../../../redux/utility/utility.actions";
 
 const ChangePassword = ({ closeModal }: any) => {
   const dispatch = useDispatch();

@@ -8,13 +8,15 @@ import {
   Divider,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import useClass from "../../hooks/useClass";
+import useClass from "../../../hooks/useClass";
 
-const AddClass = ({ closeModal, submit, edit }: any) => {
+const AddClass = ({ closeModal, submit, edit, modalActive }: any) => {
   const { teachers, getTeachers } = useClass();
 
   useEffect(() => {
-    getTeachers(1, 500, "", "teacher");
+    if (modalActive) {
+      getTeachers(1, 500, "", "teacher");
+    }
     //eslint-disable-next-line
   }, []);
 
