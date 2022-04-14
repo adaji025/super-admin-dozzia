@@ -19,12 +19,6 @@ export const getSubjects = (data: { page: number; perPage: number }) => {
   });
 };
 
-// export const getClassInfo = (id: string) => {
-//   return AxoisApi.get(`${APIS.CLASS.CLASS(id)}`).then((res) => {
-//     return res.data;
-//   });
-// };
-
 export const updateSubject = (
   id: string,
   data: {
