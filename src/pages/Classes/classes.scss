@@ -37,11 +37,11 @@
         text-align: right !important;
       }
     }
+  }
+}
 
-    .large-only {
-      @media only screen and (max-width: 576px) {
-        display: none;
-      }
-    }
+.large-only {
+  @media only screen and (max-width: 576px) {
+    display: none;
   }
 }

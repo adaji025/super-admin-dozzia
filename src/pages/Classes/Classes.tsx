@@ -93,7 +93,7 @@ const Classes = () => {
           setClassId("");
         }}
         title={<Text weight={600}>{className ?? "Class"} Students</Text>}
-        size="lg"
+        size="xl"
       >
         <ClassStudents
           closeModal={() => {

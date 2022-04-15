@@ -17,8 +17,8 @@ import useTheme from "../../hooks/useTheme";
 import {
   AdjustmentsHorizontal,
   Search,
-  UserPlus,
-  UserCircle,
+  PlaylistAdd,
+  User,
 } from "tabler-icons-react";
 import AddStudentToClass from "../../components/modals/Student/AddStudentToClass";
 import useStudent from "../../hooks/useStudent";
@@ -196,6 +196,7 @@ const Students = () => {
                         <td
                           style={{
                             borderBottom: `1px solid #0000`,
+                            fontWeight: "500",
                           }}
                         >
                           {`${item.first_name} ${item.last_name}`}
@@ -221,18 +222,9 @@ const Students = () => {
                             size="sm"
                           >
                             <Menu.Label>Menu</Menu.Label>
+
                             <Menu.Item
-                              icon={<UserCircle size={14} />}
-                              // onClick={() => {
-                              //   setClassName(item.classroom_name);
-                              //   setClassId(item.classroom_id);
-                              //   setClassStudentsModal(true);
-                              // }}
-                            >
-                              View Student
-                            </Menu.Item>
-                            <Menu.Item
-                              icon={<UserPlus size={14} />}
+                              icon={<PlaylistAdd size={14} />}
                               onClick={() => {
                                 setStudentInfo({
                                   fullName: `${item.first_name} ${item.last_name}`,
@@ -243,6 +235,9 @@ const Students = () => {
                               }}
                             >
                               Add to Class
+                            </Menu.Item>
+                            <Menu.Item icon={<User size={14} />}>
+                              View Student
                             </Menu.Item>
                           </Menu>
                         </td>

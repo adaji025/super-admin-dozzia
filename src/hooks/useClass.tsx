@@ -20,7 +20,7 @@ const useClass = () => {
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
-  const [classStudents, setClassStudents] = useState<any[]>([]);
+  const [classStudents, setClassStudents] = useState<any>([]);
 
   const getTeachers = (
     page: number,
@@ -120,6 +120,7 @@ const useClass = () => {
     getClassStudents(id)
       .then((res) => {
         setClassStudents(res);
+        setLoading(false);
       })
       .catch((error) => {
         handleError(error);
