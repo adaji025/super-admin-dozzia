@@ -66,16 +66,20 @@ const useClass = () => {
   };
 
   const getClassList = (page: number, perPage: number, all?: boolean) => {
+    setLoading(true);
+
     getClasses({ page, perPage })
       .then((res) => {
-        setLoading(false);
         if (all) {
           setAllClasses(res.data);
         } else {
           setClasses(res);
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const getClass = (id: string) => {
@@ -117,13 +121,16 @@ const useClass = () => {
   };
 
   const handleGetClassStudents = (id: string) => {
+    setLoading(false);
     getClassStudents(id)
       .then((res) => {
         setClassStudents(res);
-        setLoading(false);
       })
       .catch((error) => {
         handleError(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 

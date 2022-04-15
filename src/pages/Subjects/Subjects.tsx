@@ -38,7 +38,6 @@ const Subjects = () => {
     subjects,
     getSubjectList,
     loading,
-    setLoading,
     handleUpdateSubject,
   } = useSubject();
   const [page, setPage] = useState<number>(1);
@@ -260,7 +259,6 @@ const Subjects = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setLoading(true);
                 setPage(value);
               }}
               initialPage={subjects.meta.current_page}

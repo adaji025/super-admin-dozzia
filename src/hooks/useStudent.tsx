@@ -12,11 +12,15 @@ const useStudent = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleGetStudents = (page: number, perPage: number) => {
+    setLoading(true);
     getStudents({ page, perPage })
       .then((res) => {
         setStudents(res);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const addToClass = (values: { studentId: string; classId: string }) => {

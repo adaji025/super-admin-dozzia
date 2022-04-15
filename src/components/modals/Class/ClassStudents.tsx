@@ -25,8 +25,7 @@ const ClassStudents = ({
   closeModal: () => void;
   modalActive: boolean;
 }) => {
-  const { handleGetClassStudents, classStudents, loading, setLoading } =
-    useClass();
+  const { handleGetClassStudents, classStudents, loading } = useClass();
   const { dark } = useTheme();
   const deviceWidth = window.innerWidth;
 
@@ -197,9 +196,7 @@ const ClassStudents = ({
           sx={{ maxWidth: 900 }}
           position="center"
           mt={25}
-          onChange={(value) => {
-            setLoading(true);
-          }}
+          onChange={(value) => {}}
           initialPage={classStudents.meta.current_page}
           total={classStudents.meta.last_page}
           color="green"

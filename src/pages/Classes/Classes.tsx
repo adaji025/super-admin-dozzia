@@ -37,14 +37,8 @@ const Classes = () => {
     classroom_teacher: string;
     classroom_description: string;
   }>(null);
-  const {
-    getClassList,
-    classes,
-    loading,
-    setLoading,
-    handleAddClass,
-    handleUpdateClass,
-  } = useClass();
+  const { getClassList, classes, loading, handleAddClass, handleUpdateClass } =
+    useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [classId, setClassId] = useState<string>("");
@@ -321,7 +315,6 @@ const Classes = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setLoading(true);
                 setPage(value);
               }}
               initialPage={classes.meta.current_page}

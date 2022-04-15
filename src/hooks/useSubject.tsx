@@ -44,12 +44,16 @@ const useSubject = () => {
   };
 
   const getSubjectList = (page: number, perPage: number) => {
+    setLoading(true);
     getSubjects({ page, perPage })
       .then((res) => {
         setLoading(false);
         setSubjects(res);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   const handleUpdateSubject = (

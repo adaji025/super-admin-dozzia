@@ -27,7 +27,7 @@ import useClass from "../../hooks/useClass";
 const Students = () => {
   const { dark } = useTheme();
   const [addToClassModal, setAddToClassModal] = useState<boolean>(false);
-  const { students, handleGetStudents, loading, setLoading } = useStudent();
+  const { students, handleGetStudents, loading } = useStudent();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [studentInfo, setStudentInfo] = useState<{
@@ -263,7 +263,6 @@ const Students = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setLoading(true);
                 setPage(value);
               }}
               initialPage={students.meta.current_page}
