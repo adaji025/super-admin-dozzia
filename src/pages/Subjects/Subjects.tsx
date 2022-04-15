@@ -11,6 +11,8 @@ import {
   Pagination,
   Menu,
   Divider,
+  Group,
+  Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import {
@@ -125,123 +127,138 @@ const Subjects = () => {
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
             {subjects.data && !loading ? (
-              <Table highlightOnHover striped>
-                <thead>
-                  <tr>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                      }}
-                      className="large-only"
-                    ></th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                    >
-                      Subject Name
-                    </th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                    >
-                      Category
-                    </th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        width: "1px",
-                      }}
-                      className="table-last head large-only"
-                    ></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {subjects?.data.map(
-                    (
-                      item: {
-                        subject_id: string;
-                        subject_name: string;
-                        subject_category: string;
-                        subject_description: string;
-                      },
-                      index: number
-                    ) => (
-                      <tr key={item.subject_id}>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
-                          }}
-                          className="large-only"
-                        >
-                          {index + 1}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            fontWeight: "600",
-                          }}
-                        >
-                          {item.subject_name}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
-                          }}
-                        >
-                          {item.subject_category}
-                        </td>
-
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            width: "20px",
-                          }}
-                          className="table-last"
-                        >
-                          <Menu
-                            position={deviceWidth < 576 ? "left" : "right"}
-                            gutter={15}
-                            withArrow
-                            size="md"
+              <>
+                <Table highlightOnHover striped>
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                        }}
+                        className="large-only"
+                      ></th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Subject Name
+                      </th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Category
+                      </th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          width: "1px",
+                        }}
+                        className="table-last head large-only"
+                      ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {subjects?.data.map(
+                      (
+                        item: {
+                          subject_id: string;
+                          subject_name: string;
+                          subject_category: string;
+                          subject_description: string;
+                        },
+                        index: number
+                      ) => (
+                        <tr key={item.subject_id}>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              color: dark ? "#b3b7cb" : "#898989",
+                            }}
+                            className="large-only"
                           >
-                            <Menu.Label>Subject Menu</Menu.Label>
-                            <Menu.Item icon={<Users size={14} />}>
-                              Teachers
-                            </Menu.Item>
-                            <Menu.Item icon={<Book size={14} />}>
-                              Classes
-                            </Menu.Item>
-                            <Menu.Item icon={<CheckupList size={14} />}>
-                              Assign to class
-                            </Menu.Item>
-                            <Divider />
-                            <Menu.Item
-                              icon={<Edit size={14} />}
-                              onClick={() => {
-                                setEditSubject({
-                                  subject_id: item.subject_id,
-                                  subject_name: item.subject_name,
-                                  subject_category: item.subject_category,
-                                  subject_description: item.subject_description,
-                                });
-                                setAddSubjectModal(true);
-                              }}
+                            {index + 1}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              fontWeight: "600",
+                            }}
+                          >
+                            {item.subject_name}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              color: dark ? "#b3b7cb" : "#898989",
+                            }}
+                          >
+                            {item.subject_category}
+                          </td>
+
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              width: "20px",
+                            }}
+                            className="table-last"
+                          >
+                            <Menu
+                              position={deviceWidth < 576 ? "left" : "right"}
+                              gutter={15}
+                              withArrow
+                              size="md"
                             >
-                              Edit Subject
-                            </Menu.Item>
-                          </Menu>
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </Table>
+                              <Menu.Label>Subject Menu</Menu.Label>
+                              <Menu.Item icon={<Users size={14} />}>
+                                Teachers
+                              </Menu.Item>
+                              <Menu.Item icon={<Book size={14} />}>
+                                Classes
+                              </Menu.Item>
+                              <Menu.Item icon={<CheckupList size={14} />}>
+                                Assign to class
+                              </Menu.Item>
+                              <Divider />
+                              <Menu.Item
+                                icon={<Edit size={14} />}
+                                onClick={() => {
+                                  setEditSubject({
+                                    subject_id: item.subject_id,
+                                    subject_name: item.subject_name,
+                                    subject_category: item.subject_category,
+                                    subject_description:
+                                      item.subject_description,
+                                  });
+                                  setAddSubjectModal(true);
+                                }}
+                              >
+                                Edit Subject
+                              </Menu.Item>
+                            </Menu>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </Table>
+
+                {subjects?.data.length === 0 && (
+                  <Group grow position="center" mt={80}>
+                    <Alert
+                      title="Bummer!"
+                      color="red"
+                      style={{ maxWidth: "300px" }}
+                    >
+                      No subject found 📗.
+                    </Alert>
+                  </Group>
+                )}
+              </>
             ) : (
               <>
                 <Skeleton height={25} mt={30} radius="sm" />
@@ -253,7 +270,7 @@ const Subjects = () => {
             )}
           </Box>
 
-          {subjects?.meta && (
+          {subjects?.meta && subjects?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
               position="center"

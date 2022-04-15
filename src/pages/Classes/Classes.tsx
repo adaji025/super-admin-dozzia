@@ -11,6 +11,8 @@ import {
   Pagination,
   Menu,
   Divider,
+  Group,
+  Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import {
@@ -145,159 +147,173 @@ const Classes = () => {
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
             {classes.data && !loading ? (
-              <Table highlightOnHover striped>
-                <thead>
-                  <tr>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                      }}
-                      className="large-only"
-                    ></th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                    >
-                      Class Name
-                    </th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                    >
-                      Class Teacher
-                    </th>
-                    <th
-                      className="large-only"
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                    >
-                      Class Level
-                    </th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        width: "1px",
-                      }}
-                      className="table-last head large-only"
-                    ></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {classes?.data.map(
-                    (
-                      item: {
-                        classroom_id: string;
-                        classroom_level: number;
-                        classroom_name: string;
-                        classroom_description: string;
-                        classroom_teacher: {
-                          title: string;
-                          first_name: string;
-                          last_name: string;
-                          staff_id: string;
-                        };
-                      },
-                      index: number
-                    ) => (
-                      <tr key={item.classroom_id}>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
-                          }}
-                          className="large-only"
-                        >
-                          {index + 1}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            fontWeight: "600",
-                          }}
-                        >
-                          {item.classroom_name}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
-                          }}
-                        >
-                          {`${item.classroom_teacher.title} ${item.classroom_teacher.first_name} ${item.classroom_teacher.last_name}`}
-                        </td>
-                        <td
-                          className="large-only"
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            paddingLeft: "30px",
-                            color: dark ? "#b3b7cb" : "#898989",
-                            fontWeight: "500",
-                          }}
-                        >
-                          {item.classroom_level}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            width: "20px",
-                          }}
-                          className="table-last"
-                        >
-                          <Menu
-                            position={deviceWidth < 576 ? "left" : "right"}
-                            gutter={15}
-                            withArrow
-                            size="sm"
+              <>
+                <Table highlightOnHover striped>
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                        }}
+                        className="large-only"
+                      ></th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Class Name
+                      </th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Class Teacher
+                      </th>
+                      <th
+                        className="large-only"
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Class Level
+                      </th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          width: "1px",
+                        }}
+                        className="table-last head large-only"
+                      ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {classes?.data.map(
+                      (
+                        item: {
+                          classroom_id: string;
+                          classroom_level: number;
+                          classroom_name: string;
+                          classroom_description: string;
+                          classroom_teacher: {
+                            title: string;
+                            first_name: string;
+                            last_name: string;
+                            staff_id: string;
+                          };
+                        },
+                        index: number
+                      ) => (
+                        <tr key={item.classroom_id}>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              color: dark ? "#b3b7cb" : "#898989",
+                            }}
+                            className="large-only"
                           >
-                            <Menu.Label>Class Menu</Menu.Label>
-                            <Menu.Item
-                              icon={<Users size={14} />}
-                              onClick={() => {
-                                setClassName(item.classroom_name);
-                                setClassId(item.classroom_id);
-                                setClassStudentsModal(true);
-                              }}
+                            {index + 1}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              fontWeight: "600",
+                            }}
+                          >
+                            {item.classroom_name}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              color: dark ? "#b3b7cb" : "#898989",
+                            }}
+                          >
+                            {`${item.classroom_teacher.title} ${item.classroom_teacher.first_name} ${item.classroom_teacher.last_name}`}
+                          </td>
+                          <td
+                            className="large-only"
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              paddingLeft: "30px",
+                              color: dark ? "#b3b7cb" : "#898989",
+                              fontWeight: "500",
+                            }}
+                          >
+                            {item.classroom_level}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              width: "20px",
+                            }}
+                            className="table-last"
+                          >
+                            <Menu
+                              position={deviceWidth < 576 ? "left" : "right"}
+                              gutter={15}
+                              withArrow
+                              size="sm"
                             >
-                              Students
-                            </Menu.Item>
-                            <Menu.Item icon={<Book size={14} />}>
-                              Subjects
-                            </Menu.Item>
-                            <Menu.Item icon={<ClipboardList size={14} />}>
-                              Class Wall
-                            </Menu.Item>
-                            <Divider />
-                            <Menu.Item
-                              icon={<Edit size={14} />}
-                              onClick={() => {
-                                setEditClass({
-                                  classroom_id: item.classroom_id,
-                                  classroom_name: item.classroom_name,
-                                  classroom_level:
-                                    item.classroom_level.toString(),
-                                  classroom_description:
-                                    item.classroom_description,
-                                  classroom_teacher:
-                                    item.classroom_teacher.staff_id,
-                                });
-                                setAddClassModal(true);
-                              }}
-                            >
-                              Edit Class
-                            </Menu.Item>
-                          </Menu>
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </Table>
+                              <Menu.Label>Class Menu</Menu.Label>
+                              <Menu.Item
+                                icon={<Users size={14} />}
+                                onClick={() => {
+                                  setClassName(item.classroom_name);
+                                  setClassId(item.classroom_id);
+                                  setClassStudentsModal(true);
+                                }}
+                              >
+                                Students
+                              </Menu.Item>
+                              <Menu.Item icon={<Book size={14} />}>
+                                Subjects
+                              </Menu.Item>
+                              <Menu.Item icon={<ClipboardList size={14} />}>
+                                Class Wall
+                              </Menu.Item>
+                              <Divider />
+                              <Menu.Item
+                                icon={<Edit size={14} />}
+                                onClick={() => {
+                                  setEditClass({
+                                    classroom_id: item.classroom_id,
+                                    classroom_name: item.classroom_name,
+                                    classroom_level:
+                                      item.classroom_level.toString(),
+                                    classroom_description:
+                                      item.classroom_description,
+                                    classroom_teacher:
+                                      item.classroom_teacher.staff_id,
+                                  });
+                                  setAddClassModal(true);
+                                }}
+                              >
+                                Edit Class
+                              </Menu.Item>
+                            </Menu>
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </Table>
+
+                {classes?.data.length === 0 && (
+                  <Group grow position="center" my={80}>
+                    <Alert
+                      title="Bummer!"
+                      color="red"
+                      style={{ maxWidth: "300px" }}
+                    >
+                      No class found 😣.
+                    </Alert>
+                  </Group>
+                )}
+              </>
             ) : (
               <>
                 <Skeleton height={25} mt={30} radius="sm" />
@@ -309,7 +325,7 @@ const Classes = () => {
             )}
           </Box>
 
-          {classes?.meta && (
+          {classes?.meta && classes?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
               position="center"

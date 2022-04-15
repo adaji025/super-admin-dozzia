@@ -12,6 +12,8 @@ import {
   Pagination,
   Menu,
   Avatar,
+  Group,
+  Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import {
@@ -115,137 +117,152 @@ const Students = () => {
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
             {students.data && !loading ? (
-              <Table highlightOnHover striped>
-                <thead>
-                  <tr>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                      }}
-                      className="large-only"
-                    ></th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                      className="large-only"
-                    >
-                      Picture
-                    </th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                    >
-                      Name
-                    </th>
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        color: dark ? "#b3b7cb" : "#898989",
-                      }}
-                    >
-                      Reg No.
-                    </th>
+              <>
+                <Table highlightOnHover striped>
+                  <thead>
+                    <tr>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                        }}
+                        className="large-only"
+                      ></th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                        className="large-only"
+                      >
+                        Picture
+                      </th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Name
+                      </th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Reg No.
+                      </th>
 
-                    <th
-                      style={{
-                        borderBottom: `1px solid #0000`,
-                        width: "1px",
-                      }}
-                      className="table-last head large-only"
-                    ></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {students?.data.map(
-                    (
-                      item: {
-                        student_id: string;
-                        first_name: number;
-                        last_name: string;
-                        picture: string;
-                        username: string;
-                      },
-                      index: number
-                    ) => (
-                      <tr key={item.student_id}>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
-                          }}
-                          className="large-only"
-                        >
-                          {index + 1}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                          }}
-                          className="large-only"
-                        >
-                          <Avatar
-                            className="avatar"
-                            src={item?.picture ? item?.picture : null}
-                            radius="xl"
-                          />
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            fontWeight: "500",
-                          }}
-                        >
-                          {`${item.first_name} ${item.last_name}`}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                          }}
-                        >
-                          {item.username}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            width: "20px",
-                          }}
-                          className="table-last"
-                        >
-                          <Menu
-                            position={deviceWidth < 576 ? "left" : "right"}
-                            gutter={15}
-                            withArrow
-                            size="sm"
-                          >
-                            <Menu.Label>Menu</Menu.Label>
-
-                            <Menu.Item
-                              icon={<PlaylistAdd size={14} />}
-                              onClick={() => {
-                                setStudentInfo({
-                                  fullName: `${item.first_name} ${item.last_name}`,
-                                  studentId: item.student_id,
-                                  username: item.username,
-                                });
-                                setAddToClassModal(true);
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          width: "1px",
+                        }}
+                        className="table-last head large-only"
+                      ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {students?.data.length > 0 &&
+                      students?.data.map(
+                        (
+                          item: {
+                            student_id: string;
+                            first_name: number;
+                            last_name: string;
+                            picture: string;
+                            username: string;
+                          },
+                          index: number
+                        ) => (
+                          <tr key={item.student_id}>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                color: dark ? "#b3b7cb" : "#898989",
+                              }}
+                              className="large-only"
+                            >
+                              {index + 1}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                              className="large-only"
+                            >
+                              <Avatar
+                                className="avatar"
+                                src={item?.picture ? item?.picture : null}
+                                radius="xl"
+                              />
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                fontWeight: "500",
                               }}
                             >
-                              Add to Class
-                            </Menu.Item>
-                            <Menu.Item icon={<User size={14} />}>
-                              View Student
-                            </Menu.Item>
-                          </Menu>
-                        </td>
-                      </tr>
-                    )
-                  )}
-                </tbody>
-              </Table>
+                              {`${item.first_name} ${item.last_name}`}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                            >
+                              {item.username}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                width: "20px",
+                              }}
+                              className="table-last"
+                            >
+                              <Menu
+                                position={deviceWidth < 576 ? "left" : "right"}
+                                gutter={15}
+                                withArrow
+                                size="sm"
+                              >
+                                <Menu.Label>Menu</Menu.Label>
+
+                                <Menu.Item
+                                  icon={<PlaylistAdd size={14} />}
+                                  onClick={() => {
+                                    setStudentInfo({
+                                      fullName: `${item.first_name} ${item.last_name}`,
+                                      studentId: item.student_id,
+                                      username: item.username,
+                                    });
+                                    setAddToClassModal(true);
+                                  }}
+                                >
+                                  Add to Class
+                                </Menu.Item>
+                                <Menu.Item icon={<User size={14} />}>
+                                  View Student
+                                </Menu.Item>
+                              </Menu>
+                            </td>
+                          </tr>
+                        )
+                      )}
+                  </tbody>
+                </Table>
+
+                {students?.data.length === 0 && (
+                  <Group grow position="center" mt={80}>
+                    <Alert
+                      title="Bummer!"
+                      color="red"
+                      style={{ maxWidth: "300px" }}
+                    >
+                      No student found 😑.
+                    </Alert>
+                  </Group>
+                )}
+              </>
             ) : (
               <>
                 <Skeleton height={25} mt={30} radius="sm" />
@@ -257,7 +274,7 @@ const Students = () => {
             )}
           </Box>
 
-          {students?.meta && (
+          {students?.meta && students?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
               position="center"
