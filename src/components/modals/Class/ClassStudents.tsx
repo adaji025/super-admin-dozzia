@@ -1,4 +1,4 @@
-import { useEffect, Fragment } from "react";
+import { useEffect, Fragment, useState } from "react";
 import useClass from "../../../hooks/useClass";
 import {
   Button,
@@ -11,9 +11,10 @@ import {
   Avatar,
   Pagination,
   Alert,
+  Tabs,
 } from "@mantine/core";
 import useTheme from "../../../hooks/useTheme";
-import { Trash } from "tabler-icons-react";
+import { Trash, Users, UserPlus } from "tabler-icons-react";
 import "../modals.scss";
 
 const ClassStudents = ({
@@ -25,22 +26,69 @@ const ClassStudents = ({
   closeModal: () => void;
   modalActive: boolean;
 }) => {
+  const [activeTab, setActiveTab] = useState<number>(0);
   const { handleGetClassStudents, classStudents, loading } = useClass();
-  const { dark } = useTheme();
-  const deviceWidth = window.innerWidth;
 
   useEffect(() => {
     if (modalActive) {
       handleGetClassStudents(classId);
     }
-
     //eslint-disable-next-line
   }, []);
 
+  const onChange = (active: number, tabKey: string) => {
+    setActiveTab(active);
+  };
+
+  return (
+    <Tabs active={activeTab} onTabChange={onChange} variant="outline">
+      <Tabs.Tab icon={<Users size={14} />} label="View Students" tabKey="View">
+        <ViewStudents
+          {...{ classId, closeModal, modalActive, classStudents, loading }}
+        />
+      </Tabs.Tab>
+      <Tabs.Tab
+        icon={<UserPlus size={14} />}
+        label="Add Student(s)"
+        tabKey="Add"
+      >
+        <AddStudentsToClass {...{ closeModal }} />
+      </Tabs.Tab>
+    </Tabs>
+  );
+};
+
+const AddStudentsToClass = ({ closeModal }: { closeModal: () => void }) => {
   return (
     <Fragment>
-      <Divider mb="md" variant="dashed" />
+      <Box sx={{ maxWidth: 900, minHeight: 173 }} className="list-modal"></Box>
 
+      <Divider mt="md" variant="dashed" />
+
+      <Group position="right" mt="lg">
+        <Button variant="light" onClick={closeModal}>
+          Close
+        </Button>
+        <Button type="submit">Submit</Button>
+      </Group>
+    </Fragment>
+  );
+};
+
+const ViewStudents = ({
+  closeModal,
+  classStudents,
+  loading,
+}: {
+  closeModal: () => void;
+  classStudents: any;
+  loading: boolean;
+}) => {
+  const { dark } = useTheme();
+  const deviceWidth = window.innerWidth;
+
+  return (
+    <Fragment>
       <Box sx={{ maxWidth: 900, minHeight: 173 }} className="list-modal">
         {classStudents.data && !loading ? (
           <>
