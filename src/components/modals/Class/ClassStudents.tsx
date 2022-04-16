@@ -127,8 +127,6 @@ const AddStudentsToClass = ({
           id: student.student_id,
         };
         setStudentList(ids);
-
-        form.addListItem("students", { username: "" });
       })
       .catch((error) => {})
       .finally(() => {
@@ -236,6 +234,17 @@ const AddStudentsToClass = ({
             >
               Add Student
             </Button>
+
+            {form.values.students.length !== 0 && (
+              <Button
+                variant="white"
+                onClick={() => {
+                  form.addListItem("students", { username: "" });
+                }}
+              >
+                Add Another
+              </Button>
+            )}
           </Group>
         </Box>
       </Box>
