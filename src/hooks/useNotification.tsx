@@ -1,7 +1,27 @@
 import { showNotification } from "@mantine/notifications";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 const useNotification = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const logoutUser = () => {
+    dispatch({ type: "LOGOUT" });
+    showNotification({
+      title: "User logged out",
+      message: `${"Sign in to continue "} 😑`,
+      color: "yellow",
+    });
+    localStorage.removeItem("token");
+    navigate("/signin");
+  };
+
   const handleError = (error: any) => {
+    if (error?.response?.status === 401) {
+      return logoutUser();
+    }
+
     if (error?.response?.status === 500) {
       return showNotification({
         title: "Error",
