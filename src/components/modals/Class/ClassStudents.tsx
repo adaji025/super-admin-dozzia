@@ -163,19 +163,29 @@ const AddStudentsToClass = ({
   const fields = form.values.students.map((_, index) => (
     <Group key={index} mt="xs">
       <TextInput
-        placeholder="Enter Student Reg No."
+        placeholder="Student Reg No."
         required
         variant="filled"
         disabled={index !== form.values.students.length - 1}
         icon={<User size={14} />}
-        sx={{ maxWidth: 200 }}
+        className="el231"
+        sx={{ flex: 1 }}
         {...form.getListInputProps("students", index, "username")}
       />
 
       {studentList.map((item: { name: string }, studentIndex: number) => (
         <Fragment key={studentIndex}>
           {studentIndex === index && (
-            <Text sx={{ opacity: "0.8", fontSize: "14px" }}>{item.name}</Text>
+            <>
+              <Text sx={{ opacity: "0.8", fontSize: "14px" }} className="lg121">
+                {item.name}
+              </Text>
+              <Text sx={{ opacity: "0.8", fontSize: "14px" }} className="sm121">
+                {item.name.length > 14
+                  ? `${item.name.substring(0, 14)}...`
+                  : item.name}
+              </Text>
+            </>
           )}
         </Fragment>
       ))}
@@ -200,7 +210,7 @@ const AddStudentsToClass = ({
         <Box sx={{ maxWidth: 500 }}>
           {fields.length > 0 ? (
             <Group my="xs">
-              <Text weight={500} size="sm" sx={{ flex: 1, maxWidth: 200 }}>
+              <Text weight={500} size="sm" className="el231" sx={{ flex: 1 }}>
                 Reg No.
               </Text>
               <Text weight={500} size="sm">

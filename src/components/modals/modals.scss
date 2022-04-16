@@ -1,3 +1,26 @@
 .list-modal {
   min-height: 350px;
 }
+
+.el231 {
+  max-width: 300px;
+  @media only screen and (max-width: 768px) {
+    max-width: 230px;
+  }
+  @media only screen and (max-width: 586px) {
+    max-width: 150px;
+  }
+}
+
+.lg121 {
+  @media only screen and (max-width: 586px) {
+    display: none;
+  }
+}
+
+.sm121 {
+  display: none;
+  @media only screen and (max-width: 586px) {
+    display: block;
+  }
+}
