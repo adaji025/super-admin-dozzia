@@ -8,6 +8,7 @@ import {
   getClassInfo,
   updateClass,
   getClassStudents,
+  addMultipleStudentsToClass,
 } from "../services/class/class";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -121,7 +122,8 @@ const useClass = () => {
   };
 
   const handleGetClassStudents = (id: string) => {
-    setLoading(false);
+    setLoading(true);
+
     getClassStudents(id)
       .then((res) => {
         setClassStudents(res);
@@ -131,6 +133,30 @@ const useClass = () => {
       })
       .finally(() => {
         setLoading(false);
+      });
+  };
+
+  const addMultipleStudents = (
+    id: string,
+    data: {
+      students: string[];
+    }
+  ) => {
+    dispatch(showLoader(true));
+
+    addMultipleStudentsToClass(id, data)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Students added successfully."} ✍️`,
+          color: "green",
+        });
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
       });
   };
 
@@ -148,6 +174,7 @@ const useClass = () => {
     handleGetClassStudents,
     classStudents,
     allClasses,
+    addMultipleStudents,
   };
 };
 

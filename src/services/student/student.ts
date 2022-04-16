@@ -22,3 +22,11 @@ export const addStudentToClass = (studentId: string, classId: string) => {
     return res.data;
   });
 };
+
+export const getStudentWithUsername = (username: string) => {
+  return AxoisApi.get(
+    `${APIS.STUDENT.GET_STUDENT_WITH_USERNAME(username)}`
+  ).then((res) => {
+    return res.data;
+  });
+};

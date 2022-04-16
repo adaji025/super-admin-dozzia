@@ -45,3 +45,17 @@ export const getClassStudents = (id: string) => {
     return res.data;
   });
 };
+
+export const addMultipleStudentsToClass = (
+  id: string,
+  data: {
+    students: string[];
+  }
+) => {
+  return AxoisApi.post(
+    `${APIS.CLASS.ADD_MULTIPLE_STUDENTS_TO_CLASS(id)}`,
+    data
+  ).then((res) => {
+    return res.data;
+  });
+};

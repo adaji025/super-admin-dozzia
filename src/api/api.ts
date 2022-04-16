@@ -31,6 +31,8 @@ export const APIS = {
       `${api}/students?per_page=${perPage}&page=${page}`,
     ADD_STUDENT_TO_CLASS: (studentId: string, classId: string) =>
       `${api}/students/${studentId}/classroom/${classId}`,
+    GET_STUDENT_WITH_USERNAME: (username: string) =>
+      `${api}/students/${username}/info`,
   },
   CLASS: {
     CREATE_CLASS: `${api}/classrooms`,
@@ -38,6 +40,8 @@ export const APIS = {
       `${api}/classrooms?per_page=${perPage}&page=${page}`,
     CLASS: (id: string) => `${api}/classrooms/${id}`,
     GET_CLASS_STUDENTS: (id: string) => `${api}/classrooms/${id}/students`,
+    ADD_MULTIPLE_STUDENTS_TO_CLASS: (classId: string) =>
+      `${api}/classrooms/${classId}/students`,
   },
   SUBJECT: {
     SUBJECTS: `${api}/subjects`,

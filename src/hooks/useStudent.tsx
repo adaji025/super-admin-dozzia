@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
-import { getStudents, addStudentToClass } from "../services/student/student";
+import {
+  getStudents,
+  addStudentToClass,
+  getStudentWithUsername,
+} from "../services/student/student";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 
@@ -42,12 +46,26 @@ const useStudent = () => {
       });
   };
 
+  const getInfoWithUsername = (username: string) => {
+    return new Promise((resolve, reject) => {
+      getStudentWithUsername(username)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+          reject(error);
+        });
+    });
+  };
+
   return {
     students,
     handleGetStudents,
     loading,
     setLoading,
     addToClass,
+    getInfoWithUsername,
   };
 };
 
