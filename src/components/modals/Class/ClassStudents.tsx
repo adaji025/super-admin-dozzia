@@ -237,7 +237,7 @@ const AddStudentsToClass = ({
 
             {form.values.students.length !== 0 && (
               <Button
-                variant="white"
+                variant="subtle"
                 onClick={() => {
                   form.addListItem("students", { username: "" });
                 }}
