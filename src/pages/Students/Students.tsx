@@ -116,7 +116,7 @@ const Students = () => {
           </div>
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
-            {students.data && !loading ? (
+            {students && students.data && !loading ? (
               <>
                 <Table highlightOnHover striped>
                   <thead>

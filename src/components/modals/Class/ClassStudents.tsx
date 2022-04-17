@@ -222,7 +222,6 @@ const AddStudentsToClass = ({
 
           <Group position="left" mt="md">
             <Button
-              variant="light"
               loading={loading}
               onClick={() => {
                 if (form.values.students.length === 0) {

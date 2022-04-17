@@ -126,7 +126,7 @@ const Subjects = () => {
           </div>
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
-            {subjects.data && !loading ? (
+            {subjects && subjects.data && !loading ? (
               <>
                 <Table highlightOnHover striped>
                   <thead>

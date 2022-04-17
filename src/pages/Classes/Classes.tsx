@@ -39,7 +39,7 @@ const Classes = () => {
     classroom_teacher: string;
     classroom_description: string;
   }>(null);
-  const { getClassList, classes, loading, handleAddClass, handleUpdateClass } =
+  const { getClassList, loading, handleAddClass, handleUpdateClass, classes } =
     useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
@@ -146,7 +146,7 @@ const Classes = () => {
           </div>
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
-            {classes.data && !loading ? (
+            {classes && classes.data && !loading ? (
               <>
                 <Table highlightOnHover striped>
                   <thead>

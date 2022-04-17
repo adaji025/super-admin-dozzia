@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showNotification } from "@mantine/notifications";
 import {
   addSubject,
@@ -8,12 +8,15 @@ import {
 } from "../services/subject/subject";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
+import { setSubjects } from "../redux/data/data.actions";
 
 const useSubject = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
-  const [subjects, setSubjects] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const subjects = useSelector((state: any) => {
+    return state.data.subjects;
+  });
 
   const handleAddSubject = (values: {
     name: string;
@@ -44,11 +47,14 @@ const useSubject = () => {
   };
 
   const getSubjectList = (page: number, perPage: number) => {
-    setLoading(true);
+    if (subjects === null) {
+      setLoading(true);
+    }
+
     getSubjects({ page, perPage })
       .then((res) => {
         setLoading(false);
-        setSubjects(res);
+        dispatch(setSubjects(res));
       })
       .catch(() => {})
       .finally(() => {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getStaffList } from "../services/staff/staff";
 import { showNotification } from "@mantine/notifications";
 import {
@@ -12,16 +12,19 @@ import {
 } from "../services/class/class";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
+import { setClasses } from "../redux/data/data.actions";
 
 const useClass = () => {
   const dispatch = useDispatch();
   const [teachers, setTeachers] = useState<any>([]);
-  const [classes, setClasses] = useState<any>({});
   const [allClasses, setAllClasses] = useState<any>([]);
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
   const [classStudents, setClassStudents] = useState<any>([]);
+  const classes = useSelector((state: any) => {
+    return state.data.classes;
+  });
 
   const getTeachers = (
     page: number,
@@ -67,14 +70,16 @@ const useClass = () => {
   };
 
   const getClassList = (page: number, perPage: number, all?: boolean) => {
-    setLoading(true);
+    if (classes === null) {
+      setLoading(true);
+    }
 
     getClasses({ page, perPage })
       .then((res) => {
         if (all) {
           setAllClasses(res.data);
         } else {
-          setClasses(res);
+          dispatch(setClasses(res));
         }
       })
       .catch(() => {})

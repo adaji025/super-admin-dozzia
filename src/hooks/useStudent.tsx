@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showNotification } from "@mantine/notifications";
 import {
   getStudents,
@@ -8,18 +8,23 @@ import {
 } from "../services/student/student";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
+import { setStudents } from "../redux/data/data.actions";
 
 const useStudent = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
-  const [students, setStudents] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const students = useSelector((state: any) => {
+    return state.data.students;
+  });
 
   const handleGetStudents = (page: number, perPage: number) => {
-    setLoading(true);
+    if (students === null) {
+      setLoading(true);
+    }
     getStudents({ page, perPage })
       .then((res) => {
-        setStudents(res);
+        dispatch(setStudents(res));
       })
       .catch(() => {})
       .finally(() => {
