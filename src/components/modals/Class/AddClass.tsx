@@ -107,7 +107,7 @@ const AddClass = ({ closeModal, submit, edit, modalActive }: any) => {
             }) => ({
               key: teacher?.staff_id,
               value: teacher?.staff_id,
-              label: `${teacher.title} ${teacher.first_name} ${teacher.middle_name} ${teacher.last_name} `,
+              label: `${teacher.title} ${teacher.first_name} ${teacher.middle_name} ${teacher.last_name}`,
             })
           )}
           {...form.getInputProps("classroom_teacher")}

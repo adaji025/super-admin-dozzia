@@ -48,5 +48,6 @@ export const APIS = {
     GET_SUBJECT_LIST: (page: number, perPage: number) =>
       `${api}/subjects?per_page=${perPage}&page=${page}`,
     SUBJECT: (id: string) => `${api}/subjects/${id}`,
+    ASSIGN_CLASS_AND_TEACHER: (id: string) => `${api}/subjects/${id}/assign`,
   },
 };

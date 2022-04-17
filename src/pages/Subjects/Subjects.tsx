@@ -24,17 +24,11 @@ import {
   Edit,
 } from "tabler-icons-react";
 import AddSubject from "../../components/modals/Subject/AddSubject";
+import AssignToClass from "../../components/modals/Subject/AssignToClass";
 import useSubject from "../../hooks/useSubject";
 
 const Subjects = () => {
   const { dark } = useTheme();
-  const [addSubjectModal, setAddSubjectModal] = useState<boolean>(false);
-  const [editSubject, setEditSubject] = useState<null | {
-    subject_id: string;
-    subject_name: string;
-    subject_category: string;
-    subject_description: string;
-  }>(null);
   const {
     handleAddSubject,
     subjects,
@@ -42,6 +36,19 @@ const Subjects = () => {
     loading,
     handleUpdateSubject,
   } = useSubject();
+
+  const [addSubjectModal, setAddSubjectModal] = useState<boolean>(false);
+  const [assignToClassModal, setAssignToClassModal] = useState<boolean>(false);
+  const [editSubject, setEditSubject] = useState<
+    | any
+    | {
+        subject_id: string;
+        subject_name: string;
+        subject_category: string;
+        subject_description: string;
+      }
+  >(null);
+
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const deviceWidth = window.innerWidth;
@@ -78,6 +85,25 @@ const Subjects = () => {
           }}
           edit={editSubject}
           submit={editSubject ? handleUpdateSubject : handleAddSubject}
+        />
+      </Modal>
+
+      <Modal
+        opened={assignToClassModal}
+        onClose={() => {
+          setAssignToClassModal(false);
+          setEditSubject(null);
+        }}
+        title={<Text weight={600}>Add Subject to Class</Text>}
+        size="lg"
+      >
+        <AssignToClass
+          closeModal={() => {
+            setAssignToClassModal(false);
+            setEditSubject(null);
+          }}
+          subject={editSubject}
+          modalActive={assignToClassModal}
         />
       </Modal>
 
@@ -220,8 +246,20 @@ const Subjects = () => {
                               <Menu.Item icon={<Book size={14} />}>
                                 Classes
                               </Menu.Item>
-                              <Menu.Item icon={<CheckupList size={14} />}>
-                                Assign to class
+                              <Menu.Item
+                                icon={<CheckupList size={14} />}
+                                onClick={() => {
+                                  setEditSubject({
+                                    subject_id: item.subject_id,
+                                    subject_name: item.subject_name,
+                                    subject_category: item.subject_category,
+                                    subject_description:
+                                      item.subject_description,
+                                  });
+                                  setAssignToClassModal(true);
+                                }}
+                              >
+                                Add to class
                               </Menu.Item>
                               <Divider />
                               <Menu.Item

@@ -31,3 +31,18 @@ export const updateSubject = (
     return res.data;
   });
 };
+
+export const assignClassAndTeacher = (
+  id: string,
+  data: {
+    teacher: string;
+    classroom: string;
+  }
+) => {
+  return AxoisApi.post(
+    `${APIS.SUBJECT.ASSIGN_CLASS_AND_TEACHER(id)}`,
+    data
+  ).then((res) => {
+    return res.data;
+  });
+};

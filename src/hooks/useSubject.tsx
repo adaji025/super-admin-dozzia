@@ -5,6 +5,7 @@ import {
   addSubject,
   getSubjects,
   updateSubject,
+  assignClassAndTeacher,
 } from "../services/subject/subject";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -89,6 +90,31 @@ const useSubject = () => {
       });
   };
 
+  const handleAssignClassAndTeacher = (
+    id: string,
+    data: {
+      teacher: string;
+      classroom: string;
+    }
+  ) => {
+    dispatch(showLoader(true));
+
+    assignClassAndTeacher(id, data)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Subject added to class."} ✅`,
+          color: "green",
+        });
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
+
   return {
     handleAddSubject,
     subjects,
@@ -96,6 +122,7 @@ const useSubject = () => {
     loading,
     setLoading,
     handleUpdateSubject,
+    handleAssignClassAndTeacher,
   };
 };
 
