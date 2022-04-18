@@ -1,5 +1,4 @@
 const INITIAL_STATE = {
-  data: [],
   classes: null,
   students: null,
   subjects: null,

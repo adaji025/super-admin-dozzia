@@ -26,12 +26,14 @@ import {
 import AddClass from "../../components/modals/Class/AddClass";
 import ClassStudents from "../../components/modals/Class/ClassStudents";
 import useClass from "../../hooks/useClass";
+import ClassSubjects from "../../components/modals/Class/ClassSubjects";
 import "./classes.scss";
 
 const Classes = () => {
   const { dark } = useTheme();
   const [addClassModal, setAddClassModal] = useState<boolean>(false);
   const [classStudentsModal, setClassStudentsModal] = useState<boolean>(false);
+  const [classSubjectsModal, setClassSubjectsModal] = useState<boolean>(false);
   const [editClass, setEditClass] = useState<null | {
     classroom_id: string;
     classroom_level: string;
@@ -45,6 +47,7 @@ const Classes = () => {
   const [perPage] = useState<number>(10);
   const [classId, setClassId] = useState<string>("");
   const [className, setClassName] = useState<string>("");
+  const [classSubjects, setClassSubjects] = useState<any>(null);
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
@@ -98,6 +101,24 @@ const Classes = () => {
           }}
           classId={classId}
           modalActive={classStudentsModal}
+        />
+      </Modal>
+
+      <Modal
+        opened={classSubjectsModal}
+        onClose={() => {
+          setClassSubjectsModal(false);
+          setClassSubjects([]);
+        }}
+        title={<Text weight={600}>{className ?? "Class"} Subjects</Text>}
+        size="xl"
+      >
+        <ClassSubjects
+          closeModal={() => {
+            setClassSubjectsModal(false);
+            setClassSubjects([]);
+          }}
+          subjects={classSubjects}
         />
       </Modal>
 
@@ -205,6 +226,7 @@ const Classes = () => {
                             last_name: string;
                             staff_id: string;
                           };
+                          subjects_and_teachers: any;
                         },
                         index: number
                       ) => (
@@ -269,7 +291,14 @@ const Classes = () => {
                               >
                                 Students
                               </Menu.Item>
-                              <Menu.Item icon={<Book size={14} />}>
+                              <Menu.Item
+                                icon={<Book size={14} />}
+                                onClick={() => {
+                                  setClassName(item.classroom_name);
+                                  setClassSubjects(item.subjects_and_teachers);
+                                  setClassSubjectsModal(true);
+                                }}
+                              >
                                 Subjects
                               </Menu.Item>
                               <Menu.Item icon={<ClipboardList size={14} />}>
@@ -345,15 +374,3 @@ const Classes = () => {
 };
 
 export default Classes;
-
-// eslint-disable-next-line no-lone-blocks
-{
-  /* <Button
-  variant="subtle"
-  component={Link}
-  to={`/classes/${item.classroom_id}`}
-  state={{ classId: item.classroom_id }}
->
-  View Class
-</Button>; */
-}
