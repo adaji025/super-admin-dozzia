@@ -3,7 +3,7 @@ import {
   Button,
   Divider,
   Group,
-  LoadingOverlay,
+  Skeleton,
   Table,
   Menu,
   Box,
@@ -45,7 +45,7 @@ const SubjectClasses = ({
     <div>
       <Divider mb="md" variant="dashed" />
 
-      <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
+      <Box sx={{ minHeight: 350 }} className="d-p-main">
         {classes ? (
           <>
             <Table highlightOnHover striped>
@@ -184,9 +184,13 @@ const SubjectClasses = ({
             )}
           </>
         ) : (
-          <Box sx={{ minHeight: 270 }}>
-            <LoadingOverlay visible />
-          </Box>
+          <>
+            <Skeleton height={25} mt={30} radius="sm" />
+            <Skeleton height={25} mt={12} radius="sm" />
+            <Skeleton height={25} mt={12} radius="sm" />
+            <Skeleton height={25} mt={12} radius="sm" />
+            <Skeleton height={25} mt={12} radius="sm" />
+          </>
         )}
       </Box>
 

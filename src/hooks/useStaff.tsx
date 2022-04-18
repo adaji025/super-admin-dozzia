@@ -4,7 +4,7 @@ import { getStaffList } from "../services/staff/staff";
 // import { showNotification } from "@mantine/notifications";
 
 const useClass = () => {
-  const [allStaff, setAllStaff] = useState<any>(null);
+  const [allStaff, setAllStaff] = useState<any>({ data: [] });
   const [staffList, setStaffList] = useState<any>([]);
   // const classes = useSelector((state: any) => {
   //   return state.data.classes;
@@ -20,7 +20,7 @@ const useClass = () => {
     getStaffList({ page, perPage, query, role })
       .then((res) => {
         if (all) {
-          setAllStaff(res.data);
+          setAllStaff(res);
         } else {
           setStaffList(res);
         }

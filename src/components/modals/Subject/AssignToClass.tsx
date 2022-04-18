@@ -5,7 +5,6 @@ import {
   Select,
   Group,
   Divider,
-  Box,
   LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -63,87 +62,83 @@ const AssignToClass = ({
     <div>
       <Divider mb="md" variant="dashed" />
 
-      {allStaff ? (
-        <form
-          onSubmit={form.onSubmit((values) => {
-            closeModal();
-            submit(values);
-          })}
-        >
-          <TextInput
-            required
-            mt="sm"
-            variant="filled"
-            label="Subject Name"
-            placeholder="Subject name"
-            disabled
-            {...form.getInputProps("name")}
-          />
+      <LoadingOverlay visible={!allStaff.meta} />
 
-          <TextInput
-            required
-            mt="md"
-            label="Subject Category"
-            placeholder="Subject category"
-            variant="filled"
-            disabled
-            {...form.getInputProps("category")}
-          />
+      <form
+        onSubmit={form.onSubmit((values) => {
+          closeModal();
+          submit(values);
+        })}
+      >
+        <TextInput
+          required
+          mt="sm"
+          variant="filled"
+          label="Subject Name"
+          placeholder="Subject name"
+          disabled
+          {...form.getInputProps("name")}
+        />
 
-          <Select
-            required
-            mt="md"
-            label="Select Teacher"
-            placeholder="Select teacher"
-            variant="filled"
-            searchable
-            nothingFound="No teacher found"
-            data={allStaff.map(
-              (teacher: {
-                staff_id: string;
-                first_name: string;
-                middle_name: string;
-                last_name: string;
-                title: string;
-              }) => ({
-                key: teacher?.staff_id,
-                value: teacher?.staff_id,
-                label: `${teacher.title} ${teacher.first_name} ${teacher.middle_name} ${teacher.last_name}`,
-              })
-            )}
-            {...form.getInputProps("teacher")}
-          />
+        <TextInput
+          required
+          mt="md"
+          label="Subject Category"
+          placeholder="Subject category"
+          variant="filled"
+          disabled
+          {...form.getInputProps("category")}
+        />
 
-          <Select
-            required
-            mt="md"
-            label="Select Class"
-            placeholder="Select class"
-            variant="filled"
-            searchable
-            nothingFound="No class found"
-            data={allClasses.map(
-              (item: { classroom_id: string; classroom_name: string }) => ({
-                key: item?.classroom_id,
-                value: item?.classroom_id,
-                label: item.classroom_name,
-              })
-            )}
-            {...form.getInputProps("classroom")}
-          />
+        <Select
+          required
+          mt="md"
+          label="Select Teacher"
+          placeholder="Select teacher"
+          variant="filled"
+          searchable
+          nothingFound="No teacher found"
+          data={allStaff.data.map(
+            (teacher: {
+              staff_id: string;
+              first_name: string;
+              middle_name: string;
+              last_name: string;
+              title: string;
+            }) => ({
+              key: teacher?.staff_id,
+              value: teacher?.staff_id,
+              label: `${teacher.title} ${teacher.first_name} ${teacher.middle_name} ${teacher.last_name}`,
+            })
+          )}
+          {...form.getInputProps("teacher")}
+        />
 
-          <Group position="right" mt="lg">
-            <Button variant="light" onClick={closeModal}>
-              Cancel
-            </Button>
-            <Button type="submit">Submit</Button>
-          </Group>
-        </form>
-      ) : (
-        <Box sx={{ minHeight: 270 }}>
-          <LoadingOverlay visible />
-        </Box>
-      )}
+        <Select
+          required
+          mt="md"
+          label="Select Class"
+          placeholder="Select class"
+          variant="filled"
+          searchable
+          nothingFound="No class found"
+          data={allClasses.map(
+            (item: { classroom_id: string; classroom_name: string }) => ({
+              key: item?.classroom_id,
+              value: item?.classroom_id,
+              label: item.classroom_name,
+            })
+          )}
+          {...form.getInputProps("classroom")}
+        />
+
+        <Group position="right" mt="lg">
+          <Button variant="light" onClick={closeModal}>
+            Cancel
+          </Button>
+          <Button type="submit">Submit</Button>
+        </Group>
+      </form>
     </div>
   );
 };
