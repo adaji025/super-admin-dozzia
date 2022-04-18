@@ -6,6 +6,7 @@ import {
   getSubjects,
   updateSubject,
   assignClassAndTeacher,
+  getSubjectClasses,
 } from "../services/subject/subject";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -115,6 +116,18 @@ const useSubject = () => {
       });
   };
 
+  const handleGetSubjectClasses = (id: string) => {
+    return new Promise((resolve, reject) => {
+      getSubjectClasses(id)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  };
+
   return {
     handleAddSubject,
     subjects,
@@ -123,6 +136,7 @@ const useSubject = () => {
     setLoading,
     handleUpdateSubject,
     handleAssignClassAndTeacher,
+    handleGetSubjectClasses,
   };
 };
 

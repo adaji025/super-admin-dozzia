@@ -19,12 +19,12 @@ import {
   AdjustmentsHorizontal,
   Search,
   CheckupList,
-  Users,
   Book,
   Edit,
 } from "tabler-icons-react";
 import AddSubject from "../../components/modals/Subject/AddSubject";
 import AssignToClass from "../../components/modals/Subject/AssignToClass";
+import SubjectClasses from "../../components/modals/Subject/SubjectClasses";
 import useSubject from "../../hooks/useSubject";
 
 const Subjects = () => {
@@ -35,11 +35,14 @@ const Subjects = () => {
     getSubjectList,
     loading,
     handleUpdateSubject,
+    handleGetSubjectClasses,
   } = useSubject();
 
   const [addSubjectModal, setAddSubjectModal] = useState<boolean>(false);
   const [assignToClassModal, setAssignToClassModal] = useState<boolean>(false);
-  const [editSubject, setEditSubject] = useState<
+  const [subjectClassesModal, setSubjectClassesModal] =
+    useState<boolean>(false);
+  const [activeSubject, setActiveSubject] = useState<
     | any
     | {
         subject_id: string;
@@ -55,6 +58,7 @@ const Subjects = () => {
 
   useEffect(() => {
     getSubjectList(page, perPage);
+    handleGetSubjectClasses("9dd8ba6d-ff8f-4cc9-98aa-efed1700eb54");
 
     //eslint-disable-next-line
   }, [page]);
@@ -73,18 +77,20 @@ const Subjects = () => {
         opened={addSubjectModal}
         onClose={() => {
           setAddSubjectModal(false);
-          setEditSubject(null);
+          setActiveSubject(null);
         }}
-        title={<Text weight={600}>{editSubject ? "Edit" : "Add"} Subject</Text>}
+        title={
+          <Text weight={600}>{activeSubject ? "Edit" : "Add"} Subject</Text>
+        }
         size="lg"
       >
         <AddSubject
           closeModal={() => {
             setAddSubjectModal(false);
-            setEditSubject(null);
+            setActiveSubject(null);
           }}
-          edit={editSubject}
-          submit={editSubject ? handleUpdateSubject : handleAddSubject}
+          edit={activeSubject}
+          submit={activeSubject ? handleUpdateSubject : handleAddSubject}
         />
       </Modal>
 
@@ -92,7 +98,7 @@ const Subjects = () => {
         opened={assignToClassModal}
         onClose={() => {
           setAssignToClassModal(false);
-          setEditSubject(null);
+          setActiveSubject(null);
         }}
         title={<Text weight={600}>Add Subject to Class</Text>}
         size="lg"
@@ -100,10 +106,34 @@ const Subjects = () => {
         <AssignToClass
           closeModal={() => {
             setAssignToClassModal(false);
-            setEditSubject(null);
+            setActiveSubject(null);
           }}
-          subject={editSubject}
+          subject={activeSubject}
           modalActive={assignToClassModal}
+        />
+      </Modal>
+
+      <Modal
+        opened={subjectClassesModal}
+        onClose={() => {
+          setSubjectClassesModal(false);
+          setActiveSubject(null);
+        }}
+        title={
+          <Text weight={600}>
+            Classes offering{" "}
+            {(activeSubject && activeSubject.subject_name) ?? ""}
+          </Text>
+        }
+        size="xl"
+      >
+        <SubjectClasses
+          closeModal={() => {
+            setSubjectClassesModal(false);
+            setActiveSubject(null);
+          }}
+          subject={activeSubject}
+          modalActive={subjectClassesModal}
         />
       </Modal>
 
@@ -240,16 +270,26 @@ const Subjects = () => {
                               size="md"
                             >
                               <Menu.Label>Subject Menu</Menu.Label>
-                              <Menu.Item icon={<Users size={14} />}>
-                                Teachers
-                              </Menu.Item>
-                              <Menu.Item icon={<Book size={14} />}>
+
+                              <Menu.Item
+                                icon={<Book size={14} />}
+                                onClick={() => {
+                                  setActiveSubject({
+                                    subject_id: item.subject_id,
+                                    subject_name: item.subject_name,
+                                    subject_category: item.subject_category,
+                                    subject_description:
+                                      item.subject_description,
+                                  });
+                                  setSubjectClassesModal(true);
+                                }}
+                              >
                                 Classes
                               </Menu.Item>
                               <Menu.Item
                                 icon={<CheckupList size={14} />}
                                 onClick={() => {
-                                  setEditSubject({
+                                  setActiveSubject({
                                     subject_id: item.subject_id,
                                     subject_name: item.subject_name,
                                     subject_category: item.subject_category,
@@ -265,7 +305,7 @@ const Subjects = () => {
                               <Menu.Item
                                 icon={<Edit size={14} />}
                                 onClick={() => {
-                                  setEditSubject({
+                                  setActiveSubject({
                                     subject_id: item.subject_id,
                                     subject_name: item.subject_name,
                                     subject_category: item.subject_category,
