@@ -3,7 +3,7 @@ import {
   Button,
   Divider,
   Group,
-  Skeleton,
+  LoadingOverlay,
   Table,
   Menu,
   Box,
@@ -184,13 +184,9 @@ const SubjectClasses = ({
             )}
           </>
         ) : (
-          <>
-            <Skeleton height={25} mt={30} radius="sm" />
-            <Skeleton height={25} mt={12} radius="sm" />
-            <Skeleton height={25} mt={12} radius="sm" />
-            <Skeleton height={25} mt={12} radius="sm" />
-            <Skeleton height={25} mt={12} radius="sm" />
-          </>
+          <Box sx={{ minHeight: 270 }}>
+            <LoadingOverlay visible />
+          </Box>
         )}
       </Box>
 
