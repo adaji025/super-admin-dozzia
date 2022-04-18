@@ -15,6 +15,7 @@ import {
   Logout,
   ChevronDown,
   X,
+  Trash,
 } from "tabler-icons-react";
 import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 
@@ -44,7 +45,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Briefcase,
       name: "Management",
       route: "/management",
-      key: ["students", "staff", "subjects", "classes", "events"],
+      key: ["students", "staff", "subjects", "classes", "events", "attendance"],
       children: [
         {
           name: "Students",
@@ -66,13 +67,17 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           name: "Subjects",
           route: "/subjects",
         },
+        {
+          name: "Attendance",
+          route: "/attendance",
+        },
       ],
     },
     {
       icon: Users,
-      name: "Administration",
-      route: "/administration",
-      key: ["add-student", "add-staff", "attendance", "recycle-bin"],
+      name: "Admissions",
+      route: "/admissions",
+      key: ["add-student", "add-staff"],
       children: [
         {
           name: "Add Student",
@@ -81,14 +86,6 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         {
           name: "Add Staff",
           route: "/add-staff",
-        },
-        {
-          name: "Attendance",
-          route: "/attendance",
-        },
-        {
-          name: "Recycle Bin",
-          route: "/recycle-bin",
         },
       ],
     },
@@ -106,6 +103,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Settings,
       name: "Settings",
       route: "/settings",
+    },
+    {
+      icon: Trash,
+      name: "Recycle Bin",
+      route: "/recycle-bin",
     },
   ];
 
