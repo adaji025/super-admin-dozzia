@@ -7,13 +7,14 @@ import useTheme from "../../hooks/useTheme";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Dashboard from "../../pages/Dashboard/Dashboard";
-import OnboardStudent from "../../pages/Administration/OnboardStudent";
-import OnboardStaff from "../../pages/Administration/OnboardStaff";
+import OnboardStudent from "../../pages/Onboard/OnboardStudent";
+import OnboardStaff from "../../pages/Onboard/OnboardStaff";
 import Settings from "../../pages/Settings/Settings";
 import Classes from "../../pages/Classes/Classes";
 import ClassesInfo from "../../pages/Classes/ClassInfo";
 import Subjects from "../../pages/Subjects/Subjects";
 import Students from "../../pages/Students/Students";
+import Staff from "../../pages/Staff/Staff";
 
 import "./index.scss";
 
@@ -50,6 +51,7 @@ const LoggedinContainer = () => {
             <Route path="/classes/:id" element={<ClassesInfo />} />
             <Route path="/subjects" element={<Subjects />} />
             <Route path="/students" element={<Students />} />
+            <Route path="/staff" element={<Staff />} />
           </Routes>
         </div>
       </div>

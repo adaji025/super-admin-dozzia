@@ -1,14 +1,9 @@
 import { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
 import { getStaffList } from "../services/staff/staff";
-// import { showNotification } from "@mantine/notifications";
 
 const useClass = () => {
   const [allStaff, setAllStaff] = useState<any>({ data: [] });
   const [staffList, setStaffList] = useState<any>([]);
-  // const classes = useSelector((state: any) => {
-  //   return state.data.classes;
-  // });
 
   const handleGetStaffList = (
     page: number,
