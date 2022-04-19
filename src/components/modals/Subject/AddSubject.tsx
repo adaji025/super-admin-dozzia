@@ -50,7 +50,11 @@ const AddSubject = ({ closeModal, submit, edit }: any) => {
           label="Subject Category"
           placeholder="Select Subject category"
           variant="filled"
-          data={[{ value: "Core Course", label: "Core Course" }]}
+          data={[
+            { value: "Core Course", label: "Core Course" },
+            { value: "Selective Course", label: "Selective Course" },
+            { value: "Elective Course", label: "Elective Course" },
+          ]}
           {...form.getInputProps("category")}
         />
 
