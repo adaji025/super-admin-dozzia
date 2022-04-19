@@ -332,7 +332,7 @@ const Subjects = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No subject found 😑.
+                      No subject found.
                     </Alert>
                   </Group>
                 )}

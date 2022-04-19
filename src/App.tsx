@@ -18,6 +18,7 @@ import LoggedinContainer from "./components/Loggedin";
 
 import { getProfileInfo } from "./services/auth/auth";
 import { setUserData } from "./redux/user/user.actions";
+import useNotification from "./hooks/useNotification";
 import "./App.scss";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
   const showLoader = useSelector((state: any) => {
     return state.utility.showLoader;
   });
+  const { handleError } = useNotification();
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "color-scheme",
@@ -48,9 +50,13 @@ function App() {
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
 
   const getProfile = () => {
-    getProfileInfo().then((res) => {
-      dispatch(setUserData(res.user));
-    });
+    getProfileInfo()
+      .then((res) => {
+        dispatch(setUserData(res.user));
+      })
+      .catch((error) => {
+        handleError(error);
+      });
   };
 
   return (

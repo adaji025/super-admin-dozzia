@@ -159,7 +159,7 @@ const ClassSubjects = ({
                   color="red"
                   style={{ maxWidth: "300px" }}
                 >
-                  No Subject found 😑.
+                  No Subject found.
                 </Alert>
               </Group>
             )}

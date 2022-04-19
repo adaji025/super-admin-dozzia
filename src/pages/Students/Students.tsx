@@ -258,7 +258,7 @@ const Students = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No student found 😑.
+                      No student found.
                     </Alert>
                   </Group>
                 )}

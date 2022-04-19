@@ -178,7 +178,7 @@ const SubjectClasses = ({
                   color="red"
                   style={{ maxWidth: "300px" }}
                 >
-                  No Class found 😑.
+                  No Class found.
                 </Alert>
               </Group>
             )}

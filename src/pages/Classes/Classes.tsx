@@ -338,7 +338,7 @@ const Classes = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No class found 😑.
+                      No class found.
                     </Alert>
                   </Group>
                 )}

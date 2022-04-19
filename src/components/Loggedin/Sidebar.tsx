@@ -38,7 +38,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   const routes = [
     {
       icon: LayoutDashboard,
-      name: "General Overview",
+      name: "Dashboard",
       route: "/dashboard",
     },
     {
