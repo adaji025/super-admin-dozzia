@@ -76,6 +76,11 @@ const Staff = () => {
                 icon={<Search size={16} />}
                 placeholder="Search staff"
                 value={searchInput}
+                onKeyUp={(e: any) => {
+                  if (e.code === "Enter") {
+                    setSearch(searchInput);
+                  }
+                }}
                 rightSection={
                   searchInput !== "" && (
                     <X
@@ -278,7 +283,7 @@ const Staff = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No staff found.
+                      No {role === "" ? "Staff" : `${role}`} found.
                     </Alert>
                   </Group>
                 )}
