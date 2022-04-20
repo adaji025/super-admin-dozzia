@@ -12,3 +12,8 @@ export const setSubjects = (subjects: any) => ({
   type: "SET_SUBJECTS",
   payload: { subjects },
 });
+
+export const setStaff = (staff: any) => ({
+  type: "SET_STAFF",
+  payload: { staff },
+});

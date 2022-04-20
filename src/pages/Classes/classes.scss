@@ -26,9 +26,34 @@
       padding: 20px 30px;
       margin: 30px -30px;
 
+      &.with-btns {
+        display: flex;
+        flex-direction: row;
+        @media only screen and (max-width: 768px) {
+          flex-direction: column;
+        }
+      }
+
       @media only screen and (max-width: 768px) {
         padding: 20px;
         margin: 20px -20px;
+      }
+
+      .s-left {
+        width: 100%;
+        max-width: 696px;
+      }
+
+      .s-right {
+        margin-left: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        @media only screen and (max-width: 768px) {
+          margin-left: unset;
+          margin-top: 10px;
+        }
       }
     }
 
