@@ -296,7 +296,7 @@ const Staff = () => {
                                     setStaffId(item.staff_id);
                                   }}
                                 >
-                                  Delete staff
+                                  Delete Staff
                                 </Menu.Item>
                               </Menu>
                             </td>

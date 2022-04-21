@@ -78,6 +78,7 @@
         @media only screen and (min-width: 768px) {
           -ms-overflow-style: none;
           scrollbar-width: none;
+          height: calc(100vh - 156px);
           &::-webkit-scrollbar {
             display: none;
           }
