@@ -17,6 +17,7 @@ import useTheme from "../../hooks/useTheme";
 import { Search, User, Filter, FilterOff, X, Trash } from "tabler-icons-react";
 import useStaff from "../../hooks/useStaff";
 import useAdmin from "../../hooks/useAdmin";
+import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const Staff = () => {
   const { dark } = useTheme();
@@ -28,6 +29,8 @@ const Staff = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [role, setRole] = useState<string>("");
+  const [staffId, setStaffId] = useState<string>("");
+  const [confirmDeleteStaff, setConfirmDeleteStaff] = useState<boolean>(false);
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
@@ -45,6 +48,19 @@ const Staff = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <Confirmation
+        isOpened={confirmDeleteStaff}
+        closeModal={() => {
+          setConfirmDeleteStaff(false);
+        }}
+        title="Are you sure you want to delete staff?"
+        confirmText="DELETE"
+        submit={() => {
+          setConfirmDeleteStaff(false);
+          handleDeleteStaff(staffId);
+        }}
+      />
 
       <div
         className="data-page-container"
@@ -276,7 +292,8 @@ const Staff = () => {
                                   color="red"
                                   icon={<Trash size={14} />}
                                   onClick={() => {
-                                    handleDeleteStaff(item.staff_id);
+                                    setConfirmDeleteStaff(true);
+                                    setStaffId(item.staff_id);
                                   }}
                                 >
                                   Delete staff

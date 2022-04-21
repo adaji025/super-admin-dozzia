@@ -1,0 +1,19 @@
+.confirmation-wrapper {
+  .c-title {
+    color: grey;
+    margin-bottom: 20px;
+    transform: translateY(-13px);
+    @media only screen and (max-width: 586px) {
+      font-size: 15px;
+    }
+  }
+}
+
+.modal-title324 {
+  // margin-top: 20px;
+  font-size: 23px;
+  font-weight: 600;
+  @media only screen and (max-width: 586px) {
+    font-size: 20px;
+  }
+}
