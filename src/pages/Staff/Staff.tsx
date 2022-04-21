@@ -14,13 +14,14 @@ import {
   Divider,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { Search, User, Filter, FilterOff, X } from "tabler-icons-react";
+import { Search, User, Filter, FilterOff, X, Trash } from "tabler-icons-react";
 import useStaff from "../../hooks/useStaff";
 import useAdmin from "../../hooks/useAdmin";
 
 const Staff = () => {
   const { dark } = useTheme();
-  const { staffList, handleGetStaffList, loading } = useStaff();
+  const { staffList, handleGetStaffList, loading, handleDeleteStaff } =
+    useStaff();
   const { staffRoles, getStaffRoles } = useAdmin();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
@@ -267,6 +268,18 @@ const Staff = () => {
 
                                 <Menu.Item icon={<User size={14} />}>
                                   View Staff
+                                </Menu.Item>
+
+                                <Divider />
+
+                                <Menu.Item
+                                  color="red"
+                                  icon={<Trash size={14} />}
+                                  onClick={() => {
+                                    handleDeleteStaff(item.staff_id);
+                                  }}
+                                >
+                                  Delete staff
                                 </Menu.Item>
                               </Menu>
                             </td>

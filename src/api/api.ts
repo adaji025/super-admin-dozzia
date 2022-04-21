@@ -24,6 +24,7 @@ export const APIS = {
       role: string
     ) =>
       `${api}/staff?per_page=${perPage}&page=${page}&search_query=${query}&role=${role}`,
+    DELETE_STAFF: (id: string) => `${api}/staff/${id}`,
   },
   STUDENT: {
     ONBOARD_STUDENT: `${api}/students`,

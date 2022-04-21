@@ -30,3 +30,9 @@ export const getStaffList = (data: {
     return res.data;
   });
 };
+
+export const deleteStaff = (id: string) => {
+  return AxoisApi.delete(`${APIS.STAFF.DELETE_STAFF(id)}`).then((res) => {
+    return res.data;
+  });
+};
