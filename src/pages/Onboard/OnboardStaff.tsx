@@ -200,6 +200,13 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       <div className="form">
         <Box sx={{ maxWidth: 900 }}>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Staff Role"
+              labelPosition="center"
+            />
+
             <div className="form-row">
               <Select
                 className="form-item"
