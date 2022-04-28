@@ -21,8 +21,13 @@ import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const Staff = () => {
   const { dark } = useTheme();
-  const { staffList, handleGetStaffList, loading, handleDeleteStaff } =
-    useStaff();
+  const {
+    staffList,
+    handleGetStaffList,
+    loading,
+    handleDeleteStaff,
+    username,
+  } = useStaff();
   const { staffRoles, getStaffRoles } = useAdmin();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
@@ -228,6 +233,7 @@ const Staff = () => {
                             last_name: string;
                             phone_number: string;
                             title: string;
+                            username: string;
                             role: string;
                           },
                           index: number
@@ -295,8 +301,9 @@ const Staff = () => {
                                     setConfirmDeleteStaff(true);
                                     setStaffId(item.staff_id);
                                   }}
+                                  disabled={username === item.username}
                                 >
-                                  Delete Staff
+                                  Suspend Staff
                                 </Menu.Item>
                               </Menu>
                             </td>

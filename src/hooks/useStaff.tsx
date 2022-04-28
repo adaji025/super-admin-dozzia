@@ -14,6 +14,9 @@ const useStaff = () => {
   const staffList = useSelector((state: any) => {
     return state.data.staff;
   });
+  const username = useSelector((state: any) => {
+    return state.user.userdata.username;
+  });
 
   const handleGetStaffList = (
     page: number,
@@ -64,6 +67,7 @@ const useStaff = () => {
     handleGetStaffList,
     loading,
     handleDeleteStaff,
+    username,
   };
 };
 
