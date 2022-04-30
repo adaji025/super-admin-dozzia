@@ -52,4 +52,7 @@ export const APIS = {
     ASSIGN_CLASS_AND_TEACHER: (id: string) => `${api}/subjects/${id}/assign`,
     GET_SUBJECT_CLASSES: (id: string) => `${api}/subjects/${id}/classrooms`,
   },
+  EVENT: {
+    EVENTS: `${api}/events`,
+  },
 };

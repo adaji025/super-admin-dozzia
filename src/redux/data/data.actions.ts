@@ -17,3 +17,8 @@ export const setStaff = (staff: any) => ({
   type: "SET_STAFF",
   payload: { staff },
 });
+
+export const setEvents = (events: any) => ({
+  type: "SET_EVENTS",
+  payload: { events },
+});
