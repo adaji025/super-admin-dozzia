@@ -18,6 +18,14 @@ const useNotification = () => {
   };
 
   const handleError = (error: any) => {
+    if (!error.response) {
+      return showNotification({
+        title: "Network Error",
+        message: "Please check your connection",
+        color: "red",
+      });
+    }
+
     if (error?.response?.status === 401) {
       return logoutUser();
     }
