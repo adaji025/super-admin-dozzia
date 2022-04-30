@@ -9,7 +9,7 @@ import {
 import { useForm } from "@mantine/form";
 import { DatePicker, TimeInput } from "@mantine/dates";
 
-const CreateEvent = ({ closeModal, submit, edit, modalActive }: any) => {
+const CreateEvent = ({ closeModal, submit, edit }: any) => {
   const form = useForm({
     initialValues: {
       title: edit ? edit.title : "",
@@ -110,7 +110,7 @@ const CreateEvent = ({ closeModal, submit, edit, modalActive }: any) => {
         />
 
         <Group position="right" mt="xl">
-          <Button variant="light" onClick={closeModal}>
+          <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
           <Button type="submit">Submit</Button>
