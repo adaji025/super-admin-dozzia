@@ -220,7 +220,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                             .join(" ")
                         }
                         to={child.route}
-                        onClick={toggleSidebar}
+                        onClick={() => {
+                          if (showSidebar) {
+                            toggleSidebar();
+                          }
+                        }}
                       >
                         <Text sx={{ fontSize: "14px" }}>{child.name}</Text>
                       </NavLink>
@@ -242,7 +246,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                       .join(" ")
                   }
                   to={item.route}
-                  onClick={toggleSidebar}
+                  onClick={() => {
+                    if (showSidebar) {
+                      toggleSidebar();
+                    }
+                  }}
                 >
                   <span>
                     <item.icon
