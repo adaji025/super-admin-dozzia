@@ -8,6 +8,7 @@ import {
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { DatePicker, TimeInput } from "@mantine/dates";
+import "./create-event.scss";
 
 const CreateEvent = ({ closeModal, submit, edit }: any) => {
   const form = useForm({
@@ -57,47 +58,9 @@ const CreateEvent = ({ closeModal, submit, edit }: any) => {
           placeholder="e.g. Parents and guardians visiting day for 2nd term."
           variant="filled"
           autosize
-          minRows={2}
+          minRows={3}
           maxRows={5}
           {...form.getInputProps("description")}
-        />
-
-        <DatePicker
-          mt="md"
-          initialLevel="year"
-          label="Start Date"
-          placeholder="Start date"
-          variant="filled"
-          required
-          {...form.getInputProps("startDate")}
-        />
-
-        <TimeInput
-          label="Start Time"
-          variant="filled"
-          required
-          mt="md"
-          format="12"
-          {...form.getInputProps("startTime")}
-        />
-
-        <DatePicker
-          mt="md"
-          initialLevel="year"
-          label="End Date"
-          placeholder="End date"
-          variant="filled"
-          required
-          {...form.getInputProps("endDate")}
-        />
-
-        <TimeInput
-          label="End Time"
-          variant="filled"
-          required
-          mt="md"
-          format="12"
-          {...form.getInputProps("endTime")}
         />
 
         <Select
@@ -112,6 +75,52 @@ const CreateEvent = ({ closeModal, submit, edit }: any) => {
           ]}
           {...form.getInputProps("visibility")}
         />
+
+        <div className="form-row">
+          <DatePicker
+            mt="md"
+            initialLevel="year"
+            className="form-item"
+            label="Start Date"
+            placeholder="Start date"
+            variant="filled"
+            required
+            {...form.getInputProps("startDate")}
+          />
+
+          <TimeInput
+            label="Start Time"
+            className="form-item"
+            variant="filled"
+            required
+            mt="md"
+            format="12"
+            {...form.getInputProps("startTime")}
+          />
+        </div>
+
+        <div className="form-row">
+          <DatePicker
+            mt="md"
+            initialLevel="year"
+            className="form-item"
+            label="End Date"
+            placeholder="End date"
+            variant="filled"
+            required
+            {...form.getInputProps("endDate")}
+          />
+
+          <TimeInput
+            label="End Time"
+            className="form-item"
+            variant="filled"
+            required
+            mt="md"
+            format="12"
+            {...form.getInputProps("endTime")}
+          />
+        </div>
 
         <Group position="right" mt="xl">
           <Button variant="default" onClick={closeModal}>

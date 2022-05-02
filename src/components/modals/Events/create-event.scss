@@ -1,0 +1,9 @@
+.form-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .form-item {
+    width: 49%;
+  }
+}
