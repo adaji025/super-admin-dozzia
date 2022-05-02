@@ -59,12 +59,13 @@ const Staff = () => {
         closeModal={() => {
           setConfirmDeleteStaff(false);
         }}
-        title="Are you sure you want to delete staff?"
-        confirmText="DELETE"
+        title="Are you sure you want to suspend staff?"
+        confirmText="SUSPEND"
         submit={() => {
           setConfirmDeleteStaff(false);
           handleDeleteStaff(staffId);
         }}
+        hasInput
       />
 
       <div

@@ -8,6 +8,7 @@ interface ConfirmationProps {
   title: string;
   confirmText: string;
   submit: any;
+  hasInput: boolean;
 }
 
 const Confirmation = ({
@@ -16,6 +17,7 @@ const Confirmation = ({
   title,
   confirmText,
   submit,
+  hasInput,
 }: ConfirmationProps) => {
   const [inputText, setInputText] = useState<string>("");
 
@@ -24,28 +26,35 @@ const Confirmation = ({
       <Modal
         opened={isOpened}
         onClose={closeModal}
-        title={<Text className="modal-title324">Confirm delete</Text>}
+        title={
+          <Text className="modal-title324">
+            Confirm {confirmText.toLowerCase()}
+          </Text>
+        }
         size="lg"
+        centered
       >
         <div className="confirmation-wrapper">
           <div className="c-title">{title} This action is irreversible.</div>
 
-          <TextInput
-            placeholder=""
-            label={`Type "${confirmText}" to continue`}
-            size="md"
-            variant="filled"
-            value={inputText}
-            onChange={(e) => {
-              setInputText(e.target.value);
-            }}
-          />
+          {hasInput && (
+            <TextInput
+              placeholder=""
+              label={`Type "${confirmText}" to continue`}
+              size="md"
+              variant="filled"
+              value={inputText}
+              onChange={(e) => {
+                setInputText(e.target.value);
+              }}
+            />
+          )}
 
           <Divider variant="dashed" my={20} />
 
           <Group position="right" mt="lg">
             <Button
-              variant="light"
+              variant="default"
               onClick={() => {
                 setInputText("");
                 closeModal();
@@ -55,13 +64,13 @@ const Confirmation = ({
             </Button>
             <Button
               color="red"
-              disabled={inputText !== confirmText}
+              disabled={hasInput && inputText !== confirmText}
               onClick={() => {
                 setInputText("");
                 submit();
               }}
             >
-              Confirm Delete
+              Confirm
             </Button>
           </Group>
         </div>
