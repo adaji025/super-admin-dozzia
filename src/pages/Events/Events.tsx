@@ -1,6 +1,15 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Button, Modal, Text, Input, Menu, Divider } from "@mantine/core";
+import {
+  Button,
+  Modal,
+  Text,
+  Input,
+  Menu,
+  Divider,
+  Pagination,
+  Skeleton,
+} from "@mantine/core";
 import {
   AdjustmentsHorizontal,
   Search,
@@ -14,13 +23,15 @@ import moment from "moment";
 import "./events.scss";
 
 const Events = () => {
+  const [page, setPage] = useState<number>(1);
+  const [perPage] = useState<number>(10);
   const { dark } = useTheme();
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
   const [editEvent, setEditEvent] = useState<any>(null);
   const { handleCreateEvent, handleGetEvents, events } = useEvent();
 
   useEffect(() => {
-    handleGetEvents();
+    handleGetEvents(page, perPage);
     //eslint-disable-next-line
   }, []);
 
@@ -177,9 +188,64 @@ const Events = () => {
                 )
               )
             ) : (
-              <div>ji</div>
+              <>
+                <Skeleton
+                  className="e-i-wrapper"
+                  width={320}
+                  height={205}
+                  mt={20}
+                  mx={10}
+                  radius="sm"
+                />
+                <Skeleton
+                  className="e-i-wrapper"
+                  width={320}
+                  height={205}
+                  mt={20}
+                  mx={10}
+                  radius="sm"
+                />
+                <Skeleton
+                  className="e-i-wrapper"
+                  width={320}
+                  height={205}
+                  mx={10}
+                  mt={20}
+                  radius="sm"
+                />
+                <Skeleton
+                  className="e-i-wrapper"
+                  width={320}
+                  height={205}
+                  mt={20}
+                  mx={10}
+                  radius="sm"
+                />
+                <Skeleton
+                  className="e-i-wrapper"
+                  width={320}
+                  height={205}
+                  mt={20}
+                  mx={10}
+                  radius="sm"
+                />
+              </>
             )}
           </div>
+
+          {events?.meta && events?.data.length > 0 && (
+            <Pagination
+              sx={{ maxWidth: 900 }}
+              position="center"
+              mt={25}
+              onChange={(value) => {
+                setPage(value);
+              }}
+              initialPage={events.meta.current_page}
+              total={events.meta.last_page}
+              color="green"
+            />
+          )}
         </div>
       </div>
     </Fragment>

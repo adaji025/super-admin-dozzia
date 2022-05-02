@@ -53,12 +53,12 @@ const useEvent = () => {
       });
   };
 
-  const handleGetEvents = () => {
+  const handleGetEvents = (page: number, perPage: number) => {
     if (!events) {
       dispatch(showLoader(true));
     }
 
-    getEvents()
+    getEvents({ page, perPage })
       .then((res) => {
         setLoading(false);
         dispatch(setEvents(res));

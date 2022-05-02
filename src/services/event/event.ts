@@ -8,13 +8,15 @@ export const createEvent = (data: {
   end_at: string;
   visibility: string;
 }) => {
-  return AxoisApi.post(`${APIS.EVENT.EVENTS}`, data).then((res) => {
+  return AxoisApi.post(`${APIS.EVENT.CREATE_EVENT}`, data).then((res) => {
     return res.data;
   });
 };
 
-export const getEvents = () => {
-  return AxoisApi.get(`${APIS.EVENT.EVENTS}`).then((res) => {
-    return res.data;
-  });
+export const getEvents = (data: { page: number; perPage: number }) => {
+  return AxoisApi.get(`${APIS.EVENT.GET_EVENTS(data.page, data.perPage)}`).then(
+    (res) => {
+      return res.data;
+    }
+  );
 };
