@@ -53,6 +53,9 @@ export const APIS = {
     GET_SUBJECT_CLASSES: (id: string) => `${api}/subjects/${id}/classrooms`,
   },
   EVENT: {
-    EVENTS: `${api}/events`,
+    CREATE_EVENT: `${api}/events`,
+    GET_EVENTS: (page: number, perPage: number) =>
+      `${api}/events?per_page=${perPage}&page=${page}`,
+    EVENT: (id: string) => `${api}/events/${id}`,
   },
 };

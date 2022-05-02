@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { showNotification } from "@mantine/notifications";
-import { createEvent, getEvents } from "../services/event/event";
+import { createEvent, getEvents, deleteEvent } from "../services/event/event";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 import { setEvents } from "../redux/data/data.actions";
@@ -69,12 +69,34 @@ const useEvent = () => {
         dispatch(showLoader(false));
       });
   };
+
+  const handleDeleteEvent = (id: string) => {
+    dispatch(showLoader(true));
+
+    deleteEvent(id)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Event deleted successfully."} 🗓️`,
+          color: "green",
+        });
+        handleGetEvents(1, 10);
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
+
   return {
     events,
     loading,
     setLoading,
     handleCreateEvent,
     handleGetEvents,
+    handleDeleteEvent,
   };
 };
 

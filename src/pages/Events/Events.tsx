@@ -20,6 +20,7 @@ import useTheme from "../../hooks/useTheme";
 import useEvent from "../../hooks/useEvent";
 import CreateEvent from "../../components/modals/Events/CreateEvent";
 import moment from "moment";
+import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import "./events.scss";
 
 const Events = () => {
@@ -28,7 +29,10 @@ const Events = () => {
   const { dark } = useTheme();
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
   const [editEvent, setEditEvent] = useState<any>(null);
-  const { handleCreateEvent, handleGetEvents, events } = useEvent();
+  const [eventId, setEventId] = useState<string>("");
+  const { handleCreateEvent, handleGetEvents, events, handleDeleteEvent } =
+    useEvent();
+  const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
 
   useEffect(() => {
     handleGetEvents(page, perPage);
@@ -63,6 +67,20 @@ const Events = () => {
           submit={handleCreateEvent}
         />
       </Modal>
+
+      <Confirmation
+        isOpened={confirmDeleteEvent}
+        closeModal={() => {
+          setConfirmDeleteEvent(false);
+        }}
+        title="Are you sure you want to delete this event?"
+        confirmText="delete"
+        submit={() => {
+          setConfirmDeleteEvent(false);
+          handleDeleteEvent(eventId);
+        }}
+        hasInput={false}
+      />
 
       <div
         className="data-page-container"
@@ -176,7 +194,10 @@ const Events = () => {
                             <Menu.Item
                               color="red"
                               icon={<Trash size={14} />}
-                              onClick={() => {}}
+                              onClick={() => {
+                                setConfirmDeleteEvent(true);
+                                setEventId(item.event_id);
+                              }}
                             >
                               Delete Event
                             </Menu.Item>

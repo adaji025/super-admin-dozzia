@@ -20,3 +20,9 @@ export const getEvents = (data: { page: number; perPage: number }) => {
     }
   );
 };
+
+export const deleteEvent = (id: string) => {
+  return AxoisApi.delete(`${APIS.EVENT.EVENT(id)}`).then((res) => {
+    return res.data;
+  });
+};

@@ -48,7 +48,7 @@ const useStaff = () => {
       .then((res) => {
         showNotification({
           title: "Success",
-          message: `${"Staff account deleted."} 🏫`,
+          message: `${"Staff account suspended."} 🏫`,
           color: "green",
         });
         handleGetStaffList(1, 10, "", "");
