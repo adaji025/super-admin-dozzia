@@ -26,3 +26,18 @@ export const deleteEvent = (id: string) => {
     return res.data;
   });
 };
+
+export const updateEvent = (
+  id: string,
+  data: {
+    title: string;
+    description: string;
+    start_at: string;
+    end_at: string;
+    visibility: string;
+  }
+) => {
+  return AxoisApi.put(`${APIS.EVENT.EVENT(id)}`, data).then((res) => {
+    return res.data;
+  });
+};

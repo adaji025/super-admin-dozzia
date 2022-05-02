@@ -7,6 +7,9 @@
   .event-item {
     width: 300px;
     padding: 10px;
+    @media only screen and (max-width: 576px) {
+      width: 100%;
+    }
 
     .e-i-wrapper {
       border-radius: 4px;
@@ -20,8 +23,8 @@
         margin-bottom: 25px;
         opacity: 0.6;
         display: flex;
-        display: flex;
         align-items: center;
+
         .day {
           font-weight: 600;
           font-size: 25px;

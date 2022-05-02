@@ -28,10 +28,15 @@ const Events = () => {
   const [perPage] = useState<number>(10);
   const { dark } = useTheme();
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
-  const [editEvent, setEditEvent] = useState<any>(null);
+  const [event, setEvent] = useState<any>(null);
   const [eventId, setEventId] = useState<string>("");
-  const { handleCreateEvent, handleGetEvents, events, handleDeleteEvent } =
-    useEvent();
+  const {
+    handleCreateEvent,
+    handleGetEvents,
+    events,
+    handleDeleteEvent,
+    handleUpdateEvent,
+  } = useEvent();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
 
   useEffect(() => {
@@ -53,18 +58,18 @@ const Events = () => {
         opened={createEventModal}
         onClose={() => {
           setCreateEventModal(false);
-          setEditEvent(null);
+          setEvent(null);
         }}
-        title={<Text weight={600}>{editEvent ? "Edit" : "Create"} Event</Text>}
+        title={<Text weight={600}>{event ? "Edit" : "Create"} Event</Text>}
         size="lg"
       >
         <CreateEvent
           closeModal={() => {
             setCreateEventModal(false);
-            setEditEvent(null);
+            setEvent(null);
           }}
-          edit={editEvent}
-          submit={handleCreateEvent}
+          edit={event}
+          submit={event ? handleUpdateEvent : handleCreateEvent}
         />
       </Modal>
 
@@ -131,9 +136,11 @@ const Events = () => {
               events.data.map(
                 (item: {
                   event_id: string;
+                  description: string;
                   end_date: string;
                   start_date: string;
                   title: string;
+                  visibility: string;
                 }) => (
                   <div className="event-item" key={item.event_id}>
                     <div
@@ -185,8 +192,24 @@ const Events = () => {
                           >
                             <Menu.Label>Event Menu</Menu.Label>
 
-                            <Menu.Item icon={<CalendarEvent size={14} />}>
-                              View Event
+                            <Menu.Item
+                              icon={<CalendarEvent size={14} />}
+                              onClick={() => {
+                                setCreateEventModal(true);
+                                setEvent({
+                                  id: item.event_id,
+                                  title: item.title,
+                                  description: item.description,
+                                  startDate: moment(item.start_date).toDate(),
+                                  startTime: moment(item.start_date).toDate(),
+                                  endDate: moment(item.end_date).toDate(),
+                                  endTime: moment(item.end_date).toDate(),
+                                  visibility:
+                                    item.visibility === "Staff" ? "1" : "2",
+                                });
+                              }}
+                            >
+                              Edit Event
                             </Menu.Item>
 
                             <Divider />

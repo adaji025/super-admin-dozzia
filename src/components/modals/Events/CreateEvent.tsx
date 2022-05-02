@@ -14,10 +14,10 @@ const CreateEvent = ({ closeModal, submit, edit }: any) => {
     initialValues: {
       title: edit ? edit.title : "",
       description: edit ? edit.description : "",
-      startDate: edit ? edit.start_at : "",
-      startTime: new Date(),
-      endDate: edit ? edit.end_at : "",
-      endTime: new Date(),
+      startDate: edit ? edit.startDate : "",
+      startTime: edit ? edit.startTime : new Date(),
+      endDate: edit ? edit.endDate : "",
+      endTime: edit ? edit.endTime : new Date(),
       visibility: edit ? edit.visibility : "",
     },
 
@@ -34,7 +34,11 @@ const CreateEvent = ({ closeModal, submit, edit }: any) => {
       <form
         onSubmit={form.onSubmit((values) => {
           closeModal();
-          submit(values);
+          if (edit) {
+            submit(edit.id, values);
+          } else {
+            submit(values);
+          }
         })}
       >
         <TextInput
@@ -113,7 +117,7 @@ const CreateEvent = ({ closeModal, submit, edit }: any) => {
           <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
-          <Button type="submit">Submit</Button>
+          <Button type="submit">{edit ? "Update" : "Submit"}</Button>
         </Group>
       </form>
     </div>
