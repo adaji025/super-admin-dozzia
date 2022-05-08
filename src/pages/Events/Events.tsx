@@ -9,6 +9,8 @@ import {
   Divider,
   Pagination,
   Skeleton,
+  Alert,
+  Group,
 } from "@mantine/core";
 import {
   AdjustmentsHorizontal,
@@ -60,7 +62,9 @@ const Events = () => {
           setCreateEventModal(false);
           setEvent(null);
         }}
-        title={<Text weight={600}>{event ? "Edit" : "Create"} Event</Text>}
+        title={
+          <Text weight={600}>{event ? "Event Details" : "Create Event"}</Text>
+        }
         size="lg"
       >
         <CreateEvent
@@ -133,108 +137,126 @@ const Events = () => {
 
           <div className="events-main">
             {events && events.data ? (
-              events.data.map(
-                (item: {
-                  event_id: string;
-                  description: string;
-                  end_date: string;
-                  start_date: string;
-                  title: string;
-                  visibility: string;
-                }) => (
-                  <div className="event-item" key={item.event_id}>
-                    <div
-                      className="e-i-wrapper"
-                      style={{
-                        background: dark ? "#121212" : "#f8f9fa",
-                        color: dark ? "white" : "black",
-                      }}
-                    >
-                      <div className="e-i-top">
-                        <div className="t-itemd">
-                          <div>{moment(item.start_date).format("MMM")}</div>
-                          <div className="day">
-                            {moment(item.start_date).format("DD")}
-                          </div>
-                        </div>
-
-                        {moment(item.start_date).format("YYYY-MM-DD") !==
-                          moment(item.end_date).format("YYYY-MM-DD") && (
-                          <Fragment>
-                            <div className="t-btw">-</div>
-                            <div className="t-itemd">
-                              <div>{moment(item.end_date).format("MMM")}</div>
-                              <div className="day">
-                                {moment(item.end_date).format("DD")}
-                              </div>
+              <>
+                {events.data.map(
+                  (item: {
+                    event_id: string;
+                    description: string;
+                    end_date: string;
+                    start_date: string;
+                    title: string;
+                    visibility: string;
+                  }) => (
+                    <div className="event-item" key={item.event_id}>
+                      <div
+                        className="e-i-wrapper"
+                        style={{
+                          background: dark ? "#121212" : "#f8f9fa",
+                          color: dark ? "white" : "black",
+                        }}
+                      >
+                        <div className="e-i-top">
+                          <div className="t-itemd">
+                            <div>{moment(item.start_date).format("MMM")}</div>
+                            <div className="day">
+                              {moment(item.start_date).format("DD")}
                             </div>
-                          </Fragment>
-                        )}
-                      </div>
-
-                      <div className="e-i-middle">{item.title}</div>
-
-                      <div className="e-i-bottom">
-                        <div className="b-left">
-                          <div className="b-time">
-                            {moment(item.start_date).format("LT")} -{" "}
-                            {moment(item.end_date).format("LT")}
                           </div>
-                          <div className="b-location">Online</div>
+
+                          {moment(item.start_date).format("YYYY-MM-DD") !==
+                            moment(item.end_date).format("YYYY-MM-DD") && (
+                            <Fragment>
+                              <div className="t-btw">-</div>
+                              <div className="t-itemd">
+                                <div>{moment(item.end_date).format("MMM")}</div>
+                                <div className="day">
+                                  {moment(item.end_date).format("DD")}
+                                </div>
+                              </div>
+                            </Fragment>
+                          )}
                         </div>
 
-                        <div className="b-right">
-                          <Menu
-                            position="bottom"
-                            placement="end"
-                            withArrow
-                            size="sm"
-                          >
-                            <Menu.Label>Event Menu</Menu.Label>
+                        <div className="e-i-middle">{item.title}</div>
 
-                            <Menu.Item
-                              icon={<CalendarEvent size={14} />}
-                              onClick={() => {
-                                setCreateEventModal(true);
-                                setEvent({
-                                  id: item.event_id,
-                                  title: item.title,
-                                  description: item.description,
-                                  startDate: moment(item.start_date).toDate(),
-                                  startTime: moment(item.start_date).toDate(),
-                                  endDate: moment(item.end_date).toDate(),
-                                  endTime: moment(item.end_date).toDate(),
-                                  visibility:
-                                    item.visibility === "Staff" ? "1" : "2",
-                                });
-                              }}
+                        <div className="e-i-bottom">
+                          <div className="b-left">
+                            <div className="b-time">
+                              {moment(item.start_date).format("LT")} -{" "}
+                              {moment(item.end_date).format("LT")}
+                            </div>
+                            <div className="b-location">Online</div>
+                          </div>
+
+                          <div className="b-right">
+                            <Menu
+                              position="bottom"
+                              placement="end"
+                              withArrow
+                              size="sm"
                             >
-                              Edit Event
-                            </Menu.Item>
+                              <Menu.Label>Event Menu</Menu.Label>
 
-                            <Divider />
+                              <Menu.Item
+                                icon={<CalendarEvent size={14} />}
+                                onClick={() => {
+                                  setCreateEventModal(true);
+                                  setEvent({
+                                    id: item.event_id,
+                                    title: item.title,
+                                    description: item.description,
+                                    startDate: moment(item.start_date).toDate(),
+                                    startTime: moment(item.start_date).toDate(),
+                                    endDate: moment(item.end_date).toDate(),
+                                    endTime: moment(item.end_date).toDate(),
+                                    visibility:
+                                      item.visibility === "Staff" ? "1" : "2",
+                                  });
+                                }}
+                              >
+                                View Event
+                              </Menu.Item>
 
-                            <Menu.Item
-                              color="red"
-                              icon={<Trash size={14} />}
-                              onClick={() => {
-                                setConfirmDeleteEvent(true);
-                                setEventId(item.event_id);
-                              }}
-                            >
-                              Delete Event
-                            </Menu.Item>
-                          </Menu>
+                              <Divider />
+
+                              <Menu.Item
+                                color="red"
+                                icon={<Trash size={14} />}
+                                onClick={() => {
+                                  setConfirmDeleteEvent(true);
+                                  setEventId(item.event_id);
+                                }}
+                              >
+                                Delete Event
+                              </Menu.Item>
+                            </Menu>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                )
-              )
+                  )
+                )}
+
+                {events?.data.length === 0 && (
+                  <Group
+                    grow
+                    sx={{ width: "100%", maxWidth: "900px" }}
+                    position="center"
+                    my={80}
+                  >
+                    <Alert
+                      title="Bummer!"
+                      color="red"
+                      style={{ maxWidth: "300px" }}
+                    >
+                      No event found.
+                    </Alert>
+                  </Group>
+                )}
+              </>
             ) : (
               <>
                 <Skeleton
-                  className="e-i-wrapper"
                   width={320}
                   height={205}
                   mt={20}
@@ -242,7 +264,6 @@ const Events = () => {
                   radius="sm"
                 />
                 <Skeleton
-                  className="e-i-wrapper"
                   width={320}
                   height={205}
                   mt={20}
@@ -250,7 +271,6 @@ const Events = () => {
                   radius="sm"
                 />
                 <Skeleton
-                  className="e-i-wrapper"
                   width={320}
                   height={205}
                   mx={10}
@@ -258,7 +278,6 @@ const Events = () => {
                   radius="sm"
                 />
                 <Skeleton
-                  className="e-i-wrapper"
                   width={320}
                   height={205}
                   mt={20}
@@ -266,7 +285,6 @@ const Events = () => {
                   radius="sm"
                 />
                 <Skeleton
-                  className="e-i-wrapper"
                   width={320}
                   height={205}
                   mt={20}

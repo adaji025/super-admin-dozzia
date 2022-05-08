@@ -49,6 +49,7 @@ const useEvent = () => {
           message: "Event created successfully.",
           color: "green",
         });
+        handleGetEvents(1, 10);
       })
       .catch((error) => {
         handleError(error);
