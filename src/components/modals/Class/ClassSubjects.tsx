@@ -28,7 +28,7 @@ const ClassSubjects = ({
       <Box sx={{ minHeight: 350 }} className="d-p-main">
         {subjects ? (
           <>
-            <Table highlightOnHover striped>
+            <Table striped>
               <thead>
                 <tr>
                   <th

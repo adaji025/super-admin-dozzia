@@ -214,7 +214,7 @@ const Events = () => {
                                   });
                                 }}
                               >
-                                View Event
+                                View Details
                               </Menu.Item>
 
                               <Divider />

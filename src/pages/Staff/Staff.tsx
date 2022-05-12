@@ -177,7 +177,7 @@ const Staff = () => {
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
             {staffList && staffList.data && !loading ? (
               <>
-                <Table highlightOnHover striped>
+                <Table striped>
                   <thead>
                     <tr>
                       <th

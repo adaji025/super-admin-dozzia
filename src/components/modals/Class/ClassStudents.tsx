@@ -277,7 +277,7 @@ const ViewStudents = ({
       <Box sx={{ maxWidth: 900, minHeight: 173 }} className="list-modal">
         {classStudents.data && !loading ? (
           <>
-            <Table highlightOnHover striped>
+            <Table striped>
               <thead>
                 <tr>
                   <th
