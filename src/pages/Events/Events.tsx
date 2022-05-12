@@ -25,11 +25,10 @@ import useEvent from "../../hooks/useEvent";
 import CreateEvent from "../../components/modals/Events/CreateEvent";
 import moment from "moment";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
-import "./events.scss";
 
 const Events = () => {
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(1);
   const { dark } = useTheme();
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
   const [event, setEvent] = useState<any>(null);
@@ -41,13 +40,15 @@ const Events = () => {
     events,
     handleDeleteEvent,
     handleUpdateEvent,
+    setLoading,
+    loading,
   } = useEvent();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
 
   useEffect(() => {
     handleGetEvents(page, perPage);
     //eslint-disable-next-line
-  }, []);
+  }, [page]);
 
   return (
     <Fragment>
@@ -124,7 +125,7 @@ const Events = () => {
           >
             <Input
               sx={{
-                maxWidth: "900px",
+                maxWidth: "1000px",
               }}
               icon={<Search size={16} />}
               placeholder="Search events"
@@ -138,8 +139,8 @@ const Events = () => {
             />
           </div>
 
-          <Box sx={{ maxWidth: 1100, minHeight: 173 }} className="d-p-main">
-            {events && events.data ? (
+          <Box sx={{ maxWidth: 1000, minHeight: 173 }} className="d-p-main">
+            {events && events.data && !loading ? (
               <>
                 <Table striped verticalSpacing="sm">
                   <thead>
@@ -342,6 +343,7 @@ const Events = () => {
               position="center"
               mt={25}
               onChange={(value) => {
+                setLoading(true);
                 setPage(value);
               }}
               initialPage={events.meta.current_page}

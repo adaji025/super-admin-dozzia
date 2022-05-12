@@ -66,7 +66,6 @@ const useEvent = () => {
 
     getEvents({ page, perPage })
       .then((res) => {
-        setLoading(false);
         dispatch(setEvents(res));
       })
       .catch(() => {})
