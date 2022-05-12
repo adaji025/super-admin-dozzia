@@ -11,6 +11,8 @@ import {
   Skeleton,
   Alert,
   Group,
+  Box,
+  Table,
 } from "@mantine/core";
 import {
   AdjustmentsHorizontal,
@@ -32,6 +34,7 @@ const Events = () => {
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
   const [event, setEvent] = useState<any>(null);
   const [eventId, setEventId] = useState<string>("");
+  const deviceWidth = window.innerWidth;
   const {
     handleCreateEvent,
     handleGetEvents,
@@ -135,115 +138,183 @@ const Events = () => {
             />
           </div>
 
-          <div className="events-main">
+          <Box sx={{ maxWidth: 1100, minHeight: 173 }} className="d-p-main">
             {events && events.data ? (
               <>
-                {events.data.map(
-                  (item: {
-                    event_id: string;
-                    description: string;
-                    end_date: string;
-                    start_date: string;
-                    title: string;
-                    visibility: string;
-                  }) => (
-                    <div className="event-item" key={item.event_id}>
-                      <div
-                        className="e-i-wrapper"
+                <Table striped verticalSpacing="sm">
+                  <thead>
+                    <tr>
+                      {/* <th
                         style={{
-                          background: dark ? "#121212" : "#f8f9fa",
-                          color: dark ? "white" : "black",
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                        className="large-only"
+                      ></th> */}
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
-                        <div className="e-i-top">
-                          <div className="t-itemd">
-                            <div>{moment(item.start_date).format("MMM")}</div>
-                            <div className="day">
-                              {moment(item.start_date).format("DD")}
-                            </div>
-                          </div>
+                        Title
+                      </th>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                      >
+                        Start Date
+                      </th>
 
-                          {moment(item.start_date).format("YYYY-MM-DD") !==
-                            moment(item.end_date).format("YYYY-MM-DD") && (
-                            <Fragment>
-                              <div className="t-btw">-</div>
-                              <div className="t-itemd">
-                                <div>{moment(item.end_date).format("MMM")}</div>
-                                <div className="day">
-                                  {moment(item.end_date).format("DD")}
-                                </div>
-                              </div>
-                            </Fragment>
-                          )}
-                        </div>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                        className="large-only"
+                      >
+                        End Date
+                      </th>
 
-                        <div className="e-i-middle">{item.title}</div>
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          color: dark ? "#b3b7cb" : "#898989",
+                        }}
+                        className="large-only"
+                      >
+                        Time
+                      </th>
 
-                        <div className="e-i-bottom">
-                          <div className="b-left">
-                            <div className="b-time">
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                          width: "1px",
+                        }}
+                        className="table-last head large-only"
+                      ></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {events?.data.length > 0 &&
+                      events?.data.map(
+                        (item: {
+                          event_id: string;
+                          description: string;
+                          end_date: string;
+                          start_date: string;
+                          title: string;
+                          visibility: string;
+                        }) => (
+                          <tr key={item.event_id}>
+                            {/* <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                width: "50px",
+                              }}
+                              className="large-only"
+                            >
+                              <Avatar
+                                className="avatar"
+                                src={null}
+                                radius="xl"
+                              />
+                            </td> */}
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                fontWeight: "500",
+                              }}
+                            >
+                              {item.title}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                            >
+                              {moment(item.start_date).format("DD/MM/YYYY")}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                              className="large-only"
+                            >
+                              {moment(item.end_date).format("DD/MM/YYYY")}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                              className="large-only"
+                            >
                               {moment(item.start_date).format("LT")} -{" "}
                               {moment(item.end_date).format("LT")}
-                            </div>
-                            <div className="b-location">Online</div>
-                          </div>
-
-                          <div className="b-right">
-                            <Menu
-                              position="bottom"
-                              placement="end"
-                              withArrow
-                              size="sm"
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                width: "20px",
+                              }}
+                              className="table-last"
                             >
-                              <Menu.Label>Event Menu</Menu.Label>
-
-                              <Menu.Item
-                                icon={<CalendarEvent size={14} />}
-                                onClick={() => {
-                                  setCreateEventModal(true);
-                                  setEvent({
-                                    id: item.event_id,
-                                    title: item.title,
-                                    description: item.description,
-                                    startDate: moment(item.start_date).toDate(),
-                                    startTime: moment(item.start_date).toDate(),
-                                    endDate: moment(item.end_date).toDate(),
-                                    endTime: moment(item.end_date).toDate(),
-                                    visibility:
-                                      item.visibility === "Staff" ? "1" : "2",
-                                  });
-                                }}
+                              <Menu
+                                position={deviceWidth < 576 ? "left" : "right"}
+                                gutter={15}
+                                withArrow
+                                size="sm"
                               >
-                                View Details
-                              </Menu.Item>
+                                <Menu.Label>Event Menu</Menu.Label>
 
-                              <Divider />
+                                <Menu.Item
+                                  icon={<CalendarEvent size={14} />}
+                                  onClick={() => {
+                                    setCreateEventModal(true);
+                                    setEvent({
+                                      id: item.event_id,
+                                      title: item.title,
+                                      description: item.description,
+                                      startDate: moment(
+                                        item.start_date
+                                      ).toDate(),
+                                      startTime: moment(
+                                        item.start_date
+                                      ).toDate(),
+                                      endDate: moment(item.end_date).toDate(),
+                                      endTime: moment(item.end_date).toDate(),
+                                      visibility:
+                                        item.visibility === "Staff" ? "1" : "2",
+                                    });
+                                  }}
+                                >
+                                  View Details
+                                </Menu.Item>
 
-                              <Menu.Item
-                                color="red"
-                                icon={<Trash size={14} />}
-                                onClick={() => {
-                                  setConfirmDeleteEvent(true);
-                                  setEventId(item.event_id);
-                                }}
-                              >
-                                Delete Event
-                              </Menu.Item>
-                            </Menu>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                )}
+                                <Divider />
+
+                                <Menu.Item
+                                  color="red"
+                                  icon={<Trash size={14} />}
+                                  onClick={() => {
+                                    setConfirmDeleteEvent(true);
+                                    setEventId(item.event_id);
+                                  }}
+                                >
+                                  Delete Event
+                                </Menu.Item>
+                              </Menu>
+                            </td>
+                          </tr>
+                        )
+                      )}
+                  </tbody>
+                </Table>
 
                 {events?.data.length === 0 && (
-                  <Group
-                    grow
-                    sx={{ width: "100%", maxWidth: "900px" }}
-                    position="center"
-                    my={80}
-                  >
+                  <Group grow position="center" mt={80}>
                     <Alert
                       title="Bummer!"
                       color="red"
@@ -256,44 +327,14 @@ const Events = () => {
               </>
             ) : (
               <>
-                <Skeleton
-                  width={320}
-                  height={205}
-                  mt={20}
-                  mx={10}
-                  radius="sm"
-                />
-                <Skeleton
-                  width={320}
-                  height={205}
-                  mt={20}
-                  mx={10}
-                  radius="sm"
-                />
-                <Skeleton
-                  width={320}
-                  height={205}
-                  mx={10}
-                  mt={20}
-                  radius="sm"
-                />
-                <Skeleton
-                  width={320}
-                  height={205}
-                  mt={20}
-                  mx={10}
-                  radius="sm"
-                />
-                <Skeleton
-                  width={320}
-                  height={205}
-                  mt={20}
-                  mx={10}
-                  radius="sm"
-                />
+                <Skeleton height={25} mt={30} radius="sm" />
+                <Skeleton height={25} mt={12} radius="sm" />
+                <Skeleton height={25} mt={12} radius="sm" />
+                <Skeleton height={25} mt={12} radius="sm" />
+                <Skeleton height={25} mt={12} radius="sm" />
               </>
             )}
-          </div>
+          </Box>
 
           {events?.meta && events?.data.length > 0 && (
             <Pagination
