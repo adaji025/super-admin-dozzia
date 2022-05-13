@@ -10,7 +10,6 @@ import {
   MultiSelect,
   RadioGroup,
   Radio,
-  Textarea,
   Divider,
 } from "@mantine/core";
 import { useDispatch } from "react-redux";
@@ -510,18 +509,16 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
 const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
   const form = useForm({
     initialValues: {
-      previous_school_name: "",
-      previous_academic_year: "",
-      last_grade: "",
+      entry_class: "",
+      entry_year: "",
       entry_test_result: "",
-      reason_leaving_previous_school: "",
     },
   });
 
   const onSave = (values: any) => {
     nextStep({
       ...values,
-      previous_academic_year: values.previous_academic_year.toString(),
+      entry_year: values.entry_year.toString(),
     });
   };
 
@@ -532,12 +529,13 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
               <TextInput
+                required
                 className="form-item"
-                label="Previous School Name"
+                label="Class of Entry"
                 placeholder="Enter name"
                 variant="filled"
                 type="text"
-                {...form.getInputProps("previous_school_name")}
+                {...form.getInputProps("entry_class")}
               />
             </div>
 
@@ -545,38 +543,11 @@ const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
               <NumberInput
                 required
                 className="form-item"
-                label="Previous Academic Year"
+                label="Year of Entry"
                 placeholder="Enter year"
                 variant="filled"
                 type="number"
-                {...form.getInputProps("previous_academic_year")}
-              />
-            </div>
-
-            <div className="form-row">
-              <NumberInput
-                required
-                className="form-item"
-                label="Last Grade (%)"
-                placeholder="Grade"
-                variant="filled"
-                type="number"
-                max={100}
-                min={0}
-                {...form.getInputProps("last_grade")}
-              />
-            </div>
-
-            <div className="form-row">
-              <Textarea
-                className="form-item"
-                label="Reason for leaving previous school"
-                placeholder="Provide a summary"
-                variant="filled"
-                autosize
-                minRows={3}
-                maxRows={5}
-                {...form.getInputProps("reason_leaving_previous_school")}
+                {...form.getInputProps("entry_year")}
               />
             </div>
 
