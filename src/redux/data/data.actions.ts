@@ -22,3 +22,8 @@ export const setEvents = (events: any) => ({
   type: "SET_EVENTS",
   payload: { events },
 });
+
+export const setAttendance = (attendance: any) => ({
+  type: "SET_ATTENDANCE",
+  payload: { attendance },
+});

@@ -58,4 +58,16 @@ export const APIS = {
       `${api}/events?per_page=${perPage}&page=${page}`,
     EVENT: (id: string) => `${api}/events/${id}`,
   },
+  ATTENDANCE: {
+    GET_GENERAL_ATTENDANCE: (page: number, perPage: number, date: string) =>
+      `${api}/attendance?per_page=${perPage}&page=${page}&date=${date}`,
+    GET_CLASS_ATTENDANCE: (
+      page: number,
+      perPage: number,
+      date: string,
+      classId: string
+    ) =>
+      `${api}/student/attendance?per_page=${perPage}&page=${page}&date=${date}&classroom_id=${classId}`,
+    MARK_ATTENDANCE: `${api}/mark/attendance`,
+  },
 };

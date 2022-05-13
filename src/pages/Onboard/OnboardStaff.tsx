@@ -10,7 +10,6 @@ import {
   MultiSelect,
   RadioGroup,
   Radio,
-  Textarea,
   Divider,
 } from "@mantine/core";
 import { useDispatch } from "react-redux";

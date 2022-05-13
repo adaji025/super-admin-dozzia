@@ -17,6 +17,7 @@ import Students from "../../pages/Students/Students";
 import Staff from "../../pages/Staff/Staff";
 import Events from "../../pages/Events/Events";
 import Broadcast from "../../pages/Broadcast/Broadcast";
+import Attendance from "../../pages/Attendance/Attendance";
 import "./index.scss";
 
 const LoggedinContainer = () => {
@@ -55,6 +56,7 @@ const LoggedinContainer = () => {
             <Route path="/staff" element={<Staff />} />
             <Route path="/events" element={<Events />} />
             <Route path="/broadcast" element={<Broadcast />} />
+            <Route path="/attendance" element={<Attendance />} />
           </Routes>
         </div>
       </div>
