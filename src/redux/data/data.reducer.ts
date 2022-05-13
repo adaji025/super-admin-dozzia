@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   staff: null,
   events: null,
   attendance: null,
+  stats: null,
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -43,6 +44,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         attendance: action.payload.attendance,
+      };
+
+    case "SET_STATS":
+      return {
+        ...state,
+        stats: action.payload.stats,
       };
 
     default:

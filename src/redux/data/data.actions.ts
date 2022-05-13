@@ -27,3 +27,8 @@ export const setAttendance = (attendance: any) => ({
   type: "SET_ATTENDANCE",
   payload: { attendance },
 });
+
+export const setStats = (stats: any) => ({
+  type: "SET_STATS",
+  payload: { stats },
+});

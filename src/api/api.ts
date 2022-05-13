@@ -70,4 +70,7 @@ export const APIS = {
       `${api}/student/attendance?per_page=${perPage}&page=${page}&date=${date}&classroom_id=${classId}`,
     MARK_ATTENDANCE: `${api}/mark/attendance`,
   },
+  STATS: {
+    GET_STATS: `${api}/stats`,
+  },
 };
