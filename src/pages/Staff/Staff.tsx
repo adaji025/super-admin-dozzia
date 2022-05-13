@@ -79,7 +79,7 @@ const Staff = () => {
             <div className="d-p-h-left">Staff</div>
 
             <div className="d-p-h-right">
-              <Button variant="light" component={Link} to="/add-staff">
+              <Button component={Link} to="/add-staff">
                 Add Staff
               </Button>
             </div>

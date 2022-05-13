@@ -28,7 +28,7 @@ import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const Events = () => {
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(1);
+  const [perPage] = useState<number>(10);
   const { dark } = useTheme();
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
   const [event, setEvent] = useState<any>(null);
@@ -107,7 +107,6 @@ const Events = () => {
 
             <div className="d-p-h-right">
               <Button
-                variant="light"
                 onClick={() => {
                   setCreateEventModal(true);
                 }}
@@ -158,7 +157,7 @@ const Events = () => {
                           color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
-                        Title
+                        Event Name
                       </th>
                       <th
                         style={{
@@ -339,7 +338,7 @@ const Events = () => {
 
           {events?.meta && events?.data.length > 0 && (
             <Pagination
-              sx={{ maxWidth: 900 }}
+              sx={{ maxWidth: 1000 }}
               position="center"
               mt={25}
               onChange={(value) => {

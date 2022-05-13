@@ -640,12 +640,10 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
 const WorkHistory = ({ active, nextStep, prevStep }: any) => {
   const form = useForm({
     initialValues: {
-      previous_workplace: "",
       year_of_experience: "",
       guarantor_name: "",
       guarantor_employment_role: "",
       guarantor_phone_number: "",
-      reason_leaving_previous_workplace: "",
     },
   });
 
@@ -663,18 +661,6 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
         <Box sx={{ maxWidth: 900 }}>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
-              <TextInput
-                required
-                className="form-item"
-                label="Previous Workplace"
-                placeholder="Enter name"
-                variant="filled"
-                type="text"
-                {...form.getInputProps("previous_workplace")}
-              />
-            </div>
-
-            <div className="form-row">
               <NumberInput
                 required
                 className="form-item"
@@ -683,19 +669,6 @@ const WorkHistory = ({ active, nextStep, prevStep }: any) => {
                 variant="filled"
                 type="number"
                 {...form.getInputProps("year_of_experience")}
-              />
-            </div>
-
-            <div className="form-row">
-              <Textarea
-                className="form-item"
-                label="Reason for leaving previous school"
-                placeholder="Provide a summary"
-                variant="filled"
-                autosize
-                minRows={3}
-                maxRows={5}
-                {...form.getInputProps("reason_leaving_previous_workplace")}
               />
             </div>
 

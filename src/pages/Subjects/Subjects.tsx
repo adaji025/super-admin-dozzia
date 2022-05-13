@@ -149,7 +149,6 @@ const Subjects = () => {
 
             <div className="d-p-h-right">
               <Button
-                variant="light"
                 onClick={() => {
                   setAddSubjectModal(true);
                 }}

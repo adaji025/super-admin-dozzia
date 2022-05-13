@@ -134,7 +134,6 @@ const Classes = () => {
 
             <div className="d-p-h-right">
               <Button
-                variant="light"
                 onClick={() => {
                   setAddClassModal(true);
                 }}
