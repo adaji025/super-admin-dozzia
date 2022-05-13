@@ -342,8 +342,10 @@ const Events = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setLoading(true);
-                setPage(value);
+                if (value !== events.meta.current_page) {
+                  setLoading(true);
+                  setPage(value);
+                }
               }}
               initialPage={events.meta.current_page}
               total={events.meta.last_page}
