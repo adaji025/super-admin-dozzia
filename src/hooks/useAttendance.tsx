@@ -4,7 +4,7 @@ import {
   getClassAttendance,
   getGeneralAttendance,
 } from "../services/attendance/attendance";
-import { showNotification } from "@mantine/notifications";
+// import { showNotification } from "@mantine/notifications";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 import { setAttendance } from "../redux/data/data.actions";
@@ -37,11 +37,37 @@ const useAttendance = () => {
       });
   };
 
+  const handleGetClassAttendance = (
+    page: number,
+    perPage: number,
+    date: string,
+    classId: string
+  ) => {
+    return new Promise((resolve) => {
+      if (!attendance) {
+        dispatch(showLoader(true));
+      }
+
+      getClassAttendance(page, perPage, date, classId)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+          dispatch(showLoader(false));
+        });
+    });
+  };
+
   return {
     handleGetGeneralAttendance,
     loading,
     setLoading,
     attendance,
+    handleGetClassAttendance,
   };
 };
 

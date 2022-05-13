@@ -13,6 +13,7 @@ import {
   Box,
   Table,
   Popover,
+  Badge,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import {
@@ -23,6 +24,7 @@ import {
 import useTheme from "../../hooks/useTheme";
 import moment from "moment";
 import useAttendance from "../../hooks/useAttendance";
+import ClassAttendance from "../../components/modals/Attendance/ClassAttendance";
 
 const Attendance = () => {
   const [page, setPage] = useState<number>(1);
@@ -32,7 +34,7 @@ const Attendance = () => {
   const { dark } = useTheme();
   const [classAttendanceModal, setClassAttendanceModal] =
     useState<boolean>(false);
-  const [classId, setClassId] = useState<string>("");
+  const [activeClass, setActiveClass] = useState<any>(null);
   const deviceWidth = window.innerWidth;
   const { handleGetGeneralAttendance, loading, setLoading, attendance } =
     useAttendance();
@@ -55,6 +57,31 @@ const Attendance = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <Modal
+        opened={classAttendanceModal}
+        onClose={() => {
+          setClassAttendanceModal(false);
+          setActiveClass(null);
+        }}
+        title={
+          <Group position="apart">
+            <Text weight={600}>{activeClass?.classroom_name} Attendance </Text>
+            <Badge size="lg">{`${activeClass?.total_present}/ ${activeClass?.total_student}`}</Badge>
+          </Group>
+        }
+        size="xl"
+      >
+        <ClassAttendance
+          closeModal={() => {
+            setClassAttendanceModal(false);
+            setActiveClass(null);
+          }}
+          selectedClass={activeClass}
+          modalActive={classAttendanceModal}
+          date={date}
+        />
+      </Modal>
 
       <div
         className="data-page-container"
@@ -100,7 +127,7 @@ const Attendance = () => {
           >
             <Input
               sx={{
-                maxWidth: "700px",
+                maxWidth: "800px",
               }}
               icon={<Search size={16} />}
               placeholder="Search by class"
@@ -114,7 +141,7 @@ const Attendance = () => {
             />
           </div>
 
-          <Box sx={{ maxWidth: 700, minHeight: 173 }} className="d-p-main">
+          <Box sx={{ maxWidth: 800, minHeight: 173 }} className="d-p-main">
             {attendance && attendance.data && !loading ? (
               <>
                 <Table striped>
@@ -210,7 +237,13 @@ const Attendance = () => {
                               >
                                 <Menu.Label>Menu</Menu.Label>
 
-                                <Menu.Item icon={<ClipboardList size={14} />}>
+                                <Menu.Item
+                                  icon={<ClipboardList size={14} />}
+                                  onClick={() => {
+                                    setClassAttendanceModal(true);
+                                    setActiveClass(item);
+                                  }}
+                                >
                                   View Class
                                 </Menu.Item>
                               </Menu>
@@ -246,7 +279,7 @@ const Attendance = () => {
 
           {attendance?.meta && attendance?.data.length > 0 && (
             <Pagination
-              sx={{ maxWidth: 700 }}
+              sx={{ maxWidth: 800 }}
               position="center"
               mt={25}
               onChange={(value) => {
