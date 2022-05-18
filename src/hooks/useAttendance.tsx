@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getClassAttendance,
   getGeneralAttendance,
+  markAttendance,
 } from "../services/attendance/attendance";
-// import { showNotification } from "@mantine/notifications";
+import { showNotification } from "@mantine/notifications";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 import { setAttendance } from "../redux/data/data.actions";
@@ -62,12 +63,32 @@ const useAttendance = () => {
     });
   };
 
+  const handleMarkAttendance = (data: any) => {
+    dispatch(showLoader(true));
+
+    markAttendance(data)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Attendance marked successfully."} ✅`,
+          color: "green",
+        });
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
+
   return {
     handleGetGeneralAttendance,
     loading,
     setLoading,
     attendance,
     handleGetClassAttendance,
+    handleMarkAttendance,
   };
 };
 

@@ -245,7 +245,7 @@ const Classes = () => {
                               fontWeight: "600",
                             }}
                           >
-                            {item.classroom_name}
+                            {item?.classroom_name}
                           </td>
                           <td
                             style={{
@@ -253,7 +253,7 @@ const Classes = () => {
                               color: dark ? "#b3b7cb" : "#898989",
                             }}
                           >
-                            {`${item.classroom_teacher.title} ${item.classroom_teacher.first_name} ${item.classroom_teacher.last_name}`}
+                            {`${item.classroom_teacher?.title} ${item.classroom_teacher?.first_name} ${item?.classroom_teacher?.last_name}`}
                           </td>
                           <td
                             className="large-only"

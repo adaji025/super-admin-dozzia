@@ -25,3 +25,11 @@ export const getClassAttendance = (
     return res.data;
   });
 };
+
+export const markAttendance = (data: any) => {
+  return AxoisApi.post(`${APIS.ATTENDANCE.MARK_ATTENDANCE}`, data).then(
+    (res) => {
+      return res.data;
+    }
+  );
+};

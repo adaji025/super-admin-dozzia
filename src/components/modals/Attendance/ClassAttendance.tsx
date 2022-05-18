@@ -7,7 +7,7 @@ import {
   Table,
   Box,
   Alert,
-  Switch,
+  Checkbox,
 } from "@mantine/core";
 import useAttendance from "../../../hooks/useAttendance";
 import useTheme from "../../../hooks/useTheme";
@@ -22,8 +22,14 @@ const ClassAttendance = ({
   const { dark } = useTheme();
   const [page] = useState<number>(1);
   const [perPage] = useState<number>(10);
-  const { handleGetClassAttendance } = useAttendance();
+  const { handleGetClassAttendance, handleMarkAttendance } = useAttendance();
   const [classAttendance, setClassAttendance] = useState<any>(null);
+  const [attendanceData, setAttendanceData] = useState<any>(null);
+  const [attendanceDataRaw, setAttendanceDataRaw] = useState<any>(null);
+  const [attendanceTrigger, setAttendanceTrigger] = useState<any>({
+    studentId: "",
+    type: "",
+  });
 
   useEffect(() => {
     if (modalActive) {
@@ -33,19 +39,87 @@ const ClassAttendance = ({
         moment(date).format("YYYY-MM-DD"),
         selectedClass.classroom_id
       ).then((res: any) => {
-        console.log(res?.data);
-        setClassAttendance(res?.data);
+        setClassAttendance(res);
+        createAttendanceData(res.data);
       });
     }
     //eslint-disable-next-line
   }, []);
+
+  const createAttendanceData = (attendance: any) => {
+    let data: any = {};
+    let dataRaw: any = [];
+
+    for (let i = 0; i < attendance.length; i++) {
+      data[attendance[i].student_id] = {
+        student_id: attendance[i]?.student_id,
+        is_present: attendance[i]?.attendance?.is_present
+          ? attendance[i]?.attendance?.is_present
+          : true,
+      };
+    }
+    for (let i = 0; i < attendance.length; i++) {
+      dataRaw.push({
+        student_id: attendance[i]?.student_id,
+        is_present: attendance[i]?.attendance?.is_present
+          ? attendance[i]?.attendance?.is_present
+          : true,
+      });
+      console.log(attendance[i]?.attendance);
+    }
+
+    setAttendanceData(data);
+    setAttendanceDataRaw(dataRaw);
+  };
+
+  useEffect(() => {
+    handleAttendanceChange(attendanceTrigger.studentId, attendanceTrigger.type);
+
+    //eslint-disable-next-line
+  }, [attendanceTrigger]);
+
+  const handleAttendanceChange = (studentId: string, type: string) => {
+    let attendanceDataCopy = attendanceData;
+
+    if (studentId) {
+      let data: { student_id: string; is_present: boolean } =
+        attendanceDataCopy[studentId];
+
+      data.is_present = type === "present" ? true : false;
+
+      attendanceDataCopy[studentId] = data;
+      setAttendanceTrigger({ studentId: "", type: "" });
+      setAttendanceData(attendanceDataCopy);
+    }
+  };
+
+  const updateAttendanceRaw = (studentIndex: number, type: string) => {
+    let data: { student_id: string; is_present: boolean } =
+      attendanceDataRaw[studentIndex];
+
+    data.is_present = type === "present" ? true : false;
+
+    let attendanceDataCopy = attendanceDataRaw;
+    attendanceDataCopy[studentIndex] = data;
+
+    setAttendanceDataRaw(attendanceDataCopy);
+  };
+
+  const handleSubmit = () => {
+    const reqData = {
+      classroom_id: selectedClass.classroom_id,
+      register: attendanceDataRaw,
+    };
+    handleMarkAttendance(reqData);
+    closeModal();
+  };
 
   return (
     <div>
       <Divider mb="md" variant="dashed" />
 
       <Box sx={{ minHeight: 450 }} className="d-p-main">
-        {classAttendance ? (
+        {classAttendance && attendanceData ? (
           <>
             <Table striped>
               <thead>
@@ -84,12 +158,13 @@ const ClassAttendance = ({
                 </tr>
               </thead>
               <tbody>
-                {classAttendance.map(
+                {classAttendance?.data.map(
                   (
                     item: {
                       first_name: string;
                       last_name: string;
                       gender: string;
+                      student_id: string;
                     },
                     index: number
                   ) => (
@@ -126,7 +201,36 @@ const ClassAttendance = ({
                           color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
-                        <Switch label="Present" />
+                        <Group>
+                          <Checkbox
+                            checked={
+                              attendanceData[item.student_id]?.is_present
+                            }
+                            label="Present"
+                            onChange={() => {
+                              setAttendanceTrigger({
+                                studentId: item?.student_id,
+                                type: "present",
+                              });
+
+                              updateAttendanceRaw(index, "present");
+                            }}
+                          />
+                          <Checkbox
+                            checked={
+                              attendanceData[item.student_id]?.is_present ===
+                              false
+                            }
+                            label="Absent"
+                            onChange={() => {
+                              setAttendanceTrigger({
+                                studentId: item?.student_id,
+                                type: "absent",
+                              });
+                              updateAttendanceRaw(index, "absent");
+                            }}
+                          />
+                        </Group>
                       </td>
                     </tr>
                   )
@@ -134,7 +238,7 @@ const ClassAttendance = ({
               </tbody>
             </Table>
 
-            {classAttendance && classAttendance.length === 0 && (
+            {classAttendance && classAttendance?.data.length === 0 && (
               <Group grow position="center" mt={80} mb={60}>
                 <Alert
                   title="Bummer!"
@@ -163,7 +267,13 @@ const ClassAttendance = ({
         <Button variant="default" onClick={closeModal}>
           Go back
         </Button>
-        <Button onClick={closeModal}>Submit</Button>
+        <Button
+          onClick={() => {
+            handleSubmit();
+          }}
+        >
+          Submit
+        </Button>
       </Group>
     </div>
   );
