@@ -65,7 +65,6 @@ const ClassAttendance = ({
           ? attendance[i]?.attendance?.is_present
           : true,
       });
-      console.log(attendance[i]?.attendance);
     }
 
     setAttendanceData(data);
