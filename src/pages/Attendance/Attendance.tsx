@@ -36,8 +36,14 @@ const Attendance = () => {
     useState<boolean>(false);
   const [activeClass, setActiveClass] = useState<any>(null);
   const deviceWidth = window.innerWidth;
-  const { handleGetGeneralAttendance, loading, setLoading, attendance } =
-    useAttendance();
+  const {
+    handleGetGeneralAttendance,
+    loading,
+    setLoading,
+    attendance,
+    handleGetClassAttendance,
+    handleMarkAttendance,
+  } = useAttendance();
 
   useEffect(() => {
     handleGetGeneralAttendance(
@@ -47,6 +53,17 @@ const Attendance = () => {
     );
     //eslint-disable-next-line
   }, [page, date]);
+
+  const onSubmit = (data: any) => {
+    handleMarkAttendance(data).then((res: any) => {
+      setLoading(true);
+      handleGetGeneralAttendance(
+        page,
+        perPage,
+        moment(date).format("YYYY-MM-DD")
+      );
+    });
+  };
 
   return (
     <Fragment>
@@ -80,6 +97,8 @@ const Attendance = () => {
           selectedClass={activeClass}
           modalActive={classAttendanceModal}
           date={date}
+          handleGetClassAttendance={handleGetClassAttendance}
+          onSubmit={onSubmit}
         />
       </Modal>
 

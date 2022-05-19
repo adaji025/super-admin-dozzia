@@ -9,7 +9,6 @@ import {
   Alert,
   Checkbox,
 } from "@mantine/core";
-import useAttendance from "../../../hooks/useAttendance";
 import useTheme from "../../../hooks/useTheme";
 import moment from "moment";
 
@@ -18,11 +17,12 @@ const ClassAttendance = ({
   selectedClass,
   modalActive,
   date,
+  handleGetClassAttendance,
+  onSubmit,
 }: any) => {
   const { dark } = useTheme();
   const [page] = useState<number>(1);
   const [perPage] = useState<number>(10);
-  const { handleGetClassAttendance, handleMarkAttendance } = useAttendance();
   const [classAttendance, setClassAttendance] = useState<any>(null);
   const [attendanceData, setAttendanceData] = useState<any>(null);
   const [attendanceDataRaw, setAttendanceDataRaw] = useState<any>(null);
@@ -53,7 +53,7 @@ const ClassAttendance = ({
     for (let i = 0; i < attendance.length; i++) {
       data[attendance[i].student_id] = {
         student_id: attendance[i]?.student_id,
-        is_present: attendance[i]?.attendance?.is_present
+        is_present: attendance[i]?.attendance
           ? attendance[i]?.attendance?.is_present
           : true,
       };
@@ -61,7 +61,7 @@ const ClassAttendance = ({
     for (let i = 0; i < attendance.length; i++) {
       dataRaw.push({
         student_id: attendance[i]?.student_id,
-        is_present: attendance[i]?.attendance?.is_present
+        is_present: attendance[i]?.attendance
           ? attendance[i]?.attendance?.is_present
           : true,
       });
@@ -109,7 +109,7 @@ const ClassAttendance = ({
       classroom_id: selectedClass.classroom_id,
       register: attendanceDataRaw,
     };
-    handleMarkAttendance(reqData);
+    onSubmit(reqData);
     closeModal();
   };
 

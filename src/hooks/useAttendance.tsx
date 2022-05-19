@@ -64,22 +64,25 @@ const useAttendance = () => {
   };
 
   const handleMarkAttendance = (data: any) => {
-    dispatch(showLoader(true));
+    return new Promise((resolve) => {
+      dispatch(showLoader(true));
 
-    markAttendance(data)
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: `${"Attendance marked successfully."} ✅`,
-          color: "green",
+      markAttendance(data)
+        .then((res) => {
+          resolve(res);
+          showNotification({
+            title: "Success",
+            message: `${"Attendance marked successfully."} ✅`,
+            color: "green",
+          });
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          dispatch(showLoader(false));
         });
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        dispatch(showLoader(false));
-      });
+    });
   };
 
   return {
