@@ -8,6 +8,7 @@ import {
   Box,
   Alert,
   Checkbox,
+  Pagination,
 } from "@mantine/core";
 import useTheme from "../../../hooks/useTheme";
 import moment from "moment";
@@ -21,7 +22,7 @@ const ClassAttendance = ({
   onSubmit,
 }: any) => {
   const { dark } = useTheme();
-  const [page] = useState<number>(1);
+  const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [classAttendance, setClassAttendance] = useState<any>(null);
   const [attendanceData, setAttendanceData] = useState<any>(null);
@@ -44,7 +45,7 @@ const ClassAttendance = ({
       });
     }
     //eslint-disable-next-line
-  }, []);
+  }, [page]);
 
   const createAttendanceData = (attendance: any) => {
     let data: any = {};
@@ -259,6 +260,22 @@ const ClassAttendance = ({
           </>
         )}
       </Box>
+      {classAttendance?.meta && classAttendance?.data.length > 0 && (
+        <Pagination
+          sx={{ maxWidth: 800 }}
+          position="center"
+          mt={25}
+          onChange={(value) => {
+            if (value !== classAttendance.meta.current_page) {
+              setClassAttendance(null);
+              setPage(value);
+            }
+          }}
+          initialPage={classAttendance.meta.current_page}
+          total={classAttendance.meta.last_page}
+          color="green"
+        />
+      )}
 
       <Divider mt="md" variant="dashed" />
 
