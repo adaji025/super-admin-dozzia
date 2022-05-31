@@ -32,3 +32,8 @@ export const setStats = (stats: any) => ({
   type: "SET_STATS",
   payload: { stats },
 });
+
+export const setBroadcast = (broadcast: any) => ({
+  type: "SET_BROADCAST",
+  payload: { broadcast },
+});

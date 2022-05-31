@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   events: null,
   attendance: null,
   stats: null,
+  broadcast: null,
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -50,6 +51,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         stats: action.payload.stats,
+      };
+
+    case "SET_BROADCAST":
+      return {
+        ...state,
+        broadcast: action.payload.broadcast,
       };
 
     default:

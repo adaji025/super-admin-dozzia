@@ -73,4 +73,10 @@ export const APIS = {
   STATS: {
     GET_STATS: `${api}/stats`,
   },
+  BROADCAST: {
+    GET_BROADCAST_LIST: (page: number, perPage: number) =>
+      `${api}/broadcasts?per_page=${perPage}&page=${page}`,
+    BROADCAST: (id: string) => `${api}/broadcasts/${id}`,
+    CREATE_BROADCAST: `${api}/broadcasts/`,
+  },
 };
