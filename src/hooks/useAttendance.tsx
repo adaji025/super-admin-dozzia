@@ -24,7 +24,7 @@ const useAttendance = () => {
     date: string
   ) => {
     if (!attendance) {
-      dispatch(showLoader(true));
+      setLoading(true);
     }
 
     getGeneralAttendance(page, perPage, date)
@@ -34,7 +34,6 @@ const useAttendance = () => {
       .catch(() => {})
       .finally(() => {
         setLoading(false);
-        dispatch(showLoader(false));
       });
   };
 
@@ -45,9 +44,7 @@ const useAttendance = () => {
     classId: string
   ) => {
     return new Promise((resolve) => {
-      if (!attendance) {
-        dispatch(showLoader(true));
-      }
+      setLoading(true);
 
       getClassAttendance(page, perPage, date, classId)
         .then((res) => {
@@ -58,7 +55,6 @@ const useAttendance = () => {
         })
         .finally(() => {
           setLoading(false);
-          dispatch(showLoader(false));
         });
     });
   };
