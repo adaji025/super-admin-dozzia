@@ -39,7 +39,7 @@ const Dashboard = () => {
               <div className="card-title">Total Students</div>
               <div
                 className="card-value"
-                style={{ background: dark ? "#2f9e4459" : "#80d38ffc" }}
+                style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
                 {stats?.total_student}
               </div>
@@ -51,7 +51,7 @@ const Dashboard = () => {
               <div className="card-title">Total Staff</div>
               <div
                 className="card-value"
-                style={{ background: dark ? "#2f9e4459" : "#80d38ffc" }}
+                style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
                 {stats?.total_staff}
               </div>
@@ -63,7 +63,7 @@ const Dashboard = () => {
               <div className="card-title">Total Classes</div>
               <div
                 className="card-value"
-                style={{ background: dark ? "#2f9e4459" : "#80d38ffc" }}
+                style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
                 {stats?.total_classroom}
               </div>
@@ -75,7 +75,7 @@ const Dashboard = () => {
               <div className="card-title">Unresolved Complaints</div>
               <div
                 className="card-value"
-                style={{ background: dark ? "#2f9e4459" : "#80d38ffc" }}
+                style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
                 {stats && "0"}
               </div>
