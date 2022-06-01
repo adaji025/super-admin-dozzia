@@ -1,6 +1,7 @@
 import { Fragment, useRef } from "react";
 import { Upload, CircleCheck } from "tabler-icons-react";
 import { showNotification } from "@mantine/notifications";
+import useTheme from "../../hooks/useTheme";
 import "./upload.scss";
 
 interface UploadProps {
@@ -17,7 +18,7 @@ const UploadComponent = ({
   setFile,
 }: UploadProps) => {
   const uploadFile: any = useRef(null);
-
+  const { dark } = useTheme();
   const handleChange = (e: any) => {
     e.preventDefault();
     let selectedFile = e.target.files[0];
@@ -52,6 +53,7 @@ const UploadComponent = ({
       />
       <div
         className={`d-upload click no-select ${extraClasses}`}
+        style={{ background: dark ? "#34354A" : "#F1F3F5" }}
         onClick={() => {
           uploadFile.current.click();
         }}

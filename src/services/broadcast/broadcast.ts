@@ -1,13 +1,7 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
 
-export const createBroadcast = (data: {
-  title: string;
-  summary: string;
-  published_at: string;
-  visibility: string;
-  image: any;
-}) => {
+export const createBroadcast = (data: any) => {
   return AxoisApi.post(`${APIS.BROADCAST.CREATE_BROADCAST}`, data).then(
     (res) => {
       return res.data;
