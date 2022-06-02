@@ -19,8 +19,8 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
     initialValues: {
       title: edit ? edit.title : "",
       summary: edit ? edit.summary : "",
-      date: edit ? edit.endDate : "",
-      time: edit ? edit.endTime : new Date(),
+      date: edit ? edit.date : "",
+      time: edit ? edit.time : new Date(),
       visibility: edit ? edit.visibility : "",
     },
 
@@ -102,13 +102,25 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
         </div>
 
         <div className="upload-wrapper">
-          <div className="u-title">Add Image (optional)</div>
-          <Upload
-            text={file ? file?.name : "Upload Image"}
-            accept={["image/jpeg", "image/png", "image/jpg"]}
-            extraClasses={`${file ? "file-selected" : ""}`}
-            setFile={setFile}
-          />
+          <div className="u-title">
+            {edit ? edit?.image && "Broadcast Image" : "Add Image (optional)"}
+          </div>
+          {edit ? (
+            edit?.image && (
+              <img
+                className="broadcast-image23"
+                src={edit?.image}
+                alt="broadcast design"
+              />
+            )
+          ) : (
+            <Upload
+              text={file ? file?.name : "Upload Image"}
+              accept={["image/jpeg", "image/png", "image/jpg"]}
+              extraClasses={`${file ? "file-selected" : ""}`}
+              setFile={setFile}
+            />
+          )}
         </div>
 
         <Group position="right" mt="xl">

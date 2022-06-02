@@ -23,12 +23,6 @@ export const deleteBroadcast = (id: string) => {
   });
 };
 
-export const getBroadcastItem = (id: string) => {
-  return AxoisApi.get(`${APIS.BROADCAST.BROADCAST(id)}`).then((res) => {
-    return res.data;
-  });
-};
-
 export const updateBroadcast = (
   id: string,
   data: {
@@ -36,7 +30,6 @@ export const updateBroadcast = (
     summary: string;
     published_at: string;
     visibility: string;
-    image: any;
   }
 ) => {
   return AxoisApi.put(`${APIS.BROADCAST.BROADCAST(id)}`, data).then((res) => {

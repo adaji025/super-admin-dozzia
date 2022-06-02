@@ -5,7 +5,6 @@ import {
   Button,
   Modal,
   Text,
-  Input,
   Menu,
   Divider,
   Pagination,
@@ -14,25 +13,21 @@ import {
   Group,
   Avatar,
 } from "@mantine/core";
-import {
-  AdjustmentsHorizontal,
-  Search,
-  Trash,
-  CalendarEvent,
-} from "tabler-icons-react";
+import { Trash, CalendarEvent } from "tabler-icons-react";
 import useTheme from "../../hooks/useTheme";
 import useBroadcast from "../../hooks/useBroadcast";
 import CreateBroadcast from "../../components/modals/Broadcast/CreateBroadcast";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import moment from "moment";
 import "./broadcast.scss";
 
 const Events = () => {
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const { dark } = useTheme();
-  const [createBroadcastModal, setBroadcastEventModal] =
+  const [createBroadcastModal, setCreateBroadcastModal] =
     useState<boolean>(false);
-  const [event, setEvent] = useState<any>(null);
+  const [broadcast, setBroadcast] = useState<any>(null);
   const [broadcastId, setBroadcastId] = useState<string>("");
   const {
     handleGetBroadcastList,
@@ -41,6 +36,7 @@ const Events = () => {
     loading,
     setLoading,
     handleDeleteBroadcast,
+    handleUpdateBroadcast,
   } = useBroadcast();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
 
@@ -48,7 +44,7 @@ const Events = () => {
     handleGetBroadcastList(page, perPage);
 
     //eslint-disable-next-line
-  }, []);
+  }, [page]);
 
   return (
     <Fragment>
@@ -63,23 +59,27 @@ const Events = () => {
       <Modal
         opened={createBroadcastModal}
         onClose={() => {
-          setBroadcastEventModal(false);
-          setEvent(null);
+          setCreateBroadcastModal(false);
+          setTimeout(() => {
+            setBroadcast(null);
+          }, 500);
         }}
         title={
           <Text weight={600}>
-            {event ? "Broadcast Details" : "Create Broadcast"}
+            {broadcast ? "Broadcast Details" : "Create Broadcast"}
           </Text>
         }
         size="lg"
       >
         <CreateBroadcast
           closeModal={() => {
-            setBroadcastEventModal(false);
-            setEvent(null);
+            setCreateBroadcastModal(false);
+            setTimeout(() => {
+              setBroadcast(null);
+            }, 500);
           }}
-          edit={event}
-          submit={event ? handleCreateBroadcast : handleCreateBroadcast}
+          edit={broadcast}
+          submit={broadcast ? handleUpdateBroadcast : handleCreateBroadcast}
         />
       </Modal>
 
@@ -110,7 +110,7 @@ const Events = () => {
             <div className="d-p-h-right">
               <Button
                 onClick={() => {
-                  setBroadcastEventModal(true);
+                  setCreateBroadcastModal(true);
                 }}
               >
                 Create Braodcast
@@ -119,7 +119,7 @@ const Events = () => {
           </div>
 
           <div className="broadcasts-main">
-            {broadcasts && broadcasts.data ? (
+            {broadcasts && broadcasts.data && !loading ? (
               <>
                 {broadcasts.data.map(
                   (item: {
@@ -129,6 +129,7 @@ const Events = () => {
                     plublished_at: string;
                     title: string;
                     summary: string;
+                    visibility: string;
                   }) => (
                     <div className="broadcast-item" key={item.broadcast_id}>
                       <div
@@ -183,23 +184,22 @@ const Events = () => {
                               withArrow
                               size="md"
                             >
-                              <Menu.Label>Event Menu</Menu.Label>
+                              <Menu.Label>Broadcast Menu</Menu.Label>
 
                               <Menu.Item
                                 icon={<CalendarEvent size={14} />}
                                 onClick={() => {
-                                  setBroadcastEventModal(true);
-                                  // setEvent({
-                                  //   id: item.event_id,
-                                  //   title: item.title,
-                                  //   description: item.description,
-                                  //   startDate: moment(item.start_date).toDate(),
-                                  //   startTime: moment(item.start_date).toDate(),
-                                  //   endDate: moment(item.end_date).toDate(),
-                                  //   endTime: moment(item.end_date).toDate(),
-                                  //   visibility:
-                                  //     item.visibility === "Staff" ? "1" : "2",
-                                  // });
+                                  setCreateBroadcastModal(true);
+                                  setBroadcast({
+                                    id: item.broadcast_id,
+                                    title: item.title,
+                                    summary: item.summary,
+                                    date: moment(item.plublished_at).toDate(),
+                                    time: moment(item.plublished_at).toDate(),
+                                    visibility:
+                                      item.visibility === "Staff" ? "1" : "2",
+                                    image: item.image_url,
+                                  });
                                 }}
                               >
                                 View Details
@@ -212,7 +212,7 @@ const Events = () => {
                                 icon={<Trash size={14} />}
                                 onClick={() => {
                                   setConfirmDeleteEvent(true);
-                                  setBroadcastId(item.broadcast_id);
+                                  setBroadcastId(item?.broadcast_id);
                                 }}
                               >
                                 Delete Broadcast
@@ -246,21 +246,21 @@ const Events = () => {
               <>
                 <Skeleton
                   width={320}
-                  height={205}
+                  height={170}
                   mt={20}
                   mx={10}
                   radius="sm"
                 />
                 <Skeleton
                   width={320}
-                  height={205}
+                  height={170}
                   mt={20}
                   mx={10}
                   radius="sm"
                 />
                 <Skeleton
                   width={320}
-                  height={205}
+                  height={170}
                   mx={10}
                   mt={20}
                   radius="sm"
@@ -275,7 +275,10 @@ const Events = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setPage(value);
+                if (value !== broadcasts.meta.current_page) {
+                  setLoading(true);
+                  setPage(value);
+                }
               }}
               initialPage={broadcasts.meta.current_page}
               total={broadcasts.meta.last_page}

@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getBroadcastList,
-  getBroadcastItem,
   createBroadcast,
   updateBroadcast,
   deleteBroadcast,
@@ -99,6 +98,42 @@ const useBroadcast = () => {
       });
   };
 
+  const handleUpdateBroadcast = (
+    id: string,
+    values: {
+      title: string;
+      summary: string;
+      date: string;
+      time: string;
+      visibility: string;
+    }
+  ) => {
+    dispatch(showLoader(true));
+
+    updateBroadcast(id, {
+      title: values.title,
+      summary: values.summary,
+      published_at: `${moment(values.date).format("YYYY-MM-DD")} ${moment(
+        values.time
+      ).format("HH:mm")}`,
+      visibility: values.visibility,
+    })
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Broadcast updated successfully."}`,
+          color: "green",
+        });
+        handleGetBroadcastList(1, 10);
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
+
   return {
     handleGetBroadcastList,
     handleCreateBroadcast,
@@ -106,6 +141,7 @@ const useBroadcast = () => {
     loading,
     setLoading,
     handleDeleteBroadcast,
+    handleUpdateBroadcast,
   };
 };
 
