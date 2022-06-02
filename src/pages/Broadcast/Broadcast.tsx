@@ -23,7 +23,6 @@ import {
 import useTheme from "../../hooks/useTheme";
 import useBroadcast from "../../hooks/useBroadcast";
 import CreateBroadcast from "../../components/modals/Broadcast/CreateBroadcast";
-import moment from "moment";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import "./broadcast.scss";
 
@@ -34,13 +33,14 @@ const Events = () => {
   const [createBroadcastModal, setBroadcastEventModal] =
     useState<boolean>(false);
   const [event, setEvent] = useState<any>(null);
-  const [eventId, setEventId] = useState<string>("");
+  const [broadcastId, setBroadcastId] = useState<string>("");
   const {
     handleGetBroadcastList,
     handleCreateBroadcast,
     broadcasts,
     loading,
     setLoading,
+    handleDeleteBroadcast,
   } = useBroadcast();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
 
@@ -88,11 +88,11 @@ const Events = () => {
         closeModal={() => {
           setConfirmDeleteEvent(false);
         }}
-        title="Are you sure you want to delete this event?"
+        title="Are you sure you want to delete this broadcast?"
         confirmText="delete"
         submit={() => {
           setConfirmDeleteEvent(false);
-          // handleDeleteEvent(eventId);
+          handleDeleteBroadcast(broadcastId);
         }}
         hasInput={false}
       />
@@ -181,7 +181,7 @@ const Events = () => {
                               position="bottom"
                               placement="end"
                               withArrow
-                              size="sm"
+                              size="md"
                             >
                               <Menu.Label>Event Menu</Menu.Label>
 
@@ -212,10 +212,10 @@ const Events = () => {
                                 icon={<Trash size={14} />}
                                 onClick={() => {
                                   setConfirmDeleteEvent(true);
-                                  setEventId(item.broadcast_id);
+                                  setBroadcastId(item.broadcast_id);
                                 }}
                               >
-                                Delete Event
+                                Delete Broadcast
                               </Menu.Item>
                             </Menu>
                           </div>

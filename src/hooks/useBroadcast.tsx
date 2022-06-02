@@ -79,27 +79,25 @@ const useBroadcast = () => {
       });
   };
 
-  // const handleMarkAttendance = (data: any) => {
-  //   return new Promise((resolve) => {
-  //     dispatch(showLoader(true));
+  const handleDeleteBroadcast = (id: string) => {
+    dispatch(showLoader(true));
 
-  //     markAttendance(data)
-  //       .then((res) => {
-  //         resolve(res);
-  //         showNotification({
-  //           title: "Success",
-  //           message: `${"Attendance marked successfully."} ✅`,
-  //           color: "green",
-  //         });
-  //       })
-  //       .catch((error) => {
-  //         handleError(error);
-  //       })
-  //       .finally(() => {
-  //         dispatch(showLoader(false));
-  //       });
-  //   });
-  // };
+    deleteBroadcast(id)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Broadcast deleted successfully."}`,
+          color: "green",
+        });
+        handleGetBroadcastList(1, 10);
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
 
   return {
     handleGetBroadcastList,
@@ -107,6 +105,7 @@ const useBroadcast = () => {
     broadcasts,
     loading,
     setLoading,
+    handleDeleteBroadcast,
   };
 };
 
