@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { format } from "timeago.js";
 import {
   Button,
   Modal,
@@ -11,6 +12,7 @@ import {
   Skeleton,
   Alert,
   Group,
+  Avatar,
 } from "@mantine/core";
 import {
   AdjustmentsHorizontal,
@@ -33,11 +35,18 @@ const Events = () => {
     useState<boolean>(false);
   const [event, setEvent] = useState<any>(null);
   const [eventId, setEventId] = useState<string>("");
-  const { handleGetBroadcastList, handleCreateBroadcast } = useBroadcast();
+  const {
+    handleGetBroadcastList,
+    handleCreateBroadcast,
+    broadcasts,
+    loading,
+    setLoading,
+  } = useBroadcast();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
 
   useEffect(() => {
     handleGetBroadcastList(page, perPage);
+
     //eslint-disable-next-line
   }, []);
 
@@ -96,7 +105,7 @@ const Events = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Braodcast</div>
+            <div className="d-p-h-left">Broadcast</div>
 
             <div className="d-p-h-right">
               <Button
@@ -109,58 +118,63 @@ const Events = () => {
             </div>
           </div>
 
-          {/* <div className="events-main">
-            {events && events.data ? (
+          <div className="broadcasts-main">
+            {broadcasts && broadcasts.data ? (
               <>
-                {events.data.map(
+                {broadcasts.data.map(
                   (item: {
-                    event_id: string;
-                    description: string;
-                    end_date: string;
-                    start_date: string;
+                    broadcast_id: string;
+                    created_at: string;
+                    image_url: string;
+                    plublished_at: string;
                     title: string;
-                    visibility: string;
+                    summary: string;
                   }) => (
-                    <div className="event-item" key={item.event_id}>
+                    <div className="broadcast-item" key={item.broadcast_id}>
                       <div
-                        className="e-i-wrapper"
+                        className="b-i-wrapper"
                         style={{
                           background: dark ? "#121212" : "#f8f9fa",
                           color: dark ? "white" : "black",
                         }}
                       >
-                        <div className="e-i-top">
-                          <div className="t-itemd">
-                            <div>{moment(item.start_date).format("MMM")}</div>
-                            <div className="day">
-                              {moment(item.start_date).format("DD")}
-                            </div>
-                          </div>
-
-                          {moment(item.start_date).format("YYYY-MM-DD") !==
-                            moment(item.end_date).format("YYYY-MM-DD") && (
-                            <Fragment>
-                              <div className="t-btw">-</div>
-                              <div className="t-itemd">
-                                <div>{moment(item.end_date).format("MMM")}</div>
-                                <div className="day">
-                                  {moment(item.end_date).format("DD")}
-                                </div>
-                              </div>
-                            </Fragment>
+                        <div className="b-i-top">
+                          {item?.image_url ? (
+                            <a
+                              href={item?.image_url}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              <Avatar
+                                radius="xs"
+                                size="lg"
+                                src={item?.image_url}
+                              />
+                            </a>
+                          ) : (
+                            <Avatar
+                              src={null}
+                              alt="Vitaly Rtishchev"
+                              radius="xs"
+                              size="lg"
+                              color="green"
+                            >
+                              {item.title[0].toUpperCase()}
+                            </Avatar>
                           )}
+
+                          <div className="i-t-right">
+                            {format(item.plublished_at)}
+                          </div>
                         </div>
 
-                        <div className="e-i-middle">{item.title}</div>
+                        <div className="b-i-middle">
+                          <div className="m-title">{item.title}</div>
+                          <div className="m-desc">{item.summary}</div>
+                        </div>
 
-                        <div className="e-i-bottom">
-                          <div className="b-left">
-                            <div className="b-time">
-                              {moment(item.start_date).format("LT")} -{" "}
-                              {moment(item.end_date).format("LT")}
-                            </div>
-                            <div className="b-location">Online</div>
-                          </div>
+                        <div className="b-i-bottom">
+                          <div className="b-left"></div>
 
                           <div className="b-right">
                             <Menu
@@ -175,17 +189,17 @@ const Events = () => {
                                 icon={<CalendarEvent size={14} />}
                                 onClick={() => {
                                   setBroadcastEventModal(true);
-                                  setEvent({
-                                    id: item.event_id,
-                                    title: item.title,
-                                    description: item.description,
-                                    startDate: moment(item.start_date).toDate(),
-                                    startTime: moment(item.start_date).toDate(),
-                                    endDate: moment(item.end_date).toDate(),
-                                    endTime: moment(item.end_date).toDate(),
-                                    visibility:
-                                      item.visibility === "Staff" ? "1" : "2",
-                                  });
+                                  // setEvent({
+                                  //   id: item.event_id,
+                                  //   title: item.title,
+                                  //   description: item.description,
+                                  //   startDate: moment(item.start_date).toDate(),
+                                  //   startTime: moment(item.start_date).toDate(),
+                                  //   endDate: moment(item.end_date).toDate(),
+                                  //   endTime: moment(item.end_date).toDate(),
+                                  //   visibility:
+                                  //     item.visibility === "Staff" ? "1" : "2",
+                                  // });
                                 }}
                               >
                                 View Details
@@ -198,7 +212,7 @@ const Events = () => {
                                 icon={<Trash size={14} />}
                                 onClick={() => {
                                   setConfirmDeleteEvent(true);
-                                  setEventId(item.event_id);
+                                  setEventId(item.broadcast_id);
                                 }}
                               >
                                 Delete Event
@@ -211,7 +225,7 @@ const Events = () => {
                   )
                 )}
 
-                {events?.data.length === 0 && (
+                {broadcasts?.data.length === 0 && (
                   <Group
                     grow
                     sx={{ width: "100%", maxWidth: "900px" }}
@@ -251,25 +265,11 @@ const Events = () => {
                   mt={20}
                   radius="sm"
                 />
-                <Skeleton
-                  width={320}
-                  height={205}
-                  mt={20}
-                  mx={10}
-                  radius="sm"
-                />
-                <Skeleton
-                  width={320}
-                  height={205}
-                  mt={20}
-                  mx={10}
-                  radius="sm"
-                />
               </>
             )}
-          </div> */}
+          </div>
 
-          {/* {events?.meta && events?.data.length > 0 && (
+          {broadcasts?.meta && broadcasts?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
               position="center"
@@ -277,11 +277,11 @@ const Events = () => {
               onChange={(value) => {
                 setPage(value);
               }}
-              initialPage={events.meta.current_page}
-              total={events.meta.last_page}
+              initialPage={broadcasts.meta.current_page}
+              total={broadcasts.meta.last_page}
               color="green"
             />
-          )} */}
+          )}
         </div>
       </div>
     </Fragment>

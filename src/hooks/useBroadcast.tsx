@@ -17,7 +17,7 @@ const useBroadcast = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const broadcast = useSelector((state: any) => {
+  const broadcasts = useSelector((state: any) => {
     return state.data.broadcast;
   });
 
@@ -63,7 +63,7 @@ const useBroadcast = () => {
   };
 
   const handleGetBroadcastList = (page: number, perPage: number) => {
-    if (!broadcast) {
+    if (!broadcasts) {
       setLoading(true);
     }
 
@@ -104,6 +104,7 @@ const useBroadcast = () => {
   return {
     handleGetBroadcastList,
     handleCreateBroadcast,
+    broadcasts,
     loading,
     setLoading,
   };
