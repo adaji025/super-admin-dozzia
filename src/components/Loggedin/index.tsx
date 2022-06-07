@@ -11,13 +11,13 @@ import OnboardStudent from "../../pages/Onboard/OnboardStudent";
 import OnboardStaff from "../../pages/Onboard/OnboardStaff";
 import Settings from "../../pages/Settings/Settings";
 import Classes from "../../pages/Classes/Classes";
-import ClassesInfo from "../../pages/Classes/ClassInfo";
 import Subjects from "../../pages/Subjects/Subjects";
 import Students from "../../pages/Students/Students";
 import Staff from "../../pages/Staff/Staff";
 import Events from "../../pages/Events/Events";
 import Broadcast from "../../pages/Broadcast/Broadcast";
 import Attendance from "../../pages/Attendance/Attendance";
+import ReportsComplaints from "../../pages/ReportsComplaints/ReportsComplaints";
 import "./index.scss";
 
 const LoggedinContainer = () => {
@@ -50,13 +50,13 @@ const LoggedinContainer = () => {
             <Route path="/add-staff" element={<OnboardStaff />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/classes" element={<Classes />} />
-            <Route path="/classes/:id" element={<ClassesInfo />} />
             <Route path="/subjects" element={<Subjects />} />
             <Route path="/students" element={<Students />} />
             <Route path="/staff" element={<Staff />} />
             <Route path="/events" element={<Events />} />
             <Route path="/broadcast" element={<Broadcast />} />
             <Route path="/attendance" element={<Attendance />} />
+            <Route path="/reports" element={<ReportsComplaints />} />
           </Routes>
         </div>
       </div>
