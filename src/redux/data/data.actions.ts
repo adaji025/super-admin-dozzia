@@ -37,3 +37,8 @@ export const setBroadcast = (broadcast: any) => ({
   type: "SET_BROADCAST",
   payload: { broadcast },
 });
+
+export const setReports = (reports: any) => ({
+  type: "SET_REPORTS",
+  payload: { reports },
+});

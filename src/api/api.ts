@@ -79,4 +79,8 @@ export const APIS = {
     BROADCAST: (id: string) => `${api}/broadcasts/${id}`,
     CREATE_BROADCAST: `${api}/broadcasts`,
   },
+  REPORTS: {
+    GET_REPORTS: `${api}/complains`,
+    UPDATE_STATUS: (id: string) => `${api}/complains/${id}`,
+  },
 };
