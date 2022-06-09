@@ -11,29 +11,20 @@ import {
   Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { ClipboardList, Users, Book, Edit } from "tabler-icons-react";
+import { ClipboardList, Check } from "tabler-icons-react";
 import useReports from "../../hooks/useReports";
+import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const Reports = () => {
   const { dark } = useTheme();
   const [addClassModal, setAddClassModal] = useState<boolean>(false);
-  const [classStudentsModal, setClassStudentsModal] = useState<boolean>(false);
-  const [classSubjectsModal, setClassSubjectsModal] = useState<boolean>(false);
-  const [editClass, setEditClass] = useState<null | {
-    classroom_id: string;
-    classroom_level: string;
-    classroom_name: string;
-    classroom_teacher: string;
-    classroom_description: string;
-  }>(null);
-  const { handleGetReports, reports, loading, setLoading } = useReports();
+  const [confirmResolve, setConfirmResolve] = useState<boolean>(false);
+  const [reportId, setReportId] = useState<string>("");
 
+  const { handleGetReports, reports, loading, setLoading, markAsResolved } =
+    useReports();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
-  const [classId, setClassId] = useState<string>("");
-  const [className, setClassName] = useState<string>("");
-  const [classSubjects, setClassSubjects] = useState<any>(null);
-  const deviceWidth = window.innerWidth;
 
   useEffect(() => {
     handleGetReports(page, perPage);
@@ -87,6 +78,20 @@ const Reports = () => {
             subjects={classSubjects}
           />
         </Modal> */}
+
+      <Confirmation
+        isOpened={confirmResolve}
+        closeModal={() => {
+          setConfirmResolve(false);
+        }}
+        title="Are you sure you want to resolve complain?"
+        confirmText="RESOLVE"
+        submit={() => {
+          setConfirmResolve(false);
+          markAsResolved(reportId);
+        }}
+        hasInput={false}
+      />
 
       <div
         className="data-page-container"
@@ -274,20 +279,21 @@ const Reports = () => {
                                 position="bottom"
                                 gutter={15}
                                 withArrow
-                                size="sm"
+                                size="md"
                               >
-                                <Menu.Label>Class Menu</Menu.Label>
-                                <Menu.Item
-                                  icon={<Users size={14} />}
-                                  onClick={() => {
-                                    setClassStudentsModal(true);
-                                  }}
-                                >
-                                  Students
-                                </Menu.Item>
-
+                                <Menu.Label>Menu</Menu.Label>
                                 <Menu.Item icon={<ClipboardList size={14} />}>
-                                  Class Wall
+                                  View Report
+                                </Menu.Item>
+                                <Menu.Item
+                                  icon={<Check size={14} />}
+                                  onClick={() => {
+                                    setConfirmResolve(true);
+                                    setReportId(item?.id);
+                                  }}
+                                  disabled={item.status === "resolved"}
+                                >
+                                  Mark as Resolved
                                 </Menu.Item>
                               </Menu>
                             </td>
@@ -304,7 +310,7 @@ const Reports = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No class found.
+                      No report found.
                     </Alert>
                   </Group>
                 )}

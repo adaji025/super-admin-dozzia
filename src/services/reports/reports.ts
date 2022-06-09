@@ -13,12 +13,9 @@ export const updateStatus = (
   id: string,
   data: {
     status: string;
-    staff_id: string;
   }
 ) => {
-  return AxoisApi.put(`${APIS.REPORTS.UPDATE_STATUS}/${id}`, data).then(
-    (res) => {
-      return res.data;
-    }
-  );
+  return AxoisApi.put(`${APIS.REPORTS.UPDATE_STATUS(id)}`, data).then((res) => {
+    return res.data;
+  });
 };

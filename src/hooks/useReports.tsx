@@ -29,31 +29,32 @@ const useReports = () => {
       });
   };
 
-  // const handleDeleteStaff = (id: string) => {
-  //   dispatch(showLoader(true));
+  const markAsResolved = (id: string) => {
+    dispatch(showLoader(true));
 
-  //   deleteStaff(id)
-  //     .then((res) => {
-  //       showNotification({
-  //         title: "Success",
-  //         message: `${"Staff account suspended."} 🏫`,
-  //         color: "green",
-  //       });
-  //       handleGetStaffList(1, 10, "", "");
-  //     })
-  //     .catch((error) => {
-  //       handleError(error);
-  //     })
-  //     .finally(() => {
-  //       dispatch(showLoader(false));
-  //     });
-  // };
+    updateStatus(id, { status: "resolved" })
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Complain Resolved."}`,
+          color: "green",
+        });
+        handleGetReports(1, 10);
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
 
   return {
     handleGetReports,
     reports,
     loading,
     setLoading,
+    markAsResolved,
   };
 };
 
