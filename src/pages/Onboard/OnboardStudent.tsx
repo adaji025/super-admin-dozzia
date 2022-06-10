@@ -150,6 +150,7 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       dob: "",
       gender: "",
       age: "",
+      guardian_title: "",
       guardian_first_name: "",
       guardian_last_name: "",
       guardian_phone_number: "",
@@ -163,6 +164,8 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       dob: (value) => (value === "" ? "Enter date of birth" : null),
       gender: (value) => (value === "" ? "Select student gender" : null),
       age: (value) => (value === "" ? "Enter student age" : null),
+      guardian_title: (value) =>
+        value === "" ? "Select guardian title" : null,
       guardian_first_name: (value) =>
         value === "" ? "Input guardian first name" : null,
       guardian_last_name: (value) =>
@@ -272,6 +275,22 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
               label="Guardian Info"
               labelPosition="center"
             />
+
+            <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="Guardian Title"
+                placeholder="Guardian Title"
+                variant="filled"
+                data={[
+                  { value: "Mr", label: "Mr 🧑" },
+                  { value: "Mrs", label: "Mrs 👱‍♀️" },
+                  { value: "Miss", label: "Miss 👩‍🦰" },
+                ]}
+                {...form.getInputProps("guardian_title")}
+              />
+            </div>
 
             <div className="form-row">
               <TextInput
