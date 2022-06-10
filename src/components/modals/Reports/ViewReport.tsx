@@ -1,24 +1,9 @@
 import { useState, useEffect } from "react";
-import {
-  Button,
-  Group,
-  Divider,
-  Box,
-  Table,
-  Skeleton,
-  Menu,
-  Avatar,
-  Pagination,
-  Alert,
-  Tabs,
-  TextInput,
-  ActionIcon,
-  Text,
-  Select,
-} from "@mantine/core";
+import { Button, Group, Tabs, Select } from "@mantine/core";
 import { InfoCircle, Messages } from "tabler-icons-react";
 import useTheme from "../../../hooks/useTheme";
 import useReports from "../../../hooks/useReports";
+import Conversation from "./../../Conversation/Conversation";
 import "./view-report.scss";
 
 const ViewReport = ({
@@ -35,14 +20,16 @@ const ViewReport = ({
   };
 
   return (
-    <Tabs active={activeTab} onTabChange={onChange} variant="outline">
-      <Tabs.Tab icon={<InfoCircle size={14} />} label="Details" tabKey="1">
-        <Details closeModal={closeModal} report={report} />
-      </Tabs.Tab>
-      <Tabs.Tab icon={<Messages size={14} />} label="Conversation" tabKey="2">
-        <Conversation />
-      </Tabs.Tab>
-    </Tabs>
+    <div className="r32">
+      <Tabs active={activeTab} onTabChange={onChange} variant="outline">
+        <Tabs.Tab icon={<InfoCircle size={14} />} label="Details" tabKey="1">
+          <Details closeModal={closeModal} report={report} />
+        </Tabs.Tab>
+        <Tabs.Tab icon={<Messages size={14} />} label="Conversation" tabKey="2">
+          <Conversation />
+        </Tabs.Tab>
+      </Tabs>
+    </div>
   );
 };
 
@@ -168,10 +155,6 @@ const Details = ({ closeModal, report }: any) => {
       </Group>
     </div>
   );
-};
-
-const Conversation = () => {
-  return <div className="report-conversation">ssssssss ssssss</div>;
 };
 
 export default ViewReport;
