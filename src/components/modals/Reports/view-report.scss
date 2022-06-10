@@ -1,0 +1,40 @@
+.view-details {
+  .v-d-row {
+    display: flex;
+    flex-direction: row;
+    padding: 15px 0;
+
+    @media only screen and (max-width: 768px) {
+      flex-direction: column;
+    }
+
+    .d-r-left {
+      width: 170px;
+      font-size: 12px;
+      font-weight: 500;
+      opacity: 0.6;
+
+      @media only screen and (max-width: 768px) {
+        margin-bottom: 5px;
+      }
+    }
+
+    .d-r-right {
+      width: calc(100% - 170px);
+      font-size: 14px;
+      font-weight: 500;
+
+      @media only screen and (max-width: 768px) {
+        width: 100%;
+      }
+
+      &.fit {
+        width: fit-content;
+      }
+    }
+  }
+}
+
+.report-conversation {
+  min-height: 410px;
+}

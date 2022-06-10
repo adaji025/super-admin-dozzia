@@ -29,14 +29,14 @@ const useReports = () => {
       });
   };
 
-  const markAsResolved = (id: string) => {
+  const handleUpdateStatus = (id: string, status: string) => {
     dispatch(showLoader(true));
 
-    updateStatus(id, { status: "resolved" })
+    updateStatus(id, { status })
       .then((res) => {
         showNotification({
           title: "Success",
-          message: `${"Complain Resolved."}`,
+          message: `${"Status updated."}`,
           color: "green",
         });
         handleGetReports(1, 10);
@@ -54,7 +54,7 @@ const useReports = () => {
     reports,
     loading,
     setLoading,
-    markAsResolved,
+    handleUpdateStatus,
   };
 };
 

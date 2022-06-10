@@ -9,19 +9,28 @@ import {
   ScrollArea,
   Group,
   Alert,
+  Divider,
+  Modal,
+  Text,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { ClipboardList, Check } from "tabler-icons-react";
+import { ClipboardList, Checks, BrandHipchat, X } from "tabler-icons-react";
 import useReports from "../../hooks/useReports";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import ViewReport from "../../components/modals/Reports/ViewReport";
 
 const Reports = () => {
   const { dark } = useTheme();
-  const [addClassModal, setAddClassModal] = useState<boolean>(false);
+  const [reportModal, setReportModal] = useState<boolean>(false);
   const [confirmResolve, setConfirmResolve] = useState<boolean>(false);
   const [reportId, setReportId] = useState<string>("");
+  const [report, setReport] = useState<any>(null);
+  const [statusChangeText, setStatusChangeText] = useState<{
+    from: string;
+    to: string;
+  }>({ from: "", to: "" });
 
-  const { handleGetReports, reports, loading, setLoading, markAsResolved } =
+  const { handleGetReports, reports, loading, setLoading, handleUpdateStatus } =
     useReports();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
@@ -42,53 +51,42 @@ const Reports = () => {
         <meta property="og:url" content="" />
       </Helmet>
 
-      {/* <Modal
-          opened={classStudentsModal}
-          onClose={() => {
-            setClassStudentsModal(false);
-            setClassId("");
+      <Modal
+        opened={reportModal}
+        onClose={() => {
+          setReportModal(false);
+          setTimeout(() => {
+            setReport(null);
+          }, 500);
+        }}
+        title={
+          <Text weight={600}>
+            Issue {report?.tracking_code} ({report?.status})
+          </Text>
+        }
+        size="xl"
+      >
+        <ViewReport
+          closeModal={() => {
+            setReportModal(false);
+            setTimeout(() => {
+              setReport(null);
+            }, 500);
           }}
-          title={<Text weight={600}>{className ?? "Class"}</Text>}
-          size="xl"
-        >
-          <ClassStudents
-            closeModal={() => {
-              setClassStudentsModal(false);
-              setClassId("");
-            }}
-            classId={classId}
-            modalActive={classStudentsModal}
-          />
-        </Modal> */}
-
-      {/* <Modal
-          opened={classSubjectsModal}
-          onClose={() => {
-            setClassSubjectsModal(false);
-            setClassSubjects([]);
-          }}
-          title={<Text weight={600}>{className ?? "Class"} Subjects</Text>}
-          size="xl"
-        >
-          <ClassSubjects
-            closeModal={() => {
-              setClassSubjectsModal(false);
-              setClassSubjects([]);
-            }}
-            subjects={classSubjects}
-          />
-        </Modal> */}
+          report={report}
+        />
+      </Modal>
 
       <Confirmation
         isOpened={confirmResolve}
         closeModal={() => {
           setConfirmResolve(false);
         }}
-        title="Are you sure you want to resolve complain?"
-        confirmText="RESOLVE"
+        title={`Are you sure you want to change ticket status from ${statusChangeText.from} to ${statusChangeText.to}?`}
+        confirmText="Status Change"
         submit={() => {
           setConfirmResolve(false);
-          markAsResolved(reportId);
+          handleUpdateStatus(reportId, statusChangeText.to);
         }}
         hasInput={false}
       />
@@ -282,18 +280,59 @@ const Reports = () => {
                                 size="md"
                               >
                                 <Menu.Label>Menu</Menu.Label>
-                                <Menu.Item icon={<ClipboardList size={14} />}>
+                                <Menu.Item
+                                  icon={<ClipboardList size={14} />}
+                                  onClick={() => {
+                                    setReport(item);
+                                    setReportModal(true);
+                                  }}
+                                >
                                   View Report
                                 </Menu.Item>
+
+                                <Divider />
+
                                 <Menu.Item
-                                  icon={<Check size={14} />}
+                                  icon={<Checks size={14} />}
                                   onClick={() => {
-                                    setConfirmResolve(true);
                                     setReportId(item?.id);
+                                    setStatusChangeText({
+                                      from: item.status,
+                                      to: "resolved",
+                                    });
+                                    setConfirmResolve(true);
                                   }}
                                   disabled={item.status === "resolved"}
                                 >
-                                  Mark as Resolved
+                                  Set as Resolved
+                                </Menu.Item>
+                                <Menu.Item
+                                  icon={<BrandHipchat size={14} />}
+                                  onClick={() => {
+                                    setStatusChangeText({
+                                      from: item.status,
+                                      to: "in-progress",
+                                    });
+                                    setConfirmResolve(true);
+                                    setReportId(item?.id);
+                                  }}
+                                  disabled={item.status === "in-progress"}
+                                >
+                                  Set as In-progress
+                                </Menu.Item>
+                                <Menu.Item
+                                  icon={<X size={14} />}
+                                  onClick={() => {
+                                    setStatusChangeText({
+                                      from: item.status,
+                                      to: "unresolved",
+                                    });
+                                    setConfirmResolve(true);
+                                    setReportId(item?.id);
+                                  }}
+                                  disabled={item.status === "unresolved"}
+                                >
+                                  Set as Unresolved
                                 </Menu.Item>
                               </Menu>
                             </td>

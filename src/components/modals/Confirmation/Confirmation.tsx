@@ -35,7 +35,7 @@ const Confirmation = ({
         centered
       >
         <div className="confirmation-wrapper">
-          <div className="c-title">{title} This action is irreversible.</div>
+          <div className="c-title">{title}</div>
 
           {hasInput && (
             <TextInput
