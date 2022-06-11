@@ -359,7 +359,9 @@ const Classes = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setPage(value);
+                if (value !== classes.meta.current_page) {
+                  setPage(value);
+                }
               }}
               initialPage={classes.meta.current_page}
               total={classes.meta.last_page}

@@ -25,6 +25,7 @@ const Staff = () => {
     staffList,
     handleGetStaffList,
     loading,
+    setLoading,
     handleDeleteStaff,
     username,
   } = useStaff();
@@ -101,7 +102,10 @@ const Staff = () => {
                 value={searchInput}
                 onKeyUp={(e: any) => {
                   if (e.code === "Enter") {
-                    setSearch(searchInput);
+                    if (searchInput !== "") {
+                      setLoading(true);
+                      setSearch(searchInput);
+                    }
                   }
                 }}
                 rightSection={
@@ -111,8 +115,11 @@ const Staff = () => {
                       style={{ opacity: 0.5 }}
                       className="click"
                       onClick={() => {
+                        if (search !== "") {
+                          setLoading(true);
+                          setSearch("");
+                        }
                         setSearchInput("");
-                        setSearch("");
                       }}
                     />
                   )
@@ -126,7 +133,10 @@ const Staff = () => {
             <div className="s-right">
               <Button
                 onClick={() => {
-                  setSearch(searchInput);
+                  if (searchInput !== "") {
+                    setLoading(true);
+                    setSearch(searchInput);
+                  }
                 }}
               >
                 Search
@@ -177,7 +187,7 @@ const Staff = () => {
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
             {staffList && staffList.data && !loading ? (
               <>
-                <Table striped>
+                <Table striped verticalSpacing="md">
                   <thead>
                     <tr>
                       <th
@@ -343,7 +353,10 @@ const Staff = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setPage(value);
+                if (value !== staffList.meta.current_page) {
+                  setLoading(true);
+                  setPage(value);
+                }
               }}
               initialPage={staffList.meta.current_page}
               total={staffList.meta.last_page}

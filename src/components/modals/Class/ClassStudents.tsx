@@ -429,7 +429,11 @@ const ViewStudents = ({
           sx={{ maxWidth: 900 }}
           position="center"
           mt={25}
-          onChange={(value) => {}}
+          onChange={(value) => {
+            // if (value !== classStudents.meta.current_page) {
+            //   setPage(value);
+            // }
+          }}
           initialPage={classStudents.meta.current_page}
           total={classStudents.meta.last_page}
           color="green"
