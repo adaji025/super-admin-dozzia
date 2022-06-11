@@ -87,4 +87,8 @@ export const APIS = {
     GET_CONVERSATION: (id: string) => `${api}/conversations?complain_id=${id}`,
     POST_CONVERSATION: `${api}/conversations`,
   },
+  RECYCLE_BIN: {
+    LIST_SUSPENDED_STAFF: `${api}/recycle-bin/staff`,
+    RESTORE_STAFF: (id: string) => `${api}/recycle-bin/staff/${id}/restore`,
+  },
 };

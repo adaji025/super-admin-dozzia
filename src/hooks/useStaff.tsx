@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getStaffList, deleteStaff } from "../services/staff/staff";
+import {
+  getStaffList,
+  deleteStaff,
+  getSuspendedStaff,
+  restoreSuspendedStaff,
+} from "../services/staff/staff";
 import { setStaff } from "../redux/data/data.actions";
 import { showLoader } from "../redux/utility/utility.actions";
 import useNotification from "./useNotification";
@@ -25,7 +30,9 @@ const useStaff = () => {
     role: string,
     all?: boolean
   ) => {
-    setLoading(true);
+    if (!staffList) {
+      setLoading(true);
+    }
 
     getStaffList({ page, perPage, query, role })
       .then((res) => {
@@ -61,13 +68,53 @@ const useStaff = () => {
       });
   };
 
+  const handleGetSuspendedStaff = () => {
+    return new Promise((resolve) => {
+      setLoading(true);
+
+      getSuspendedStaff()
+        .then((res) => {
+          resolve(res);
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
+
+  const handleRestoreStaff = (id: string) => {
+    return new Promise((resolve) => {
+      dispatch(showLoader(true));
+
+      restoreSuspendedStaff(id)
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: `${"Staff account restored."} 🏫`,
+            color: "green",
+          });
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          dispatch(showLoader(false));
+        });
+    });
+  };
+
   return {
     allStaff,
     staffList,
     handleGetStaffList,
+    setLoading,
     loading,
     handleDeleteStaff,
     username,
+    handleGetSuspendedStaff,
+    handleRestoreStaff,
   };
 };
 

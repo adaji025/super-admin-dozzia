@@ -36,3 +36,17 @@ export const deleteStaff = (id: string) => {
     return res.data;
   });
 };
+
+export const getSuspendedStaff = () => {
+  return AxoisApi.get(`${APIS.RECYCLE_BIN.LIST_SUSPENDED_STAFF}`).then(
+    (res) => {
+      return res.data;
+    }
+  );
+};
+
+export const restoreSuspendedStaff = (id: string) => {
+  return AxoisApi.get(`${APIS.RECYCLE_BIN.RESTORE_STAFF(id)}`).then((res) => {
+    return res.data;
+  });
+};
