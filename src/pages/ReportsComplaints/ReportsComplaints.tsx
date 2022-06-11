@@ -415,7 +415,7 @@ const Reports = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No report found.
+                      No {status} complaint found.
                     </Alert>
                   </Group>
                 )}

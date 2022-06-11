@@ -5,6 +5,7 @@ const useStyles = createStyles((theme) => ({
   body: {
     paddingLeft: 54,
     paddingTop: theme.spacing.xs,
+    fontWeight: 500,
   },
 }));
 
@@ -23,11 +24,14 @@ export function Comment({ postedAt, body, author }: CommentProps) {
   return (
     <div>
       <Group>
-        <Avatar radius="xl">
+        <Avatar radius="xl" color="dark">
           {`${author?.first_name[0]}${author?.last_name[0]}`}
         </Avatar>
         <div>
-          <Text size="sm">{`${author?.title ?? ""} ${author?.first_name} ${
+          <Text
+            size="sm"
+            style={{ opacity: "0.7", fontSize: "13px", fontWeight: "500" }}
+          >{`${author?.title ?? ""} ${author?.first_name} ${
             author?.last_name
           }`}</Text>
           <Text size="xs" color="dimmed">

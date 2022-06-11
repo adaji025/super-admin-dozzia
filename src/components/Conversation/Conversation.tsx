@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
   LoadingOverlay,
   Textarea,
@@ -25,6 +25,7 @@ const Conversation = ({
   const [conversation, setConversation] = useState<any>(null);
   const [textInput, setTextInput] = useState<string>("");
   const { dark } = useTheme();
+  const viewport = useRef<any>();
 
   useEffect(() => {
     getConversationList();
@@ -34,13 +35,19 @@ const Conversation = ({
   const getConversationList = () => {
     handleGetConversation().then((res) => {
       setConversation(res);
+      setTextInput("");
+      setTimeout(() => {
+        viewport.current.scrollTo({
+          top: viewport.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }, 500);
       setLoading(false);
     });
   };
 
   const sendReply = () => {
     handlePostConversation(textInput).then(() => {
-      setTextInput("");
       getConversationList();
     });
   };
@@ -49,7 +56,7 @@ const Conversation = ({
     <div className="conversation-container">
       <LoadingOverlay visible={loading} />
 
-      <ScrollArea className="c-main">
+      <ScrollArea className="c-main" viewportRef={viewport}>
         {conversation &&
           conversation?.data.map(
             (item: {
@@ -86,6 +93,11 @@ const Conversation = ({
           }}
           variant="filled"
           disabled={disable}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              sendReply();
+            }
+          }}
         />
         <Group position="right" mt="lg">
           <Button variant="default" onClick={onCancel}>
