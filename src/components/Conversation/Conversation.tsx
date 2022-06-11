@@ -84,6 +84,7 @@ const Conversation = ({
           onChange={(e: any) => {
             setTextInput(e.target.value);
           }}
+          variant="filled"
           disabled={disable}
         />
         <Group position="right" mt="lg">
