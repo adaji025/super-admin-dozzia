@@ -14,9 +14,11 @@ import "./conversation.scss";
 const Conversation = ({
   id,
   onCancel,
+  disable,
 }: {
   id: string;
   onCancel: () => void;
+  disable: boolean;
 }) => {
   const { handleGetConversation, loading, setLoading, handlePostConversation } =
     useConversation(id);
@@ -82,6 +84,7 @@ const Conversation = ({
           onChange={(e: any) => {
             setTextInput(e.target.value);
           }}
+          disabled={disable}
         />
         <Group position="right" mt="lg">
           <Button variant="default" onClick={onCancel}>

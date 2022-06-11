@@ -26,7 +26,11 @@ const ViewReport = ({
           <Details closeModal={closeModal} report={report} />
         </Tabs.Tab>
         <Tabs.Tab icon={<Messages size={14} />} label="Conversation" tabKey="2">
-          <Conversation id={report?.id} onCancel={closeModal} />
+          <Conversation
+            id={report?.id}
+            onCancel={closeModal}
+            disable={report?.status === "resolved"}
+          />
         </Tabs.Tab>
       </Tabs>
     </div>
