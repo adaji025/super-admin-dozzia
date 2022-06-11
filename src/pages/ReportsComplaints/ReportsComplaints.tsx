@@ -12,9 +12,17 @@ import {
   Divider,
   Modal,
   Text,
+  Button,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { ClipboardList, Checks, BrandHipchat, X } from "tabler-icons-react";
+import {
+  ClipboardList,
+  Checks,
+  BrandHipchat,
+  X,
+  Filter,
+  FilterOff,
+} from "tabler-icons-react";
 import useReports from "../../hooks/useReports";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import ViewReport from "../../components/modals/Reports/ViewReport";
@@ -24,7 +32,9 @@ const Reports = () => {
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [confirmResolve, setConfirmResolve] = useState<boolean>(false);
   const [reportId, setReportId] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
   const [report, setReport] = useState<any>(null);
+
   const [statusChangeText, setStatusChangeText] = useState<{
     from: string;
     to: string;
@@ -36,10 +46,10 @@ const Reports = () => {
   const [perPage] = useState<number>(10);
 
   useEffect(() => {
-    handleGetReports(page, perPage);
+    handleGetReports(page, perPage, status);
 
     //eslint-disable-next-line
-  }, [page]);
+  }, [page, status]);
 
   return (
     <Fragment>
@@ -86,7 +96,9 @@ const Reports = () => {
         confirmText="Status Change"
         submit={() => {
           setConfirmResolve(false);
-          handleUpdateStatus(reportId, statusChangeText.to);
+          handleUpdateStatus(reportId, statusChangeText.to).then(() => {
+            handleGetReports(page, perPage, status);
+          });
         }}
         hasInput={false}
       />
@@ -101,7 +113,63 @@ const Reports = () => {
           <div className="d-p-header">
             <div className="d-p-h-left">Reports and Complaints</div>
 
-            <div className="d-p-h-right"></div>
+            <div className="d-p-h-right">
+              <Menu
+                size="sm"
+                control={
+                  <Button leftIcon={<Filter size={14} />}>
+                    <span style={{ textTransform: "capitalize" }}>
+                      {status === "" ? "Status" : `${status} only`}
+                    </span>
+                  </Button>
+                }
+              >
+                <Menu.Label>Filter Menu</Menu.Label>
+
+                <Menu.Item
+                  onClick={() => {
+                    setLoading(true);
+                    setStatus("resolved");
+                  }}
+                  disabled={status === "resolved"}
+                >
+                  Resolved
+                </Menu.Item>
+
+                <Menu.Item
+                  onClick={() => {
+                    setLoading(true);
+                    setStatus("in-progress");
+                  }}
+                  disabled={status === "in-progress"}
+                >
+                  In-progress
+                </Menu.Item>
+
+                <Menu.Item
+                  onClick={() => {
+                    setLoading(true);
+                    setStatus("unresolved");
+                  }}
+                  disabled={status === "unresolved"}
+                >
+                  Unresolved
+                </Menu.Item>
+
+                <Divider />
+
+                <Menu.Item
+                  onClick={() => {
+                    setLoading(true);
+                    setStatus("");
+                  }}
+                  color="red"
+                  icon={<FilterOff size={14} />}
+                >
+                  Clear filter
+                </Menu.Item>
+              </Menu>
+            </div>
           </div>
 
           <Box
@@ -237,7 +305,9 @@ const Reports = () => {
                                 borderBottom: `1px solid #0000`,
                               }}
                             >
-                              {`${item?.parent?.title} ${item?.parent?.first_name} ${item?.parent?.last_name}`}
+                              {`${item?.parent?.title ?? ""} ${
+                                item?.parent?.first_name
+                              } ${item?.parent?.last_name}`}
                             </td>
 
                             <td

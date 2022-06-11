@@ -14,12 +14,12 @@ const useReports = () => {
     return state.data.reports;
   });
 
-  const handleGetReports = (page: number, perPage: number) => {
+  const handleGetReports = (page: number, perPage: number, status: string) => {
     if (!reports) {
       setLoading(true);
     }
 
-    getReports(page, perPage)
+    getReports(page, perPage, status)
       .then((res) => {
         dispatch(setReports(res));
       })
@@ -30,23 +30,25 @@ const useReports = () => {
   };
 
   const handleUpdateStatus = (id: string, status: string) => {
-    dispatch(showLoader(true));
+    return new Promise((resolve) => {
+      dispatch(showLoader(true));
 
-    updateStatus(id, { status })
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: `${"Status updated."}`,
-          color: "green",
+      updateStatus(id, { status })
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: `${"Status updated."}`,
+            color: "green",
+          });
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          dispatch(showLoader(false));
         });
-        handleGetReports(1, 10);
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        dispatch(showLoader(false));
-      });
+    });
   };
 
   return {

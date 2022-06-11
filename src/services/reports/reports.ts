@@ -1,9 +1,9 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
 
-export const getReports = (page: number, perPage: number) => {
+export const getReports = (page: number, perPage: number, status: string) => {
   return AxoisApi.get(
-    `${APIS.REPORTS.GET_REPORTS}?per_page=${perPage}&page=${page}`
+    `${APIS.REPORTS.GET_REPORTS}?per_page=${perPage}&page=${page}&status=${status}`
   ).then((res) => {
     return res.data;
   });
