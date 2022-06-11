@@ -1,0 +1,10 @@
+.conversation-container {
+  position: relative;
+
+  .c-input {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}

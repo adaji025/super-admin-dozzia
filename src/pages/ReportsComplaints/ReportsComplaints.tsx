@@ -196,6 +196,7 @@ const Reports = () => {
                             };
                             parent: {
                               id: string;
+                              title: string;
                               first_name: string;
                               last_name: string;
                             };
@@ -236,7 +237,7 @@ const Reports = () => {
                                 borderBottom: `1px solid #0000`,
                               }}
                             >
-                              {`${item?.parent?.first_name} ${item?.parent?.last_name}`}
+                              {`${item?.parent?.title} ${item?.parent?.first_name} ${item?.parent?.last_name}`}
                             </td>
 
                             <td
@@ -273,12 +274,7 @@ const Reports = () => {
                               }}
                               className="table-last"
                             >
-                              <Menu
-                                position="bottom"
-                                gutter={15}
-                                withArrow
-                                size="md"
-                              >
+                              <Menu position="left" withArrow size="md">
                                 <Menu.Label>Menu</Menu.Label>
                                 <Menu.Item
                                   icon={<ClipboardList size={14} />}

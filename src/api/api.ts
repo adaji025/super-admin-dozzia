@@ -83,4 +83,8 @@ export const APIS = {
     GET_REPORTS: `${api}/complains`,
     UPDATE_STATUS: (id: string) => `${api}/complains/${id}`,
   },
+  CONVERSATION: {
+    GET_CONVERSATION: (id: string) => `${api}/conversations?complain_id=${id}`,
+    POST_CONVERSATION: `${api}/conversations`,
+  },
 };

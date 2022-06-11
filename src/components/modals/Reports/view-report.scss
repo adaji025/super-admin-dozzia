@@ -37,6 +37,14 @@
   }
 
   .conversation-container {
-    min-height: 410px;
+    min-height: calc(100vh - 250px);
+
+    .c-main {
+      height: calc(100vh - 430px);
+    }
+
+    .comment-wrapper {
+      padding: 7px 0;
+    }
   }
 }

@@ -26,7 +26,7 @@ const ViewReport = ({
           <Details closeModal={closeModal} report={report} />
         </Tabs.Tab>
         <Tabs.Tab icon={<Messages size={14} />} label="Conversation" tabKey="2">
-          <Conversation />
+          <Conversation id={report?.id} onCancel={closeModal} />
         </Tabs.Tab>
       </Tabs>
     </div>
@@ -36,13 +36,13 @@ const ViewReport = ({
 const Details = ({ closeModal, report }: any) => {
   const [status, setStatus] = useState<string>("");
   const { handleUpdateStatus } = useReports();
+  const { dark } = useTheme();
 
   useEffect(() => {
     setStatus(report?.status);
     //eslint-disable-next-line
   }, []);
 
-  const { dark } = useTheme();
   return (
     <div className="view-details">
       <div
