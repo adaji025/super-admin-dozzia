@@ -168,7 +168,7 @@ const Classes = () => {
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
             {classes && classes.data && !loading ? (
               <>
-                <Table striped>
+                <Table striped verticalSpacing="md">
                   <thead>
                     <tr>
                       <th

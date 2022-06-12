@@ -163,7 +163,7 @@ const Attendance = () => {
           <Box sx={{ maxWidth: 800, minHeight: 173 }} className="d-p-main">
             {attendance && attendance.data && !loading ? (
               <>
-                <Table striped>
+                <Table striped verticalSpacing="md">
                   <thead>
                     <tr>
                       <th

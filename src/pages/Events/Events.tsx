@@ -141,7 +141,7 @@ const Events = () => {
           <Box sx={{ maxWidth: 1000, minHeight: 173 }} className="d-p-main">
             {events && events.data && !loading ? (
               <>
-                <Table striped verticalSpacing="sm">
+                <Table striped verticalSpacing="md">
                   <thead>
                     <tr>
                       {/* <th
