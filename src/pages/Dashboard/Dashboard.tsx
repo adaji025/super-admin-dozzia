@@ -41,7 +41,7 @@ const Dashboard = () => {
                 className="card-value"
                 style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
-                {stats?.total_student}
+                {stats?.total_student ?? "..."}
               </div>
             </div>
           </div>
@@ -53,7 +53,7 @@ const Dashboard = () => {
                 className="card-value"
                 style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
-                {stats?.total_staff}
+                {stats?.total_staff ?? "..."}
               </div>
             </div>
           </div>
@@ -65,7 +65,7 @@ const Dashboard = () => {
                 className="card-value"
                 style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
-                {stats?.total_classroom}
+                {stats?.total_classroom ?? "..."}
               </div>
             </div>
           </div>
@@ -77,7 +77,7 @@ const Dashboard = () => {
                 className="card-value"
                 style={{ background: dark ? "#2e2e2e" : "#e5e5e5fc" }}
               >
-                {stats && "0"}
+                {stats ? "0" : "..."}
               </div>
             </div>
           </div>

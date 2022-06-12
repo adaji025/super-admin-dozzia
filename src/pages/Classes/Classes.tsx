@@ -253,7 +253,9 @@ const Classes = () => {
                               color: dark ? "#b3b7cb" : "#898989",
                             }}
                           >
-                            {`${item.classroom_teacher?.title} ${item.classroom_teacher?.first_name} ${item?.classroom_teacher?.last_name}`}
+                            {`${item.classroom_teacher?.title ?? ""} ${
+                              item.classroom_teacher?.first_name ?? ""
+                            } ${item?.classroom_teacher?.last_name ?? ""}`}
                           </td>
                           <td
                             className="large-only"
@@ -314,8 +316,10 @@ const Classes = () => {
                                       item.classroom_level.toString(),
                                     classroom_description:
                                       item.classroom_description,
-                                    classroom_teacher:
-                                      item.classroom_teacher.staff_id,
+                                    classroom_teacher: item.classroom_teacher
+                                      ?.staff_id
+                                      ? item.classroom_teacher?.staff_id
+                                      : "",
                                   });
                                   setAddClassModal(true);
                                 }}
