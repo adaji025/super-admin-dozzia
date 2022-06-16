@@ -61,7 +61,7 @@ const useEvent = () => {
 
   const handleGetEvents = (page: number, perPage: number) => {
     if (!events) {
-      dispatch(showLoader(true));
+      setLoading(true);
     }
 
     getEvents({ page, perPage })
