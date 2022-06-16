@@ -309,7 +309,6 @@ const Attendance = () => {
               }}
               initialPage={attendance.meta.current_page}
               total={attendance.meta.last_page}
-              color="green"
             />
           )}
         </div>

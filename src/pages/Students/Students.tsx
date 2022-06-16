@@ -284,7 +284,6 @@ const Students = () => {
               }}
               initialPage={students.meta.current_page}
               total={students.meta.last_page}
-              color="green"
             />
           )}
         </div>

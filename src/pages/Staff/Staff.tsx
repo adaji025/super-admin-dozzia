@@ -360,7 +360,6 @@ const Staff = () => {
               }}
               initialPage={staffList.meta.current_page}
               total={staffList.meta.last_page}
-              color="green"
             />
           )}
         </div>

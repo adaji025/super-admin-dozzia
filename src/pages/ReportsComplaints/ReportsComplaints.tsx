@@ -444,7 +444,6 @@ const Reports = () => {
               }}
               initialPage={reports.meta.current_page}
               total={reports.meta.last_page}
-              color="green"
             />
           )}
         </div>

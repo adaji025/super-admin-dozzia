@@ -282,7 +282,6 @@ const Events = () => {
               }}
               initialPage={broadcasts.meta.current_page}
               total={broadcasts.meta.last_page}
-              color="green"
             />
           )}
         </div>

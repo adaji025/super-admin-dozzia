@@ -436,7 +436,6 @@ const ViewStudents = ({
           }}
           initialPage={classStudents.meta.current_page}
           total={classStudents.meta.last_page}
-          color="green"
         />
       )}
       <Divider mt="md" variant="dashed" />

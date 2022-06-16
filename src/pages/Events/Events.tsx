@@ -349,7 +349,6 @@ const Events = () => {
               }}
               initialPage={events.meta.current_page}
               total={events.meta.last_page}
-              color="green"
             />
           )}
         </div>

@@ -369,7 +369,6 @@ const Classes = () => {
               }}
               initialPage={classes.meta.current_page}
               total={classes.meta.last_page}
-              color="green"
             />
           )}
         </div>

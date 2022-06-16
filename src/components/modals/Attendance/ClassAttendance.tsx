@@ -273,7 +273,6 @@ const ClassAttendance = ({
           }}
           initialPage={classAttendance.meta.current_page}
           total={classAttendance.meta.last_page}
-          color="green"
         />
       )}
 

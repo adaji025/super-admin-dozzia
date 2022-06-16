@@ -357,7 +357,6 @@ const Subjects = () => {
               }}
               initialPage={subjects.meta.current_page}
               total={subjects.meta.last_page}
-              color="green"
             />
           )}
         </div>
