@@ -49,7 +49,7 @@ const Events = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Braodcast</title>
+        <title>Broadcast</title>
         <meta name="description" content="" />
         <meta property="og:title" content="Braodcast" />
         <meta property="og:description" content="" />
@@ -113,7 +113,7 @@ const Events = () => {
                   setCreateBroadcastModal(true);
                 }}
               >
-                Create Braodcast
+                Create Broadcast
               </Button>
             </div>
           </div>
