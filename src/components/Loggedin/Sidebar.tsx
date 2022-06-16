@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Text } from "@mantine/core";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -16,6 +16,10 @@ import {
   ChevronDown,
   X,
   Trash,
+  FilePencil,
+  Books,
+  ClipboardList,
+  Wall,
 } from "tabler-icons-react";
 import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 
@@ -27,15 +31,26 @@ interface SidebarProps {
 const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   const { dark } = useTheme();
   const [showChildren, setShowChildren] = useState<string>("");
+  const [routes, setRoutes] = useState<any>([]);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const schoolName = useSelector((state: any) => {
-    return state.user.userdata?.profile_details?.school_name;
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
   });
 
-  const routes = [
+  useEffect(() => {
+    if (userdata?.role?.name === "School Admin") {
+      setRoutes(adminRoutes);
+    } else if (userdata?.role?.name === "Teacher") {
+      setRoutes(teacherRoutes);
+    }
+
+    //eslint-disable-next-line
+  }, []);
+
+  const adminRoutes = [
     {
       icon: LayoutDashboard,
       name: "Dashboard",
@@ -111,6 +126,45 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
     },
   ];
 
+  const teacherRoutes = [
+    {
+      icon: LayoutDashboard,
+      name: "Dashboard",
+      route: "/dashboard",
+    },
+    {
+      icon: Wall,
+      name: "Classes",
+      route: "/classes",
+    },
+
+    {
+      icon: ClipboardList,
+      name: "Class Wall",
+      route: "/class-wall",
+    },
+    {
+      icon: Books,
+      name: "Subjects",
+      route: "/subjects",
+    },
+    {
+      icon: FilePencil,
+      name: "Attendance",
+      route: "/attendance",
+    },
+    {
+      icon: Settings,
+      name: "Settings",
+      route: "/settings",
+    },
+    {
+      icon: Trash,
+      name: "Recycle Bin",
+      route: "/recycle-bin",
+    },
+  ];
+
   return (
     <div
       className={`sidebar-container no-select ${
@@ -140,7 +194,9 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                 color: dark ? "white" : "black",
               }}
             >
-              {schoolName ? schoolName : ""}
+              {userdata?.profile_details?.school_name
+                ? userdata?.profile_details?.school_name
+                : ""}
             </Text>
           </div>
         </div>
@@ -151,7 +207,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             color: dark ? "white" : "black",
           }}
         >
-          {routes.map((item) => (
+          {routes.map((item: any) => (
             <Fragment key={item.name}>
               {item.children ? (
                 <>
@@ -206,7 +262,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                   </div>
 
                   {showChildren === item.name &&
-                    item.children.map((child) => (
+                    item.children.map((child: any) => (
                       <NavLink
                         key={child.name}
                         className={({ isActive }) =>
