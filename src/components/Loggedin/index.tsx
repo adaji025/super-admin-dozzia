@@ -19,7 +19,15 @@ import Broadcast from "../../pages/Broadcast/Broadcast";
 import Attendance from "../../pages/Attendance/Attendance";
 import ReportsComplaints from "../../pages/ReportsComplaints/ReportsComplaints";
 import RecycleBin from "../../pages/RecycleBin/RecycleBin";
+
 import ClassWall from "../../pages/ClassWall/ClassWall";
+import AcdemicLog from "../../pages/ClassWall/AcdemicLog";
+import BehaviouralLog from "../../pages/ClassWall/BehaviouralLog";
+import TestExam from "../../pages/ClassWall/TestExam";
+import StudyResources from "../../pages/ClassWall/StudyResources";
+import ClassEvents from "../../pages/ClassWall/ClassEvents";
+import Curriculum from "../../pages/ClassWall/Curriculum";
+
 import "./index.scss";
 
 const LoggedinContainer = () => {
@@ -61,6 +69,18 @@ const LoggedinContainer = () => {
             <Route path="/reports" element={<ReportsComplaints />} />
             <Route path="/recycle-bin" element={<RecycleBin />} />
             <Route path="/class-wall" element={<ClassWall />} />
+            <Route path="/class-wall/academic-log" element={<AcdemicLog />} />
+            <Route
+              path="/class-wall/behavioral-log"
+              element={<BehaviouralLog />}
+            />
+            <Route path="/class-wall/test-exam" element={<TestExam />} />
+            <Route
+              path="/class-wall/study-resources"
+              element={<StudyResources />}
+            />
+            <Route path="/class-wall/class-events" element={<ClassEvents />} />
+            <Route path="/class-wall/curriculum" element={<Curriculum />} />
           </Routes>
         </div>
       </div>
