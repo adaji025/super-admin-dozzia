@@ -1,0 +1,36 @@
+.class-wall-main {
+  padding: 30px;
+  margin-top: 30px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  @media only screen and (max-width: 576px) {
+    padding: 10px;
+  }
+
+  .c-card {
+    width: calc(33% - 40px);
+    padding: 10px 20px;
+    min-width: 300px;
+    @media only screen and (max-width: 576px) {
+      padding: 10px;
+      min-width: none;
+      width: 100%;
+    }
+
+    .c-c-inner {
+      font-weight: 500;
+      font-size: 28px;
+      padding: 70px 10px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      text-align: center;
+      @media only screen and (max-width: 576px) {
+        margin-bottom: 5px;
+        font-size: 24px;
+        padding: 50px 10px;
+      }
+    }
+  }
+}
