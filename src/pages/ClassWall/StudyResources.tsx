@@ -6,7 +6,6 @@ import {
   Button,
   Modal,
   Text,
-  Input,
   Menu,
   Divider,
   Pagination,
@@ -28,6 +27,7 @@ import useStudyResources from "../../hooks/useStudyResources";
 import useSubject from "../../hooks/useSubject";
 import { useSelector } from "react-redux";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import ViewStudyResource from "../../components/modals/ClassWall/ViewStudyResource";
 
 const StudyResources = () => {
   const { dark } = useTheme();
@@ -37,6 +37,8 @@ const StudyResources = () => {
   const [activeSubjectId, setActiveSubjectId] = useState<string>("");
   const [activeSubjectName, setActiveSubjectName] = useState<string>("");
   const [addResourceModal, setAddResourceModal] = useState<boolean>(false);
+  const [viewStudyResourceModal, setViewStudyResourceModal] =
+    useState<boolean>(false);
   const {
     handlePostStudyResource,
     setLoading,
@@ -53,6 +55,7 @@ const StudyResources = () => {
   const [confirmDeleteResource, setConfirmDeleteresource] =
     useState<boolean>(false);
   const [resourceId, setresourceId] = useState<string>("");
+  const [resource, setResource] = useState<any>(null);
 
   useEffect(() => {
     getSubjectList(1, 300, true);
@@ -125,6 +128,29 @@ const StudyResources = () => {
         hasInput
       />
 
+      <Modal
+        opened={viewStudyResourceModal}
+        onClose={() => {
+          setViewStudyResourceModal(false);
+          setTimeout(() => {
+            setResource(null);
+          }, 500);
+        }}
+        title={<Text weight={600}>View Resource</Text>}
+        size="xl"
+      >
+        <ViewStudyResource
+          closeModal={() => {
+            setViewStudyResourceModal(false);
+            setTimeout(() => {
+              setResource(null);
+            }, 500);
+          }}
+          resource={resource}
+          modalActive={viewStudyResourceModal}
+        />
+      </Modal>
+
       <div
         className="data-page-container study-resources"
         style={{
@@ -180,6 +206,7 @@ const StudyResources = () => {
                 >
                   All Subjects
                 </Menu.Item>
+
                 {allSubjects.map(
                   (item: { subject_id: string; subject_name: string }) => (
                     <Menu.Item
@@ -234,150 +261,155 @@ const StudyResources = () => {
             </Group>
           )}
 
-          <Box
-            mt={40}
-            sx={{ maxWidth: 900, minHeight: 173 }}
-            className="d-p-main"
-          >
-            {studyResources && studyResources.data && !loading ? (
-              <>
-                <Table striped verticalSpacing="md">
-                  <thead>
-                    <tr>
-                      <th
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                        }}
-                        className="large-only"
-                      ></th>
-                      <th
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
-                        }}
-                      >
-                        Resource Name
-                      </th>
-                      <th
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
-                        }}
-                      >
-                        Subject
-                      </th>
+          {classWall?.activeClassId && (
+            <Box
+              mt={40}
+              sx={{ maxWidth: 900, minHeight: 173 }}
+              className="d-p-main"
+            >
+              {studyResources && studyResources.data && !loading ? (
+                <>
+                  <Table striped verticalSpacing="md">
+                    <thead>
+                      <tr>
+                        <th
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                          className="large-only"
+                        ></th>
+                        <th
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            color: dark ? "#b3b7cb" : "#898989",
+                          }}
+                        >
+                          Resource Name
+                        </th>
+                        <th
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            color: dark ? "#b3b7cb" : "#898989",
+                          }}
+                        >
+                          Subject
+                        </th>
 
-                      <th
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          width: "1px",
-                        }}
-                        className="table-last head large-only"
-                      ></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {studyResources?.data.map(
-                      (
-                        item: {
-                          id: string;
-                          title: string;
-                          subject: {
-                            subject_name: string;
-                          };
-                        },
-                        index: number
-                      ) => (
-                        <tr key={item.id}>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              color: dark ? "#b3b7cb" : "#898989",
-                            }}
-                            className="large-only"
-                          >
-                            {index + 1}
-                          </td>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              fontWeight: "600",
-                            }}
-                          >
-                            {item?.title}
-                          </td>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              color: dark ? "#b3b7cb" : "#898989",
-                            }}
-                          >
-                            {item?.subject?.subject_name}
-                          </td>
-
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              width: "20px",
-                            }}
-                            className="table-last"
-                          >
-                            <Menu
-                              position={deviceWidth < 576 ? "left" : "right"}
-                              gutter={15}
-                              withArrow
-                              size="md"
+                        <th
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            width: "1px",
+                          }}
+                          className="table-last head large-only"
+                        ></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {studyResources?.data.map(
+                        (
+                          item: {
+                            id: string;
+                            title: string;
+                            subject: {
+                              subject_name: string;
+                            };
+                          },
+                          index: number
+                        ) => (
+                          <tr key={item.id}>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                color: dark ? "#b3b7cb" : "#898989",
+                              }}
+                              className="large-only"
                             >
-                              <Menu.Label>Resource Menu</Menu.Label>
-                              <Menu.Item
-                                icon={<FileText size={14} />}
-                                onClick={() => {}}
+                              {index + 1}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                fontWeight: "600",
+                              }}
+                            >
+                              {item?.title}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                color: dark ? "#b3b7cb" : "#898989",
+                              }}
+                            >
+                              {item?.subject?.subject_name}
+                            </td>
+
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                width: "20px",
+                              }}
+                              className="table-last"
+                            >
+                              <Menu
+                                position={deviceWidth < 576 ? "left" : "right"}
+                                gutter={15}
+                                withArrow
+                                size="md"
                               >
-                                View Resource
-                              </Menu.Item>
+                                <Menu.Label>Resource Menu</Menu.Label>
+                                <Menu.Item
+                                  icon={<FileText size={14} />}
+                                  onClick={() => {
+                                    setViewStudyResourceModal(true);
+                                    setResource(item);
+                                  }}
+                                >
+                                  View Resource
+                                </Menu.Item>
 
-                              <Divider />
+                                <Divider />
 
-                              <Menu.Item
-                                color="red"
-                                icon={<Trash size={14} />}
-                                onClick={() => {
-                                  setConfirmDeleteresource(true);
-                                  setresourceId(item?.id);
-                                }}
-                              >
-                                Delete Resource
-                              </Menu.Item>
-                            </Menu>
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </Table>
+                                <Menu.Item
+                                  color="red"
+                                  icon={<Trash size={14} />}
+                                  onClick={() => {
+                                    setConfirmDeleteresource(true);
+                                    setresourceId(item?.id);
+                                  }}
+                                >
+                                  Delete Resource
+                                </Menu.Item>
+                              </Menu>
+                            </td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </Table>
 
-                {studyResources?.data.length === 0 && (
-                  <Group grow position="center" my={80}>
-                    <Alert
-                      title="Bummer!"
-                      color="red"
-                      style={{ maxWidth: "350px" }}
-                    >
-                      No study resource found.
-                    </Alert>
-                  </Group>
-                )}
-              </>
-            ) : (
-              <>
-                <Skeleton height={25} mt={30} radius="sm" />
-                <Skeleton height={25} mt={12} radius="sm" />
-                <Skeleton height={25} mt={12} radius="sm" />
-                <Skeleton height={25} mt={12} radius="sm" />
-                <Skeleton height={25} mt={12} radius="sm" />
-              </>
-            )}
-          </Box>
+                  {studyResources?.data.length === 0 && (
+                    <Group grow position="center" my={80}>
+                      <Alert
+                        title="Bummer!"
+                        color="red"
+                        style={{ maxWidth: "350px" }}
+                      >
+                        No study resource found.
+                      </Alert>
+                    </Group>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Skeleton height={25} mt={30} radius="sm" />
+                  <Skeleton height={25} mt={12} radius="sm" />
+                  <Skeleton height={25} mt={12} radius="sm" />
+                  <Skeleton height={25} mt={12} radius="sm" />
+                  <Skeleton height={25} mt={12} radius="sm" />
+                </>
+              )}
+            </Box>
+          )}
 
           {studyResources?.meta && studyResources?.data.length > 0 && (
             <Pagination

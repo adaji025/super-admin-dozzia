@@ -105,6 +105,7 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
           <div className="u-title">
             {edit ? edit?.image && "Broadcast Image" : "Add Image (optional)"}
           </div>
+
           {edit ? (
             edit?.image && (
               <img
