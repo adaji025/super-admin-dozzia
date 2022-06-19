@@ -51,7 +51,7 @@ const useStudyResources = () => {
       .then((res) => {
         showNotification({
           title: "Success",
-          message: "Resource posted successfully",
+          message: "Resource created successfully",
           color: "green",
         });
       })
@@ -63,11 +63,34 @@ const useStudyResources = () => {
       });
   };
 
+  const handleGetStudyResources = (
+    page: number,
+    perPage: number,
+    classId: string,
+    subjectId: string
+  ) => {
+    return new Promise((resolve) => {
+      setLoading(true);
+
+      getStudyResources(page, perPage, classId, subjectId)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
+
   return {
     setLoading,
     loading,
     handlePostStudyResource,
     handleUploadStudyResourceFile,
+    handleGetStudyResources,
   };
 };
 

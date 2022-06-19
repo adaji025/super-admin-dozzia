@@ -13,16 +13,36 @@
       justify-content: space-between;
       align-items: center;
 
+      &.jump-line {
+        @media only screen and (max-width: 768px) {
+          display: block;
+
+          .d-p-h-left {
+            margin-bottom: 13px;
+          }
+
+          .d-p-h-right {
+            justify-content: flex-end;
+          }
+        }
+      }
+
       .d-p-h-left {
-        font-size: 30px;
+        font-size: 25px;
         font-weight: 700;
         @media only screen and (max-width: 768px) {
-          font-size: 25px;
+          font-size: 20px;
         }
 
         .go-back {
           margin-right: 8px;
         }
+      }
+
+      .d-p-h-right {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
       }
     }
 
