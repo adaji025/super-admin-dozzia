@@ -16,6 +16,7 @@ const useSubject = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
+  const [allSubjects, setAllSubjects] = useState<any>([]);
   const subjects = useSelector((state: any) => {
     return state.data.subjects;
   });
@@ -48,15 +49,18 @@ const useSubject = () => {
       });
   };
 
-  const getSubjectList = (page: number, perPage: number) => {
+  const getSubjectList = (page: number, perPage: number, all?: boolean) => {
     if (subjects === null) {
       setLoading(true);
     }
 
     getSubjects({ page, perPage })
       .then((res) => {
-        setLoading(false);
-        dispatch(setSubjects(res));
+        if (all) {
+          setAllSubjects(res.data);
+        } else {
+          dispatch(setSubjects(res));
+        }
       })
       .catch(() => {})
       .finally(() => {
@@ -137,6 +141,7 @@ const useSubject = () => {
     handleUpdateSubject,
     handleAssignClassAndTeacher,
     handleGetSubjectClasses,
+    allSubjects,
   };
 };
 

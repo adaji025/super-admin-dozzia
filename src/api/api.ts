@@ -91,4 +91,13 @@ export const APIS = {
     LIST_SUSPENDED_STAFF: `${api}/recycle-bin/staff`,
     RESTORE_STAFF: (id: string) => `${api}/recycle-bin/staff/${id}/restore`,
   },
+  STUDY_RESOURCES: {
+    UPLOAD_STUDY_RESOURCE_FILE: `${api}/study-resource-files`,
+    GET_STUDY_RESOURCE_FILES: (id: string) =>
+      `${api}/study-resource-files?study_resource_id=${id}`,
+    DELETE_STUDY_RESOURCE_FILE: (id: string) =>
+      `${api}/study-resource-files/${id}`,
+    STUDY_RESOURCE: `${api}/study-resources`,
+    DELETE_STUDY_RESOURCE: (id: string) => `${api}/study-resources/${id}`,
+  },
 };

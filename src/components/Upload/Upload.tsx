@@ -9,6 +9,7 @@ interface UploadProps {
   accept: string[];
   extraClasses?: string;
   setFile: (value: any) => void;
+  acceptAll?: boolean;
 }
 
 const UploadComponent = ({
@@ -16,6 +17,7 @@ const UploadComponent = ({
   accept,
   extraClasses,
   setFile,
+  acceptAll,
 }: UploadProps) => {
   const uploadFile: any = useRef(null);
   const { dark } = useTheme();
@@ -24,7 +26,7 @@ const UploadComponent = ({
     let selectedFile = e.target.files[0];
 
     if (selectedFile) {
-      if (accept.includes(selectedFile.type)) {
+      if (accept.includes(selectedFile.type) || acceptAll) {
         setFile(selectedFile);
         uploadFile.current.value = null;
       } else {
