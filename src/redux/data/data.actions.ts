@@ -42,3 +42,8 @@ export const setReports = (reports: any) => ({
   type: "SET_REPORTS",
   payload: { reports },
 });
+
+export const setClassWall = (classWall: any) => ({
+  type: "SET_CLASS_WALL",
+  payload: { classWall },
+});

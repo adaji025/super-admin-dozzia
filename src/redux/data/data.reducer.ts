@@ -8,6 +8,10 @@ const INITIAL_STATE = {
   stats: null,
   broadcast: null,
   reports: null,
+  classWall: {
+    activeClassName: "",
+    activeClassId: "",
+  },
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -64,6 +68,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         reports: action.payload.reports,
+      };
+
+    case "SET_CLASS_WALL":
+      return {
+        ...state,
+        classWall: action.payload.classWall,
       };
 
     default:
