@@ -37,8 +37,10 @@ export const APIS = {
   },
   CLASS: {
     CREATE_CLASS: `${api}/classrooms`,
-    GET_CLASS_LIST: (page: number, perPage: number) =>
-      `${api}/classrooms?per_page=${perPage}&page=${page}`,
+    GET_CLASS_LIST: (page: number, perPage: number, staffId?: string) =>
+      `${api}/classrooms?per_page=${perPage}&page=${page}&staff_id=${
+        staffId ?? ""
+      }`,
     CLASS: (id: string) => `${api}/classrooms/${id}`,
     GET_CLASS_STUDENTS: (id: string) => `${api}/classrooms/${id}/students`,
     ADD_MULTIPLE_STUDENTS_TO_CLASS: (classId: string) =>

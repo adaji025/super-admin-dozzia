@@ -16,6 +16,7 @@ import { Trash } from "tabler-icons-react";
 import useStudyResources from "../../../hooks/useStudyResources";
 import Upload from "../../Upload/Upload";
 import { showNotification } from "@mantine/notifications";
+import { useSelector } from "react-redux";
 
 const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
   const { getClassList, allClasses } = useClass();
@@ -24,6 +25,9 @@ const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
   const [fileListIds, setFileListIds] = useState<Array<string>>([]);
   const { loading, handleUploadStudyResourceFile } = useStudyResources();
   const [file, setFile] = useState<any>(null);
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
+  });
 
   const form = useForm({
     initialValues: {
@@ -42,7 +46,11 @@ const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
 
   useEffect(() => {
     if (modalActive) {
-      getClassList(1, 300, true);
+      if (userdata?.role?.name === "Teacher") {
+        getClassList(1, 300, true, userdata?.user_id);
+      } else {
+        getClassList(1, 300, true);
+      }
       getSubjectList(1, 300, true);
     }
     //eslint-disable-next-line

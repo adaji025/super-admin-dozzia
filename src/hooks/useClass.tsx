@@ -69,12 +69,17 @@ const useClass = () => {
       });
   };
 
-  const getClassList = (page: number, perPage: number, all?: boolean) => {
+  const getClassList = (
+    page: number,
+    perPage: number,
+    all?: boolean,
+    staffId?: string
+  ) => {
     if (classes === null) {
       setLoading(true);
     }
 
-    getClasses({ page, perPage })
+    getClasses({ page, perPage, staffId })
       .then((res) => {
         if (all) {
           setAllClasses(res.data);

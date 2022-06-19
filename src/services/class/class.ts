@@ -12,9 +12,13 @@ export const addClass = (data: {
   });
 };
 
-export const getClasses = (data: { page: number; perPage: number }) => {
+export const getClasses = (data: {
+  page: number;
+  perPage: number;
+  staffId?: string;
+}) => {
   return AxoisApi.get(
-    `${APIS.CLASS.GET_CLASS_LIST(data.page, data.perPage)}`
+    `${APIS.CLASS.GET_CLASS_LIST(data.page, data.perPage, data.staffId)}`
   ).then((res) => {
     return res.data;
   });
