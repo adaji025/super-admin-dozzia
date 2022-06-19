@@ -110,7 +110,7 @@ const Attendance = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Attendance</div>
+            <div className="d-p-h-left no-select">Attendance</div>
 
             <div className="d-p-h-right">
               <Popover

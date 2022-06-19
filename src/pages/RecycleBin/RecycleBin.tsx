@@ -68,7 +68,7 @@ const RecycleBin = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Suspended Staff</div>
+            <div className="d-p-h-left no-select">Suspended Staff</div>
           </div>
 
           <Box

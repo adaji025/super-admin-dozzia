@@ -36,7 +36,7 @@ const ClassWall = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Class Wall</div>
+            <div className="d-p-h-left no-select">Class Wall</div>
           </div>
         </div>
 

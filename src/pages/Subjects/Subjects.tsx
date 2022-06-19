@@ -145,7 +145,7 @@ const Subjects = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Subjects</div>
+            <div className="d-p-h-left no-select">Subjects</div>
 
             <div className="d-p-h-right">
               <Button

@@ -105,7 +105,7 @@ const Events = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Broadcast</div>
+            <div className="d-p-h-left no-select">Broadcast</div>
 
             <div className="d-p-h-right">
               <Button

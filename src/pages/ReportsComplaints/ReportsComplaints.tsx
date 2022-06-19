@@ -111,7 +111,7 @@ const Reports = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Reports and Complaints</div>
+            <div className="d-p-h-left no-select">Reports and Complaints</div>
 
             <div className="d-p-h-right">
               <Menu

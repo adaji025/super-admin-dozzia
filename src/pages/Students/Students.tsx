@@ -84,7 +84,7 @@ const Students = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Students</div>
+            <div className="d-p-h-left no-select">Students</div>
 
             <div className="d-p-h-right">
               <Button component={Link} to="/add-student">

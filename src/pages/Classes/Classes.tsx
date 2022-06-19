@@ -130,7 +130,7 @@ const Classes = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Classes</div>
+            <div className="d-p-h-left no-select">Classes</div>
 
             <div className="d-p-h-right">
               <Button

@@ -103,7 +103,7 @@ const Events = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left">Events</div>
+            <div className="d-p-h-left no-select">Events</div>
 
             <div className="d-p-h-right">
               <Button
