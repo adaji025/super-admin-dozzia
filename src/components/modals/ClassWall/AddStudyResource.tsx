@@ -28,13 +28,17 @@ const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
   const userdata = useSelector((state: any) => {
     return state.user.userdata;
   });
+  const classWall = useSelector((state: any) => {
+    return state.data.classWall;
+  });
 
   const form = useForm({
     initialValues: {
       title: "",
       description: "",
       subject_id: "",
-      classroom_id: "",
+      classroom_id:
+        userdata?.role?.name === "Teacher" ? classWall?.activeClassId : "",
       external_link: "",
     },
 
@@ -160,6 +164,7 @@ const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
           label="Classroom"
           placeholder="Select classroom"
           variant="filled"
+          disabled={userdata?.role?.name === "Teacher"}
           data={allClasses.map(
             (item: { classroom_id: string; classroom_name: string }) => ({
               key: item?.classroom_id,
