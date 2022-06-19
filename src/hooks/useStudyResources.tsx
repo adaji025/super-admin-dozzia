@@ -16,6 +16,7 @@ const useStudyResources = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
+  const [trigger, setTrigger] = useState<number>(0);
 
   const handleUploadStudyResourceFile = (file: any) => {
     return new Promise((resolve) => {
@@ -54,6 +55,7 @@ const useStudyResources = () => {
           message: "Resource created successfully",
           color: "green",
         });
+        setTrigger(trigger + 1);
       })
       .catch((error) => {
         handleError(error);
@@ -107,6 +109,18 @@ const useStudyResources = () => {
     });
   };
 
+  const handleGetStudyResourceFiles = (id: string) => {
+    return new Promise((resolve) => {
+      getStudyResourceFiles(id)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        });
+    });
+  };
+
   return {
     setLoading,
     loading,
@@ -114,6 +128,8 @@ const useStudyResources = () => {
     handleUploadStudyResourceFile,
     handleGetStudyResources,
     handleDeleteStudyResource,
+    handleGetStudyResourceFiles,
+    trigger,
   };
 };
 

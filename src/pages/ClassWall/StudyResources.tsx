@@ -45,6 +45,7 @@ const StudyResources = () => {
     loading,
     handleGetStudyResources,
     handleDeleteStudyResource,
+    trigger,
   } = useStudyResources();
   const navigate = useNavigate();
   const { getSubjectList, allSubjects } = useSubject();
@@ -69,7 +70,7 @@ const StudyResources = () => {
     }
 
     //eslint-disable-next-line
-  }, [activeSubjectId, page]);
+  }, [activeSubjectId, page, trigger]);
 
   const getResources = () => {
     handleGetStudyResources(
