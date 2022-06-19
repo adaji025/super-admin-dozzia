@@ -16,11 +16,18 @@ import {
   Box,
   Table,
 } from "@mantine/core";
-import { CirclePlus, ArrowBackUp, ChevronDown } from "tabler-icons-react";
+import {
+  CirclePlus,
+  ArrowBackUp,
+  ChevronDown,
+  Trash,
+  FileText,
+} from "tabler-icons-react";
 import AddStudyResource from "../../components/modals/ClassWall/AddStudyResource";
 import useStudyResources from "../../hooks/useStudyResources";
 import useSubject from "../../hooks/useSubject";
 import { useSelector } from "react-redux";
+import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const StudyResources = () => {
   const { dark } = useTheme();
@@ -35,6 +42,7 @@ const StudyResources = () => {
     setLoading,
     loading,
     handleGetStudyResources,
+    handleDeleteStudyResource,
   } = useStudyResources();
   const navigate = useNavigate();
   const { getSubjectList, allSubjects } = useSubject();
@@ -42,6 +50,9 @@ const StudyResources = () => {
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
+  const [confirmDeleteResource, setConfirmDeleteresource] =
+    useState<boolean>(false);
+  const [resourceId, setresourceId] = useState<string>("");
 
   useEffect(() => {
     getSubjectList(1, 300, true);
@@ -51,20 +62,22 @@ const StudyResources = () => {
 
   useEffect(() => {
     if (classWall?.activeClassId) {
-      handleGetStudyResources(
-        page,
-        perPage,
-        classWall?.activeClassId,
-        activeSubjectId
-      ).then((res: any) => {
-        console.log(res);
-
-        setStudyResources(res);
-      });
+      getResources();
     }
 
     //eslint-disable-next-line
   }, [activeSubjectId, page]);
+
+  const getResources = () => {
+    handleGetStudyResources(
+      page,
+      perPage,
+      classWall?.activeClassId,
+      activeSubjectId
+    ).then((res: any) => {
+      setStudyResources(res);
+    });
+  };
 
   return (
     <Fragment>
@@ -95,6 +108,22 @@ const StudyResources = () => {
           modalActive={addResourceModal}
         />
       </Modal>
+
+      <Confirmation
+        isOpened={confirmDeleteResource}
+        closeModal={() => {
+          setConfirmDeleteresource(false);
+        }}
+        title="Are you sure you want to delete this study resource?"
+        confirmText="DELETE"
+        submit={() => {
+          setConfirmDeleteresource(false);
+          handleDeleteStudyResource(resourceId).then(() => {
+            getResources();
+          });
+        }}
+        hasInput
+      />
 
       <div
         className="data-page-container study-resources"
@@ -297,10 +326,28 @@ const StudyResources = () => {
                               position={deviceWidth < 576 ? "left" : "right"}
                               gutter={15}
                               withArrow
-                              size="sm"
+                              size="md"
                             >
                               <Menu.Label>Resource Menu</Menu.Label>
-                              <Menu.Item onClick={() => {}}>Students</Menu.Item>
+                              <Menu.Item
+                                icon={<FileText size={14} />}
+                                onClick={() => {}}
+                              >
+                                View Resource
+                              </Menu.Item>
+
+                              <Divider />
+
+                              <Menu.Item
+                                color="red"
+                                icon={<Trash size={14} />}
+                                onClick={() => {
+                                  setConfirmDeleteresource(true);
+                                  setresourceId(item?.id);
+                                }}
+                              >
+                                Delete Resource
+                              </Menu.Item>
                             </Menu>
                           </td>
                         </tr>

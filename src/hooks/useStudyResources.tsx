@@ -85,12 +85,35 @@ const useStudyResources = () => {
     });
   };
 
+  const handleDeleteStudyResource = (id: string) => {
+    return new Promise((resolve) => {
+      dispatch(showLoader(true));
+
+      deleteStudyResource(id)
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: `${"Resource deleted successfully."}`,
+            color: "green",
+          });
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          dispatch(showLoader(false));
+        });
+    });
+  };
+
   return {
     setLoading,
     loading,
     handlePostStudyResource,
     handleUploadStudyResourceFile,
     handleGetStudyResources,
+    handleDeleteStudyResource,
   };
 };
 
