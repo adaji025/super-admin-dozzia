@@ -17,7 +17,7 @@ import {
 } from "@mantine/core";
 import {
   CirclePlus,
-  ArrowBackUp,
+  ArrowLeft,
   ChevronDown,
   Trash,
   FileText,
@@ -167,7 +167,7 @@ const StudyResources = () => {
                   navigate("/class-wall");
                 }}
               >
-                <ArrowBackUp size={18} />
+                <ArrowLeft size={20} />
               </span>
               {classWall?.activeClassName && (
                 <span style={{ opacity: "0.4" }}>

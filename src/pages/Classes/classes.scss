@@ -36,6 +36,11 @@
 
         .go-back {
           margin-right: 8px;
+          @media only screen and (max-width: 768px) {
+            svg {
+              transform: translateY(3px);
+            }
+          }
         }
       }
 
