@@ -338,7 +338,6 @@ const StudyResources = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                             >
                               {item?.subject?.subject_name}

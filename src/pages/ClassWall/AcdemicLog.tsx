@@ -335,7 +335,6 @@ const AcdemicLog = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                             >
                               {item?.subject?.name}
@@ -344,7 +343,6 @@ const AcdemicLog = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                             >
                               {moment(item?.created_at).format("Do MMM, YYYY")}
@@ -353,7 +351,6 @@ const AcdemicLog = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                             >
                               {moment(item?.end_at).format("Do MMM, YYYY")}
