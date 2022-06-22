@@ -45,8 +45,17 @@ const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
     validate: {
       subject_id: (value) => (value === "" ? "Select resource subject" : null),
       classroom_id: (value) => (value === "" ? "Select resource class" : null),
+      external_link: (value) =>
+        !isValidURL(value) ? "Enter a valid URL" : null,
     },
   });
+
+  const isValidURL = (string: string) => {
+    var res = string.match(
+      /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
+    );
+    return res !== null;
+  };
 
   useEffect(() => {
     if (modalActive) {
