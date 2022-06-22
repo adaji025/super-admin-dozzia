@@ -102,4 +102,17 @@ export const APIS = {
     STUDY_RESOURCE: `${api}/study-resources`,
     DELETE_STUDY_RESOURCE: (id: string) => `${api}/study-resources/${id}`,
   },
+  ACADEMIC_LOG: {
+    CREATE_TASK: `${api}/tasks`,
+    LIST_TASKS: (
+      page: number,
+      perPage: number,
+      classroomId: string,
+      subjectId: string
+    ) =>
+      `${api}/tasks?classroom_id=${classroomId}&per_page=${perPage}&page=${page}&subject_id=${subjectId}`,
+    GET_TASK_RESPONSES: (page: number, perPage: number, taskId: string) =>
+      `${api}/tasks/${taskId}/response?per_page=${perPage}&page=${page}`,
+    GRADE_TASK_RESPONSE: `${api}/tasks/grading/response`,
+  },
 };
