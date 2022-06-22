@@ -219,8 +219,8 @@ const StudyResources = () => {
                       }}
                       disabled={activeSubjectId === item.subject_id}
                     >
-                      {item.subject_name.length > 18
-                        ? `${item.subject_name.substring(0, 18)}...`
+                      {item.subject_name.length > 21
+                        ? `${item.subject_name.substring(0, 21)}...`
                         : item.subject_name}
                     </Menu.Item>
                   )

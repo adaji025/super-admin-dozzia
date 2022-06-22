@@ -1,15 +1,7 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
 
-export const createTask = (data: {
-  title: string;
-  description: string;
-  subject_id: string;
-  classroom_id: string;
-  end_at: string;
-  document: any;
-  link: string;
-}) => {
+export const createTask = (data: any) => {
   return AxoisApi.post(`${APIS.ACADEMIC_LOG.CREATE_TASK}`, data).then((res) => {
     return res.data;
   });
