@@ -179,7 +179,7 @@ const StudyResources = () => {
 
             <div className="d-p-h-right">
               <Menu
-                size="sm"
+                size="md"
                 control={
                   <Button
                     size={deviceWidth < 768 ? "xs" : "sm"}
