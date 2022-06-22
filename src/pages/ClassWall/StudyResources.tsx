@@ -153,7 +153,7 @@ const StudyResources = () => {
       </Modal>
 
       <div
-        className="data-page-container study-resources"
+        className="data-page-container"
         style={{
           background: dark ? "#1a1b1e" : "#ffffff",
         }}

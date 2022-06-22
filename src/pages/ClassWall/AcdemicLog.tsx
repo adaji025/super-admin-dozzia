@@ -35,8 +35,7 @@ const AcdemicLog = () => {
   const [activeSubjectId, setActiveSubjectId] = useState<string>("");
   const [activeSubjectName, setActiveSubjectName] = useState<string>("");
   const [addTaskModal, setAddTaskModal] = useState<boolean>(false);
-  const [viewStudyResourceModal, setViewStudyResourceModal] =
-    useState<boolean>(false);
+  const [viewTaskModal, setViewTaskModal] = useState<boolean>(false);
   const { setLoading, loading, trigger, handleCreateTask, handleGetTasks } =
     useAcademicLog();
   const navigate = useNavigate();
@@ -45,8 +44,7 @@ const AcdemicLog = () => {
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
-
-  const [resource, setResource] = useState<any>(null);
+  const [task, setTask] = useState<any>(null);
 
   useEffect(() => {
     getSubjectList(1, 300, true);
@@ -70,7 +68,6 @@ const AcdemicLog = () => {
       activeSubjectId
     ).then((res: any) => {
       setAcademicLog(res);
-      console.log(res);
     });
   };
 
@@ -105,30 +102,32 @@ const AcdemicLog = () => {
       </Modal>
 
       <Modal
-        opened={viewStudyResourceModal}
+        opened={viewTaskModal}
         onClose={() => {
-          setViewStudyResourceModal(false);
+          setViewTaskModal(false);
           setTimeout(() => {
-            setResource(null);
+            setTask(null);
           }, 500);
         }}
-        title={<Text weight={600}>View Resource</Text>}
+        title={
+          <Text weight={600}>{task?.title ?? "Academic Task Details"}</Text>
+        }
         size="xl"
       >
         <ViewAcademicTask
           closeModal={() => {
-            setViewStudyResourceModal(false);
+            setViewTaskModal(false);
             setTimeout(() => {
-              setResource(null);
+              setTask(null);
             }, 500);
           }}
-          resource={resource}
-          modalActive={viewStudyResourceModal}
+          task={task}
+          modalActive={viewTaskModal}
         />
       </Modal>
 
       <div
-        className="data-page-container study-resources"
+        className="data-page-container"
         style={{
           background: dark ? "#1a1b1e" : "#ffffff",
         }}
@@ -377,11 +376,11 @@ const AcdemicLog = () => {
                                 <Menu.Item
                                   icon={<FileText size={14} />}
                                   onClick={() => {
-                                    setViewStudyResourceModal(true);
-                                    setResource(item);
+                                    setViewTaskModal(true);
+                                    setTask(item);
                                   }}
                                 >
-                                  View Resource
+                                  View Task
                                 </Menu.Item>
                               </Menu>
                             </td>
@@ -398,7 +397,7 @@ const AcdemicLog = () => {
                         color="red"
                         style={{ maxWidth: "350px" }}
                       >
-                        No study resource found.
+                        No task found.
                       </Alert>
                     </Group>
                   )}
