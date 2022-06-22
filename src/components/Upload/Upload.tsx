@@ -55,7 +55,7 @@ const UploadComponent = ({
       />
       <div
         className={`d-upload click no-select ${extraClasses}`}
-        style={{ background: dark ? "#34354A" : "#F1F3F5" }}
+        style={{ background: dark ? "#2C2E33" : "#F1F3F5" }}
         onClick={() => {
           uploadFile.current.click();
         }}
