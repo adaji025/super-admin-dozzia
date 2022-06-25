@@ -21,7 +21,7 @@ const useClass = () => {
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
-  const [classStudents, setClassStudents] = useState<any>([]);
+  const [classStudents, setClassStudents] = useState<any>({});
   const classes = useSelector((state: any) => {
     return state.data.classes;
   });
@@ -131,10 +131,14 @@ const useClass = () => {
       });
   };
 
-  const handleGetClassStudents = (id: string) => {
+  const handleGetClassStudents = (
+    id: string,
+    page: number,
+    perPage: number
+  ) => {
     setLoading(true);
 
-    getClassStudents(id)
+    getClassStudents(id, page, perPage)
       .then((res) => {
         setClassStudents(res);
       })

@@ -34,6 +34,8 @@ const ClassStudents = ({
   modalActive: boolean;
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+  const [perPage] = useState<number>(20);
   const {
     handleGetClassStudents,
     classStudents,
@@ -43,10 +45,10 @@ const ClassStudents = ({
 
   useEffect(() => {
     if (modalActive) {
-      handleGetClassStudents(classId);
+      handleGetClassStudents(classId, page, perPage);
     }
     //eslint-disable-next-line
-  }, []);
+  }, [page]);
 
   const onChange = (active: number, tabKey: string) => {
     setActiveTab(active);
@@ -56,7 +58,14 @@ const ClassStudents = ({
     <Tabs active={activeTab} onTabChange={onChange} variant="outline">
       <Tabs.Tab icon={<Users size={14} />} label="View Students" tabKey="View">
         <ViewStudents
-          {...{ classId, closeModal, modalActive, classStudents, loading }}
+          {...{
+            classId,
+            closeModal,
+            modalActive,
+            classStudents,
+            loading,
+            setPage,
+          }}
         />
       </Tabs.Tab>
       <Tabs.Tab
@@ -264,10 +273,12 @@ const ViewStudents = ({
   closeModal,
   classStudents,
   loading,
+  setPage,
 }: {
   closeModal: () => void;
   classStudents: any;
   loading: boolean;
+  setPage: (value: number) => void;
 }) => {
   const { dark } = useTheme();
   const deviceWidth = window.innerWidth;
@@ -430,9 +441,9 @@ const ViewStudents = ({
           position="center"
           mt={25}
           onChange={(value) => {
-            // if (value !== classStudents.meta.current_page) {
-            //   setPage(value);
-            // }
+            if (value !== classStudents.meta.current_page) {
+              setPage(value);
+            }
           }}
           initialPage={classStudents.meta.current_page}
           total={classStudents.meta.last_page}

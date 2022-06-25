@@ -42,7 +42,8 @@ export const APIS = {
         staffId ?? ""
       }`,
     CLASS: (id: string) => `${api}/classrooms/${id}`,
-    GET_CLASS_STUDENTS: (id: string) => `${api}/classrooms/${id}/students`,
+    GET_CLASS_STUDENTS: (id: string, page: number, perPage: number) =>
+      `${api}/classrooms/${id}/students?per_page=${perPage}&page=${page}`,
     ADD_MULTIPLE_STUDENTS_TO_CLASS: (classId: string) =>
       `${api}/classrooms/${classId}/students`,
   },
