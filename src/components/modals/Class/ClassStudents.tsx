@@ -286,7 +286,7 @@ const ViewStudents = ({
   return (
     <Fragment>
       <Box sx={{ maxWidth: 900, minHeight: 173 }} className="list-modal">
-        {classStudents.data && !loading ? (
+        {classStudents?.data && !loading ? (
           <>
             <Table striped>
               <thead>

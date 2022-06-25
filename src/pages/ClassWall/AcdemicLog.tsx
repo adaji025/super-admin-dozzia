@@ -79,7 +79,7 @@ const AcdemicLog = () => {
         <meta name="description" content="" />
         <meta
           property="og:title"
-          content={`${classWall?.activeClassName}Acdemic Log`}
+          content={`${classWall?.activeClassName} Acdemic Log`}
         />
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
