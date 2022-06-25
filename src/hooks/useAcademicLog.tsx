@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import {
   createTask,
   getTaskResponses,
-  gradeTaskResponse,
+  // gradeTaskResponse,
   getTasks,
 } from "../services/academicLog/academicLog";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -77,27 +77,26 @@ const useAcademicLog = () => {
     });
   };
 
-  // const handleDeleteStudyResource = (id: string) => {
-  //   return new Promise((resolve) => {
-  //     dispatch(showLoader(true));
+  const handleGetTaskResponses = (
+    page: number,
+    perPage: number,
+    taskId: string
+  ) => {
+    return new Promise((resolve) => {
+      setLoading(true);
 
-  //     deleteStudyResource(id)
-  //       .then((res) => {
-  //         showNotification({
-  //           title: "Success",
-  //           message: `${"Resource deleted successfully."}`,
-  //           color: "green",
-  //         });
-  //         resolve(res);
-  //       })
-  //       .catch((error) => {
-  //         handleError(error);
-  //       })
-  //       .finally(() => {
-  //         dispatch(showLoader(false));
-  //       });
-  //   });
-  // };
+      getTaskResponses(page, perPage, taskId)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
 
   // const handleGetStudyResourceFiles = (id: string) => {
   //   return new Promise((resolve) => {
@@ -122,6 +121,7 @@ const useAcademicLog = () => {
     handleCreateTask,
     trigger,
     handleGetTasks,
+    handleGetTaskResponses,
   };
 };
 

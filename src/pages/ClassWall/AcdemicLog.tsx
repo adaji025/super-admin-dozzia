@@ -13,6 +13,7 @@ import {
   Group,
   Box,
   Table,
+  ScrollArea,
 } from "@mantine/core";
 import {
   CirclePlus,
@@ -243,8 +244,8 @@ const AcdemicLog = () => {
               className="d-p-main"
             >
               {academicLog && academicLog.data && !loading ? (
-                <>
-                  <Table striped verticalSpacing="md">
+                <ScrollArea>
+                  <Table striped verticalSpacing="md" sx={{ minWidth: 900 }}>
                     <thead>
                       <tr>
                         <th
@@ -398,7 +399,7 @@ const AcdemicLog = () => {
                       </Alert>
                     </Group>
                   )}
-                </>
+                </ScrollArea>
               ) : (
                 <>
                   <Skeleton height={25} mt={30} radius="sm" />

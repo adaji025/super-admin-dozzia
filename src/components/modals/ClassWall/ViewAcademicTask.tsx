@@ -7,17 +7,7 @@ import useAcademicLog from "../../../hooks/useAcademicLog";
 import moment from "moment";
 
 const ViewAcademicTask = ({ closeModal, task, modalActive }: any) => {
-  const { loading } = useAcademicLog();
   const [activeTab, setActiveTab] = useState<number>(0);
-
-  useEffect(() => {
-    // if (modalActive) {
-    //   handleGetStudyResourceFiles(task?.id).then((res: any) => {
-    //     setResourceFiles(res?.data);
-    //   });
-    // }
-    //eslint-disable-next-line
-  }, []);
 
   const onChange = (active: number, tabKey: string) => {
     setActiveTab(active);
@@ -25,8 +15,6 @@ const ViewAcademicTask = ({ closeModal, task, modalActive }: any) => {
 
   return (
     <div className="r32">
-      <LoadingOverlay visible={loading} />
-
       <Tabs active={activeTab} onTabChange={onChange} variant="outline">
         <Tabs.Tab
           icon={<InfoCircle size={14} />}
@@ -36,14 +24,18 @@ const ViewAcademicTask = ({ closeModal, task, modalActive }: any) => {
           <TaskDetails closeModal={closeModal} task={task} />
         </Tabs.Tab>
         <Tabs.Tab icon={<Messages size={14} />} label="Responses" tabKey="2">
-          hello
+          <TaskResponses
+            closeModal={closeModal}
+            modalActive={modalActive}
+            task={task}
+          />
         </Tabs.Tab>
       </Tabs>
     </div>
   );
 };
 
-const TaskDetails = ({ closeModal, task }: any) => {
+const TaskDetails = ({ closeModal, task, modalActive }: any) => {
   const { dark } = useTheme();
 
   return (
@@ -112,7 +104,10 @@ const TaskDetails = ({ closeModal, task }: any) => {
           <div className="d-r-left">Download link:</div>
           <div
             className="d-r-right"
-            style={{ color: "blue", textDecoration: "underline" }}
+            style={{
+              color: dark ? "#a8a8ff" : "blue",
+              textDecoration: "underline",
+            }}
           >
             <a href={task?.link} target="_blank" rel="noreferrer">
               {task?.link}
@@ -132,7 +127,10 @@ const TaskDetails = ({ closeModal, task }: any) => {
           <div className="d-r-left">Document:</div>
           <div
             className="d-r-right"
-            style={{ color: "blue", textDecoration: "underline" }}
+            style={{
+              color: dark ? "#a8a8ff" : "blue",
+              textDecoration: "underline",
+            }}
           >
             <a href={task?.file_url} target="_blank" rel="noreferrer">
               {task?.file_url}
@@ -141,6 +139,41 @@ const TaskDetails = ({ closeModal, task }: any) => {
           </div>
         </div>
       )}
+
+      <Group position="right" mt="lg">
+        <Button variant="default" onClick={closeModal}>
+          Close
+        </Button>
+      </Group>
+    </div>
+  );
+};
+
+const TaskResponses = ({ closeModal, modalActive, task }: any) => {
+  const [
+    // taskResponses,
+    setTaskResponses,
+  ] = useState<any>(null);
+  const { loading, handleGetTaskResponses } = useAcademicLog();
+  const [
+    page,
+    // setPage
+  ] = useState<number>(1);
+  const [perPage] = useState<number>(20);
+
+  useEffect(() => {
+    if (modalActive) {
+      handleGetTaskResponses(page, perPage, task?.task_id).then((res: any) => {
+        setTaskResponses(res);
+      });
+    }
+
+    //eslint-disable-next-line
+  }, []);
+
+  return (
+    <div>
+      <LoadingOverlay visible={loading} />
 
       <Group position="right" mt="lg">
         <Button variant="default" onClick={closeModal}>

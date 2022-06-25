@@ -92,7 +92,10 @@ const ViewStudyResource = ({ closeModal, resource, modalActive }: any) => {
             <div className="d-r-left">External file URL:</div>
             <div
               className="d-r-right"
-              style={{ color: "blue", textDecoration: "underline" }}
+              style={{
+                color: dark ? "#a8a8ff" : "blue",
+                textDecoration: "underline",
+              }}
             >
               <a
                 href={resource?.external_link}
@@ -121,7 +124,7 @@ const ViewStudyResource = ({ closeModal, resource, modalActive }: any) => {
                     style={{
                       textDecoration: "underline",
                       marginBottom: "10px",
-                      color: "blue",
+                      color: dark ? "#a8a8ff" : "blue",
                     }}
                     key={item.id}
                   >
