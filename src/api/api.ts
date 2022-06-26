@@ -116,4 +116,13 @@ export const APIS = {
       `${api}/tasks/${taskId}/response?per_page=${perPage}&page=${page}`,
     GRADE_TASK_RESPONSE: `${api}/tasks/grading/response`,
   },
+  BEHAVIOURAL_LOG: {
+    CREATE_REMARK: `${api}/remarks`,
+    REMARK: (id: string) => `${api}/remarks/${id}`,
+    GET_REMARKS: (page: number, perPage: number, studentId: string) =>
+      `${api}/remarks?per_page=${perPage}&page=${page}&student_id=${studentId}`,
+    POST_COMMENT: (id: string) => `${api}/remarks/${id}/comments`,
+    GET_COMMENTS: (id: string, page: number, perPage: number) =>
+      `${api}/remarks/${id}/comments?per_page=${perPage}&page=${page}`,
+  },
 };
