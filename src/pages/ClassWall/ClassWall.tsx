@@ -70,7 +70,9 @@ const ClassWall = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left no-select">Class Wall</div>
+            <div className="d-p-h-left no-select">
+              {classWall?.activeClassName ?? ""} Class Wall
+            </div>
 
             <div className="d-p-h-right">
               <Menu

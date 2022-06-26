@@ -130,19 +130,6 @@
             margin-right: 10px;
             transform: translateY(2px);
           }
-
-          .arrow-down {
-            margin-left: 7px;
-            transition: 0.3s;
-            transform: translateY(1px);
-            &.rotate {
-              -o-transform: translateY(2px) rotate(180deg);
-              -ms-transform: translateY(2px) rotate(180deg);
-              -moz-transform: translateY(2px) rotate(180deg);
-              -webkit-transform: translateY(2px) rotate(180deg);
-              transform: translateY(2px) rotate(180deg);
-            }
-          }
         }
       }
     }
@@ -217,4 +204,17 @@
 .avatar {
   border: 1px solid rgba(134, 134, 134, 0.177);
   border-radius: 50%;
+}
+
+.arrow-down {
+  margin-left: 7px;
+  transition: 0.3s;
+  transform: translateY(1px);
+  &.rotate {
+    -o-transform: translateY(2px) rotate(180deg);
+    -ms-transform: translateY(2px) rotate(180deg);
+    -moz-transform: translateY(2px) rotate(180deg);
+    -webkit-transform: translateY(2px) rotate(180deg);
+    transform: translateY(2px) rotate(180deg);
+  }
 }

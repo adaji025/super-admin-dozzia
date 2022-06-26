@@ -1,0 +1,52 @@
+.behavioural-log-list {
+  min-height: 400px;
+
+  .b-l-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 15px 10px;
+    border-radius: 8px;
+    transition: transform 0.5s;
+
+    &.hide {
+      display: none;
+    }
+
+    @media only screen and (max-width: 576px) {
+      flex-direction: column-reverse;
+      align-items: unset;
+    }
+
+    .b-i-left {
+      @media only screen and (max-width: 576px) {
+        font-size: 14px;
+      }
+    }
+
+    .b-i-right {
+      font-size: 13px;
+      opacity: 0.7;
+      @media only screen and (max-width: 576px) {
+        font-size: 12px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .r-arr {
+        transform: translateY(4px) !important;
+        &.rotate {
+          transform: translateY(5px) rotate(180deg) !important;
+        }
+      }
+    }
+
+    &:hover {
+      transform: scale(1.03);
+    }
+  }
+}

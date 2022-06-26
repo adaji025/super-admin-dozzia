@@ -68,6 +68,44 @@ const useBehaviouralLog = () => {
     });
   };
 
+  // const handleGetTaskResponses = (
+  //   page: number,
+  //   perPage: number,
+  //   taskId: string
+  // ) => {
+  //   return new Promise((resolve) => {
+  //     setLoading(true);
+
+  //     getTaskResponses(page, perPage, taskId)
+  //       .then((res) => {
+  //         resolve(res);
+  //       })
+  //       .catch((error) => {
+  //         handleError(error);
+  //       })
+  //       .finally(() => {
+  //         setLoading(false);
+  //       });
+  //   });
+  // };
+
+  // const handleGetStudyResourceFiles = (id: string) => {
+  //   return new Promise((resolve) => {
+  //     setLoading(true);
+
+  //     getStudyResourceFiles(id)
+  //       .then((res) => {
+  //         resolve(res);
+  //       })
+  //       .catch((error) => {
+  //         handleError(error);
+  //       })
+  //       .finally(() => {
+  //         setLoading(false);
+  //       });
+  //   });
+  // };
+
   return {
     setLoading,
     loading,
