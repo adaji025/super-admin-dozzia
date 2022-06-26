@@ -35,7 +35,7 @@ const ViewAcademicTask = ({ closeModal, task, modalActive }: any) => {
   );
 };
 
-const TaskDetails = ({ closeModal, task, modalActive }: any) => {
+const TaskDetails = ({ closeModal, task }: any) => {
   const { dark } = useTheme();
 
   return (

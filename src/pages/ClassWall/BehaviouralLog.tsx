@@ -3,7 +3,6 @@ import { Helmet } from "react-helmet";
 import useTheme from "../../hooks/useTheme";
 import { useNavigate } from "react-router-dom";
 import {
-  Button,
   Modal,
   Text,
   Menu,
@@ -16,7 +15,7 @@ import {
   ScrollArea,
   Avatar,
 } from "@mantine/core";
-import { CirclePlus, ArrowLeft, FileText } from "tabler-icons-react";
+import { ArrowLeft, FileText } from "tabler-icons-react";
 import { useSelector } from "react-redux";
 import ViewBehaviouralLog from "../../components/modals/ClassWall/ViewBehaviouralLog";
 import useClass from "../../hooks/useClass";
@@ -68,7 +67,7 @@ const BehaviouralLog = () => {
             {student?.first_name} {student?.last_name}
           </Text>
         }
-        size="lg"
+        size="xl"
       >
         <ViewBehaviouralLog
           closeModal={() => {
@@ -77,6 +76,7 @@ const BehaviouralLog = () => {
               setStudent(null);
             }, 500);
           }}
+          studentId={student?.student_id}
           modalActive={viewLogModal}
         />
       </Modal>
@@ -104,19 +104,6 @@ const BehaviouralLog = () => {
                 </span>
               )}
               Behavioural Log
-            </div>
-
-            <div className="d-p-h-right">
-              <Button
-                size={deviceWidth < 768 ? "xs" : "sm"}
-                ml="sm"
-                leftIcon={<CirclePlus size={14} />}
-                onClick={() => {
-                  setViewLogModal(true);
-                }}
-              >
-                Add Task
-              </Button>
             </div>
           </div>
 
@@ -150,7 +137,7 @@ const BehaviouralLog = () => {
             >
               {classStudents?.data && !loading ? (
                 <ScrollArea>
-                  <Table striped verticalSpacing="md" sx={{ minWidth: 900 }}>
+                  <Table striped verticalSpacing="md">
                     <thead>
                       <tr>
                         <th
