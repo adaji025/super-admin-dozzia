@@ -8,6 +8,7 @@ import {
   LoadingOverlay,
   Pagination,
   Alert,
+  Accordion,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import useTheme from "../../../hooks/useTheme";
@@ -31,6 +32,7 @@ const ViewBehaviouralLog = ({
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [log, setLog] = useState<any>(null);
+  const [edit, setEdit] = useState<any>(null);
 
   useEffect(() => {
     if (modalActive) {
@@ -41,6 +43,21 @@ const ViewBehaviouralLog = ({
 
     //eslint-disable-next-line
   }, [page]);
+
+  const onPressEdit = (remark: {
+    description: string;
+    is_draft: boolean;
+    published_at: string;
+    remark_id: string;
+    teacher: {
+      first_name: string;
+      last_name: string;
+      title: string;
+    };
+  }) => {
+    setEdit(remark);
+    onChange(1);
+  };
 
   const onChange = (active: number) => {
     setActiveTab(active);
@@ -73,17 +90,26 @@ const ViewBehaviouralLog = ({
 
       <Tabs active={activeTab} onTabChange={onChange} variant="outline">
         <Tabs.Tab icon={<List size={14} />} label="View Log" tabKey="1">
-          <ViewLog log={log} closeModal={closeModal} setPage={setPage} />
+          <ViewLog
+            log={log}
+            closeModal={closeModal}
+            setPage={setPage}
+            onPressEdit={onPressEdit}
+          />
         </Tabs.Tab>
         <Tabs.Tab icon={<CirclePlus size={14} />} label="Add Remark" tabKey="2">
-          <AddToLog closeModal={closeModal} createRemark={createRemark} />
+          <AddToLog
+            closeModal={closeModal}
+            createRemark={createRemark}
+            edit={edit}
+          />
         </Tabs.Tab>
       </Tabs>
     </div>
   );
 };
 
-const ViewLog = ({ closeModal, log, setPage }: any) => {
+const ViewLog = ({ closeModal, log, setPage, onPressEdit }: any) => {
   const { dark } = useTheme();
   const [activeRemark, setActiveRemark] = useState<any>(null);
 
@@ -206,6 +232,15 @@ const ViewLog = ({ closeModal, log, setPage }: any) => {
         <Button variant="default" onClick={closeModal}>
           Close
         </Button>
+
+        <Button
+          disabled={!activeRemark}
+          onClick={() => {
+            onPressEdit(activeRemark);
+          }}
+        >
+          Edit Remark
+        </Button>
       </Group>
     </div>
   );
@@ -214,11 +249,11 @@ const ViewLog = ({ closeModal, log, setPage }: any) => {
 const AddToLog = ({ closeModal, createRemark, edit }: any) => {
   const form = useForm({
     initialValues: {
-      is_draft: edit ? edit.is_draft : "",
-      category: edit ? edit.category : "",
-      date: edit ? edit.date : "",
-      time: edit ? edit.time : new Date(),
-      description: edit ? edit.description : "",
+      is_draft: edit ? edit?.is_draft : "",
+      category: edit ? edit?.category : "",
+      date: edit ? edit?.date : "",
+      time: edit ? edit?.time : new Date(),
+      description: edit ? edit?.description : "",
     },
 
     validate: {
