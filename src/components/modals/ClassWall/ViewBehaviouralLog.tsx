@@ -394,7 +394,6 @@ const ViewLog = ({
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <ActionIcon
                     variant="light"
-                    color="red"
                     title="Toggle color scheme"
                     mr="md"
                   >

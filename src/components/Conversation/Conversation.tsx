@@ -56,6 +56,7 @@ const Conversation = ({
         {conversation &&
           conversation?.data.map(
             (item: {
+              id: string;
               body: string;
               date: string;
               sender: {
@@ -69,6 +70,7 @@ const Conversation = ({
                 style={{
                   borderBottom: `1px solid ${dark ? "#2c2e336b" : "#e9ecef61"}`,
                 }}
+                key={item?.id}
               >
                 <Comment
                   postedAt={item?.date}
