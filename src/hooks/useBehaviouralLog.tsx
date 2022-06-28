@@ -16,10 +16,9 @@ const useBehaviouralLog = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const [trigger, setTrigger] = useState<number>(0);
 
   const handleCreateRemark = (data: {
-    is_draft: string;
+    is_draft: boolean;
     student_id: string;
     category: string;
     description: string;
@@ -35,7 +34,6 @@ const useBehaviouralLog = () => {
             message: "Remark saved",
             color: "green",
           });
-          setTrigger(trigger + 1);
           resolve(res);
         })
         .catch((error) => {
@@ -68,50 +66,42 @@ const useBehaviouralLog = () => {
     });
   };
 
-  // const handleGetTaskResponses = (
-  //   page: number,
-  //   perPage: number,
-  //   taskId: string
-  // ) => {
-  //   return new Promise((resolve) => {
-  //     setLoading(true);
+  const handleUpdateRemark = (
+    remarkId: string,
+    data: {
+      is_draft: boolean;
+      category: string;
+      description: string;
+      published_at: string;
+    }
+  ) => {
+    return new Promise((resolve) => {
+      setLoading(true);
 
-  //     getTaskResponses(page, perPage, taskId)
-  //       .then((res) => {
-  //         resolve(res);
-  //       })
-  //       .catch((error) => {
-  //         handleError(error);
-  //       })
-  //       .finally(() => {
-  //         setLoading(false);
-  //       });
-  //   });
-  // };
-
-  // const handleGetStudyResourceFiles = (id: string) => {
-  //   return new Promise((resolve) => {
-  //     setLoading(true);
-
-  //     getStudyResourceFiles(id)
-  //       .then((res) => {
-  //         resolve(res);
-  //       })
-  //       .catch((error) => {
-  //         handleError(error);
-  //       })
-  //       .finally(() => {
-  //         setLoading(false);
-  //       });
-  //   });
-  // };
+      updateRemark(remarkId, data)
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: "Remark updated",
+            color: "green",
+          });
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
 
   return {
     setLoading,
     loading,
     handleCreateRemark,
-    trigger,
     handleGetRemarks,
+    handleUpdateRemark,
   };
 };
 

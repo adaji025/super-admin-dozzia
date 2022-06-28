@@ -2,7 +2,7 @@ import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
 
 export const createRemark = (data: {
-  is_draft: string;
+  is_draft: boolean;
   student_id: string;
   category: string;
   description: string;
@@ -18,7 +18,7 @@ export const createRemark = (data: {
 export const updateRemark = (
   remarkId: string,
   data: {
-    is_draft: string;
+    is_draft: boolean;
     category: string;
     description: string;
     published_at: string;

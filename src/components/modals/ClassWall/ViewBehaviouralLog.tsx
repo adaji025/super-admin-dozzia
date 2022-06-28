@@ -8,11 +8,10 @@ import {
   LoadingOverlay,
   Pagination,
   Alert,
-  Accordion,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import useTheme from "../../../hooks/useTheme";
-import { List, CirclePlus, ChevronDown } from "tabler-icons-react";
+import { List, CirclePlus, ChevronDown, Edit } from "tabler-icons-react";
 import { DatePicker, TimeInput } from "@mantine/dates";
 import useBehaviouralLog from "../../../hooks/useBehaviouralLog";
 import moment from "moment";
@@ -28,7 +27,13 @@ const ViewBehaviouralLog = ({
   modalActive: boolean;
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  const { handleCreateRemark, loading, handleGetRemarks } = useBehaviouralLog();
+  const {
+    handleCreateRemark,
+    loading,
+    setLoading,
+    handleGetRemarks,
+    handleUpdateRemark,
+  } = useBehaviouralLog();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [log, setLog] = useState<any>(null);
@@ -36,13 +41,17 @@ const ViewBehaviouralLog = ({
 
   useEffect(() => {
     if (modalActive) {
-      handleGetRemarks(page, perPage, studentId).then((res) => {
-        setLog(res);
-      });
+      getRemarks();
     }
 
     //eslint-disable-next-line
   }, [page]);
+
+  const getRemarks = () => {
+    handleGetRemarks(page, perPage, studentId).then((res) => {
+      setLog(res);
+    });
+  };
 
   const onPressEdit = (remark: {
     description: string;
@@ -61,6 +70,9 @@ const ViewBehaviouralLog = ({
 
   const onChange = (active: number) => {
     setActiveTab(active);
+    if (active === 0 && edit) {
+      setEdit(null);
+    }
   };
 
   const createRemark = (values: {
@@ -71,7 +83,7 @@ const ViewBehaviouralLog = ({
     date: string;
   }) => {
     handleCreateRemark({
-      is_draft: values?.is_draft,
+      is_draft: values?.is_draft === "false" ? false : true,
       category: values?.category,
       description: values?.description,
       student_id: studentId,
@@ -79,8 +91,33 @@ const ViewBehaviouralLog = ({
         values.time
       ).format("HH:mm")}`,
     }).then(() => {
+      setLoading(true);
       onChange(0);
-      handleGetRemarks(page, perPage, studentId);
+      getRemarks();
+    });
+  };
+
+  const updateRemark = (
+    remarkId: string,
+    values: {
+      is_draft: string;
+      category: string;
+      description: string;
+      time: string;
+      date: string;
+    }
+  ) => {
+    handleUpdateRemark(remarkId, {
+      is_draft: values?.is_draft === "false" ? false : true,
+      category: values?.category,
+      description: values?.description,
+      published_at: `${moment(values.date).format("YYYY-MM-DD")} ${moment(
+        values.time
+      ).format("HH:mm")}`,
+    }).then(() => {
+      onChange(0);
+      setLoading(true);
+      getRemarks();
     });
   };
 
@@ -97,10 +134,15 @@ const ViewBehaviouralLog = ({
             onPressEdit={onPressEdit}
           />
         </Tabs.Tab>
-        <Tabs.Tab icon={<CirclePlus size={14} />} label="Add Remark" tabKey="2">
+        <Tabs.Tab
+          icon={edit ? <Edit size={14} /> : <CirclePlus size={14} />}
+          label={`${edit ? "Edit" : "Add"} Remark`}
+          tabKey="2"
+        >
           <AddToLog
             closeModal={closeModal}
             createRemark={createRemark}
+            updateRemark={updateRemark}
             edit={edit}
           />
         </Tabs.Tab>
@@ -246,13 +288,13 @@ const ViewLog = ({ closeModal, log, setPage, onPressEdit }: any) => {
   );
 };
 
-const AddToLog = ({ closeModal, createRemark, edit }: any) => {
+const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
   const form = useForm({
     initialValues: {
-      is_draft: edit ? edit?.is_draft : "",
+      is_draft: edit ? `${edit?.is_draft}` : "",
       category: edit ? edit?.category : "",
-      date: edit ? edit?.date : "",
-      time: edit ? edit?.time : new Date(),
+      date: edit ? moment(edit.plublished_at).toDate() : "",
+      time: edit ? moment(edit.plublished_at).toDate() : new Date(),
       description: edit ? edit?.description : "",
     },
 
@@ -267,7 +309,11 @@ const AddToLog = ({ closeModal, createRemark, edit }: any) => {
     <div>
       <form
         onSubmit={form.onSubmit((values) => {
-          createRemark(values);
+          if (edit) {
+            updateRemark(edit?.remark_id, values);
+          } else {
+            createRemark(values);
+          }
         })}
       >
         <Select
@@ -338,7 +384,7 @@ const AddToLog = ({ closeModal, createRemark, edit }: any) => {
           <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
-          <Button type="submit">Submit</Button>
+          <Button type="submit">{edit ? "Save Changes" : "Submit"}</Button>
         </Group>
       </form>
     </div>
