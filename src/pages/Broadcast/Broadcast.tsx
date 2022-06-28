@@ -1,6 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { format } from "timeago.js";
 import {
   Button,
   Modal,
@@ -165,7 +164,7 @@ const Events = () => {
                           )}
 
                           <div className="i-t-right">
-                            {format(item.plublished_at)}
+                            {moment(item.plublished_at).format("MMM Do, YY")}
                           </div>
                         </div>
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { createStyles, Text, Avatar, Group } from "@mantine/core";
+import moment from "moment";
 
 const useStyles = createStyles((theme) => ({
   body: {
@@ -35,7 +36,7 @@ export function Comment({ postedAt, body, author }: CommentProps) {
             author?.last_name
           }`}</Text>
           <Text size="xs" color="dimmed">
-            {postedAt}
+            {moment(postedAt).format("MMMM Do YYYY, h:mm a")}
           </Text>
         </div>
       </Group>

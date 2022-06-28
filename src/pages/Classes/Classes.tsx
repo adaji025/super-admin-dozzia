@@ -295,8 +295,8 @@ const Classes = () => {
                               <Menu.Item
                                 icon={<Book size={14} />}
                                 onClick={() => {
-                                  setClassName(item.classroom_name);
-                                  setClassSubjects(item.subjects_and_teachers);
+                                  setClassName(item?.classroom_name);
+                                  setClassSubjects(item?.subjects_and_teachers);
                                   setClassSubjectsModal(true);
                                 }}
                               >

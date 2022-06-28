@@ -399,7 +399,9 @@ const ViewLog = ({
                   >
                     <Trash size={25} />
                   </ActionIcon>
-                  <Text size="sm">Delete remark?</Text>
+                  <Text color={dark ? "white" : "gray"} size="sm">
+                    Delete remark?
+                  </Text>
                 </div>
 
                 <Group position="right">
