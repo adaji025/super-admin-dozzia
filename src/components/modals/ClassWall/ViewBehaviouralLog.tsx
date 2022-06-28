@@ -189,10 +189,14 @@ const ViewLog = ({ closeModal, log, setPage, onPressEdit }: any) => {
                   }
                 }}
               >
-                <div className="b-i-left">Misdemeanor notice</div>
+                <div className="b-i-left">
+                  {item?.description && item?.description.length > 70
+                    ? `${item.description.substring(0, 70)}...`
+                    : item.description}
+                </div>
 
                 <div className="b-i-right">
-                  23rd Dec, 2021{" "}
+                  {moment(item?.published_at).format("Do MMM, YYYY")}{" "}
                   <span>
                     <ChevronDown
                       className={`arrow-down r-arr ${
@@ -271,18 +275,25 @@ const ViewLog = ({ closeModal, log, setPage, onPressEdit }: any) => {
       )}
 
       <Group position="right" mt="xl">
-        <Button variant="default" onClick={closeModal}>
-          Close
-        </Button>
+        {activeRemark ? (
+          <Button color="red" onClick={closeModal}>
+            Delete Remark
+          </Button>
+        ) : (
+          <Button variant="default" onClick={closeModal}>
+            Close
+          </Button>
+        )}
 
-        <Button
-          disabled={!activeRemark}
-          onClick={() => {
-            onPressEdit(activeRemark);
-          }}
-        >
-          Edit Remark
-        </Button>
+        {activeRemark && (
+          <Button
+            onClick={() => {
+              onPressEdit(activeRemark);
+            }}
+          >
+            Edit Remark
+          </Button>
+        )}
       </Group>
     </div>
   );
