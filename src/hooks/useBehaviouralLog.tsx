@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   createRemark,
   updateRemark,
@@ -8,12 +7,10 @@ import {
   postComment,
   getComments,
 } from "../services/behaviouralLog/behaviouralLog";
-import { showLoader } from "../redux/utility/utility.actions";
 import useNotification from "./useNotification";
 import { showNotification } from "@mantine/notifications";
 
 const useBehaviouralLog = () => {
-  const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -118,6 +115,36 @@ const useBehaviouralLog = () => {
     });
   };
 
+  const handleGetComments = (id: string) => {
+    return new Promise((resolve) => {
+      setLoading(true);
+      getComments(1, 100, id)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
+
+  const handlePostComment = (remarkId: string, text: string) => {
+    return new Promise((resolve) => {
+      setLoading(true);
+      postComment(remarkId, { content: text })
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+          setLoading(false);
+        });
+    });
+  };
+
   return {
     setLoading,
     loading,
@@ -125,6 +152,8 @@ const useBehaviouralLog = () => {
     handleGetRemarks,
     handleUpdateRemark,
     handleDeleteRemark,
+    handleGetComments,
+    handlePostComment,
   };
 };
 

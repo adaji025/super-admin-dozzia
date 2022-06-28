@@ -6,22 +6,18 @@ import {
   Button,
   ScrollArea,
 } from "@mantine/core";
-import useConversation from "../../hooks/useConversation";
 import { Comment } from "./Comment";
 import useTheme from "../../hooks/useTheme";
 import "./conversation.scss";
 
 const Conversation = ({
-  id,
   onCancel,
   disable,
-}: {
-  id: string;
-  onCancel: () => void;
-  disable: boolean;
-}) => {
-  const { handleGetConversation, loading, setLoading, handlePostConversation } =
-    useConversation(id);
+  handleGetConversation,
+  loading,
+  setLoading,
+  handlePostConversation,
+}: any) => {
   const [conversation, setConversation] = useState<any>(null);
   const [textInput, setTextInput] = useState<string>("");
   const { dark } = useTheme();
@@ -33,7 +29,7 @@ const Conversation = ({
   }, []);
 
   const getConversationList = () => {
-    handleGetConversation().then((res) => {
+    handleGetConversation().then((res: any) => {
       setConversation(res);
       setTextInput("");
       setTimeout(() => {

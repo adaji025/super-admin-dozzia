@@ -18,6 +18,7 @@ import { List, CirclePlus, ChevronDown, Edit, Trash } from "tabler-icons-react";
 import { DatePicker, TimeInput } from "@mantine/dates";
 import useBehaviouralLog from "../../../hooks/useBehaviouralLog";
 import moment from "moment";
+import Conversation from "./../../Conversation/Conversation";
 import "./class-wall-modals.scss";
 
 const ViewBehaviouralLog = ({
@@ -37,6 +38,8 @@ const ViewBehaviouralLog = ({
     handleGetRemarks,
     handleUpdateRemark,
     handleDeleteRemark,
+    handleGetComments,
+    handlePostComment,
   } = useBehaviouralLog();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
@@ -144,6 +147,10 @@ const ViewBehaviouralLog = ({
             setPage={setPage}
             onPressEdit={onPressEdit}
             deleteRemark={deleteRemark}
+            handleGetComments={handleGetComments}
+            handlePostComment={handlePostComment}
+            loading={loading}
+            setLoading={setLoading}
           />
         </Tabs.Tab>
         <Tabs.Tab
@@ -169,11 +176,40 @@ const ViewLog = ({
   setPage,
   onPressEdit,
   deleteRemark,
+  handlePostComment,
+  handleGetComments,
+  loading,
+  setLoading,
 }: any) => {
   const { dark } = useTheme();
   const [activeRemark, setActiveRemark] = useState<any>(null);
   const [confirmDeleteRemark, setConfirmDeleteRemark] =
     useState<boolean>(false);
+  const [activeView, setActiveView] = useState<string>("details");
+
+  useEffect(() => {
+    if (activeView === "comments") {
+      getComments();
+    }
+
+    //eslint-disable-next-line
+  }, [activeView]);
+
+  const getComments = () => {
+    return new Promise((resolve) => {
+      handleGetComments(activeRemark?.remark_id).then((res: any) => {
+        resolve(res);
+      });
+    });
+  };
+
+  const postComment = (text: string) => {
+    return new Promise((resolve) => {
+      handlePostComment(activeRemark?.remark_id, text).then((res: any) => {
+        resolve(res);
+      });
+    });
+  };
 
   return (
     <div>
@@ -204,6 +240,7 @@ const ViewLog = ({
                 onClick={() => {
                   if (activeRemark?.remark_id === item?.remark_id) {
                     setActiveRemark(null);
+                    setActiveView("details");
                   } else {
                     setActiveRemark(item);
                   }
@@ -232,7 +269,7 @@ const ViewLog = ({
             )
           )}
 
-        {activeRemark && (
+        {activeRemark && activeView === "details" && (
           <div className="view-details">
             <div
               className="v-d-row"
@@ -267,7 +304,40 @@ const ViewLog = ({
                 {activeRemark?.teacher?.last_name}
               </div>
             </div>
+
+            <div
+              className="v-d-row"
+              style={{
+                borderBottom: `1px solid ${dark ? "#2c2e336b" : "#e9ecef61"}`,
+              }}
+            >
+              <div className="d-r-left">Comments:</div>
+              <div className="d-r-right">
+                <Button
+                  variant="subtle"
+                  size="xs"
+                  onClick={() => {
+                    setActiveView("comments");
+                  }}
+                >
+                  View Comments
+                </Button>
+              </div>
+            </div>
           </div>
+        )}
+
+        {activeRemark && activeView === "comments" && (
+          <Conversation
+            onCancel={() => {
+              setActiveView("details");
+            }}
+            disable={false}
+            handleGetConversation={getComments}
+            loading={false}
+            setLoading={setLoading}
+            handlePostConversation={postComment}
+          />
         )}
 
         {log?.data.length === 0 && (
@@ -294,82 +364,84 @@ const ViewLog = ({
         />
       )}
 
-      <Group position="right" mt="xl">
-        {activeRemark ? (
-          <Popover
-            opened={confirmDeleteRemark}
-            onClose={() => setConfirmDeleteRemark(false)}
-            target={
-              <Button
-                color="red"
-                onClick={() => {
-                  setConfirmDeleteRemark(!confirmDeleteRemark);
-                }}
-              >
-                Delete Remark
-              </Button>
-            }
-            width={260}
-            position="top"
-            withArrow
-          >
-            <>
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <ActionIcon
-                  variant="light"
-                  color="red"
-                  title="Toggle color scheme"
-                  mr="md"
-                >
-                  <Trash size={25} />
-                </ActionIcon>
-                <Text size="sm">Delete remark?</Text>
-              </div>
-
-              <Group position="right">
+      {!(activeRemark && activeView === "comments") && (
+        <Group position="right" mt="xl">
+          {activeRemark ? (
+            <Popover
+              opened={confirmDeleteRemark}
+              onClose={() => setConfirmDeleteRemark(false)}
+              target={
                 <Button
-                  size="xs"
-                  variant="subtle"
-                  color="gray"
+                  color="red"
                   onClick={() => {
-                    setConfirmDeleteRemark(false);
+                    setConfirmDeleteRemark(!confirmDeleteRemark);
                   }}
                 >
-                  No
+                  Delete Remark
                 </Button>
-                <Button
-                  variant="light"
-                  color="red"
-                  size="xs"
-                  onClick={() => {
-                    deleteRemark(activeRemark?.remark_id);
-                    setConfirmDeleteRemark(false);
-                    setTimeout(() => {
-                      setActiveRemark(null);
-                    }, 1000);
-                  }}
-                >
-                  Yes
-                </Button>
-              </Group>
-            </>
-          </Popover>
-        ) : (
-          <Button variant="default" onClick={closeModal}>
-            Close
-          </Button>
-        )}
+              }
+              width={260}
+              position="top"
+              withArrow
+            >
+              <>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <ActionIcon
+                    variant="light"
+                    color="red"
+                    title="Toggle color scheme"
+                    mr="md"
+                  >
+                    <Trash size={25} />
+                  </ActionIcon>
+                  <Text size="sm">Delete remark?</Text>
+                </div>
 
-        {activeRemark && (
-          <Button
-            onClick={() => {
-              onPressEdit(activeRemark);
-            }}
-          >
-            Edit Remark
-          </Button>
-        )}
-      </Group>
+                <Group position="right">
+                  <Button
+                    size="xs"
+                    variant="subtle"
+                    color="gray"
+                    onClick={() => {
+                      setConfirmDeleteRemark(false);
+                    }}
+                  >
+                    No
+                  </Button>
+                  <Button
+                    variant="light"
+                    color="red"
+                    size="xs"
+                    onClick={() => {
+                      deleteRemark(activeRemark?.remark_id);
+                      setConfirmDeleteRemark(false);
+                      setTimeout(() => {
+                        setActiveRemark(null);
+                      }, 1000);
+                    }}
+                  >
+                    Yes
+                  </Button>
+                </Group>
+              </>
+            </Popover>
+          ) : (
+            <Button variant="default" onClick={closeModal}>
+              Close
+            </Button>
+          )}
+
+          {activeRemark && (
+            <Button
+              onClick={() => {
+                onPressEdit(activeRemark);
+              }}
+            >
+              Edit Remark
+            </Button>
+          )}
+        </Group>
+      )}
     </div>
   );
 };

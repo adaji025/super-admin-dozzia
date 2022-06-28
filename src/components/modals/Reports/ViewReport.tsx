@@ -4,6 +4,7 @@ import { InfoCircle, Messages } from "tabler-icons-react";
 import useTheme from "../../../hooks/useTheme";
 import useReports from "../../../hooks/useReports";
 import Conversation from "./../../Conversation/Conversation";
+import useConversation from "../../../hooks/useConversation";
 import "./view-report.scss";
 
 const ViewReport = ({
@@ -14,6 +15,8 @@ const ViewReport = ({
   closeModal: () => void;
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
+  const { handleGetConversation, loading, setLoading, handlePostConversation } =
+    useConversation(report?.id);
 
   const onChange = (active: number, tabKey: string) => {
     setActiveTab(active);
@@ -30,6 +33,12 @@ const ViewReport = ({
             id={report?.id}
             onCancel={closeModal}
             disable={report?.status === "resolved"}
+            {...{
+              handleGetConversation,
+              loading,
+              setLoading,
+              handlePostConversation,
+            }}
           />
         </Tabs.Tab>
       </Tabs>

@@ -52,4 +52,11 @@
       transform: scale(1.03);
     }
   }
+
+  .conversation-container {
+    min-height: calc(100vh - 350px) !important;
+    .c-main {
+      height: calc(100vh - 530px) !important;
+    }
+  }
 }
