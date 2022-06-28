@@ -8,10 +8,13 @@ import {
   LoadingOverlay,
   Pagination,
   Alert,
+  Popover,
+  Text,
+  ActionIcon,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import useTheme from "../../../hooks/useTheme";
-import { List, CirclePlus, ChevronDown, Edit } from "tabler-icons-react";
+import { List, CirclePlus, ChevronDown, Edit, Trash } from "tabler-icons-react";
 import { DatePicker, TimeInput } from "@mantine/dates";
 import useBehaviouralLog from "../../../hooks/useBehaviouralLog";
 import moment from "moment";
@@ -33,6 +36,7 @@ const ViewBehaviouralLog = ({
     setLoading,
     handleGetRemarks,
     handleUpdateRemark,
+    handleDeleteRemark,
   } = useBehaviouralLog();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
@@ -121,6 +125,13 @@ const ViewBehaviouralLog = ({
     });
   };
 
+  const deleteRemark = (remarkId: string) => {
+    handleDeleteRemark(remarkId).then(() => {
+      setLoading(true);
+      getRemarks();
+    });
+  };
+
   return (
     <div className="r32">
       <LoadingOverlay visible={loading} />
@@ -132,6 +143,7 @@ const ViewBehaviouralLog = ({
             closeModal={closeModal}
             setPage={setPage}
             onPressEdit={onPressEdit}
+            deleteRemark={deleteRemark}
           />
         </Tabs.Tab>
         <Tabs.Tab
@@ -151,9 +163,17 @@ const ViewBehaviouralLog = ({
   );
 };
 
-const ViewLog = ({ closeModal, log, setPage, onPressEdit }: any) => {
+const ViewLog = ({
+  closeModal,
+  log,
+  setPage,
+  onPressEdit,
+  deleteRemark,
+}: any) => {
   const { dark } = useTheme();
   const [activeRemark, setActiveRemark] = useState<any>(null);
+  const [confirmDeleteRemark, setConfirmDeleteRemark] =
+    useState<boolean>(false);
 
   return (
     <div>
@@ -276,9 +296,64 @@ const ViewLog = ({ closeModal, log, setPage, onPressEdit }: any) => {
 
       <Group position="right" mt="xl">
         {activeRemark ? (
-          <Button color="red" onClick={closeModal}>
-            Delete Remark
-          </Button>
+          <Popover
+            opened={confirmDeleteRemark}
+            onClose={() => setConfirmDeleteRemark(false)}
+            target={
+              <Button
+                color="red"
+                onClick={() => {
+                  setConfirmDeleteRemark(!confirmDeleteRemark);
+                }}
+              >
+                Delete Remark
+              </Button>
+            }
+            width={260}
+            position="top"
+            withArrow
+          >
+            <>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <ActionIcon
+                  variant="light"
+                  color="red"
+                  title="Toggle color scheme"
+                  mr="md"
+                >
+                  <Trash size={25} />
+                </ActionIcon>
+                <Text size="sm">Delete remark?</Text>
+              </div>
+
+              <Group position="right">
+                <Button
+                  size="xs"
+                  variant="subtle"
+                  color="gray"
+                  onClick={() => {
+                    setConfirmDeleteRemark(false);
+                  }}
+                >
+                  No
+                </Button>
+                <Button
+                  variant="light"
+                  color="red"
+                  size="xs"
+                  onClick={() => {
+                    deleteRemark(activeRemark?.remark_id);
+                    setConfirmDeleteRemark(false);
+                    setTimeout(() => {
+                      setActiveRemark(null);
+                    }, 1000);
+                  }}
+                >
+                  Yes
+                </Button>
+              </Group>
+            </>
+          </Popover>
         ) : (
           <Button variant="default" onClick={closeModal}>
             Close

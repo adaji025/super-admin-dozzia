@@ -96,12 +96,35 @@ const useBehaviouralLog = () => {
     });
   };
 
+  const handleDeleteRemark = (remarkId: string) => {
+    return new Promise((resolve) => {
+      setLoading(true);
+
+      deleteRemark(remarkId)
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: "Remark Deleted",
+            color: "green",
+          });
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
+
   return {
     setLoading,
     loading,
     handleCreateRemark,
     handleGetRemarks,
     handleUpdateRemark,
+    handleDeleteRemark,
   };
 };
 
