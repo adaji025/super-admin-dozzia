@@ -49,12 +49,12 @@
     }
 
     &:hover {
-      transform: scale(1.03);
+      transform: scale(1.02);
     }
   }
 
   .conversation-container {
-    min-height: calc(100vh - 350px) !important;
+    min-height: calc(100vh - 330px) !important;
     .c-main {
       height: calc(100vh - 530px) !important;
     }

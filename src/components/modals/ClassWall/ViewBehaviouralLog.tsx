@@ -26,7 +26,7 @@ const ViewBehaviouralLog = ({
   studentId,
   modalActive,
 }: {
-  closeModal: (value: boolean) => void;
+  closeModal: () => void;
   studentId: string;
   modalActive: boolean;
 }) => {
@@ -159,7 +159,13 @@ const ViewBehaviouralLog = ({
           tabKey="2"
         >
           <AddToLog
-            closeModal={closeModal}
+            closeModal={() => {
+              if (edit) {
+                onChange(0);
+              } else {
+                closeModal();
+              }
+            }}
             createRemark={createRemark}
             updateRemark={updateRemark}
             edit={edit}
@@ -540,7 +546,7 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
 
         <Group position="right" mt="xl">
           <Button variant="default" onClick={closeModal}>
-            Cancel
+            {edit ? "Go back" : "Close"}
           </Button>
           <Button type="submit">{edit ? "Save Changes" : "Submit"}</Button>
         </Group>
