@@ -107,7 +107,7 @@ const SubjectClasses = ({
                     },
                     index: number
                   ) => (
-                    <tr key={item.classroom_id}>
+                    <tr key={item?.classroom_id}>
                       <td
                         style={{
                           borderBottom: `1px solid #0000`,
@@ -123,7 +123,7 @@ const SubjectClasses = ({
                           fontWeight: "600",
                         }}
                       >
-                        {item.classroom_name}
+                        {item?.classroom_name}
                       </td>
                       <td
                         style={{
@@ -132,7 +132,7 @@ const SubjectClasses = ({
                         }}
                         className="large-only"
                       >
-                        {item.classroom_level}
+                        {item?.classroom_level}
                       </td>
                       <td
                         style={{
@@ -140,7 +140,7 @@ const SubjectClasses = ({
                           color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
-                        {`${item.classroom_teacher.title} ${item.classroom_teacher.first_name} ${item.classroom_teacher.last_name}`}
+                        {`${item?.classroom_teacher?.title} ${item?.classroom_teacher?.first_name} ${item?.classroom_teacher?.last_name}`}
                       </td>
 
                       <td
