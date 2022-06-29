@@ -130,4 +130,15 @@ export const APIS = {
     GET_COMMENTS: (id: string, page: number, perPage: number) =>
       `${api}/remarks/${id}/comments?per_page=${perPage}&page=${page}`,
   },
+  CURRICULUM: {
+    CREATE_CURRICULUM_ITEM: `${api}/curricula`,
+    UPDATE_CURRICULUM: (id: string) => `${api}/curricula/${id}`,
+    GET_CURRICULUM_LIST: (
+      page: number,
+      perPage: number,
+      subjectId: string,
+      classroomId: string
+    ) =>
+      `${api}/curricula?per_page=${perPage}&page=${page}&subject_id=${subjectId}&classroom_id=${classroomId}`,
+  },
 };
