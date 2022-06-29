@@ -11,9 +11,19 @@ export const addSubject = (data: {
   });
 };
 
-export const getSubjects = (data: { page: number; perPage: number }) => {
+export const getSubjects = (data: {
+  page: number;
+  perPage: number;
+  staffId: string;
+  classId: string;
+}) => {
   return AxoisApi.get(
-    `${APIS.SUBJECT.GET_SUBJECT_LIST(data.page, data.perPage)}`
+    `${APIS.SUBJECT.GET_SUBJECT_LIST(
+      data.page,
+      data.perPage,
+      data?.staffId,
+      data?.classId
+    )}`
   ).then((res) => {
     return res.data;
   });

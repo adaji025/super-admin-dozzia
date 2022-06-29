@@ -35,7 +35,6 @@ const Subjects = () => {
     getSubjectList,
     loading,
     handleUpdateSubject,
-    handleGetSubjectClasses,
   } = useSubject();
 
   const [addSubjectModal, setAddSubjectModal] = useState<boolean>(false);
@@ -58,7 +57,6 @@ const Subjects = () => {
 
   useEffect(() => {
     getSubjectList(page, perPage);
-    handleGetSubjectClasses("9dd8ba6d-ff8f-4cc9-98aa-efed1700eb54");
 
     //eslint-disable-next-line
   }, [page]);

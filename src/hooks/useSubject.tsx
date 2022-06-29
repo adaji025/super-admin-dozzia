@@ -49,12 +49,23 @@ const useSubject = () => {
       });
   };
 
-  const getSubjectList = (page: number, perPage: number, all?: boolean) => {
+  const getSubjectList = (
+    page: number,
+    perPage: number,
+    all?: boolean,
+    staffId?: string,
+    classId?: string
+  ) => {
     if (subjects === null) {
       setLoading(true);
     }
 
-    getSubjects({ page, perPage })
+    getSubjects({
+      page,
+      perPage,
+      staffId: staffId ?? "",
+      classId: classId ?? "",
+    })
       .then((res) => {
         if (all) {
           setAllSubjects(res.data);
