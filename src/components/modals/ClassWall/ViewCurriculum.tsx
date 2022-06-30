@@ -277,7 +277,7 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
             mt="md"
             initialLevel="year"
             className="form-item"
-            label="Send Date"
+            label="Start Date"
             placeholder="Date"
             variant="filled"
             required
@@ -288,7 +288,7 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
             mt="md"
             initialLevel="year"
             className="form-item"
-            label="Send Date"
+            label="End Date"
             placeholder="Date"
             variant="filled"
             required
