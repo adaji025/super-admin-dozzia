@@ -42,7 +42,7 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
       subject_id: (value) => (value === "" ? "Select resource subject" : null),
       classroom_id: (value) => (value === "" ? "Select resource class" : null),
       external_link: (value) =>
-        !isValidURL(value) ? "Enter a valid URL" : null,
+        value && !isValidURL(value) ? "Enter a valid URL" : null,
     },
   });
 

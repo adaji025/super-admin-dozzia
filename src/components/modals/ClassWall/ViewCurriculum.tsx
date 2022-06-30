@@ -160,7 +160,7 @@ const ViewCurricula = ({ closeModal, curriculum }: any) => {
                       <td style={{ width: 120 }}>
                         <ul>
                           {item?.components.map((item: string) => (
-                            <li>
+                            <li key={item}>
                               <Text size="sm" mb={5}>
                                 {item}
                               </Text>

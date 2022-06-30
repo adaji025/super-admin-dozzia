@@ -36,7 +36,8 @@ const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
     validate: {
       subject_id: (value) => (value === "" ? "Select resource subject" : null),
       classroom_id: (value) => (value === "" ? "Select resource class" : null),
-      link: (value) => (!isValidURL(value) ? "Enter a valid URL" : null),
+      link: (value) =>
+        value && !isValidURL(value) ? "Enter a valid URL" : null,
     },
   });
 
