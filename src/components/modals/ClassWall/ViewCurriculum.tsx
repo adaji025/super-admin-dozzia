@@ -15,6 +15,7 @@ import {
   ColorSwatch,
   useMantineTheme,
   MultiSelect,
+  Text,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import useTheme from "../../../hooks/useTheme";
@@ -36,13 +37,8 @@ const ViewCurriculum = ({
   modalActive: boolean;
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
-  const {
-    loading,
-    setLoading,
-    handleCreateCurriculumItem,
-    handleUpdateCurriculumItem,
-    handleGetCurriculum,
-  } = useCurriculum();
+  const { loading, handleCreateCurriculumItem, handleGetCurriculum } =
+    useCurriculum();
   const [page] = useState<number>(1);
   const [perPage] = useState<number>(100);
   const [curriculum, setCurriculum] = useState<any>(null);
@@ -113,16 +109,18 @@ const ViewCurriculum = ({
 };
 
 const ViewCurricula = ({ closeModal, curriculum }: any) => {
+  const { dark } = useTheme();
+
   return (
     <div className="curriculum-container">
       <Box sx={{ minHeight: 450 }}>
         {curriculum && curriculum?.data ? (
           <ScrollArea>
             <Table
-              striped
-              style={{ minWidth: curriculum?.data.length > 0 ? 800 : "" }}
+              verticalSpacing="sm"
+              style={{ minWidth: curriculum?.data.length > 0 ? 700 : "" }}
             >
-              <thead>
+              <thead className={dark ? "border-dark" : "border-light"}>
                 <tr>
                   <th>Timeline</th>
                   <th>Topics</th>
@@ -132,28 +130,43 @@ const ViewCurricula = ({ closeModal, curriculum }: any) => {
 
               <tbody>
                 {curriculum?.data.map(
-                  (
-                    item: {
-                      id: string;
-                      subject: {
-                        subject_id: string;
-                        subject_name: string;
-                        subject_category: number;
-                      };
-                      teacher: {
-                        title: string;
-                        first_name: string;
-                        last_name: string;
-                        staff_id: string;
-                      };
-                    },
-                    index: number
-                  ) => (
-                    <tr key={item.id}>
-                      <td>{index + 1}</td>
-                      <td>{item.subject.subject_name}</td>
-                      <td className="large-only">
-                        {item.subject.subject_category}
+                  (item: {
+                    curriculum_id: string;
+                    title: string;
+                    description: string;
+                    status: string;
+                    start_date: string;
+                    end_date: string;
+                    components: Array<string>;
+                  }) => (
+                    <tr
+                      key={item.curriculum_id}
+                      className={dark ? "border-dark" : "border-light"}
+                    >
+                      <td>
+                        <Text size="xs">
+                          {moment(item?.start_date).format("DD/MM/YYYY")} -{" "}
+                          {moment(item?.end_date).format("DD/MM/YYYY")}
+                        </Text>
+                      </td>
+                      <td>
+                        <Text size="sm" style={{ fontWeight: 600 }}>
+                          {item?.title}
+                        </Text>
+                        <Text size="xs" style={{ opacity: 0.7 }}>
+                          {item?.description}
+                        </Text>
+                      </td>
+                      <td style={{ width: 120 }}>
+                        <ul>
+                          {item?.components.map((item: string) => (
+                            <li>
+                              <Text size="sm" mb={5}>
+                                {item}
+                              </Text>
+                            </li>
+                          ))}
+                        </ul>
                       </td>
                     </tr>
                   )
@@ -222,7 +235,7 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
       onClick={() => {
         setSelectedColor(color);
       }}
-      style={{ cursor: "pointer" }}
+      className="click"
       size={40}
     >
       {selectedColor === color && (
@@ -306,6 +319,8 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
             {swatches}
           </Group>
         </div>
+
+        <Divider mt="md" variant="dotted" />
 
         <Group position="right" mt="xl">
           <Button variant="default" onClick={closeModal}>

@@ -63,6 +63,26 @@
 
 .curriculum-container {
   max-width: calc(100vw - 73px);
+
+  .border-light {
+    td,
+    th {
+      border: 1px solid #dee2e6 !important;
+    }
+  }
+
+  .border-dark {
+    td,
+    th {
+      border: 1px solid #373a40 !important;
+    }
+  }
+
+  ul {
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    padding-inline-start: 12px !important;
+  }
 }
 
 .color-select {
