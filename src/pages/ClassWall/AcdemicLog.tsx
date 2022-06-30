@@ -119,7 +119,7 @@ const AcdemicLog = () => {
             setAddTaskModal(false);
           }}
           submit={handleCreateTask}
-          modalActive={addTaskModal}
+          allSubjects={allSubjects}
         />
       </Modal>
 

@@ -10,17 +10,13 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import useClass from "../../../hooks/useClass";
-import useSubject from "../../../hooks/useSubject";
 import { Trash } from "tabler-icons-react";
 import useStudyResources from "../../../hooks/useStudyResources";
 import Upload from "../../Upload/Upload";
 import { showNotification } from "@mantine/notifications";
 import { useSelector } from "react-redux";
 
-const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
-  const { getClassList, allClasses } = useClass();
-  const { getSubjectList, allSubjects } = useSubject();
+const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
   const [fileListNames, setFileListNames] = useState<Array<string>>([]);
   const [fileListIds, setFileListIds] = useState<Array<string>>([]);
   const { loading, handleUploadStudyResourceFile } = useStudyResources();
@@ -56,18 +52,6 @@ const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
     );
     return res !== null;
   };
-
-  useEffect(() => {
-    if (modalActive) {
-      if (userdata?.role?.name === "Teacher") {
-        getClassList(1, 300, true, userdata?.user_id);
-      } else {
-        getClassList(1, 300, true);
-      }
-      getSubjectList(1, 300, true);
-    }
-    //eslint-disable-next-line
-  }, []);
 
   useEffect(() => {
     if (file) {
@@ -174,7 +158,7 @@ const AddStudyResource = ({ closeModal, submit, modalActive }: any) => {
           placeholder="Select classroom"
           variant="filled"
           disabled={userdata?.role?.name === "Teacher"}
-          data={allClasses.map(
+          data={classWall?.classes.map(
             (item: { classroom_id: string; classroom_name: string }) => ({
               key: item?.classroom_id,
               value: item?.classroom_id,

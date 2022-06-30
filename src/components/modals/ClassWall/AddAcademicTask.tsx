@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   TextInput,
@@ -9,15 +9,11 @@ import {
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
-import useClass from "../../../hooks/useClass";
-import useSubject from "../../../hooks/useSubject";
 import Upload from "../../Upload/Upload";
 import { useSelector } from "react-redux";
 import moment from "moment";
 
-const AddAcademicTask = ({ closeModal, submit, modalActive }: any) => {
-  const { getClassList, allClasses } = useClass();
-  const { getSubjectList, allSubjects } = useSubject();
+const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
   const [file, setFile] = useState<any>(null);
   const userdata = useSelector((state: any) => {
     return state.user.userdata;
@@ -50,32 +46,6 @@ const AddAcademicTask = ({ closeModal, submit, modalActive }: any) => {
     );
     return res !== null;
   };
-
-  useEffect(() => {
-    if (modalActive) {
-      if (userdata?.role?.name === "Teacher") {
-        getClassList(1, 300, true, userdata?.user_id);
-      } else {
-        getClassList(1, 300, true);
-      }
-
-      if (
-        userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
-      ) {
-        getSubjectList(1, 300, true, "", classWall?.activeClassId);
-      } else {
-        getSubjectList(
-          1,
-          300,
-          true,
-          userdata?.user_id,
-          classWall?.activeClassId
-        );
-      }
-    }
-
-    //eslint-disable-next-line
-  }, []);
 
   return (
     <div>
@@ -139,7 +109,7 @@ const AddAcademicTask = ({ closeModal, submit, modalActive }: any) => {
           placeholder="Select classroom"
           variant="filled"
           disabled={userdata?.role?.name === "Teacher"}
-          data={allClasses.map(
+          data={classWall?.classes.map(
             (item: { classroom_id: string; classroom_name: string }) => ({
               key: item?.classroom_id,
               value: item?.classroom_id,

@@ -53,13 +53,34 @@ const StudyResources = () => {
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
+  });
   const [confirmDeleteResource, setConfirmDeleteresource] =
     useState<boolean>(false);
   const [resourceId, setresourceId] = useState<string>("");
   const [resource, setResource] = useState<any>(null);
 
   useEffect(() => {
-    getSubjectList(1, 300, true);
+    if (classWall?.activeClassId) {
+      if (
+        userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
+      ) {
+        getSubjectList(1, 300, true, "", classWall?.activeClassId);
+      } else if (
+        userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
+      ) {
+        getSubjectList(
+          1,
+          300,
+          true,
+          userdata?.user_id,
+          classWall?.activeClassId
+        );
+      } else {
+        getSubjectList(1, 300, true, "");
+      }
+    }
 
     //eslint-disable-next-line
   }, []);
@@ -109,7 +130,7 @@ const StudyResources = () => {
             setAddResourceModal(false);
           }}
           submit={handlePostStudyResource}
-          modalActive={addResourceModal}
+          allSubjects={allSubjects}
         />
       </Modal>
 

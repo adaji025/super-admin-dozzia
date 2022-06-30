@@ -39,19 +39,29 @@ const Curriculum = () => {
   });
 
   const [page] = useState<number>(1);
-  const [perPage] = useState<number>(100);
+  const [perPage] = useState<number>(300);
   const deviceWidth = window.innerWidth;
   const navigate = useNavigate();
 
   useEffect(() => {
     if (classWall?.activeClassId) {
-      getSubjectList(
-        page,
-        perPage,
-        true,
-        userdata?.user_id,
-        classWall?.activeClassId
-      );
+      if (
+        userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
+      ) {
+        getSubjectList(1, perPage, true, "", classWall?.activeClassId);
+      } else if (
+        userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
+      ) {
+        getSubjectList(
+          1,
+          perPage,
+          true,
+          userdata?.user_id,
+          classWall?.activeClassId
+        );
+      } else {
+        getSubjectList(1, perPage, true, "");
+      }
     }
 
     //eslint-disable-next-line
