@@ -60,3 +60,20 @@
     }
   }
 }
+
+.curriculum-container {
+  max-width: calc(100vw - 73px);
+}
+
+.color-select {
+  margin-top: 18px;
+
+  .c-s-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 7px;
+    span {
+      color: #f03e3e;
+    }
+  }
+}

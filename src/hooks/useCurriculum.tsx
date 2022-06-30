@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import {
   createCurriculumItem,
   updateCurriculumItem,
   getSubjectCurriculum,
 } from "../services/curriculum/curriculum";
-import { showLoader } from "../redux/utility/utility.actions";
 import useNotification from "./useNotification";
 import { showNotification } from "@mantine/notifications";
+import moment from "moment";
 
 const useCurriculum = () => {
-  const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -25,21 +23,26 @@ const useCurriculum = () => {
     components: Array<string>;
   }) => {
     return new Promise((resolve) => {
-      dispatch(showLoader(true));
+      setLoading(true);
 
-      createCurriculumItem(data)
+      createCurriculumItem({
+        ...data,
+        start_date: moment(data?.start_date).format("YYYY-MM-DD"),
+        end_date: moment(data?.end_date).format("YYYY-MM-DD"),
+      })
         .then((res) => {
           showNotification({
             title: "Success",
             message: "Curriculum saved",
             color: "green",
           });
+          resolve(res);
         })
         .catch((error) => {
           handleError(error);
         })
         .finally(() => {
-          dispatch(showLoader(false));
+          setLoading(false);
         });
     });
   };
