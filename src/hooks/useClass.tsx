@@ -75,22 +75,25 @@ const useClass = () => {
     all?: boolean,
     staffId?: string
   ) => {
-    if (classes === null) {
-      setLoading(true);
-    }
+    return new Promise((resolve) => {
+      if (classes === null) {
+        setLoading(true);
+      }
 
-    getClasses({ page, perPage, staffId })
-      .then((res) => {
-        if (all) {
-          setAllClasses(res.data);
-        } else {
-          dispatch(setClasses(res));
-        }
-      })
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false);
-      });
+      getClasses({ page, perPage, staffId })
+        .then((res) => {
+          if (all) {
+            setAllClasses(res.data);
+          } else {
+            dispatch(setClasses(res));
+          }
+          resolve(res);
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    });
   };
 
   const getClass = (id: string) => {

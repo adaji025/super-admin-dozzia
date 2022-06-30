@@ -56,27 +56,30 @@ const useSubject = () => {
     staffId?: string,
     classId?: string
   ) => {
-    if (subjects === null) {
-      setLoading(true);
-    }
+    return new Promise((resolve) => {
+      if (subjects === null) {
+        setLoading(true);
+      }
 
-    getSubjects({
-      page,
-      perPage,
-      staffId: staffId ?? "",
-      classId: classId ?? "",
-    })
-      .then((res) => {
-        if (all) {
-          setAllSubjects(res.data);
-        } else {
-          dispatch(setSubjects(res));
-        }
+      getSubjects({
+        page,
+        perPage,
+        staffId: staffId ?? "",
+        classId: classId ?? "",
       })
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false);
-      });
+        .then((res) => {
+          if (all) {
+            setAllSubjects(res.data);
+          } else {
+            dispatch(setSubjects(res));
+          }
+          resolve(res);
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+        });
+    });
   };
 
   const handleUpdateSubject = (

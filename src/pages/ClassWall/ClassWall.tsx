@@ -21,13 +21,27 @@ const ClassWall = () => {
   const userdata = useSelector((state: any) => {
     return state.user.userdata;
   });
-  const { getClassList, allClasses } = useClass();
+  const { getClassList } = useClass();
 
   useEffect(() => {
     if (userdata?.role?.name === "Teacher") {
-      getClassList(1, 300, true, userdata?.user_id);
+      getClassList(1, 300, true, userdata?.user_id).then((res: any) => {
+        dispatch(
+          setClassWall({
+            ...classWall,
+            classes: res?.data,
+          })
+        );
+      });
     } else {
-      getClassList(1, 300, true);
+      getClassList(1, 300, true).then((res: any) => {
+        dispatch(
+          setClassWall({
+            ...classWall,
+            classes: res?.data,
+          })
+        );
+      });
     }
     //eslint-disable-next-line
   }, []);
@@ -89,7 +103,7 @@ const ClassWall = () => {
               >
                 <Menu.Label>Classroom List</Menu.Label>
 
-                {allClasses.map(
+                {classWall?.classes.map(
                   (item: { classroom_id: string; classroom_name: string }) => (
                     <Menu.Item
                       key={item.classroom_id}
