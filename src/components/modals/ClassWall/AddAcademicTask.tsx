@@ -58,7 +58,20 @@ const AddAcademicTask = ({ closeModal, submit, modalActive }: any) => {
       } else {
         getClassList(1, 300, true);
       }
-      getSubjectList(1, 300, true);
+
+      if (
+        userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
+      ) {
+        getSubjectList(1, 300, true, "", classWall?.activeClassId);
+      } else {
+        getSubjectList(
+          1,
+          300,
+          true,
+          userdata?.user_id,
+          classWall?.activeClassId
+        );
+      }
     }
 
     //eslint-disable-next-line

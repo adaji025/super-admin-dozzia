@@ -45,10 +45,31 @@ const AcdemicLog = () => {
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
+  });
   const [task, setTask] = useState<any>(null);
 
   useEffect(() => {
-    getSubjectList(1, 300, true);
+    if (classWall?.activeClassId) {
+      if (
+        userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
+      ) {
+        getSubjectList(1, 300, true, "", classWall?.activeClassId);
+      } else if (
+        userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
+      ) {
+        getSubjectList(
+          1,
+          300,
+          true,
+          userdata?.user_id,
+          classWall?.activeClassId
+        );
+      } else {
+        getSubjectList(1, 300, true, "");
+      }
+    }
 
     //eslint-disable-next-line
   }, []);
@@ -209,6 +230,7 @@ const AcdemicLog = () => {
                 onClick={() => {
                   setAddTaskModal(true);
                 }}
+                disabled={userdata?.role?.name === "School Admin"}
               >
                 Add Task
               </Button>
