@@ -200,7 +200,6 @@ const Staff = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Name
@@ -209,7 +208,6 @@ const Staff = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                         className="large-only"
                       >
@@ -219,7 +217,6 @@ const Staff = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         {role === "" ? "Staff Role" : `${role}s only`}
@@ -253,7 +250,6 @@ const Staff = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                               className="large-only"
                             >

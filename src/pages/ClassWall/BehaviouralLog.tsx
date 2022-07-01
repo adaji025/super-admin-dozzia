@@ -149,7 +149,6 @@ const BehaviouralLog = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                           className="large-only"
                         >
@@ -158,7 +157,6 @@ const BehaviouralLog = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Name
@@ -166,7 +164,6 @@ const BehaviouralLog = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Reg No.
@@ -198,7 +195,6 @@ const BehaviouralLog = () => {
                               <td
                                 style={{
                                   borderBottom: `1px solid #0000`,
-                                  color: dark ? "#b3b7cb" : "#898989",
                                 }}
                                 className="large-only"
                               >

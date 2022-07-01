@@ -11,7 +11,6 @@ import {
 } from "@mantine/core";
 import { User, Clipboard } from "tabler-icons-react";
 import useSubject from "../../../hooks/useSubject";
-import useTheme from "../../../hooks/useTheme";
 
 const SubjectClasses = ({
   closeModal,
@@ -27,7 +26,6 @@ const SubjectClasses = ({
   };
   modalActive: boolean;
 }) => {
-  const { dark } = useTheme();
   const { handleGetSubjectClasses } = useSubject();
   const [classes, setClasses] = useState<any>(null);
   const deviceWidth = window.innerWidth;
@@ -60,7 +58,6 @@ const SubjectClasses = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                   >
                     Class Name
@@ -68,7 +65,6 @@ const SubjectClasses = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                     className="large-only"
                   >
@@ -77,7 +73,6 @@ const SubjectClasses = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                   >
                     Teacher
@@ -111,7 +106,6 @@ const SubjectClasses = ({
                       <td
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                         className="large-only"
                       >
@@ -137,7 +131,6 @@ const SubjectClasses = ({
                       <td
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         {`${item?.classroom_teacher?.title} ${item?.classroom_teacher?.first_name} ${item?.classroom_teacher?.last_name}`}

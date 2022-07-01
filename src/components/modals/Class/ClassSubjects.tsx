@@ -9,7 +9,6 @@ import {
   Alert,
 } from "@mantine/core";
 import { User } from "tabler-icons-react";
-import useTheme from "../../../hooks/useTheme";
 
 const ClassSubjects = ({
   closeModal,
@@ -18,7 +17,6 @@ const ClassSubjects = ({
   closeModal: () => void;
   subjects: any;
 }) => {
-  const { dark } = useTheme();
   const deviceWidth = window.innerWidth;
 
   return (
@@ -40,7 +38,6 @@ const ClassSubjects = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                   >
                     Subject Name
@@ -48,7 +45,6 @@ const ClassSubjects = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                     className="large-only"
                   >
@@ -57,7 +53,6 @@ const ClassSubjects = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                   >
                     Teacher
@@ -95,7 +90,6 @@ const ClassSubjects = ({
                       <td
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                         className="large-only"
                       >
@@ -121,7 +115,6 @@ const ClassSubjects = ({
                       <td
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         {`${item.teacher.title} ${item.teacher.first_name} ${item.teacher.last_name}`}

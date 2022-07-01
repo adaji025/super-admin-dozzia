@@ -112,8 +112,8 @@ const ViewCurricula = ({ closeModal, curriculum }: any) => {
   const { dark } = useTheme();
 
   return (
-    <div className="curriculum-container">
-      <Box sx={{ minHeight: 450 }}>
+    <div className="curriculum-container modal-table-container">
+      <Box sx={{ minHeight: 400 }}>
         {curriculum && curriculum?.data ? (
           <ScrollArea>
             <Table

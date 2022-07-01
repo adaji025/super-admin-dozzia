@@ -176,7 +176,6 @@ const Attendance = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Class
@@ -185,7 +184,6 @@ const Attendance = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                         className="large-only"
                       >
@@ -217,7 +215,6 @@ const Attendance = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                               className="large-only"
                             >

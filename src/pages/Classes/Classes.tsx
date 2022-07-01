@@ -180,7 +180,6 @@ const Classes = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Class Name
@@ -188,7 +187,6 @@ const Classes = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Class Teacher
@@ -197,7 +195,6 @@ const Classes = () => {
                         className="large-only"
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Class Level
@@ -233,7 +230,6 @@ const Classes = () => {
                           <td
                             style={{
                               borderBottom: `1px solid #0000`,
-                              color: dark ? "#b3b7cb" : "#898989",
                             }}
                             className="large-only"
                           >
@@ -250,7 +246,6 @@ const Classes = () => {
                           <td
                             style={{
                               borderBottom: `1px solid #0000`,
-                              color: dark ? "#b3b7cb" : "#898989",
                             }}
                           >
                             {`${item.classroom_teacher?.title ?? ""} ${
@@ -262,7 +257,7 @@ const Classes = () => {
                             style={{
                               borderBottom: `1px solid #0000`,
                               paddingLeft: "30px",
-                              color: dark ? "#b3b7cb" : "#898989",
+
                               fontWeight: "500",
                             }}
                           >

@@ -130,7 +130,6 @@ const Students = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                         className="large-only"
                       >
@@ -139,7 +138,6 @@ const Students = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Name
@@ -147,7 +145,6 @@ const Students = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Reg No.
@@ -179,7 +176,6 @@ const Students = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                               className="large-only"
                             >

@@ -279,7 +279,6 @@ const AcdemicLog = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Task Title
@@ -288,7 +287,6 @@ const AcdemicLog = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Subject
@@ -297,7 +295,6 @@ const AcdemicLog = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Date Created
@@ -306,7 +303,6 @@ const AcdemicLog = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Due Date
@@ -340,7 +336,6 @@ const AcdemicLog = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                               className="large-only"
                             >

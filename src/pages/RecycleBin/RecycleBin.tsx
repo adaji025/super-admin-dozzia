@@ -91,7 +91,6 @@ const RecycleBin = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Name
@@ -100,7 +99,6 @@ const RecycleBin = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                         className="large-only"
                       >
@@ -110,7 +108,6 @@ const RecycleBin = () => {
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
-                          color: dark ? "#b3b7cb" : "#898989",
                         }}
                       >
                         Staff Role
@@ -144,7 +141,6 @@ const RecycleBin = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                               className="large-only"
                             >

@@ -191,7 +191,6 @@ const Reports = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Issue Number
@@ -199,7 +198,6 @@ const Reports = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Title
@@ -207,7 +205,6 @@ const Reports = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Created By
@@ -216,7 +213,6 @@ const Reports = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Date
@@ -225,7 +221,6 @@ const Reports = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Status
@@ -234,7 +229,6 @@ const Reports = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Comment
@@ -277,7 +271,6 @@ const Reports = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                             >
                               {index + 1}

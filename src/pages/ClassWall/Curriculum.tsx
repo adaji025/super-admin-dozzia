@@ -174,7 +174,6 @@ const Curriculum = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Subject Name
@@ -182,7 +181,6 @@ const Curriculum = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Category
@@ -211,7 +209,6 @@ const Curriculum = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                               className="large-only"
                             >
@@ -228,7 +225,6 @@ const Curriculum = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                             >
                               {item.subject_category}

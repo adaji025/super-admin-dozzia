@@ -303,7 +303,6 @@ const StudyResources = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Resource Name
@@ -311,7 +310,6 @@ const StudyResources = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                         >
                           Subject
@@ -342,7 +340,6 @@ const StudyResources = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                color: dark ? "#b3b7cb" : "#898989",
                               }}
                               className="large-only"
                             >

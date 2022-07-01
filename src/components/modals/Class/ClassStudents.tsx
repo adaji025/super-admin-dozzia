@@ -16,7 +16,6 @@ import {
   Text,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
-import useTheme from "../../../hooks/useTheme";
 import { Trash, Users, UserPlus, User } from "tabler-icons-react";
 import { useForm, formList } from "@mantine/form";
 import useClass from "../../../hooks/useClass";
@@ -280,7 +279,6 @@ const ViewStudents = ({
   loading: boolean;
   setPage: (value: number) => void;
 }) => {
-  const { dark } = useTheme();
   const deviceWidth = window.innerWidth;
 
   return (
@@ -300,7 +298,6 @@ const ViewStudents = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                     className="large-only"
                   >
@@ -309,7 +306,6 @@ const ViewStudents = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                   >
                     Name
@@ -317,7 +313,6 @@ const ViewStudents = ({
                   <th
                     style={{
                       borderBottom: `1px solid #0000`,
-                      color: dark ? "#b3b7cb" : "#898989",
                     }}
                   >
                     Reg No.
@@ -349,7 +344,6 @@ const ViewStudents = ({
                         <td
                           style={{
                             borderBottom: `1px solid #0000`,
-                            color: dark ? "#b3b7cb" : "#898989",
                           }}
                           className="large-only"
                         >
