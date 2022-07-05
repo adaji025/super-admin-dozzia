@@ -16,12 +16,7 @@ import {
   Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import {
-  AdjustmentsHorizontal,
-  Search,
-  PlaylistAdd,
-  User,
-} from "tabler-icons-react";
+import { X, Search, PlaylistAdd, User } from "tabler-icons-react";
 import AddStudentToClass from "../../components/modals/Student/AddStudentToClass";
 import useStudent from "../../hooks/useStudent";
 import useClass from "../../hooks/useClass";
@@ -29,9 +24,11 @@ import useClass from "../../hooks/useClass";
 const Students = () => {
   const { dark } = useTheme();
   const [addToClassModal, setAddToClassModal] = useState<boolean>(false);
-  const { students, handleGetStudents, loading } = useStudent();
+  const { students, handleGetStudents, loading, setLoading } = useStudent();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const [studentInfo, setStudentInfo] = useState<{
     fullName: string;
     studentId: string;
@@ -41,10 +38,10 @@ const Students = () => {
   const { allClasses, getClassList } = useClass();
 
   useEffect(() => {
-    handleGetStudents(page, perPage);
+    handleGetStudents(page, perPage, search);
     getClassList(1, 200, "", "", true);
     //eslint-disable-next-line
-  }, [page]);
+  }, [page, search]);
 
   return (
     <Fragment>
@@ -94,25 +91,61 @@ const Students = () => {
           </div>
 
           <div
-            className="d-p-search"
+            className="d-p-search with-btns"
             style={{
               background: dark ? "#121212" : "#f8f9fa",
             }}
           >
-            <Input
-              sx={{
-                maxWidth: "900px",
-              }}
-              icon={<Search size={16} />}
-              placeholder="Search student (not working yet)"
-              rightSection={
-                <AdjustmentsHorizontal
-                  strokeWidth={1.4}
-                  style={{ opacity: 0.5 }}
-                  className="click"
-                />
-              }
-            />
+            <div className="s-left">
+              <Input
+                sx={{
+                  maxWidth: "706px",
+                }}
+                icon={<Search size={16} />}
+                placeholder="Search student"
+                value={searchInput}
+                onKeyUp={(e: any) => {
+                  if (e.code === "Enter") {
+                    if (searchInput !== "") {
+                      setLoading(true);
+                      setSearch(searchInput);
+                    }
+                  }
+                }}
+                rightSection={
+                  (searchInput !== "" || search !== "") && (
+                    <X
+                      strokeWidth={1.4}
+                      style={{ opacity: 0.5 }}
+                      className="click"
+                      onClick={() => {
+                        if (search !== "") {
+                          setLoading(true);
+                          setSearch("");
+                        }
+                        setSearchInput("");
+                      }}
+                    />
+                  )
+                }
+                onChange={(e: any) => {
+                  setSearchInput(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="s-right">
+              <Button
+                onClick={() => {
+                  if (searchInput !== "") {
+                    setLoading(true);
+                    setSearch(searchInput);
+                  }
+                }}
+              >
+                Search
+              </Button>
+            </div>
           </div>
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">

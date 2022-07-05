@@ -7,9 +7,9 @@ export const onboardStudent = (data: any) => {
   });
 };
 
-export const getStudents = (data: { page: number; perPage: number }) => {
+export const getStudents = (page: number, perPage: number, search: string) => {
   return AxoisApi.get(
-    `${APIS.STUDENT.GET_STUDENT_LIST(data.page, data.perPage)}`
+    `${APIS.STUDENT.GET_STUDENT_LIST(page, perPage, search)}`
   ).then((res) => {
     return res.data;
   });

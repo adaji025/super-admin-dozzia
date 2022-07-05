@@ -20,16 +20,16 @@ export const APIS = {
     GET_STAFF_LIST: (
       page: number,
       perPage: number,
-      query: string,
+      search: string,
       role: string
     ) =>
-      `${api}/staff?per_page=${perPage}&page=${page}&search_query=${query}&role=${role}`,
+      `${api}/staff?per_page=${perPage}&page=${page}&search_query=${search}&role=${role}`,
     DELETE_STAFF: (id: string) => `${api}/staff/${id}`,
   },
   STUDENT: {
     ONBOARD_STUDENT: `${api}/students`,
-    GET_STUDENT_LIST: (page: number, perPage: number) =>
-      `${api}/students?per_page=${perPage}&page=${page}`,
+    GET_STUDENT_LIST: (page: number, perPage: number, search: string) =>
+      `${api}/students?per_page=${perPage}&page=${page}&search_query=${search}`,
     ADD_STUDENT_TO_CLASS: (studentId: string, classId: string) =>
       `${api}/students/${studentId}/classroom/${classId}`,
     GET_STUDENT_WITH_USERNAME: (username: string) =>
@@ -58,10 +58,11 @@ export const APIS = {
     GET_SUBJECT_LIST: (
       page: number,
       perPage: number,
+      search: string,
       staffId: string,
       classId: string
     ) =>
-      `${api}/subjects?per_page=${perPage}&page=${page}&staff_id=${staffId}&classroom_id=${classId}`,
+      `${api}/subjects?per_page=${perPage}&page=${page}&staff_id=${staffId}&classroom_id=${classId}&search_query=${search}`,
     SUBJECT: (id: string) => `${api}/subjects/${id}`,
     ASSIGN_CLASS_AND_TEACHER: (id: string) => `${api}/subjects/${id}/assign`,
     GET_SUBJECT_CLASSES: (id: string) => `${api}/subjects/${id}/classrooms`,

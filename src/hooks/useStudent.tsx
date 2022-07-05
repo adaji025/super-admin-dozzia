@@ -18,11 +18,11 @@ const useStudent = () => {
     return state.data.students;
   });
 
-  const handleGetStudents = (page: number, perPage: number) => {
+  const handleGetStudents = (page: number, perPage: number, search: string) => {
     if (students === null) {
       setLoading(true);
     }
-    getStudents({ page, perPage })
+    getStudents(page, perPage, search)
       .then((res) => {
         dispatch(setStudents(res));
       })
