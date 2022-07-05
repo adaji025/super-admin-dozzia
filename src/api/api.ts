@@ -62,8 +62,13 @@ export const APIS = {
   },
   EVENT: {
     CREATE_EVENT: `${api}/events`,
-    GET_EVENTS: (page: number, perPage: number) =>
-      `${api}/events?per_page=${perPage}&page=${page}`,
+    GET_EVENTS: (
+      page: number,
+      perPage: number,
+      search: string,
+      classId: string
+    ) =>
+      `${api}/events?per_page=${perPage}&page=${page}&search_query=${search}&classroom_id=${classId}`,
     EVENT: (id: string) => `${api}/events/${id}`,
   },
   ATTENDANCE: {

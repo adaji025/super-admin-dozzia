@@ -29,6 +29,7 @@ const useEvent = () => {
     endTime: string;
     visibility: string;
     time: string;
+    classId?: string;
   }) => {
     dispatch(showLoader(true));
 
@@ -42,6 +43,7 @@ const useEvent = () => {
         values.endTime
       ).format("HH:mm:ss")}`,
       visibility: values.visibility,
+      classroom_id: values.classId,
     })
       .then((res) => {
         showNotification({
@@ -49,7 +51,7 @@ const useEvent = () => {
           message: "Event created successfully.",
           color: "green",
         });
-        handleGetEvents(1, 10);
+        handleGetEvents(1, 10, "");
       })
       .catch((error) => {
         handleError(error);
@@ -59,12 +61,17 @@ const useEvent = () => {
       });
   };
 
-  const handleGetEvents = (page: number, perPage: number) => {
+  const handleGetEvents = (
+    page: number,
+    perPage: number,
+    search: string,
+    classId?: string
+  ) => {
     if (!events) {
       setLoading(true);
     }
 
-    getEvents({ page, perPage })
+    getEvents(page, perPage, search, classId ? classId : "")
       .then((res) => {
         dispatch(setEvents(res));
       })
@@ -85,7 +92,7 @@ const useEvent = () => {
           message: `${"Event deleted successfully."} 🗓️`,
           color: "green",
         });
-        handleGetEvents(1, 10);
+        handleGetEvents(1, 10, "");
       })
       .catch((error) => {
         handleError(error);
@@ -127,7 +134,7 @@ const useEvent = () => {
           message: `${"Event updated successfully."} 🗓️`,
           color: "green",
         });
-        handleGetEvents(1, 10);
+        handleGetEvents(1, 10, "");
       })
       .catch((error) => {
         handleError(error);

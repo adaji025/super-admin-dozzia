@@ -109,7 +109,7 @@ const Staff = () => {
                   }
                 }}
                 rightSection={
-                  searchInput !== "" && (
+                  (searchInput !== "" || search !== "") && (
                     <X
                       strokeWidth={1.4}
                       style={{ opacity: 0.5 }}

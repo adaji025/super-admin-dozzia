@@ -14,12 +14,7 @@ import {
   Box,
   Table,
 } from "@mantine/core";
-import {
-  AdjustmentsHorizontal,
-  Search,
-  Trash,
-  CalendarEvent,
-} from "tabler-icons-react";
+import { X, Search, Trash, CalendarEvent } from "tabler-icons-react";
 import useTheme from "../../hooks/useTheme";
 import useEvent from "../../hooks/useEvent";
 import CreateEvent from "../../components/modals/Events/CreateEvent";
@@ -29,6 +24,8 @@ import Confirmation from "../../components/modals/Confirmation/Confirmation";
 const Events = () => {
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const { dark } = useTheme();
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
   const [event, setEvent] = useState<any>(null);
@@ -46,9 +43,9 @@ const Events = () => {
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
 
   useEffect(() => {
-    handleGetEvents(page, perPage);
+    handleGetEvents(page, perPage, search);
     //eslint-disable-next-line
-  }, [page]);
+  }, [page, search]);
 
   return (
     <Fragment>
@@ -117,25 +114,61 @@ const Events = () => {
           </div>
 
           <div
-            className="d-p-search"
+            className="d-p-search with-btns"
             style={{
               background: dark ? "#121212" : "#f8f9fa",
             }}
           >
-            <Input
-              sx={{
-                maxWidth: "1000px",
-              }}
-              icon={<Search size={16} />}
-              placeholder="Search events"
-              rightSection={
-                <AdjustmentsHorizontal
-                  strokeWidth={1.4}
-                  style={{ opacity: 0.5 }}
-                  className="click"
-                />
-              }
-            />
+            <div className="s-left">
+              <Input
+                sx={{
+                  maxWidth: "706px",
+                }}
+                icon={<Search size={16} />}
+                placeholder="Search event"
+                value={searchInput}
+                onKeyUp={(e: any) => {
+                  if (e.code === "Enter") {
+                    if (searchInput !== "") {
+                      setLoading(true);
+                      setSearch(searchInput);
+                    }
+                  }
+                }}
+                rightSection={
+                  (searchInput !== "" || search !== "") && (
+                    <X
+                      strokeWidth={1.4}
+                      style={{ opacity: 0.5 }}
+                      className="click"
+                      onClick={() => {
+                        if (search !== "") {
+                          setLoading(true);
+                          setSearch("");
+                        }
+                        setSearchInput("");
+                      }}
+                    />
+                  )
+                }
+                onChange={(e: any) => {
+                  setSearchInput(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="s-right">
+              <Button
+                onClick={() => {
+                  if (searchInput !== "") {
+                    setLoading(true);
+                    setSearch(searchInput);
+                  }
+                }}
+              >
+                Search
+              </Button>
+            </div>
           </div>
 
           <Box sx={{ maxWidth: 1000, minHeight: 173 }} className="d-p-main">
@@ -144,19 +177,12 @@ const Events = () => {
                 <Table striped verticalSpacing="md">
                   <thead>
                     <tr>
-                      {/* <th
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          
-                        }}
-                        className="large-only"
-                      ></th> */}
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
                         }}
                       >
-                        Event Name
+                        Event
                       </th>
                       <th
                         style={{
@@ -205,19 +231,6 @@ const Events = () => {
                           visibility: string;
                         }) => (
                           <tr key={item.event_id}>
-                            {/* <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                width: "50px",
-                              }}
-                              className="large-only"
-                            >
-                              <Avatar
-                                className="avatar"
-                                src={null}
-                                radius="xl"
-                              />
-                            </td> */}
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
