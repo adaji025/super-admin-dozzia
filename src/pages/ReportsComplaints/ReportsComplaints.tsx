@@ -21,7 +21,6 @@ import {
   BrandHipchat,
   X,
   Filter,
-  FilterOff,
 } from "tabler-icons-react";
 import useReports from "../../hooks/useReports";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
@@ -124,7 +123,17 @@ const Reports = () => {
                   </Button>
                 }
               >
-                <Menu.Label>Filter Menu</Menu.Label>
+                <Menu.Label>Status Menu</Menu.Label>
+
+                <Menu.Item
+                  onClick={() => {
+                    setLoading(true);
+                    setStatus("");
+                  }}
+                  disabled={status === ""}
+                >
+                  All Complaints
+                </Menu.Item>
 
                 <Menu.Item
                   onClick={() => {
@@ -154,19 +163,6 @@ const Reports = () => {
                   disabled={status === "unresolved"}
                 >
                   Unresolved
-                </Menu.Item>
-
-                <Divider />
-
-                <Menu.Item
-                  onClick={() => {
-                    setLoading(true);
-                    setStatus("");
-                  }}
-                  color="red"
-                  icon={<FilterOff size={14} />}
-                >
-                  Clear filter
                 </Menu.Item>
               </Menu>
             </div>
