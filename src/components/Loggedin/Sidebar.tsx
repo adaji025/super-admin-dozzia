@@ -92,7 +92,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Users,
       name: "Admissions",
       route: "/admissions",
-      key: ["add-student", "add-staff"],
+      key: ["add-student", "add-staff", "terms-sessions"],
       children: [
         {
           name: "Add Student",
@@ -101,6 +101,10 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         {
           name: "Add Staff",
           route: "/add-staff",
+        },
+        {
+          name: "Terms/Sessions",
+          route: "/terms-sessions",
         },
       ],
     },

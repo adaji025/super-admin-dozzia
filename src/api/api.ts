@@ -158,4 +158,16 @@ export const APIS = {
     ) =>
       `${api}/curricula?per_page=${perPage}&page=${page}&subject_id=${subjectId}&classroom_id=${classroomId}`,
   },
+  TERMS: {
+    ADD_TERM: `${api}/settings/terms`,
+    DELETE_TERM: (id: string) => `${api}/settings/terms/${id}`,
+    GET_TERMS: (sessionId: string) =>
+      `${api}/settings/terms?session_id=${sessionId}`,
+  },
+  SESSIONS: {
+    SESSIONS: `${api}/settings/sessions`,
+    DELETE_SESSION: (id: string) => `${api}/settings/sessions/${id}`,
+    SET_ACTIVE_SESSION: (sessionId: string) =>
+      `${api}/settings/sessions/${sessionId}/set-active`,
+  },
 };

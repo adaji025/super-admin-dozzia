@@ -19,6 +19,7 @@ import Broadcast from "../../pages/Broadcast/Broadcast";
 import Attendance from "../../pages/Attendance/Attendance";
 import ReportsComplaints from "../../pages/ReportsComplaints/ReportsComplaints";
 import RecycleBin from "../../pages/RecycleBin/RecycleBin";
+import TermsSessions from "../../pages/TermsSessions/TermsSessions";
 
 import ClassWall from "../../pages/ClassWall/ClassWall";
 import AcdemicLog from "../../pages/ClassWall/AcdemicLog";
@@ -68,6 +69,7 @@ const LoggedinContainer = () => {
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/reports" element={<ReportsComplaints />} />
             <Route path="/recycle-bin" element={<RecycleBin />} />
+            <Route path="/terms-sessions" element={<TermsSessions />} />
             <Route path="/class-wall" element={<ClassWall />} />
             <Route path="/class-wall/academic-log" element={<AcdemicLog />} />
             <Route
