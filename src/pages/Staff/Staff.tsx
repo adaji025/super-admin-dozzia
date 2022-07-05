@@ -87,7 +87,7 @@ const Staff = () => {
           </div>
 
           <div
-            className="d-p-search with-btns"
+            className="d-p-search with-btns next"
             style={{
               background: dark ? "#121212" : "#f8f9fa",
             }}
@@ -130,7 +130,7 @@ const Staff = () => {
               />
             </div>
 
-            <div className="s-right">
+            <div className="s-right next">
               <Button
                 onClick={() => {
                   if (searchInput !== "") {

@@ -58,6 +58,9 @@
       &.with-btns {
         display: flex;
         flex-direction: row;
+      }
+
+      &.next {
         @media only screen and (max-width: 768px) {
           flex-direction: column;
         }
@@ -79,9 +82,11 @@
         flex-direction: row;
         align-items: center;
 
-        @media only screen and (max-width: 768px) {
-          margin-left: unset;
-          margin-top: 10px;
+        &.next {
+          @media only screen and (max-width: 768px) {
+            margin-left: unset;
+            margin-top: 10px;
+          }
         }
       }
     }
