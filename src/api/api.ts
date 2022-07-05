@@ -37,10 +37,16 @@ export const APIS = {
   },
   CLASS: {
     CREATE_CLASS: `${api}/classrooms`,
-    GET_CLASS_LIST: (page: number, perPage: number, staffId?: string) =>
+    GET_CLASS_LIST: (
+      page: number,
+      perPage: number,
+      level: string,
+      search: string,
+      staffId?: string
+    ) =>
       `${api}/classrooms?per_page=${perPage}&page=${page}&staff_id=${
         staffId ?? ""
-      }`,
+      }&level=${level}&search_query=${search}`,
     CLASS: (id: string) => `${api}/classrooms/${id}`,
     GET_CLASS_STUDENTS: (id: string, page: number, perPage: number) =>
       `${api}/classrooms/${id}/students?per_page=${perPage}&page=${page}`,

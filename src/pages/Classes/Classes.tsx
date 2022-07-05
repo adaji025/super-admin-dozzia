@@ -13,15 +13,17 @@ import {
   Divider,
   Group,
   Alert,
+  ScrollArea,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import {
-  AdjustmentsHorizontal,
+  X,
   Search,
   ClipboardList,
   Users,
   Book,
   Edit,
+  Filter,
 } from "tabler-icons-react";
 import AddClass from "../../components/modals/Class/AddClass";
 import ClassStudents from "../../components/modals/Class/ClassStudents";
@@ -41,19 +43,29 @@ const Classes = () => {
     classroom_teacher: string;
     classroom_description: string;
   }>(null);
-  const { getClassList, loading, handleAddClass, handleUpdateClass, classes } =
-    useClass();
+  const {
+    getClassList,
+    loading,
+    setLoading,
+    handleAddClass,
+    handleUpdateClass,
+    classes,
+    classLevels,
+  } = useClass();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
+  const [level, setLevel] = useState<string>("");
   const [classId, setClassId] = useState<string>("");
   const [className, setClassName] = useState<string>("");
   const [classSubjects, setClassSubjects] = useState<any>(null);
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
-    getClassList(page, perPage);
+    getClassList(page, perPage, level, search);
     //eslint-disable-next-line
-  }, [page]);
+  }, [page, level, search]);
 
   return (
     <Fragment>
@@ -144,27 +156,106 @@ const Classes = () => {
           </div>
 
           <div
-            className="d-p-search"
+            className="d-p-search with-btns next"
             style={{
               background: dark ? "#121212" : "#f8f9fa",
             }}
           >
-            <Input
-              sx={{
-                maxWidth: "900px",
-              }}
-              icon={<Search size={16} />}
-              placeholder="Search class (not working yet)"
-              rightSection={
-                <AdjustmentsHorizontal
-                  strokeWidth={1.4}
-                  style={{ opacity: 0.5 }}
-                  className="click"
-                />
-              }
-            />
-          </div>
+            <div className="s-left">
+              <Input
+                sx={{
+                  maxWidth: "706px",
+                }}
+                icon={<Search size={16} />}
+                placeholder="Search class, class teacher"
+                value={searchInput}
+                onKeyUp={(e: any) => {
+                  if (e.code === "Enter") {
+                    if (searchInput !== "") {
+                      setLoading(true);
+                      setSearch(searchInput);
+                    }
+                  }
+                }}
+                rightSection={
+                  (searchInput !== "" || search !== "") && (
+                    <X
+                      strokeWidth={1.4}
+                      style={{ opacity: 0.5 }}
+                      className="click"
+                      onClick={() => {
+                        if (search !== "") {
+                          setLoading(true);
+                          setSearch("");
+                        }
+                        setSearchInput("");
+                      }}
+                    />
+                  )
+                }
+                onChange={(e: any) => {
+                  setSearchInput(e.target.value);
+                }}
+              />
+            </div>
 
+            <div className="s-right next">
+              <Button
+                onClick={() => {
+                  if (searchInput !== "") {
+                    setLoading(true);
+                    setSearch(searchInput);
+                  }
+                }}
+              >
+                Search
+              </Button>
+
+              <Menu
+                size="sm"
+                sx={{ maxHeight: 400 }}
+                placement="end"
+                control={
+                  <Button
+                    leftIcon={<Filter size={14} />}
+                    ml="sm"
+                    variant="default"
+                  >
+                    Level
+                  </Button>
+                }
+              >
+                <Fragment>
+                  <Menu.Label>Level Menu</Menu.Label>
+
+                  <ScrollArea style={{ height: 200 }}>
+                    <Menu.Item
+                      onClick={() => {
+                        setLoading(true);
+                        setLevel("");
+                      }}
+                      disabled={level === ""}
+                    >
+                      All Levels
+                    </Menu.Item>
+
+                    {classLevels.map((item: string) => (
+                      <Menu.Item
+                        onClick={() => {
+                          setLoading(true);
+                          setLevel(item);
+                        }}
+                        disabled={level === item}
+                        key={item}
+                      >
+                        {item}
+                      </Menu.Item>
+                    ))}
+                  </ScrollArea>
+                </Fragment>
+              </Menu>
+            </div>
+          </div>
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
             {classes && classes.data && !loading ? (
               <>

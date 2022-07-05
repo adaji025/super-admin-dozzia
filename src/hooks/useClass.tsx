@@ -17,6 +17,18 @@ import { setClasses } from "../redux/data/data.actions";
 const useClass = () => {
   const dispatch = useDispatch();
   const [teachers, setTeachers] = useState<any>([]);
+  const [classLevels] = useState<Array<string>>([
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+  ]);
   const [allClasses, setAllClasses] = useState<any>([]);
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -59,7 +71,7 @@ const useClass = () => {
           message: `${"Class added successfully."} 🏫`,
           color: "green",
         });
-        getClassList(1, 10);
+        getClassList(1, 10, "", "");
       })
       .catch((error) => {
         handleError(error);
@@ -72,6 +84,8 @@ const useClass = () => {
   const getClassList = (
     page: number,
     perPage: number,
+    level: string,
+    search: string,
     all?: boolean,
     staffId?: string
   ) => {
@@ -80,7 +94,7 @@ const useClass = () => {
         setLoading(true);
       }
 
-      getClasses({ page, perPage, staffId })
+      getClasses(page, perPage, level, search, staffId)
         .then((res) => {
           if (all) {
             setAllClasses(res.data);
@@ -124,7 +138,7 @@ const useClass = () => {
           message: `${"Class updated successfully."} ✍️`,
           color: "green",
         });
-        getClassList(1, 10);
+        getClassList(1, 10, "", "");
       })
       .catch((error) => {
         handleError(error);
@@ -192,6 +206,7 @@ const useClass = () => {
     classStudents,
     allClasses,
     addMultipleStudents,
+    classLevels,
   };
 };
 

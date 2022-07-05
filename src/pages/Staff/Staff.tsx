@@ -14,7 +14,7 @@ import {
   Divider,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { Search, User, Filter, FilterOff, X, Trash } from "tabler-icons-react";
+import { Search, User, Filter, X, UserOff } from "tabler-icons-react";
 import useStaff from "../../hooks/useStaff";
 import useAdmin from "../../hooks/useAdmin";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
@@ -144,21 +144,35 @@ const Staff = () => {
 
               <Menu
                 size="sm"
+                placement="end"
                 control={
                   <Button
                     leftIcon={<Filter size={14} />}
                     ml="sm"
                     variant="default"
                   >
-                    Filter
+                    Role
                   </Button>
                 }
               >
-                <Menu.Label>Filter Menu</Menu.Label>
+                <Menu.Label>Role Menu</Menu.Label>
+                <Divider />
+
+                <Menu.Item
+                  onClick={() => {
+                    setLoading(true);
+                    setRole("");
+                  }}
+                  disabled={role === ""}
+                >
+                  All Staff
+                </Menu.Item>
+
                 {staffRoles.map(
                   (item: { role_id: string; role_name: string }) => (
                     <Menu.Item
                       onClick={() => {
+                        setLoading(true);
                         setRole(item.role_name);
                       }}
                       disabled={role === item.role_name}
@@ -168,18 +182,6 @@ const Staff = () => {
                     </Menu.Item>
                   )
                 )}
-
-                <Divider />
-
-                <Menu.Item
-                  onClick={() => {
-                    setRole("");
-                  }}
-                  color="red"
-                  icon={<FilterOff size={14} />}
-                >
-                  Clear filter
-                </Menu.Item>
               </Menu>
             </div>
           </div>
@@ -303,7 +305,7 @@ const Staff = () => {
 
                                 <Menu.Item
                                   color="red"
-                                  icon={<Trash size={14} />}
+                                  icon={<UserOff size={14} />}
                                   onClick={() => {
                                     setConfirmDeleteStaff(true);
                                     setStaffId(item.staff_id);

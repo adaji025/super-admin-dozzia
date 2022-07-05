@@ -25,7 +25,7 @@ const ClassWall = () => {
 
   useEffect(() => {
     if (userdata?.role?.name === "Teacher") {
-      getClassList(1, 300, true, userdata?.user_id).then((res: any) => {
+      getClassList(1, 300, "", "", true, userdata?.user_id).then((res: any) => {
         dispatch(
           setClassWall({
             ...classWall,
@@ -34,7 +34,7 @@ const ClassWall = () => {
         );
       });
     } else {
-      getClassList(1, 300, true).then((res: any) => {
+      getClassList(1, 300, "", "", true).then((res: any) => {
         dispatch(
           setClassWall({
             ...classWall,

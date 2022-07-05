@@ -33,7 +33,7 @@ const AssignToClass = ({
   useEffect(() => {
     if (modalActive) {
       handleGetStaffList(1, 500, "", "teacher", true);
-      getClassList(1, 300, true);
+      getClassList(1, 300, "", "", true);
     }
     //eslint-disable-next-line
   }, []);

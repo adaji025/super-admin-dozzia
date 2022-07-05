@@ -42,7 +42,7 @@ const Students = () => {
 
   useEffect(() => {
     handleGetStudents(page, perPage);
-    getClassList(1, 200, true);
+    getClassList(1, 200, "", "", true);
     //eslint-disable-next-line
   }, [page]);
 
