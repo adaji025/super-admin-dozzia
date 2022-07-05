@@ -39,7 +39,7 @@ const useSubject = () => {
           message: `${"Subject added successfully."} 📗`,
           color: "green",
         });
-        getSubjectList(1, 10);
+        getSubjectList(1, 10, "");
       })
       .catch((error) => {
         handleError(error);
@@ -52,6 +52,7 @@ const useSubject = () => {
   const getSubjectList = (
     page: number,
     perPage: number,
+    search: string,
     all?: boolean,
     staffId?: string,
     classId?: string
@@ -61,12 +62,7 @@ const useSubject = () => {
         setLoading(true);
       }
 
-      getSubjects({
-        page,
-        perPage,
-        staffId: staffId ?? "",
-        classId: classId ?? "",
-      })
+      getSubjects(page, perPage, search, staffId ?? "", classId ?? "")
         .then((res) => {
           if (all) {
             setAllSubjects(res.data);
@@ -99,7 +95,7 @@ const useSubject = () => {
           message: `${"Subject updated successfully."} ✍️`,
           color: "green",
         });
-        getSubjectList(1, 10);
+        getSubjectList(1, 10, "");
       })
       .catch((error) => {
         handleError(error);

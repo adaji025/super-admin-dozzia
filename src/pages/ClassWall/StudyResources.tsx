@@ -66,19 +66,20 @@ const StudyResources = () => {
       if (
         userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
       ) {
-        getSubjectList(1, 300, true, "", classWall?.activeClassId);
+        getSubjectList(1, 300, "", true, "", classWall?.activeClassId);
       } else if (
         userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
       ) {
         getSubjectList(
           1,
           300,
+          "",
           true,
           userdata?.user_id,
           classWall?.activeClassId
         );
       } else {
-        getSubjectList(1, 300, true, "");
+        getSubjectList(1, 300, "", true, "");
       }
     }
 

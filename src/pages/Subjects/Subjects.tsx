@@ -15,13 +15,7 @@ import {
   Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import {
-  AdjustmentsHorizontal,
-  Search,
-  CheckupList,
-  Book,
-  Edit,
-} from "tabler-icons-react";
+import { X, Search, CheckupList, Book, Edit } from "tabler-icons-react";
 import AddSubject from "../../components/modals/Subject/AddSubject";
 import AssignToClass from "../../components/modals/Subject/AssignToClass";
 import SubjectClasses from "../../components/modals/Subject/SubjectClasses";
@@ -35,6 +29,7 @@ const Subjects = () => {
     getSubjectList,
     loading,
     handleUpdateSubject,
+    setLoading,
   } = useSubject();
 
   const [addSubjectModal, setAddSubjectModal] = useState<boolean>(false);
@@ -53,13 +48,15 @@ const Subjects = () => {
 
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
-    getSubjectList(page, perPage);
+    getSubjectList(page, perPage, search);
 
     //eslint-disable-next-line
-  }, [page]);
+  }, [page, search]);
 
   return (
     <Fragment>
@@ -157,25 +154,61 @@ const Subjects = () => {
           </div>
 
           <div
-            className="d-p-search"
+            className="d-p-search with-btns"
             style={{
               background: dark ? "#121212" : "#f8f9fa",
             }}
           >
-            <Input
-              sx={{
-                maxWidth: "900px",
-              }}
-              icon={<Search size={16} />}
-              placeholder="Search subject (not working yet)"
-              rightSection={
-                <AdjustmentsHorizontal
-                  strokeWidth={1.4}
-                  style={{ opacity: 0.5 }}
-                  className="click"
-                />
-              }
-            />
+            <div className="s-left">
+              <Input
+                sx={{
+                  maxWidth: "706px",
+                }}
+                icon={<Search size={16} />}
+                placeholder="Search subject"
+                value={searchInput}
+                onKeyUp={(e: any) => {
+                  if (e.code === "Enter") {
+                    if (searchInput !== "") {
+                      setLoading(true);
+                      setSearch(searchInput);
+                    }
+                  }
+                }}
+                rightSection={
+                  (searchInput !== "" || search !== "") && (
+                    <X
+                      strokeWidth={1.4}
+                      style={{ opacity: 0.5 }}
+                      className="click"
+                      onClick={() => {
+                        if (search !== "") {
+                          setLoading(true);
+                          setSearch("");
+                        }
+                        setSearchInput("");
+                      }}
+                    />
+                  )
+                }
+                onChange={(e: any) => {
+                  setSearchInput(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="s-right">
+              <Button
+                onClick={() => {
+                  if (searchInput !== "") {
+                    setLoading(true);
+                    setSearch(searchInput);
+                  }
+                }}
+              >
+                Search
+              </Button>
+            </div>
           </div>
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
