@@ -21,13 +21,14 @@ const useAttendance = () => {
   const handleGetGeneralAttendance = (
     page: number,
     perPage: number,
-    date: string
+    date: string,
+    search: string
   ) => {
     if (!attendance) {
       setLoading(true);
     }
 
-    getGeneralAttendance(page, perPage, date)
+    getGeneralAttendance(page, perPage, date, search)
       .then((res) => {
         dispatch(setAttendance(res));
       })

@@ -4,10 +4,11 @@ import { APIS } from "../../api/api";
 export const getGeneralAttendance = (
   page: number,
   perPage: number,
-  date: string
+  date: string,
+  search: string
 ) => {
   return AxoisApi.get(
-    `${APIS.ATTENDANCE.GET_GENERAL_ATTENDANCE(page, perPage, date)}`
+    `${APIS.ATTENDANCE.GET_GENERAL_ATTENDANCE(page, perPage, date, search)}`
   ).then((res) => {
     return res.data;
   });

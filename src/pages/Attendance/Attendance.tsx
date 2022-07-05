@@ -16,11 +16,7 @@ import {
   Badge,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
-import {
-  AdjustmentsHorizontal,
-  Search,
-  ClipboardList,
-} from "tabler-icons-react";
+import { X, Search, ClipboardList } from "tabler-icons-react";
 import useTheme from "../../hooks/useTheme";
 import moment from "moment";
 import useAttendance from "../../hooks/useAttendance";
@@ -29,6 +25,8 @@ import ClassAttendance from "../../components/modals/Attendance/ClassAttendance"
 const Attendance = () => {
   const [page, setPage] = useState<number>(1);
   const [date, setDate] = useState<any>(new Date());
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [perPage] = useState<number>(10);
   const { dark } = useTheme();
@@ -49,10 +47,11 @@ const Attendance = () => {
     handleGetGeneralAttendance(
       page,
       perPage,
-      moment(date).format("YYYY-MM-DD")
+      moment(date).format("YYYY-MM-DD"),
+      search
     );
     //eslint-disable-next-line
-  }, [page, date]);
+  }, [page, date, search]);
 
   const onSubmit = (data: any) => {
     handleMarkAttendance(data).then((res: any) => {
@@ -60,7 +59,8 @@ const Attendance = () => {
       handleGetGeneralAttendance(
         page,
         perPage,
-        moment(date).format("YYYY-MM-DD")
+        moment(date).format("YYYY-MM-DD"),
+        search
       );
     });
   };
@@ -139,25 +139,61 @@ const Attendance = () => {
           </div>
 
           <div
-            className="d-p-search"
+            className="d-p-search with-btns"
             style={{
               background: dark ? "#121212" : "#f8f9fa",
             }}
           >
-            <Input
-              sx={{
-                maxWidth: "800px",
-              }}
-              icon={<Search size={16} />}
-              placeholder="Search by class"
-              rightSection={
-                <AdjustmentsHorizontal
-                  strokeWidth={1.4}
-                  style={{ opacity: 0.5 }}
-                  className="click"
-                />
-              }
-            />
+            <div className="s-left">
+              <Input
+                sx={{
+                  maxWidth: "706px",
+                }}
+                icon={<Search size={16} />}
+                placeholder="Search class"
+                value={searchInput}
+                onKeyUp={(e: any) => {
+                  if (e.code === "Enter") {
+                    if (searchInput !== "") {
+                      setLoading(true);
+                      setSearch(searchInput);
+                    }
+                  }
+                }}
+                rightSection={
+                  (searchInput !== "" || search !== "") && (
+                    <X
+                      strokeWidth={1.4}
+                      style={{ opacity: 0.5 }}
+                      className="click"
+                      onClick={() => {
+                        if (search !== "") {
+                          setLoading(true);
+                          setSearch("");
+                        }
+                        setSearchInput("");
+                      }}
+                    />
+                  )
+                }
+                onChange={(e: any) => {
+                  setSearchInput(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="s-right">
+              <Button
+                onClick={() => {
+                  if (searchInput !== "") {
+                    setLoading(true);
+                    setSearch(searchInput);
+                  }
+                }}
+              >
+                Search
+              </Button>
+            </div>
           </div>
 
           <Box sx={{ maxWidth: 800, minHeight: 173 }} className="d-p-main">
