@@ -98,6 +98,7 @@ const useTermsSessions = () => {
           message: `${"Term deleted successfully."}`,
           color: "green",
         });
+        handleGetSessions();
       })
       .catch((error) => {
         handleError(error);
