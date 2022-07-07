@@ -43,3 +43,9 @@ export const setActiveSession = (sessionId: string) => {
     }
   );
 };
+
+export const deleteSession = (id: string) => {
+  return AxoisApi.delete(`${APIS.SESSIONS.DELETE_SESSION(id)}`).then((res) => {
+    return res.data;
+  });
+};
