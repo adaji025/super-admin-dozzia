@@ -13,6 +13,8 @@ const INITIAL_STATE = {
     activeClassId: "",
     classes: [],
   },
+  terms: null,
+  sesions: null,
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -77,6 +79,17 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
         classWall: action.payload.classWall,
       };
 
+    case "SET_TERMS":
+      return {
+        ...state,
+        terms: action.payload.terms,
+      };
+
+    case "SET_SESSIONS":
+      return {
+        ...state,
+        sessions: action.payload.sesions,
+      };
     default:
       return state;
   }

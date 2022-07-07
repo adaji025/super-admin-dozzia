@@ -47,3 +47,13 @@ export const setClassWall = (classWall: any) => ({
   type: "SET_CLASS_WALL",
   payload: { classWall },
 });
+
+export const setTerms = (terms: any) => ({
+  type: "SET_TERMS",
+  payload: { terms },
+});
+
+export const setSessions = (sesions: any) => ({
+  type: "SET_SESSIONS",
+  payload: { sesions },
+});
