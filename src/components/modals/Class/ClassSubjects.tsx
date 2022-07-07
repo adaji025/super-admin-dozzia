@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Button,
   Divider,
@@ -9,22 +10,34 @@ import {
   Alert,
 } from "@mantine/core";
 import { User } from "tabler-icons-react";
+import useSubject from "../../../hooks/useSubject";
 
 const ClassSubjects = ({
   closeModal,
-  subjects,
+  classId,
+  modalActive,
 }: {
   closeModal: () => void;
-  subjects: any;
+  classId: string;
+  modalActive: boolean;
 }) => {
   const deviceWidth = window.innerWidth;
+  const { getSubjectList, allSubjects, loading } = useSubject();
+
+  useEffect(() => {
+    if (modalActive) {
+      getSubjectList(1, 100, "", true, "", classId);
+    }
+
+    //eslint-disable-next-line
+  }, []);
 
   return (
     <div>
       <Divider mb="md" variant="dashed" />
 
       <Box sx={{ minHeight: 350 }} className="d-p-main">
-        {subjects ? (
+        {allSubjects && !loading ? (
           <>
             <Table striped>
               <thead>
@@ -68,15 +81,12 @@ const ClassSubjects = ({
               </thead>
 
               <tbody>
-                {subjects.map(
+                {allSubjects.map(
                   (
                     item: {
-                      id: string;
-                      subject: {
-                        subject_id: string;
-                        subject_name: string;
-                        subject_category: number;
-                      };
+                      subject_id: string;
+                      subject_name: string;
+                      subject_category: number;
                       teacher: {
                         title: string;
                         first_name: string;
@@ -86,7 +96,7 @@ const ClassSubjects = ({
                     },
                     index: number
                   ) => (
-                    <tr key={item.id}>
+                    <tr key={item.subject_id}>
                       <td
                         style={{
                           borderBottom: `1px solid #0000`,
@@ -101,7 +111,7 @@ const ClassSubjects = ({
                           fontWeight: "600",
                         }}
                       >
-                        {item.subject.subject_name}
+                        {item?.subject_name}
                       </td>
                       <td
                         style={{
@@ -110,14 +120,14 @@ const ClassSubjects = ({
                         }}
                         className="large-only"
                       >
-                        {item.subject.subject_category}
+                        {item?.subject_category}
                       </td>
                       <td
                         style={{
                           borderBottom: `1px solid #0000`,
                         }}
                       >
-                        {`${item.teacher.title} ${item.teacher.first_name} ${item.teacher.last_name}`}
+                        {/* {`${item.teacher.title} ${item.teacher.first_name} ${item.teacher.last_name}`} */}
                       </td>
 
                       <td
@@ -145,7 +155,7 @@ const ClassSubjects = ({
               </tbody>
             </Table>
 
-            {subjects && subjects.length === 0 && (
+            {allSubjects && allSubjects.length === 0 && (
               <Group grow position="center" mt={80} mb={60}>
                 <Alert
                   title="Bummer!"

@@ -59,7 +59,6 @@ const Classes = () => {
   const [level, setLevel] = useState<string>("");
   const [classId, setClassId] = useState<string>("");
   const [className, setClassName] = useState<string>("");
-  const [classSubjects, setClassSubjects] = useState<any>(null);
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
@@ -120,7 +119,7 @@ const Classes = () => {
         opened={classSubjectsModal}
         onClose={() => {
           setClassSubjectsModal(false);
-          setClassSubjects([]);
+          setClassId("");
         }}
         title={<Text weight={600}>{className ?? "Class"} Subjects</Text>}
         size="xl"
@@ -128,9 +127,10 @@ const Classes = () => {
         <ClassSubjects
           closeModal={() => {
             setClassSubjectsModal(false);
-            setClassSubjects([]);
+            setClassId("");
           }}
-          subjects={classSubjects}
+          classId={classId}
+          modalActive={classSubjectsModal}
         />
       </Modal>
 
@@ -382,7 +382,7 @@ const Classes = () => {
                                 icon={<Book size={14} />}
                                 onClick={() => {
                                   setClassName(item?.classroom_name);
-                                  setClassSubjects(item?.subjects_and_teachers);
+                                  setClassId(item.classroom_id);
                                   setClassSubjectsModal(true);
                                 }}
                               >

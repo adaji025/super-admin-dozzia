@@ -58,7 +58,7 @@ const useSubject = () => {
     classId?: string
   ) => {
     return new Promise((resolve) => {
-      if (subjects === null) {
+      if (subjects === null || all) {
         setLoading(true);
       }
 
