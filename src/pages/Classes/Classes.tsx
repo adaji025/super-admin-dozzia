@@ -1,5 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Input,
@@ -28,10 +30,13 @@ import {
 import AddClass from "../../components/modals/Class/AddClass";
 import ClassStudents from "../../components/modals/Class/ClassStudents";
 import useClass from "../../hooks/useClass";
+import { setClassWall } from "../../redux/data/data.actions";
 import ClassSubjects from "../../components/modals/Class/ClassSubjects";
 import "./classes.scss";
 
 const Classes = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { dark } = useTheme();
   const [addClassModal, setAddClassModal] = useState<boolean>(false);
   const [classStudentsModal, setClassStudentsModal] = useState<boolean>(false);
@@ -60,6 +65,9 @@ const Classes = () => {
   const [classId, setClassId] = useState<string>("");
   const [className, setClassName] = useState<string>("");
   const deviceWidth = window.innerWidth;
+  const classWall = useSelector((state: any) => {
+    return state.data.classWall;
+  });
 
   useEffect(() => {
     getClassList(page, perPage, level, search);
@@ -388,7 +396,19 @@ const Classes = () => {
                               >
                                 Subjects
                               </Menu.Item>
-                              <Menu.Item icon={<ClipboardList size={14} />}>
+                              <Menu.Item
+                                icon={<ClipboardList size={14} />}
+                                onClick={() => {
+                                  dispatch(
+                                    setClassWall({
+                                      ...classWall,
+                                      activeClassName: item?.classroom_name,
+                                      activeClassId: item?.classroom_id,
+                                    })
+                                  );
+                                  navigate("/class-wall");
+                                }}
+                              >
                                 Class Wall
                               </Menu.Item>
                               <Divider />

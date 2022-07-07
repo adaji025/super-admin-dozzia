@@ -60,7 +60,15 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Briefcase,
       name: "Management",
       route: "/management",
-      key: ["students", "staff", "subjects", "classes", "events", "attendance"],
+      key: [
+        "students",
+        "staff",
+        "subjects",
+        "classes",
+        "events",
+        "attendance",
+        "class-wall",
+      ],
       children: [
         {
           name: "Students",
@@ -161,11 +169,6 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Settings,
       name: "Settings",
       route: "/settings",
-    },
-    {
-      icon: Trash,
-      name: "Recycle Bin",
-      route: "/recycle-bin",
     },
   ];
 
@@ -275,6 +278,10 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                             "child",
                             dark ? "h-dark" : "h-light",
                             isActive ? "is-active" : null,
+                            location.pathname === "/class-wall" &&
+                            child.name === "Classes"
+                              ? "is-active"
+                              : null,
                           ]
                             .filter(Boolean)
                             .join(" ")
