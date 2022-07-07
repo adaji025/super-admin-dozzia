@@ -183,6 +183,8 @@ const useTermsSessions = () => {
           message: `${"Session set as active."}`,
           color: "green",
         });
+
+        handleGetSessions();
       })
       .catch((error) => {
         handleError(error);

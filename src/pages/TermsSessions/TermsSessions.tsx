@@ -25,19 +25,18 @@ const TermsSessions = () => {
   const [addSessionModal, setAddSessionModal] = useState<boolean>(false);
   const [confirmDeleteTerm, setConfirmDeleteTerm] = useState<boolean>(false);
   const [termId, setTermId] = useState<string>("");
+  const [sessionId, setSessionId] = useState<string>("");
+  const [confirmSetSession, setConfirmSetSession] = useState<boolean>(false);
+
   const deviceWidth = window.innerWidth;
   const {
     loading,
-    setLoading,
-    handleAddSession,
     handleGetSessions,
     handleSetActiveSession,
     handleDeleteSession,
     sessions,
     terms,
-    handleAddTerm,
     handleDeleteTerm,
-    handleGetTerms,
   } = useTermsSessions();
 
   useEffect(() => {
@@ -96,6 +95,20 @@ const TermsSessions = () => {
         submit={() => {
           setConfirmDeleteTerm(false);
           handleDeleteTerm(termId);
+        }}
+        hasInput
+      />
+
+      <Confirmation
+        isOpened={confirmSetSession}
+        closeModal={() => {
+          setConfirmDeleteTerm(false);
+        }}
+        title="Are you sure you want to set this session as active?"
+        confirmText="CONFIRM"
+        submit={() => {
+          setConfirmSetSession(false);
+          handleSetActiveSession(sessionId);
         }}
         hasInput
       />
@@ -202,9 +215,12 @@ const TermsSessions = () => {
 
                                 <Menu.Item
                                   icon={<ClipboardList size={14} />}
-                                  onClick={() => {}}
+                                  onClick={() => {
+                                    setConfirmSetSession(true);
+                                    setSessionId(item?.id);
+                                  }}
                                 >
-                                  View Terms
+                                  Set as active
                                 </Menu.Item>
                               </Menu>
                             </td>
