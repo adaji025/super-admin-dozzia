@@ -108,23 +108,31 @@ const useTermsSessions = () => {
       });
   };
 
-  const handleAddSession = (data: { start_year: string; end_year: string }) => {
-    dispatch(showLoader(true));
+  const handleAddSession = (data: { start_year: Date; end_year: Date }) => {
+    return new Promise((resolve) => {
+      setLoading(true);
 
-    addSession(data)
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: "Session added successfully.",
-          color: "green",
+      addSession({
+        ...data,
+        start_year: moment(data?.start_year).format("YYYY"),
+        end_year: moment(data?.end_year).format("YYYY"),
+      })
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: "Session added successfully.",
+            color: "green",
+          });
+          resolve(res);
+          handleGetSessions();
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        dispatch(showLoader(false));
-      });
+    });
   };
 
   const handleGetSessions = () => {

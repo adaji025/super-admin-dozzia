@@ -16,6 +16,7 @@ import { ClipboardList } from "tabler-icons-react";
 import useTheme from "../../hooks/useTheme";
 import useTermsSessions from "../../hooks/useTermsSessions";
 import AddTerm from "../../components/modals/TermsSessions/AddTerm";
+import AddSession from "../../components/modals/TermsSessions/AddSession";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const TermsSessions = () => {
@@ -66,6 +67,21 @@ const TermsSessions = () => {
         <AddTerm
           closeModal={() => {
             setAddTermModal(false);
+          }}
+        />
+      </Modal>
+
+      <Modal
+        opened={addSessionModal}
+        onClose={() => {
+          setAddSessionModal(false);
+        }}
+        title={<Text sx={{ fontWeight: 600 }}>Add Session</Text>}
+        size="md"
+      >
+        <AddSession
+          closeModal={() => {
+            setAddSessionModal(false);
           }}
         />
       </Modal>
@@ -222,9 +238,25 @@ const TermsSessions = () => {
           </Box>
         </div>
 
-        <div className="d-p-wrapper">
+        <div className="d-p-wrapper" style={{ marginTop: 30 }}>
           <div className="d-p-header">
-            <div className="d-p-h-left no-select">Terms</div>
+            <div className="d-p-h-left no-select">
+              {sessions?.data.length > 0 &&
+                sessions?.data.map(
+                  (item: {
+                    id: string;
+                    end_year: number;
+                    start_year: number;
+                    is_current: boolean;
+                  }) =>
+                    item?.is_current && (
+                      <span>
+                        {item.start_year}/{item?.end_year}
+                      </span>
+                    )
+                )}{" "}
+              Terms
+            </div>
 
             <div className="d-p-h-right">
               <Button

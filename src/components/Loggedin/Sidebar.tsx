@@ -103,7 +103,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           route: "/add-staff",
         },
         {
-          name: "Terms/Sessions",
+          name: "Terms & Sessions",
           route: "/terms-sessions",
         },
       ],
