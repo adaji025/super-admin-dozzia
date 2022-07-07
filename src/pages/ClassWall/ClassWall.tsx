@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setClassWall } from "../../redux/data/data.actions";
 import useClass from "../../hooks/useClass";
 import { Button, Menu } from "@mantine/core";
-import { ChevronDown } from "tabler-icons-react";
+import { ChevronDown, ArrowLeft } from "tabler-icons-react";
 import { showNotification } from "@mantine/notifications";
 import "./class-wall.scss";
 import "../Classes/classes.scss";
@@ -85,6 +85,16 @@ const ClassWall = () => {
         <div className="d-p-wrapper">
           <div className="d-p-header">
             <div className="d-p-h-left no-select">
+              {userdata?.role?.name === "School Admin" && (
+                <span
+                  className="go-back click"
+                  onClick={() => {
+                    navigate("/classes");
+                  }}
+                >
+                  <ArrowLeft size={20} />
+                </span>
+              )}{" "}
               {classWall?.activeClassName ?? ""} Class Wall
             </div>
 

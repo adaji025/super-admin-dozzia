@@ -278,7 +278,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                             "child",
                             dark ? "h-dark" : "h-light",
                             isActive ? "is-active" : null,
-                            location.pathname === "/class-wall" &&
+                            location.pathname.includes("/class-wall") &&
                             child.name === "Classes"
                               ? "is-active"
                               : null,
