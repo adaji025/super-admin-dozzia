@@ -33,7 +33,6 @@ const TermsSessions = () => {
     loading,
     handleGetSessions,
     handleSetActiveSession,
-    handleDeleteSession,
     sessions,
     terms,
     handleDeleteTerm,
@@ -350,7 +349,7 @@ const TermsSessions = () => {
                                 fontWeight: "500",
                               }}
                             >
-                              {item?.term}
+                              Term {item?.term}
                             </td>
                             <td
                               style={{
@@ -397,6 +396,7 @@ const TermsSessions = () => {
                                     setTermId(item?.id);
                                     setConfirmDeleteTerm(true);
                                   }}
+                                  disabled={terms?.data.length < 2}
                                 >
                                   Delete Term
                                 </Menu.Item>
