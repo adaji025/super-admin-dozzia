@@ -24,7 +24,7 @@ const StudentDetails = ({ closeModal, student, modalActive }: any) => {
 
       <Divider mb="md" variant="dashed" />
 
-      <div className="view-details">
+      <div className="view-details no-next">
         <Avatar mb={10} src={null} className="avatar" size={100} />
 
         <div
@@ -141,7 +141,10 @@ const StudentDetails = ({ closeModal, student, modalActive }: any) => {
           }}
         >
           <div className="d-r-left">Height:</div>
-          <div className="d-r-right">{studentDetails?.data?.height} cm</div>
+          <div className="d-r-right">
+            {studentDetails?.data?.height}{" "}
+            {studentDetails?.data?.height && "cm"}
+          </div>
         </div>
 
         <div
@@ -151,7 +154,10 @@ const StudentDetails = ({ closeModal, student, modalActive }: any) => {
           }}
         >
           <div className="d-r-left">Weight:</div>
-          <div className="d-r-right">{studentDetails?.data?.weight} kg</div>
+          <div className="d-r-right">
+            {studentDetails?.data?.weight}{" "}
+            {studentDetails?.data?.weight && "kg"}
+          </div>
         </div>
 
         <Group position="right" mt="lg">
