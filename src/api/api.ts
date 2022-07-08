@@ -34,6 +34,7 @@ export const APIS = {
       `${api}/students/${studentId}/classroom/${classId}`,
     GET_STUDENT_WITH_USERNAME: (username: string) =>
       `${api}/students/${username}/info`,
+    GET_STUDENT_DETAILS: (id: string) => `${api}/students/${id}`,
   },
   CLASS: {
     CREATE_CLASS: `${api}/classrooms`,

@@ -18,12 +18,15 @@ import {
 import useTheme from "../../hooks/useTheme";
 import { X, Search, PlaylistAdd, User } from "tabler-icons-react";
 import AddStudentToClass from "../../components/modals/Student/AddStudentToClass";
+import StudentDetails from "../../components/modals/Student/StudentDetails";
 import useStudent from "../../hooks/useStudent";
 import useClass from "../../hooks/useClass";
 
 const Students = () => {
   const { dark } = useTheme();
   const [addToClassModal, setAddToClassModal] = useState<boolean>(false);
+  const [studentDetailsModal, setStudentDetailsModal] =
+    useState<boolean>(false);
   const { students, handleGetStudents, loading, setLoading } = useStudent();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
@@ -70,6 +73,29 @@ const Students = () => {
           student={studentInfo}
           modalActive={addToClassModal}
           allClasses={allClasses}
+        />
+      </Modal>
+
+      <Modal
+        opened={studentDetailsModal}
+        onClose={() => {
+          setStudentDetailsModal(false);
+          setTimeout(() => {
+            setStudentInfo(null);
+          }, 500);
+        }}
+        title={<Text weight={600}>{studentInfo?.fullName}</Text>}
+        size="lg"
+      >
+        <StudentDetails
+          closeModal={() => {
+            setStudentDetailsModal(false);
+            setTimeout(() => {
+              setStudentInfo(null);
+            }, 500);
+          }}
+          student={studentInfo}
+          modalActive={studentDetailsModal}
         />
       </Modal>
 
@@ -269,7 +295,17 @@ const Students = () => {
                                 >
                                   Add to Class
                                 </Menu.Item>
-                                <Menu.Item icon={<User size={14} />}>
+                                <Menu.Item
+                                  icon={<User size={14} />}
+                                  onClick={() => {
+                                    setStudentDetailsModal(true);
+                                    setStudentInfo({
+                                      fullName: `${item?.first_name} ${item?.last_name}`,
+                                      studentId: item.student_id,
+                                      username: item.username,
+                                    });
+                                  }}
+                                >
                                   View Student
                                 </Menu.Item>
                               </Menu>

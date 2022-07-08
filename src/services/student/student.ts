@@ -15,6 +15,12 @@ export const getStudents = (page: number, perPage: number, search: string) => {
   });
 };
 
+export const getStudentDetails = (id: string) => {
+  return AxoisApi.get(`${APIS.STUDENT.GET_STUDENT_DETAILS(id)}`).then((res) => {
+    return res.data;
+  });
+};
+
 export const addStudentToClass = (studentId: string, classId: string) => {
   return AxoisApi.get(
     `${APIS.STUDENT.ADD_STUDENT_TO_CLASS(studentId, classId)}`

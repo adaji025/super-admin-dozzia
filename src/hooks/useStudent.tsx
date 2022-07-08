@@ -5,6 +5,7 @@ import {
   getStudents,
   addStudentToClass,
   getStudentWithUsername,
+  getStudentDetails,
 } from "../services/student/student";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -30,6 +31,23 @@ const useStudent = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleGetStudentDetails = (id: string) => {
+    return new Promise((resolve) => {
+      setLoading(true);
+
+      getStudentDetails(id)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
   };
 
   const addToClass = (values: { studentId: string; classId: string }) => {
@@ -71,6 +89,7 @@ const useStudent = () => {
     setLoading,
     addToClass,
     getInfoWithUsername,
+    handleGetStudentDetails,
   };
 };
 
