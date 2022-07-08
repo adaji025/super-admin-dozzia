@@ -514,8 +514,9 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
     },
 
     validate: {
-      blood_type: (value) =>
-        value.length > 3 ? "Cannot be greater than 3 characters" : null,
+      blood_type: (value) => (value === "" ? "Please select genotype" : null),
+      blood_group: (value) =>
+        value === "" ? "Please select blood group" : null,
       state_disability: (value) =>
         value === "" && disability === "Yes"
           ? "Please specify disability"
@@ -562,23 +563,38 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
             </div>
 
             <div className="form-row">
-              <TextInput
+              <Select
                 className="form-item"
                 required
                 label="Blood Group"
                 placeholder="Blood group"
                 variant="filled"
-                type="text"
+                data={[
+                  { value: "O+", label: "O+" },
+                  { value: "O-", label: "O-" },
+                  { value: "AB+", label: "AB+" },
+                  { value: "AB-", label: "AB-" },
+                  { value: "A+", label: "A+" },
+                  { value: "A-", label: "A-" },
+                  { value: "B+", label: "B+" },
+                  { value: "B-", label: "B-" },
+                ]}
                 {...form.getInputProps("blood_group")}
               />
 
-              <TextInput
+              <Select
                 className="form-item"
                 required
                 label="Genotype"
                 placeholder="Genotype"
                 variant="filled"
-                type="text"
+                data={[
+                  { value: "AA", label: "AA" },
+                  { value: "AS", label: "AS" },
+                  { value: "AC", label: "AC" },
+                  { value: "SS", label: "SS" },
+                  { value: "SC", label: "SC" },
+                ]}
                 {...form.getInputProps("blood_type")}
               />
             </div>
