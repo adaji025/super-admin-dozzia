@@ -143,6 +143,7 @@ const OnboardStaff = () => {
 
 const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   const { getStates, getStaffRoles, states, staffRoles } = useAdmin();
+  const [age, setAge] = useState<number>(0);
 
   useEffect(() => {
     getStates();
@@ -185,12 +186,25 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
 
   const { dark } = useTheme();
 
+  useEffect(() => {
+    onDobChange();
+
+    //eslint-disable-next-line
+  }, [form.values.dob]);
+
+  const onDobChange = () => {
+    var age = moment().diff(form.values.dob, "years");
+
+    setAge(age ? age : 0);
+  };
+
   const onSave = (values: any) => {
     nextStep({
       ...values,
       dob: moment(values.dob).format("L"),
       phone_number: values.phone_number,
       next_of_kin_phone_number: values.next_of_kin_phone_number,
+      age,
     });
   };
 
@@ -327,9 +341,10 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 label="Age"
                 placeholder="Age"
                 variant="filled"
-                max={130}
+                max={100}
                 min={0}
-                {...form.getInputProps("age")}
+                disabled
+                value={age}
               />
             </div>
 

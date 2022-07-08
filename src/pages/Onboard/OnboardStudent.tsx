@@ -142,6 +142,7 @@ const OnboardStudent = () => {
 };
 
 const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
+  const [age, setAge] = useState<number>(0);
   const form = useForm({
     initialValues: {
       first_name: "",
@@ -184,7 +185,20 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       ...values,
       dob: moment(values.dob).format("YYYY-MM-DD"),
       guardian_phone_number: values.guardian_phone_number,
+      age,
     });
+  };
+
+  useEffect(() => {
+    onDobChange();
+
+    //eslint-disable-next-line
+  }, [form.values.dob]);
+
+  const onDobChange = () => {
+    var age = moment().diff(form.values.dob, "years");
+
+    setAge(age ? age : 0);
   };
 
   return (
@@ -265,7 +279,8 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                 variant="filled"
                 max={100}
                 min={0}
-                {...form.getInputProps("age")}
+                disabled
+                value={age}
               />
             </div>
 
