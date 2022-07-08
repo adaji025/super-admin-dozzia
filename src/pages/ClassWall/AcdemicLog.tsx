@@ -53,10 +53,12 @@ const AcdemicLog = () => {
   useEffect(() => {
     if (classWall?.activeClassId) {
       if (
+        userdata?.role?.name === "Teacher" &&
         userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
       ) {
         getSubjectList(1, 300, "", true, "", classWall?.activeClassId);
       } else if (
+        userdata?.role?.name === "Teacher" &&
         userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
       ) {
         getSubjectList(
@@ -97,7 +99,7 @@ const AcdemicLog = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>{classWall?.activeClassName} Acdemic Log</title>
+        <title>{classWall?.activeClassName} Academic Log</title>
         <meta name="description" content="" />
         <meta
           property="og:title"

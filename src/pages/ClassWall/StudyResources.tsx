@@ -64,10 +64,12 @@ const StudyResources = () => {
   useEffect(() => {
     if (classWall?.activeClassId) {
       if (
+        userdata?.role?.name === "Teacher" &&
         userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
       ) {
         getSubjectList(1, 300, "", true, "", classWall?.activeClassId);
       } else if (
+        userdata?.role?.name === "Teacher" &&
         userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
       ) {
         getSubjectList(

@@ -46,10 +46,12 @@ const Curriculum = () => {
   useEffect(() => {
     if (classWall?.activeClassId) {
       if (
+        userdata?.role?.name === "Teacher" &&
         userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
       ) {
         getSubjectList(1, perPage, "", true, "", classWall?.activeClassId);
       } else if (
+        userdata?.role?.name === "Teacher" &&
         userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
       ) {
         getSubjectList(
@@ -61,7 +63,7 @@ const Curriculum = () => {
           classWall?.activeClassId
         );
       } else {
-        getSubjectList(1, perPage, "", true, "");
+        getSubjectList(1, perPage, "", true, "", classWall?.activeClassId);
       }
     }
 
