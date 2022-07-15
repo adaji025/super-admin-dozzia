@@ -5,6 +5,7 @@ import {
   deleteStaff,
   getSuspendedStaff,
   restoreSuspendedStaff,
+  getStaffDetails,
 } from "../services/staff/staff";
 import { setStaff } from "../redux/data/data.actions";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -46,6 +47,23 @@ const useStaff = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleGetStaffDetails = (id: string) => {
+    return new Promise((resolve) => {
+      setLoading(true);
+
+      getStaffDetails(id)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
   };
 
   const handleDeleteStaff = (id: string) => {
@@ -115,6 +133,7 @@ const useStaff = () => {
     username,
     handleGetSuspendedStaff,
     handleRestoreStaff,
+    handleGetStaffDetails,
   };
 };
 

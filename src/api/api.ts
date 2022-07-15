@@ -24,6 +24,7 @@ export const APIS = {
       role: string
     ) =>
       `${api}/staff?per_page=${perPage}&page=${page}&search_query=${search}&role=${role}`,
+    GET_STAFF_DETAILS: (id: string) => `${api}/staff/${id}`,
     DELETE_STAFF: (id: string) => `${api}/staff/${id}`,
   },
   STUDENT: {

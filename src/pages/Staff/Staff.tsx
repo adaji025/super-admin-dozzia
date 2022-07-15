@@ -12,12 +12,15 @@ import {
   Group,
   Alert,
   Divider,
+  Modal,
+  Text,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import { Search, User, Filter, X, UserOff } from "tabler-icons-react";
 import useStaff from "../../hooks/useStaff";
 import useAdmin from "../../hooks/useAdmin";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import StaffDetails from "../../components/modals/Staff/StaffDetails";
 
 const Staff = () => {
   const { dark } = useTheme();
@@ -37,6 +40,11 @@ const Staff = () => {
   const [role, setRole] = useState<string>("");
   const [staffId, setStaffId] = useState<string>("");
   const [confirmDeleteStaff, setConfirmDeleteStaff] = useState<boolean>(false);
+  const [staffDetailsModal, setStaffDetailsModal] = useState<boolean>(false);
+  const [staffInfo, setStaffInfo] = useState<{
+    fullName: string;
+    staffId: string;
+  } | null>(null);
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
@@ -68,6 +76,29 @@ const Staff = () => {
         }}
         hasInput
       />
+
+      <Modal
+        opened={staffDetailsModal}
+        onClose={() => {
+          setStaffDetailsModal(false);
+          setTimeout(() => {
+            setStaffInfo(null);
+          }, 500);
+        }}
+        title={<Text weight={600}>{staffInfo?.fullName}</Text>}
+        size="lg"
+      >
+        <StaffDetails
+          closeModal={() => {
+            setStaffDetailsModal(false);
+            setTimeout(() => {
+              setStaffInfo(null);
+            }, 500);
+          }}
+          staff={staffInfo}
+          modalActive={staffDetailsModal}
+        />
+      </Modal>
 
       <div
         className="data-page-container"
@@ -297,7 +328,16 @@ const Staff = () => {
                               >
                                 <Menu.Label>Menu</Menu.Label>
 
-                                <Menu.Item icon={<User size={14} />}>
+                                <Menu.Item
+                                  icon={<User size={14} />}
+                                  onClick={() => {
+                                    setStaffDetailsModal(true);
+                                    setStaffInfo({
+                                      fullName: `${item?.title} ${item?.first_name} ${item?.last_name}`,
+                                      staffId: item?.staff_id,
+                                    });
+                                  }}
+                                >
                                   View Staff
                                 </Menu.Item>
 

@@ -50,3 +50,9 @@ export const restoreSuspendedStaff = (id: string) => {
     return res.data;
   });
 };
+
+export const getStaffDetails = (id: string) => {
+  return AxoisApi.get(`${APIS.STAFF.GET_STAFF_DETAILS(id)}`).then((res) => {
+    return res.data;
+  });
+};
