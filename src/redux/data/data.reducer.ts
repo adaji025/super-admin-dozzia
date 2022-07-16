@@ -15,6 +15,7 @@ const INITIAL_STATE = {
   },
   terms: null,
   sesions: null,
+  grades: null,
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -89,6 +90,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         sessions: action.payload.sesions,
+      };
+
+    case "SET_GRADES":
+      return {
+        ...state,
+        grades: action.payload.grades,
       };
     default:
       return state;

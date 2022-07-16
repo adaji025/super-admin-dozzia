@@ -57,3 +57,8 @@ export const setSessions = (sesions: any) => ({
   type: "SET_SESSIONS",
   payload: { sesions },
 });
+
+export const setGrades = (grades: any) => ({
+  type: "SET_GRADES",
+  payload: { grades },
+});
