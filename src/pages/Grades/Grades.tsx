@@ -16,12 +16,20 @@ import useTheme from "../../hooks/useTheme";
 import { Trash } from "tabler-icons-react";
 import AddGrade from "../../components/modals/Grades/AddGrade";
 import useGrades from "../../hooks/useGrades";
+import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const Grades = () => {
   const { dark } = useTheme();
-  const { loading, grades, handleAddGrade, handleGetGrades } = useGrades();
+  const {
+    loading,
+    grades,
+    handleAddGrade,
+    handleGetGrades,
+    handleDeleteGrade,
+  } = useGrades();
 
   const [addGradeModal, setAddGradeModal] = useState<boolean>(false);
+  const [deleteGradeModal, setDeleteGradeModal] = useState<boolean>(false);
   const [gradeId, setGradeId] = useState<string>("");
 
   const deviceWidth = window.innerWidth;
@@ -56,6 +64,20 @@ const Grades = () => {
           loading={loading}
         />
       </Modal>
+
+      <Confirmation
+        isOpened={deleteGradeModal}
+        closeModal={() => {
+          setDeleteGradeModal(false);
+        }}
+        title="Are you sure you want to delete this grade?"
+        confirmText="DELETE"
+        submit={() => {
+          setDeleteGradeModal(false);
+          handleDeleteGrade(gradeId);
+        }}
+        hasInput
+      />
 
       <div
         className="data-page-container"
@@ -101,7 +123,7 @@ const Grades = () => {
                           borderBottom: `1px solid #0000`,
                         }}
                       >
-                        Score Range
+                        Score
                       </th>
 
                       <th
@@ -177,6 +199,7 @@ const Grades = () => {
                                 icon={<Trash size={14} />}
                                 onClick={() => {
                                   setGradeId(item?.id);
+                                  setDeleteGradeModal(true);
                                 }}
                               >
                                 Delete Grade
@@ -196,7 +219,7 @@ const Grades = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No subject found.
+                      No grade found.
                     </Alert>
                   </Group>
                 )}
