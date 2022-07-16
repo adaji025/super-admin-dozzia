@@ -7,42 +7,29 @@ import {
   Table,
   Box,
   Skeleton,
-  Pagination,
   Menu,
   Divider,
   Group,
   Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { X, Search, CheckupList, Book, Edit } from "tabler-icons-react";
+import { Trash } from "tabler-icons-react";
 import AddGrade from "../../components/modals/Grades/AddGrade";
-import AssignToClass from "../../components/modals/Subject/AssignToClass";
-import SubjectClasses from "../../components/modals/Subject/SubjectClasses";
 import useGrades from "../../hooks/useGrades";
 
 const Grades = () => {
   const { dark } = useTheme();
-  const { loading, grades, setLoading, handleAddGrade } = useGrades();
+  const { loading, grades, handleAddGrade, handleGetGrades } = useGrades();
 
   const [addGradeModal, setAddGradeModal] = useState<boolean>(false);
-  const [activeSubject, setActiveSubject] = useState<
-    | any
-    | {
-        subject_id: string;
-        subject_name: string;
-        subject_category: string;
-        subject_description: string;
-      }
-  >(null);
+  const [gradeId, setGradeId] = useState<string>("");
 
-  const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
-  const [search, setSearch] = useState<string>("");
   const deviceWidth = window.innerWidth;
 
   useEffect(() => {
+    handleGetGrades();
     //eslint-disable-next-line
-  }, [page, search]);
+  }, []);
 
   return (
     <Fragment>
@@ -57,7 +44,6 @@ const Grades = () => {
         opened={addGradeModal}
         onClose={() => {
           setAddGradeModal(false);
-          setActiveSubject(null);
         }}
         title={<Text weight={600}>Add Grade</Text>}
         size="lg"
@@ -106,22 +92,26 @@ const Grades = () => {
                         style={{
                           borderBottom: `1px solid #0000`,
                         }}
-                        className="large-only"
-                      ></th>
+                      >
+                        Grade
+                      </th>
+
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
                         }}
                       >
-                        Subject Name
+                        Score Range
                       </th>
+
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
                         }}
                       >
-                        Category
+                        Remark
                       </th>
+
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
@@ -133,38 +123,37 @@ const Grades = () => {
                   </thead>
                   <tbody>
                     {grades?.data.map(
-                      (
-                        item: {
-                          subject_id: string;
-                          subject_name: string;
-                          subject_category: string;
-                          subject_description: string;
-                        },
-                        index: number
-                      ) => (
-                        <tr key={item.subject_id}>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                            }}
-                            className="large-only"
-                          >
-                            {index + 1}
-                          </td>
+                      (item: {
+                        id: string;
+                        name: string;
+                        remark: string;
+                        min_score: number;
+                        max_score: number;
+                      }) => (
+                        <tr key={item?.id}>
                           <td
                             style={{
                               borderBottom: `1px solid #0000`,
                               fontWeight: "600",
                             }}
                           >
-                            {item.subject_name}
+                            {item?.name}
                           </td>
+
                           <td
                             style={{
                               borderBottom: `1px solid #0000`,
                             }}
                           >
-                            {item.subject_category}
+                            {item?.min_score} - {item?.max_score}
+                          </td>
+
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                          >
+                            {item?.remark}
                           </td>
 
                           <td
@@ -184,19 +173,13 @@ const Grades = () => {
 
                               <Divider />
                               <Menu.Item
-                                icon={<Edit size={14} />}
+                                color="red"
+                                icon={<Trash size={14} />}
                                 onClick={() => {
-                                  setActiveSubject({
-                                    subject_id: item.subject_id,
-                                    subject_name: item.subject_name,
-                                    subject_category: item.subject_category,
-                                    subject_description:
-                                      item.subject_description,
-                                  });
-                                  setAddGradeModal(true);
+                                  setGradeId(item?.id);
                                 }}
                               >
-                                Edit Subject
+                                Delete Grade
                               </Menu.Item>
                             </Menu>
                           </td>
@@ -228,19 +211,6 @@ const Grades = () => {
               </>
             )}
           </Box>
-
-          {grades?.meta && grades?.data.length > 0 && (
-            <Pagination
-              sx={{ maxWidth: 900 }}
-              position="center"
-              mt={25}
-              onChange={(value) => {
-                setPage(value);
-              }}
-              initialPage={grades.meta.current_page}
-              total={grades.meta.last_page}
-            />
-          )}
         </div>
       </div>
     </Fragment>
