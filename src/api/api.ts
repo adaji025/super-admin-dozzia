@@ -172,4 +172,8 @@ export const APIS = {
     SET_ACTIVE_SESSION: (sessionId: string) =>
       `${api}/settings/sessions/${sessionId}/set-active`,
   },
+  GRADES: {
+    GRADES: `${api}/settings/grades`,
+    GRADE: (id: string) => `${api}/settings/grades/${id}`,
+  },
 };

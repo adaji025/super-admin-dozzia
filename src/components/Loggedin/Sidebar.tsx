@@ -68,6 +68,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         "events",
         "attendance",
         "class-wall",
+        "grades",
       ],
       children: [
         {
@@ -93,6 +94,10 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         {
           name: "Attendance",
           route: "/attendance",
+        },
+        {
+          name: "Grades",
+          route: "/grades",
         },
       ],
     },
