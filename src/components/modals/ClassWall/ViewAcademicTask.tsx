@@ -171,7 +171,8 @@ interface TaskScore {
 const TaskResponses = ({ closeModal, modalActive, task }: any) => {
   const [activeView, setActiveView] = useState<string>("responses");
   const [taskResponses, setTaskResponses] = useState<any>(null);
-  const { loading, handleGetTaskResponses } = useAcademicLog();
+  const { loading, handleGetTaskResponses, handleGradeTaskResponses } =
+    useAcademicLog();
   const [taskTotalScore, setTaskTotalScore] = useState<number>(0);
   const [scoreData, setScoreData] = useState<Array<TaskScore>>([]);
   const [scoreDataUpdateTrigger, setScoreDataUpdateTrigger] = useState<
@@ -183,11 +184,7 @@ const TaskResponses = ({ closeModal, modalActive, task }: any) => {
 
   useEffect(() => {
     if (modalActive) {
-      handleGetTaskResponses(page, perPage, task?.task_id).then((res: any) => {
-        console.log(res);
-        setTaskResponses(res);
-        createScores(res?.data);
-      });
+      getResponses();
     }
 
     //eslint-disable-next-line
@@ -197,8 +194,16 @@ const TaskResponses = ({ closeModal, modalActive, task }: any) => {
     if (taskResponses) {
       handleScoreUpdate(scoreDataUpdateTrigger[0], scoreDataUpdateTrigger[1]);
     }
+
     //eslint-disable-next-line
   }, [scoreDataUpdateTrigger]);
+
+  const getResponses = () => {
+    handleGetTaskResponses(page, perPage, task?.task_id).then((res: any) => {
+      setTaskResponses(res);
+      createScores(res?.data);
+    });
+  };
 
   const createScores = (scores: any) => {
     let data: Array<TaskScore> = [];
@@ -225,7 +230,19 @@ const TaskResponses = ({ closeModal, modalActive, task }: any) => {
     setScoreData(data);
   };
 
-  // const submitGrading = () => {};
+  const submitGrading = () => {
+    let reqArray = [];
+
+    for (let i = 0; i < scoreData.length; i++) {
+      const item = { ...scoreData[i], total_grade: taskTotalScore };
+      reqArray.push(item);
+    }
+
+    handleGradeTaskResponses(reqArray).then(() => {
+      getResponses();
+      setActiveView("responses");
+    });
+  };
 
   return (
     <div className="task-responses modal-table-container">
@@ -484,7 +501,7 @@ const TaskResponses = ({ closeModal, modalActive, task }: any) => {
             if (activeView === "responses") {
               setActiveView("grade");
             } else {
-              console.log(scoreData);
+              submitGrading();
             }
           }}
         >

@@ -32,19 +32,11 @@ export const getTaskResponses = (
   });
 };
 
-export const gradeTaskResponse = (data: {
-  response_id: string;
-  score: string;
-  task_score: string;
-}) => {
-  return AxoisApi.post(`${APIS.ACADEMIC_LOG.GRADE_TASK_RESPONSE}`, {
-    grading: [
-      {
-        response_id: data?.response_id,
-        score: data?.score,
-        task_score: data?.task_score,
-      },
-    ],
+export const gradeTaskResponse = (
+  data: Array<{ grade: number; total_grade: number; response_id: string }>
+) => {
+  return AxoisApi.put(`${APIS.ACADEMIC_LOG.GRADE_TASK_RESPONSE}`, {
+    grading: data,
   }).then((res) => {
     return res.data;
   });

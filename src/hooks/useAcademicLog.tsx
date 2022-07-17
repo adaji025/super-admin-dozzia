@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import {
   createTask,
   getTaskResponses,
-  // gradeTaskResponse,
+  gradeTaskResponse,
   getTasks,
 } from "../services/academicLog/academicLog";
 import { showLoader } from "../redux/utility/utility.actions";
@@ -98,22 +98,24 @@ const useAcademicLog = () => {
     });
   };
 
-  // const handleGetStudyResourceFiles = (id: string) => {
-  //   return new Promise((resolve) => {
-  //     setLoading(true);
+  const handleGradeTaskResponses = (
+    data: Array<{ grade: number; total_grade: number; response_id: string }>
+  ) => {
+    return new Promise((resolve) => {
+      setLoading(true);
 
-  //     getStudyResourceFiles(id)
-  //       .then((res) => {
-  //         resolve(res);
-  //       })
-  //       .catch((error) => {
-  //         handleError(error);
-  //       })
-  //       .finally(() => {
-  //         setLoading(false);
-  //       });
-  //   });
-  // };
+      gradeTaskResponse(data)
+        .then((res) => {
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
 
   return {
     setLoading,
@@ -122,6 +124,7 @@ const useAcademicLog = () => {
     trigger,
     handleGetTasks,
     handleGetTaskResponses,
+    handleGradeTaskResponses,
   };
 };
 
