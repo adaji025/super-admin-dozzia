@@ -17,7 +17,7 @@ const useTestExams = () => {
       grade_id: string;
     }
   ) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       setLoading(true);
 
       postTestExams(id, values)
@@ -31,6 +31,7 @@ const useTestExams = () => {
         })
         .catch((error) => {
           handleError(error);
+          reject(error);
         })
         .finally(() => {
           setLoading(false);

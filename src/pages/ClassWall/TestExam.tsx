@@ -20,6 +20,7 @@ import { useSelector } from "react-redux";
 import ViewReportCard from "../../components/modals/ClassWall/ViewReportCard";
 import useClass from "../../hooks/useClass";
 import useTermsSessions from "../../hooks/useTermsSessions";
+import useGrades from "../../hooks/useGrades";
 
 const TestExams = () => {
   const { dark } = useTheme();
@@ -34,11 +35,13 @@ const TestExams = () => {
   const [student, setStudent] = useState<any>(null);
   const { handleGetClassStudents, classStudents, loading } = useClass();
   const { handleGetSessions } = useTermsSessions();
+  const { handleGetGrades } = useGrades();
 
   useEffect(() => {
     if (classWall?.activeClassId) {
       handleGetClassStudents(classWall?.activeClassId, page, perPage);
       handleGetSessions();
+      handleGetGrades();
     }
 
     //eslint-disable-next-line
@@ -65,12 +68,8 @@ const TestExams = () => {
             setStudent(null);
           }, 500);
         }}
-        title={
-          <Text weight={600}>
-            {student?.first_name} {student?.last_name}
-          </Text>
-        }
-        size="xl"
+        title={<Text weight={600}>Student Report Card</Text>}
+        size={850}
       >
         <ViewReportCard
           closeModal={() => {
