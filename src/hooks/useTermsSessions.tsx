@@ -194,6 +194,18 @@ const useTermsSessions = () => {
       });
   };
 
+  const getActiveTerm = () => {
+    let activeTerm;
+
+    for (let i = 0; i < terms?.data.length; i++) {
+      if (terms?.data[i]?.is_current) {
+        activeTerm = terms?.data[i];
+      }
+    }
+
+    return activeTerm;
+  };
+
   return {
     handleAddTerm,
     handleGetTerms,
@@ -206,6 +218,7 @@ const useTermsSessions = () => {
     handleSetActiveSession,
     sessions,
     terms,
+    getActiveTerm,
   };
 };
 

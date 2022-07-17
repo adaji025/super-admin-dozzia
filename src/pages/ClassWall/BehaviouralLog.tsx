@@ -240,7 +240,7 @@ const BehaviouralLog = () => {
                                   }
                                   gutter={15}
                                   withArrow
-                                  size="md"
+                                  size="sm"
                                 >
                                   <Menu.Label>Menu</Menu.Label>
 
