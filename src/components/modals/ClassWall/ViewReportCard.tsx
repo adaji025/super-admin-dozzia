@@ -211,27 +211,42 @@ const ReportCard = ({ closeModal, reportCard, onPressEdit }: any) => {
                         </td>
 
                         <td>
-                          <Text size="sm">{Number(item?.first_ca_score)}</Text>
-                        </td>
-
-                        <td>
-                          <Text size="sm">{Number(item?.second_ca_score)}</Text>
-                        </td>
-
-                        <td>
-                          <Text size="sm">{Number(item?.third_ca_score)}</Text>
-                        </td>
-
-                        <td>
-                          <Text size="sm">{Number(item?.exam_score)}</Text>
+                          <Text size="sm">
+                            {item?.first_ca_score &&
+                              Number(item?.first_ca_score)}
+                          </Text>
                         </td>
 
                         <td>
                           <Text size="sm">
-                            {Number(item?.first_ca_score) +
-                              Number(item?.second_ca_score) +
-                              Number(item?.third_ca_score) +
-                              Number(item?.exam_score)}
+                            {item?.second_ca_score &&
+                              Number(item?.second_ca_score)}
+                          </Text>
+                        </td>
+
+                        <td>
+                          <Text size="sm">
+                            {item?.third_ca_score &&
+                              Number(item?.third_ca_score)}
+                          </Text>
+                        </td>
+
+                        <td>
+                          <Text size="sm">
+                            {item?.exam_score && Number(item?.exam_score)}
+                          </Text>
+                        </td>
+
+                        <td>
+                          <Text size="sm">
+                            {(item?.first_ca_score ||
+                              item?.second_ca_score ||
+                              item?.third_ca_score ||
+                              item?.exam_score) &&
+                              Number(item?.first_ca_score) +
+                                Number(item?.second_ca_score) +
+                                Number(item?.third_ca_score) +
+                                Number(item?.exam_score)}
                           </Text>
                         </td>
 

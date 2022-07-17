@@ -176,4 +176,23 @@ export const APIS = {
     GRADES: `${api}/settings/grades`,
     GRADE: (id: string) => `${api}/settings/grades/${id}`,
   },
+  TEST_EXAMS: {
+    GET_TEST_EXAMS: (classId: string) =>
+      `${api}/test-exam-scores?classroom_id=${classId}`,
+    POST_TEST_EXAMS: (id: string) => `${api}/test-exam-scores/${id}`,
+  },
+  REPORT_CARD: {
+    GET_ALL_REPORT_CARDS: (
+      page: number,
+      perPage: number,
+      classId: string,
+      termId: string,
+      sessionId: string
+    ) =>
+      `${api}/report-cards?per_page=${perPage}&page=${page}&classroom_id=${classId}&term_id=${termId}&session_id=${sessionId}`,
+    GET_STUDENT_REPORT_CARD: (termId: string, studentId: string) =>
+      `${api}/report-cards/term/${termId}/student/${studentId}`,
+    APPROVE_REPORT_CARD: (reportCardId: string) =>
+      `${api}/report-cards/${reportCardId}/approve`,
+  },
 };
