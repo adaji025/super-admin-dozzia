@@ -225,7 +225,7 @@ const TaskResponses = ({ closeModal, modalActive, task }: any) => {
     setScoreData(data);
   };
 
-  const submitGrading = () => {};
+  // const submitGrading = () => {};
 
   return (
     <div className="task-responses modal-table-container">

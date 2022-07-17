@@ -62,8 +62,6 @@
 }
 
 .curriculum-container {
-  max-width: calc(100vw - 73px);
-
   .border-light {
     td,
     th {
@@ -96,4 +94,8 @@
       color: #f03e3e;
     }
   }
+}
+
+.modal-table-container {
+  max-width: calc(100vw - 73px);
 }
