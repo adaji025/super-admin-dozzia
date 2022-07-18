@@ -445,7 +445,7 @@ const TaskResponses = ({ closeModal, modalActive, task }: any) => {
                   color="red"
                   style={{ maxWidth: "350px" }}
                 >
-                  No task found.
+                  No task reponse found.
                 </Alert>
               </Group>
             )}
