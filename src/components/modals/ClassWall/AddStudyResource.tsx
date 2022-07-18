@@ -21,9 +21,7 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
   const [fileListIds, setFileListIds] = useState<Array<string>>([]);
   const { loading, handleUploadStudyResourceFile } = useStudyResources();
   const [file, setFile] = useState<any>(null);
-  const userdata = useSelector((state: any) => {
-    return state.user.userdata;
-  });
+
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
@@ -33,8 +31,7 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
       title: "",
       description: "",
       subject_id: "",
-      classroom_id:
-        userdata?.role?.name === "Teacher" ? classWall?.activeClassId : "",
+      classroom_id: classWall?.activeClassId ? classWall?.activeClassId : "",
       external_link: "",
     },
 
@@ -157,7 +154,7 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
           label="Classroom"
           placeholder="Select classroom"
           variant="filled"
-          disabled={userdata?.role?.name === "Teacher"}
+          disabled
           data={classWall?.classes.map(
             (item: { classroom_id: string; classroom_name: string }) => ({
               key: item?.classroom_id,

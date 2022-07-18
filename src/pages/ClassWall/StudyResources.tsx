@@ -258,6 +258,7 @@ const StudyResources = () => {
                 onClick={() => {
                   setAddResourceModal(true);
                 }}
+                disabled={!classWall?.activeClassId}
               >
                 Add Resource
               </Button>
