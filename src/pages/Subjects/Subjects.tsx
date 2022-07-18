@@ -158,15 +158,14 @@ const Subjects = () => {
             <div className="d-p-h-left no-select">Subjects</div>
 
             <div className="d-p-h-right">
-              {userdata?.role?.name === "School Admin" && (
-                <Button
-                  onClick={() => {
-                    setAddSubjectModal(true);
-                  }}
-                >
-                  Add Subject
-                </Button>
-              )}
+              <Button
+                onClick={() => {
+                  setAddSubjectModal(true);
+                }}
+                disabled={userdata?.role?.name !== "School Admin"}
+              >
+                Add Subject
+              </Button>
             </div>
           </div>
 
@@ -341,6 +340,9 @@ const Subjects = () => {
                                   });
                                   setAssignToClassModal(true);
                                 }}
+                                disabled={
+                                  userdata?.role?.name !== "School Admin"
+                                }
                               >
                                 Add to class
                               </Menu.Item>
@@ -357,6 +359,9 @@ const Subjects = () => {
                                   });
                                   setAddSubjectModal(true);
                                 }}
+                                disabled={
+                                  userdata?.role?.name !== "School Admin"
+                                }
                               >
                                 Edit Subject
                               </Menu.Item>

@@ -114,7 +114,7 @@ const AddClass = ({ closeModal, submit, edit, modalActive }: any) => {
         />
 
         <Group position="right" mt="lg">
-          <Button variant="light" onClick={closeModal}>
+          <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
           <Button type="submit">Submit</Button>

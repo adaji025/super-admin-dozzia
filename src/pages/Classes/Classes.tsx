@@ -172,15 +172,14 @@ const Classes = () => {
             <div className="d-p-h-left no-select">Classes</div>
 
             <div className="d-p-h-right">
-              {userdata?.role?.name === "School Admin" && (
-                <Button
-                  onClick={() => {
-                    setAddClassModal(true);
-                  }}
-                >
-                  Add Class
-                </Button>
-              )}
+              <Button
+                onClick={() => {
+                  setAddClassModal(true);
+                }}
+                disabled={userdata?.role?.name !== "School Admin"}
+              >
+                Add Class
+              </Button>
             </div>
           </div>
 
@@ -451,6 +450,9 @@ const Classes = () => {
                                   });
                                   setAddClassModal(true);
                                 }}
+                                disabled={
+                                  userdata?.role?.name !== "School Admin"
+                                }
                               >
                                 Edit Class
                               </Menu.Item>

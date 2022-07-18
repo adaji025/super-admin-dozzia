@@ -24,7 +24,7 @@ import {
 } from "tabler-icons-react";
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
-import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
+import Upload from "../../components/Upload/Upload";
 import { onboardStudent } from "../../services/student/student";
 import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
@@ -143,6 +143,7 @@ const OnboardStudent = () => {
 
 const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   const [age, setAge] = useState<number>(0);
+  const [file, setFile] = useState<any>(null);
   const form = useForm({
     initialValues: {
       first_name: "",
@@ -360,10 +361,15 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                     color: dark ? "#d5d7e0" : "#212529",
                   }}
                 >
-                  Upload Image <span>* (Skip for now)</span>
+                  Upload Image <span>*</span>
                 </div>
 
-                <ImageDropzone filetype="image" fileLimit="1mb" />
+                <Upload
+                  text={file ? file?.name : "Upload Image"}
+                  accept={["image/jpeg", "image/png", "image/jpg"]}
+                  extraClasses={`${file ? "file-selected" : ""}`}
+                  setFile={setFile}
+                />
               </div>
             </div>
 
