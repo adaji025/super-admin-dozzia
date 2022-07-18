@@ -41,7 +41,21 @@ const OnboardStaff = () => {
 
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
+  const {
+    getStates,
+    getStaffRoles,
+    states,
+    staffRoles,
+    getMedicals,
+    medicals,
+  } = useAdmin();
 
+  useEffect(() => {
+    getStates();
+    getStaffRoles();
+    getMedicals();
+    //eslint-disable-next-line
+  }, []);
   const nextStep = (data: any) => {
     if (active === 2) {
       return handleSubmit({ ...formData, ...data });
@@ -149,7 +163,16 @@ const OnboardStaff = () => {
                 description="First step"
                 allowStepSelect={false}
               >
-                <PersonalInfo {...{ active, nextStep, prevStep, formData }} />
+                <PersonalInfo
+                  {...{
+                    active,
+                    nextStep,
+                    prevStep,
+                    formData,
+                    states,
+                    staffRoles,
+                  }}
+                />
               </Stepper.Step>
 
               <Stepper.Step
@@ -158,7 +181,9 @@ const OnboardStaff = () => {
                 description="Second step"
                 allowStepSelect={false}
               >
-                <HealthHistory {...{ active, nextStep, prevStep, formData }} />
+                <HealthHistory
+                  {...{ active, nextStep, prevStep, formData, medicals }}
+                />
               </Stepper.Step>
 
               <Stepper.Step
@@ -177,17 +202,18 @@ const OnboardStaff = () => {
   );
 };
 
-const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
-  const { getStates, getStaffRoles, states, staffRoles } = useAdmin();
+const PersonalInfo = ({
+  active,
+  nextStep,
+  prevStep,
+  formData,
+  states,
+  staffRoles,
+}: any) => {
   const [age, setAge] = useState<number>(0);
   const [file, setFile] = useState<any>(
     formData?.image ? formData?.image : null
   );
-  useEffect(() => {
-    getStates();
-    getStaffRoles();
-    //eslint-disable-next-line
-  }, []);
 
   const form = useForm({
     initialValues: {
@@ -554,7 +580,13 @@ const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
   );
 };
 
-const HealthHistory = ({ active, nextStep, prevStep, formData }: any) => {
+const HealthHistory = ({
+  active,
+  nextStep,
+  prevStep,
+  formData,
+  medicals,
+}: any) => {
   const [disability, setDisability] = useState<string>(
     formData?.disability ? formData?.disability : "No"
   );
@@ -585,13 +617,6 @@ const HealthHistory = ({ active, nextStep, prevStep, formData }: any) => {
           : null,
     },
   });
-
-  const { getMedicals, medicals } = useAdmin();
-
-  useEffect(() => {
-    getMedicals();
-    //eslint-disable-next-line
-  }, []);
 
   const onSave = (values: any) => {
     nextStep({ ...values, disability });

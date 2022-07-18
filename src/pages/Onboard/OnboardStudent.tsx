@@ -41,6 +41,12 @@ const OnboardStudent = () => {
 
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
+  const { getMedicals, medicals } = useAdmin();
+
+  useEffect(() => {
+    getMedicals();
+    //eslint-disable-next-line
+  }, []);
 
   const nextStep = (data: any) => {
     if (active === 2) {
@@ -157,7 +163,9 @@ const OnboardStudent = () => {
                 description="Second step"
                 allowStepSelect={false}
               >
-                <HealthHistory {...{ formData, active, nextStep, prevStep }} />
+                <HealthHistory
+                  {...{ formData, active, nextStep, prevStep, medicals }}
+                />
               </Stepper.Step>
 
               <Stepper.Step
@@ -438,7 +446,13 @@ const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
   );
 };
 
-const HealthHistory = ({ active, nextStep, prevStep, formData }: any) => {
+const HealthHistory = ({
+  active,
+  nextStep,
+  prevStep,
+  formData,
+  medicals,
+}: any) => {
   const [disability, setDisability] = useState<string>(
     formData?.disability ? formData?.disability : "No"
   );
@@ -470,13 +484,6 @@ const HealthHistory = ({ active, nextStep, prevStep, formData }: any) => {
           : null,
     },
   });
-
-  const { getMedicals, medicals } = useAdmin();
-
-  useEffect(() => {
-    getMedicals();
-    //eslint-disable-next-line
-  }, []);
 
   const onSave = (values: any) => {
     nextStep({ ...values, disability });
