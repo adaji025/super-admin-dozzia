@@ -27,6 +27,7 @@ import { DatePicker } from "@mantine/dates";
 import Upload from "../../components/Upload/Upload";
 import { onboardStudent } from "../../services/student/student";
 import useAdmin from "../../hooks/useAdmin";
+import useClass from "../../hooks/useClass";
 import { showLoader } from "../../redux/utility/utility.actions";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
@@ -39,12 +40,15 @@ const OnboardStudent = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
 
-  const [active, setActive] = useState<number>(0);
+  const [active, setActive] = useState<number>(2);
   const [formData, setFormData] = useState<any>({});
   const { getMedicals, medicals } = useAdmin();
+  const { getClassList, allClasses } = useClass();
 
   useEffect(() => {
     getMedicals();
+    getClassList(1, 200, "", "", true);
+
     //eslint-disable-next-line
   }, []);
 
@@ -175,7 +179,7 @@ const OnboardStudent = () => {
                 allowStepSelect={false}
               >
                 <AcademicHistory
-                  {...{ formData, active, nextStep, prevStep }}
+                  {...{ formData, active, nextStep, prevStep, allClasses }}
                 />
               </Stepper.Step>
             </Stepper>
@@ -627,7 +631,13 @@ const HealthHistory = ({
   );
 };
 
-const AcademicHistory = ({ active, nextStep, prevStep, formData }: any) => {
+const AcademicHistory = ({
+  active,
+  nextStep,
+  prevStep,
+  formData,
+  allClasses,
+}: any) => {
   const form = useForm({
     initialValues: {
       entry_class: formData?.entry_class ? formData?.entry_class : "",
@@ -648,13 +658,21 @@ const AcademicHistory = ({ active, nextStep, prevStep, formData }: any) => {
         <Box sx={{ maxWidth: 900 }}>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
-              <TextInput
+              <Select
                 required
-                className="form-item"
                 label="Class of Entry"
-                placeholder="Enter name"
+                placeholder="Select class"
                 variant="filled"
-                type="text"
+                searchable
+                className="form-item"
+                nothingFound="No class found"
+                data={allClasses.map(
+                  (item: { classroom_id: string; classroom_name: string }) => ({
+                    key: item?.classroom_id,
+                    value: item?.classroom_name,
+                    label: item.classroom_name,
+                  })
+                )}
                 {...form.getInputProps("entry_class")}
               />
             </div>

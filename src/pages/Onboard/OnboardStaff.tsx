@@ -54,6 +54,7 @@ const OnboardStaff = () => {
     getStates();
     getStaffRoles();
     getMedicals();
+
     //eslint-disable-next-line
   }, []);
   const nextStep = (data: any) => {
