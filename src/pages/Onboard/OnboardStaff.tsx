@@ -65,7 +65,7 @@ const OnboardStaff = () => {
     data.append("blood_group", values?.blood_group);
     data.append("blood_type", values?.blood_type);
     data.append("disability", values?.disability);
-    data.append("dob", values?.dob);
+    data.append("dob", moment(values.dob).format("L"));
     data.append("email", values?.email);
     data.append("first_name", values?.first_name);
     data.append("middle_name", values?.middle_name);
@@ -85,7 +85,7 @@ const OnboardStaff = () => {
     data.append("state_disability", values?.state_disability);
     data.append("weight", values?.weight);
     data.append("height", values?.height);
-    data.append("year_of_experience", values?.year_of_experience);
+    data.append("year_of_experience", values.year_of_experience.toString());
     data.append("title", values?.title);
     data.append("image", values?.image);
     for (let i = 0; i < values?.existing_conditions.length; i++) {
@@ -149,7 +149,7 @@ const OnboardStaff = () => {
                 description="First step"
                 allowStepSelect={false}
               >
-                <PersonalInfo {...{ active, nextStep, prevStep }} />
+                <PersonalInfo {...{ active, nextStep, prevStep, formData }} />
               </Stepper.Step>
 
               <Stepper.Step
@@ -158,7 +158,7 @@ const OnboardStaff = () => {
                 description="Second step"
                 allowStepSelect={false}
               >
-                <HealthHistory {...{ active, nextStep, prevStep }} />
+                <HealthHistory {...{ active, nextStep, prevStep, formData }} />
               </Stepper.Step>
 
               <Stepper.Step
@@ -167,7 +167,7 @@ const OnboardStaff = () => {
                 description="Final step"
                 allowStepSelect={false}
               >
-                <WorkHistory {...{ active, nextStep, prevStep }} />
+                <WorkHistory {...{ active, nextStep, prevStep, formData }} />
               </Stepper.Step>
             </Stepper>
           </div>
@@ -177,11 +177,12 @@ const OnboardStaff = () => {
   );
 };
 
-const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
+const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
   const { getStates, getStaffRoles, states, staffRoles } = useAdmin();
   const [age, setAge] = useState<number>(0);
-  const [file, setFile] = useState<any>(null);
-
+  const [file, setFile] = useState<any>(
+    formData?.image ? formData?.image : null
+  );
   useEffect(() => {
     getStates();
     getStaffRoles();
@@ -190,23 +191,31 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
 
   const form = useForm({
     initialValues: {
-      role_id: "",
-      title: "",
-      first_name: "",
-      last_name: "",
-      middle_name: "",
-      email: "",
-      phone_number: "",
-      address: "",
-      postal_code: "",
-      dob: "",
-      gender: "",
-      marital_status: "",
-      state_of_origin: "",
-      religion: "",
-      next_of_kin_name: "",
-      next_of_kin_phone_number: "",
-      next_of_kin_email: "",
+      role_id: formData?.role_id ? formData?.role_id : "",
+      title: formData?.title ? formData?.title : "",
+      first_name: formData?.first_name ? formData?.first_name : "",
+      last_name: formData?.last_name ? formData?.last_name : "",
+      middle_name: formData?.middle_name ? formData?.middle_name : "",
+      email: formData?.email ? formData?.email : "",
+      phone_number: formData?.phone_number ? formData?.phone_number : "",
+      address: formData?.address ? formData?.address : "",
+      postal_code: formData?.postal_code ? formData?.postal_code : "",
+      dob: formData?.dob ? formData?.dob : "",
+      gender: formData?.gender ? formData?.gender : "",
+      marital_status: formData?.marital_status ? formData?.marital_status : "",
+      state_of_origin: formData?.state_of_origin
+        ? formData?.state_of_origin
+        : "",
+      religion: formData?.religion ? formData?.religion : "",
+      next_of_kin_name: formData?.next_of_kin_name
+        ? formData?.next_of_kin_name
+        : "",
+      next_of_kin_phone_number: formData?.next_of_kin_phone_number
+        ? formData?.next_of_kin_phone_number
+        : "",
+      next_of_kin_email: formData?.next_of_kin_email
+        ? formData?.next_of_kin_email
+        : "",
     },
 
     validate: {
@@ -244,9 +253,6 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
 
     nextStep({
       ...values,
-      dob: moment(values.dob).format("L"),
-      phone_number: values.phone_number,
-      next_of_kin_phone_number: values.next_of_kin_phone_number,
       age,
       image: file,
     });
@@ -548,18 +554,25 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   );
 };
 
-const HealthHistory = ({ active, nextStep, prevStep }: any) => {
-  const [disability, setDisability] = useState<string>("No");
-
+const HealthHistory = ({ active, nextStep, prevStep, formData }: any) => {
+  const [disability, setDisability] = useState<string>(
+    formData?.disability ? formData?.disability : "No"
+  );
   const form = useForm({
     initialValues: {
-      height: "",
-      weight: "",
-      blood_group: "",
-      blood_type: "",
-      existing_conditions: [],
-      hereditary_conditions: [],
-      state_disability: "",
+      height: formData?.height ? formData?.height : "",
+      weight: formData?.weight ? formData?.weight : "",
+      blood_group: formData?.blood_group ? formData?.blood_group : "",
+      blood_type: formData?.blood_type ? formData?.blood_type : "",
+      existing_conditions: formData?.existing_conditions
+        ? formData?.existing_conditions
+        : [],
+      hereditary_conditions: formData?.hereditary_conditions
+        ? formData?.hereditary_conditions
+        : [],
+      state_disability: formData?.state_disability
+        ? formData?.state_disability
+        : "",
     },
 
     validate: {
@@ -722,22 +735,24 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
   );
 };
 
-const WorkHistory = ({ active, nextStep, prevStep }: any) => {
+const WorkHistory = ({ active, nextStep, prevStep, formData }: any) => {
   const form = useForm({
     initialValues: {
-      year_of_experience: "",
-      guarantor_name: "",
-      guarantor_employment_role: "",
-      guarantor_phone_number: "",
+      year_of_experience: formData?.year_of_experience
+        ? formData?.year_of_experience
+        : "",
+      guarantor_name: formData?.guarantor_name ? formData?.guarantor_name : "",
+      guarantor_employment_role: formData?.guarantor_employment_role
+        ? formData?.guarantor_employment_role
+        : "",
+      guarantor_phone_number: formData?.guarantor_phone_number
+        ? formData?.guarantor_phone_number
+        : "",
     },
   });
 
   const onSave = (values: any) => {
-    nextStep({
-      ...values,
-      year_of_experience: values.year_of_experience.toString(),
-      guarantor_phone_number: values.guarantor_phone_number,
-    });
+    nextStep(values);
   };
 
   return (
