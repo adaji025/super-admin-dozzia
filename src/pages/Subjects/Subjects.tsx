@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useSelector } from "react-redux";
 import {
   Button,
   Input,
@@ -51,6 +52,9 @@ const Subjects = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const deviceWidth = window.innerWidth;
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
+  });
 
   useEffect(() => {
     getSubjectList(page, perPage, search);
@@ -72,7 +76,9 @@ const Subjects = () => {
         opened={addSubjectModal}
         onClose={() => {
           setAddSubjectModal(false);
-          setActiveSubject(null);
+          setTimeout(() => {
+            setActiveSubject(null);
+          }, 500);
         }}
         title={
           <Text weight={600}>{activeSubject ? "Edit" : "Add"} Subject</Text>
@@ -82,7 +88,9 @@ const Subjects = () => {
         <AddSubject
           closeModal={() => {
             setAddSubjectModal(false);
-            setActiveSubject(null);
+            setTimeout(() => {
+              setActiveSubject(null);
+            }, 500);
           }}
           edit={activeSubject}
           submit={activeSubject ? handleUpdateSubject : handleAddSubject}
@@ -93,7 +101,9 @@ const Subjects = () => {
         opened={assignToClassModal}
         onClose={() => {
           setAssignToClassModal(false);
-          setActiveSubject(null);
+          setTimeout(() => {
+            setActiveSubject(null);
+          }, 500);
         }}
         title={<Text weight={600}>Add Subject to Class</Text>}
         size="lg"
@@ -101,7 +111,9 @@ const Subjects = () => {
         <AssignToClass
           closeModal={() => {
             setAssignToClassModal(false);
-            setActiveSubject(null);
+            setTimeout(() => {
+              setActiveSubject(null);
+            }, 500);
           }}
           subject={activeSubject}
           modalActive={assignToClassModal}
@@ -112,12 +124,13 @@ const Subjects = () => {
         opened={subjectClassesModal}
         onClose={() => {
           setSubjectClassesModal(false);
-          setActiveSubject(null);
+          setTimeout(() => {
+            setActiveSubject(null);
+          }, 500);
         }}
         title={
           <Text weight={600}>
-            Classes offering{" "}
-            {(activeSubject && activeSubject.subject_name) ?? ""}
+            {(activeSubject && activeSubject.subject_name) ?? ""} Classes
           </Text>
         }
         size="xl"
@@ -125,7 +138,9 @@ const Subjects = () => {
         <SubjectClasses
           closeModal={() => {
             setSubjectClassesModal(false);
-            setActiveSubject(null);
+            setTimeout(() => {
+              setActiveSubject(null);
+            }, 500);
           }}
           subject={activeSubject}
           modalActive={subjectClassesModal}
@@ -143,13 +158,15 @@ const Subjects = () => {
             <div className="d-p-h-left no-select">Subjects</div>
 
             <div className="d-p-h-right">
-              <Button
-                onClick={() => {
-                  setAddSubjectModal(true);
-                }}
-              >
-                Add Subject
-              </Button>
+              {userdata?.role?.name === "School Admin" && (
+                <Button
+                  onClick={() => {
+                    setAddSubjectModal(true);
+                  }}
+                >
+                  Add Subject
+                </Button>
+              )}
             </div>
           </div>
 

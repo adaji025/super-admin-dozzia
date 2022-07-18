@@ -5,11 +5,9 @@ import {
   Group,
   Skeleton,
   Table,
-  Menu,
   Box,
   Alert,
 } from "@mantine/core";
-import { User, Clipboard } from "tabler-icons-react";
 import useSubject from "../../../hooks/useSubject";
 
 const SubjectClasses = ({
@@ -28,11 +26,10 @@ const SubjectClasses = ({
 }) => {
   const { handleGetSubjectClasses } = useSubject();
   const [classes, setClasses] = useState<any>(null);
-  const deviceWidth = window.innerWidth;
 
   useEffect(() => {
     if (modalActive) {
-      handleGetSubjectClasses(subject.subject_id).then((res: any) => {
+      handleGetSubjectClasses(subject?.subject_id).then((res: any) => {
         setClasses(res?.data);
       });
     }
@@ -75,15 +72,8 @@ const SubjectClasses = ({
                       borderBottom: `1px solid #0000`,
                     }}
                   >
-                    Teacher
+                    Subject Teacher
                   </th>
-                  <th
-                    style={{
-                      borderBottom: `1px solid #0000`,
-                      width: "1px",
-                    }}
-                    className="table-last head large-only"
-                  ></th>
                 </tr>
               </thead>
               <tbody>
@@ -99,6 +89,7 @@ const SubjectClasses = ({
                         last_name: string;
                         staff_id: string;
                       };
+                      subjects_and_teachers: any;
                     },
                     index: number
                   ) => (
@@ -133,30 +124,21 @@ const SubjectClasses = ({
                           borderBottom: `1px solid #0000`,
                         }}
                       >
-                        {`${item?.classroom_teacher?.title} ${item?.classroom_teacher?.first_name} ${item?.classroom_teacher?.last_name}`}
-                      </td>
-
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          width: "20px",
-                        }}
-                        className="table-last"
-                      >
-                        <Menu
-                          position={deviceWidth < 576 ? "left" : "right"}
-                          gutter={15}
-                          withArrow
-                          size="sm"
-                        >
-                          <Menu.Label>Subject Menu</Menu.Label>
-                          <Menu.Item icon={<Clipboard size={14} />}>
-                            View Class
-                          </Menu.Item>
-                          <Menu.Item icon={<User size={14} />}>
-                            View Teacher
-                          </Menu.Item>
-                        </Menu>
+                        {item?.subjects_and_teachers.map(
+                          (item: {
+                            subject: {
+                              subject_id: string;
+                            };
+                            teacher: {
+                              title: string;
+                              first_name: string;
+                              last_name: string;
+                              staff_id: string;
+                            };
+                          }) =>
+                            item?.subject?.subject_id === subject?.subject_id &&
+                            `${item?.teacher?.title} ${item?.teacher?.first_name} ${item?.teacher?.last_name}`
+                        )}
                       </td>
                     </tr>
                   )

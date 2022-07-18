@@ -110,7 +110,7 @@ const ClassSubjects = ({
                           borderBottom: `1px solid #0000`,
                         }}
                       >
-                        {`${item.teacher.title} ${item.teacher.first_name} ${item.teacher.last_name}`}
+                        {`${item?.teacher?.title} ${item?.teacher?.first_name} ${item?.teacher?.last_name}`}
                       </td>
                     </tr>
                   )
