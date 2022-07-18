@@ -24,7 +24,7 @@ import {
 } from "tabler-icons-react";
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
-import ImageDropzone from "../../components/ImageDropzone/ImageDropzone";
+import Upload from "../../components/Upload/Upload";
 import { onboardStaff } from "../../services/staff/staff";
 import useAdmin from "../../hooks/useAdmin";
 import { showLoader } from "../../redux/utility/utility.actions";
@@ -56,8 +56,44 @@ const OnboardStaff = () => {
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (values: any) => {
     dispatch(showLoader(true));
+
+    const data = new FormData();
+    data.append("address", values?.address);
+    data.append("age", values?.age);
+    data.append("blood_group", values?.blood_group);
+    data.append("blood_type", values?.blood_type);
+    data.append("disability", values?.disability);
+    data.append("dob", values?.dob);
+    data.append("email", values?.email);
+    data.append("first_name", values?.first_name);
+    data.append("middle_name", values?.middle_name);
+    data.append("gender", values?.gender);
+    data.append("guarantor_employment_role", values?.guarantor_employment_role);
+    data.append("guarantor_name", values?.guarantor_name);
+    data.append("guarantor_phone_number", values?.guarantor_phone_number);
+    data.append("marital_status", values?.marital_status);
+    data.append("next_of_kin_email", values?.next_of_kin_email);
+    data.append("next_of_kin_name", values?.next_of_kin_name);
+    data.append("next_of_kin_phone_number", values?.next_of_kin_phone_number);
+    data.append("phone_number", values?.phone_number);
+    data.append("postal_code", values?.postal_code);
+    data.append("religion", values?.religion);
+    data.append("role_id", values?.role_id);
+    data.append("last_name", values?.last_name);
+    data.append("state_disability", values?.state_disability);
+    data.append("weight", values?.weight);
+    data.append("height", values?.height);
+    data.append("year_of_experience", values?.year_of_experience);
+    data.append("title", values?.title);
+    data.append("image", values?.image);
+    for (let i = 0; i < values?.existing_conditions.length; i++) {
+      data.append("existing_conditions[]", values?.existing_conditions[i]);
+    }
+    for (let i = 0; i < values?.hereditary_conditions.length; i++) {
+      data.append("hereditary_conditions[]", values?.hereditary_conditions[i]);
+    }
 
     onboardStaff(data)
       .then((res) => {
@@ -144,6 +180,7 @@ const OnboardStaff = () => {
 const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   const { getStates, getStaffRoles, states, staffRoles } = useAdmin();
   const [age, setAge] = useState<number>(0);
+  const [file, setFile] = useState<any>(null);
 
   useEffect(() => {
     getStates();
@@ -164,7 +201,6 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       postal_code: "",
       dob: "",
       gender: "",
-      age: "",
       marital_status: "",
       state_of_origin: "",
       religion: "",
@@ -199,12 +235,20 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   };
 
   const onSave = (values: any) => {
+    if (!file) {
+      return showNotification({
+        message: "Please select staff image",
+        color: "yellow",
+      });
+    }
+
     nextStep({
       ...values,
       dob: moment(values.dob).format("L"),
       phone_number: values.phone_number,
       next_of_kin_phone_number: values.next_of_kin_phone_number,
       age,
+      image: file,
     });
   };
 
@@ -477,10 +521,15 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
                     color: dark ? "#d5d7e0" : "#212529",
                   }}
                 >
-                  Upload Image <span>* (Skip for now)</span>
+                  Upload Image <span>*</span>
                 </div>
 
-                <ImageDropzone filetype="image" fileLimit="1mb" />
+                <Upload
+                  text={file ? file?.name : "Upload Image"}
+                  accept={["image/jpeg", "image/png", "image/jpg"]}
+                  extraClasses={`${file ? "file-selected" : ""}`}
+                  setFile={setFile}
+                />
               </div>
             </div>
 
