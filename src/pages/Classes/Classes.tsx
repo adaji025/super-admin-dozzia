@@ -64,13 +64,21 @@ const Classes = () => {
   const [level, setLevel] = useState<string>("");
   const [classId, setClassId] = useState<string>("");
   const [className, setClassName] = useState<string>("");
+  const [classSubjects, setClassSubjects] = useState<any>(null);
   const deviceWidth = window.innerWidth;
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
+  const userdata = useSelector((state: any) => {
+    return state.user.userdata;
+  });
 
   useEffect(() => {
-    getClassList(page, perPage, level, search);
+    if (userdata?.role?.name === "Teacher") {
+      getClassList(page, perPage, level, search, false, userdata?.user_id);
+    } else {
+      getClassList(page, perPage, level, search);
+    }
     //eslint-disable-next-line
   }, [page, level, search]);
 
@@ -88,7 +96,9 @@ const Classes = () => {
         opened={addClassModal}
         onClose={() => {
           setAddClassModal(false);
-          setEditClass(null);
+          setTimeout(() => {
+            setEditClass(null);
+          }, 500);
         }}
         title={<Text weight={600}>{editClass ? "Edit" : "Add"} Class</Text>}
         size="lg"
@@ -96,7 +106,9 @@ const Classes = () => {
         <AddClass
           closeModal={() => {
             setAddClassModal(false);
-            setEditClass(null);
+            setTimeout(() => {
+              setEditClass(null);
+            }, 500);
           }}
           edit={editClass}
           submit={editClass ? handleUpdateClass : handleAddClass}
@@ -127,7 +139,10 @@ const Classes = () => {
         opened={classSubjectsModal}
         onClose={() => {
           setClassSubjectsModal(false);
-          setClassId("");
+          setTimeout(() => {
+            setClassSubjects([]);
+            setClassId("");
+          }, 500);
         }}
         title={<Text weight={600}>{className ?? "Class"} Subjects</Text>}
         size="xl"
@@ -135,9 +150,13 @@ const Classes = () => {
         <ClassSubjects
           closeModal={() => {
             setClassSubjectsModal(false);
-            setClassId("");
+            setTimeout(() => {
+              setClassSubjects([]);
+              setClassId("");
+            }, 500);
           }}
           classId={classId}
+          subjects={classSubjects}
           modalActive={classSubjectsModal}
         />
       </Modal>
@@ -153,13 +172,15 @@ const Classes = () => {
             <div className="d-p-h-left no-select">Classes</div>
 
             <div className="d-p-h-right">
-              <Button
-                onClick={() => {
-                  setAddClassModal(true);
-                }}
-              >
-                Add Class
-              </Button>
+              {userdata?.role?.name === "School Admin" && (
+                <Button
+                  onClick={() => {
+                    setAddClassModal(true);
+                  }}
+                >
+                  Add Class
+                </Button>
+              )}
             </div>
           </div>
 
@@ -391,6 +412,7 @@ const Classes = () => {
                                 onClick={() => {
                                   setClassName(item?.classroom_name);
                                   setClassId(item.classroom_id);
+                                  setClassSubjects(item?.subjects_and_teachers);
                                   setClassSubjectsModal(true);
                                 }}
                               >
