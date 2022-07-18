@@ -4,11 +4,9 @@ import {
   Group,
   Skeleton,
   Table,
-  Menu,
   Box,
   Alert,
 } from "@mantine/core";
-import { User } from "tabler-icons-react";
 
 const ClassSubjects = ({
   closeModal,
@@ -21,8 +19,6 @@ const ClassSubjects = ({
   modalActive: boolean;
   subjects: any;
 }) => {
-  const deviceWidth = window.innerWidth;
-
   return (
     <div>
       <Divider mb="md" variant="dashed" />
@@ -61,13 +57,6 @@ const ClassSubjects = ({
                   >
                     Teacher
                   </th>
-                  <th
-                    style={{
-                      borderBottom: `1px solid #0000`,
-                      width: "1px",
-                    }}
-                    className="table-last head large-only"
-                  ></th>
                 </tr>
               </thead>
 
@@ -122,26 +111,6 @@ const ClassSubjects = ({
                         }}
                       >
                         {`${item.teacher.title} ${item.teacher.first_name} ${item.teacher.last_name}`}
-                      </td>
-
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          width: "20px",
-                        }}
-                        className="table-last"
-                      >
-                        <Menu
-                          position={deviceWidth < 576 ? "left" : "right"}
-                          gutter={15}
-                          withArrow
-                          size="sm"
-                        >
-                          <Menu.Label>Subject Menu</Menu.Label>
-                          <Menu.Item icon={<User size={14} />}>
-                            View Teacher
-                          </Menu.Item>
-                        </Menu>
                       </td>
                     </tr>
                   )
