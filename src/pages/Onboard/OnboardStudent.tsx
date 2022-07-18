@@ -56,8 +56,43 @@ const OnboardStudent = () => {
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (values: any) => {
     dispatch(showLoader(true));
+
+    const data = new FormData();
+    data.append("age", values?.age);
+    data.append("blood_group", values?.blood_group);
+    data.append("disability", values?.disability);
+    data.append("dob", values?.dob);
+    data.append("entry_class", values?.entry_class);
+    data.append("entry_test_result", values?.entry_test_result);
+    data.append("entry_year", values?.entry_year);
+    data.append("first_name", values?.first_name);
+    data.append("middle_name", values?.middle_name);
+    data.append("gender", values?.gender);
+    data.append("genotype", values?.genotype);
+    data.append("guardian_email", values?.guardian_email);
+    data.append("guardian_first_name", values?.guardian_first_name);
+    data.append("guardian_last_name", values?.guardian_last_name);
+    data.append("guardian_phone_number", values?.guardian_phone_number);
+    data.append("guardian_title", values?.guardian_title);
+    data.append("height", values?.height);
+    data.append("last_name", values?.last_name);
+    data.append("state_disability", values?.state_disability);
+    data.append("weight", values?.weight);
+    data.append("image", values?.image);
+    for (let i = 0; i < values?.existing_medical_condition.length; i++) {
+      data.append(
+        "existing_medical_condition[]",
+        values?.existing_medical_condition[i]
+      );
+    }
+    for (let i = 0; i < values?.hereditary_health_condition.length; i++) {
+      data.append(
+        "hereditary_health_condition[]",
+        values?.hereditary_health_condition[i]
+      );
+    }
 
     onboardStudent(data)
       .then((res) => {
@@ -151,7 +186,6 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       middle_name: "",
       dob: "",
       gender: "",
-      age: "",
       guardian_title: "",
       guardian_first_name: "",
       guardian_last_name: "",
@@ -165,7 +199,6 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
       middle_name: (value) => (value === "" ? "Input middle name" : null),
       dob: (value) => (value === "" ? "Enter date of birth" : null),
       gender: (value) => (value === "" ? "Select student gender" : null),
-      age: (value) => (value === "" ? "Enter student age" : null),
       guardian_title: (value) =>
         value === "" ? "Select guardian title" : null,
       guardian_first_name: (value) =>
@@ -182,11 +215,19 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   const { dark } = useTheme();
 
   const onSave = (values: any) => {
+    if (!file) {
+      return showNotification({
+        message: "Please select student image",
+        color: "yellow",
+      });
+    }
+
     nextStep({
       ...values,
       dob: moment(values.dob).format("YYYY-MM-DD"),
       guardian_phone_number: values.guardian_phone_number,
       age,
+      image: file,
     });
   };
 
