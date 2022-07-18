@@ -161,7 +161,7 @@ const ViewCurricula = ({ closeModal, curriculum }: any) => {
                         <ul>
                           {item?.components.map((item: string) => (
                             <li key={item}>
-                              <Text size="sm" mb={5}>
+                              <Text size="xs" mb={5}>
                                 {item}
                               </Text>
                             </li>

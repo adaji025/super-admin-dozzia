@@ -25,7 +25,12 @@ const StudentDetails = ({ closeModal, staff, modalActive }: any) => {
       <Divider mb="md" variant="dashed" />
 
       <div className="view-details no-next">
-        <Avatar mb={10} src={null} className="avatar" size={100} />
+        <Avatar
+          mb={10}
+          src={staffDetails?.data?.picture ? staffDetails?.data?.picture : null}
+          className="avatar"
+          size={100}
+        />
 
         <div
           className="v-d-row"
