@@ -63,10 +63,10 @@ const OnboardStudent = () => {
     data.append("age", values?.age);
     data.append("blood_group", values?.blood_group);
     data.append("disability", values?.disability);
-    data.append("dob", values?.dob);
+    data.append("dob", moment(values?.dob).format("YYYY-MM-DD"));
     data.append("entry_class", values?.entry_class);
     data.append("entry_test_result", values?.entry_test_result);
-    data.append("entry_year", values?.entry_year);
+    data.append("entry_year", values.entry_year.toString());
     data.append("first_name", values?.first_name);
     data.append("middle_name", values?.middle_name);
     data.append("gender", values?.gender);
@@ -148,7 +148,7 @@ const OnboardStudent = () => {
                 description="First step"
                 allowStepSelect={false}
               >
-                <PersonalInfo {...{ active, nextStep, prevStep }} />
+                <PersonalInfo {...{ formData, active, nextStep, prevStep }} />
               </Stepper.Step>
 
               <Stepper.Step
@@ -157,7 +157,7 @@ const OnboardStudent = () => {
                 description="Second step"
                 allowStepSelect={false}
               >
-                <HealthHistory {...{ active, nextStep, prevStep }} />
+                <HealthHistory {...{ formData, active, nextStep, prevStep }} />
               </Stepper.Step>
 
               <Stepper.Step
@@ -166,7 +166,9 @@ const OnboardStudent = () => {
                 description="Final step"
                 allowStepSelect={false}
               >
-                <AcademicHistory {...{ active, nextStep, prevStep }} />
+                <AcademicHistory
+                  {...{ formData, active, nextStep, prevStep }}
+                />
               </Stepper.Step>
             </Stepper>
           </div>
@@ -176,21 +178,30 @@ const OnboardStudent = () => {
   );
 };
 
-const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
+const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
   const [age, setAge] = useState<number>(0);
-  const [file, setFile] = useState<any>(null);
+  const [file, setFile] = useState<any>(
+    formData?.image ? formData?.image : null
+  );
+
   const form = useForm({
     initialValues: {
-      first_name: "",
-      last_name: "",
-      middle_name: "",
-      dob: "",
-      gender: "",
-      guardian_title: "",
-      guardian_first_name: "",
-      guardian_last_name: "",
-      guardian_phone_number: "",
-      guardian_email: "",
+      first_name: formData?.first_name ? formData?.first_name : "",
+      last_name: formData?.last_name ? formData?.last_name : "",
+      middle_name: formData?.middle_name ? formData?.middle_name : "",
+      dob: formData?.dob ? formData?.dob : "",
+      gender: formData?.gender ? formData?.gender : "",
+      guardian_title: formData?.guardian_title ? formData?.guardian_title : "",
+      guardian_first_name: formData?.guardian_first_name
+        ? formData?.guardian_first_name
+        : "",
+      guardian_last_name: formData?.guardian_last_name
+        ? formData?.guardian_last_name
+        : "",
+      guardian_phone_number: formData?.guardian_phone_number
+        ? formData?.guardian_phone_number
+        : "",
+      guardian_email: formData?.guardian_email ? formData?.guardian_email : "",
     },
 
     validate: {
@@ -224,8 +235,6 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
 
     nextStep({
       ...values,
-      dob: moment(values.dob).format("YYYY-MM-DD"),
-      guardian_phone_number: values.guardian_phone_number,
       age,
       image: file,
     });
@@ -429,18 +438,26 @@ const PersonalInfo = ({ active, nextStep, prevStep }: any) => {
   );
 };
 
-const HealthHistory = ({ active, nextStep, prevStep }: any) => {
-  const [disability, setDisability] = useState<string>("No");
+const HealthHistory = ({ active, nextStep, prevStep, formData }: any) => {
+  const [disability, setDisability] = useState<string>(
+    formData?.disability ? formData?.disability : "No"
+  );
 
   const form = useForm({
     initialValues: {
-      height: "",
-      weight: "",
-      blood_group: "",
-      genotype: "",
-      existing_medical_condition: [],
-      hereditary_health_condition: [],
-      state_disability: "",
+      height: formData?.height ? formData?.height : "",
+      weight: formData?.weight ? formData?.weight : "",
+      blood_group: formData?.blood_group ? formData?.blood_group : "",
+      genotype: formData?.genotype ? formData?.genotype : "",
+      existing_medical_condition: formData?.existing_medical_condition
+        ? formData?.existing_medical_condition
+        : [],
+      hereditary_health_condition: formData?.hereditary_health_condition
+        ? formData?.hereditary_health_condition
+        : [],
+      state_disability: formData?.state_disability
+        ? formData?.state_disability
+        : "",
     },
 
     validate: {
@@ -603,20 +620,19 @@ const HealthHistory = ({ active, nextStep, prevStep }: any) => {
   );
 };
 
-const AcademicHistory = ({ active, nextStep, prevStep }: any) => {
+const AcademicHistory = ({ active, nextStep, prevStep, formData }: any) => {
   const form = useForm({
     initialValues: {
-      entry_class: "",
-      entry_year: "",
-      entry_test_result: "",
+      entry_class: formData?.entry_class ? formData?.entry_class : "",
+      entry_year: formData?.entry_year ? formData?.entry_year : "",
+      entry_test_result: formData?.entry_test_result
+        ? formData?.entry_test_result
+        : "",
     },
   });
 
   const onSave = (values: any) => {
-    nextStep({
-      ...values,
-      entry_year: values.entry_year.toString(),
-    });
+    nextStep(values);
   };
 
   return (
