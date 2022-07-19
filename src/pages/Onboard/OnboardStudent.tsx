@@ -40,7 +40,7 @@ const OnboardStudent = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
 
-  const [active, setActive] = useState<number>(2);
+  const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
   const { getMedicals, medicals } = useAdmin();
   const { getClassList, allClasses } = useClass();

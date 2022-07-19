@@ -24,7 +24,6 @@ import Confirmation from "../../components/modals/Confirmation/Confirmation";
 
 const ClassEvents = () => {
   const [page, setPage] = useState<number>(1);
-  const [events, setEvents] = useState<any>(null);
   const [perPage] = useState<number>(10);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
@@ -40,6 +39,7 @@ const ClassEvents = () => {
     handleUpdateEvent,
     setLoading,
     loading,
+    events,
   } = useEvent();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
   const classWall = useSelector((state: any) => {
@@ -47,11 +47,7 @@ const ClassEvents = () => {
   });
 
   useEffect(() => {
-    handleGetEvents(page, perPage, search, classWall?.activeClassId, true).then(
-      (res: any) => {
-        setEvents(res);
-      }
-    );
+    handleGetEvents(page, perPage, search, classWall?.activeClassId);
 
     //eslint-disable-next-line
   }, [page, search]);
