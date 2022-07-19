@@ -65,21 +65,28 @@ const useEvent = () => {
     page: number,
     perPage: number,
     search: string,
-    classId?: string
+    classId?: string,
+    isClass?: boolean
   ) => {
-    if (!events) {
-      setLoading(true);
-    }
+    return new Promise((resolve) => {
+      if (!events) {
+        setLoading(true);
+      }
 
-    getEvents(page, perPage, search, classId ? classId : "")
-      .then((res) => {
-        dispatch(setEvents(res));
-      })
-      .catch(() => {})
-      .finally(() => {
-        setLoading(false);
-        dispatch(showLoader(false));
-      });
+      getEvents(page, perPage, search, classId ? classId : "")
+        .then((res) => {
+          if (isClass) {
+            resolve(res);
+          } else {
+            dispatch(setEvents(res));
+          }
+        })
+        .catch(() => {})
+        .finally(() => {
+          setLoading(false);
+          dispatch(showLoader(false));
+        });
+    });
   };
 
   const handleDeleteEvent = (id: string) => {
