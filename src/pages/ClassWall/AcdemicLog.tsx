@@ -173,7 +173,7 @@ const AcdemicLog = () => {
                   {classWall?.activeClassName}/{" "}
                 </span>
               )}
-              Acdemic Log
+              Academic Log
             </div>
 
             <div className="d-p-h-right">
