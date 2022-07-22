@@ -31,34 +31,37 @@ const useEvent = () => {
     time: string;
     classId?: string;
   }) => {
-    dispatch(showLoader(true));
+    return new Promise((resolve) => {
+      dispatch(showLoader(true));
 
-    createEvent({
-      title: values.title,
-      description: values.description,
-      start_at: `${moment(values.startDate).format("YYYY-MM-DD")} ${moment(
-        values.startTime
-      ).format("HH:mm:ss")}`,
-      end_at: `${moment(values.endDate).format("YYYY-MM-DD")} ${moment(
-        values.endTime
-      ).format("HH:mm:ss")}`,
-      visibility: values.visibility,
-      classroom_id: values.classId,
-    })
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: "Event created successfully.",
-          color: "green",
+      createEvent({
+        title: values.title,
+        description: values.description,
+        start_at: `${moment(values.startDate).format("YYYY-MM-DD")} ${moment(
+          values.startTime
+        ).format("HH:mm:ss")}`,
+        end_at: `${moment(values.endDate).format("YYYY-MM-DD")} ${moment(
+          values.endTime
+        ).format("HH:mm:ss")}`,
+        visibility: values.visibility,
+        classroom_id: values.classId,
+      })
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: "Event created successfully.",
+            color: "green",
+          });
+          handleGetEvents(1, 10, "");
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+        })
+        .finally(() => {
+          dispatch(showLoader(false));
         });
-        handleGetEvents(1, 10, "");
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        dispatch(showLoader(false));
-      });
+    });
   };
 
   const handleGetEvents = (
