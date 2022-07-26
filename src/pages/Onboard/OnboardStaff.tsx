@@ -271,12 +271,12 @@ const PersonalInfo = ({
   };
 
   const onSave = (values: any) => {
-    if (!file) {
-      return showNotification({
-        message: "Please select staff image",
-        color: "yellow",
-      });
-    }
+    // if (!file) {
+    //   return showNotification({
+    //     message: "Please select staff image",
+    //     color: "yellow",
+    //   });
+    // }
 
     nextStep({
       ...values,

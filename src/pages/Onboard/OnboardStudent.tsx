@@ -238,12 +238,12 @@ const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
   const { dark } = useTheme();
 
   const onSave = (values: any) => {
-    if (!file) {
-      return showNotification({
-        message: "Please select student image",
-        color: "yellow",
-      });
-    }
+    // if (!file) {
+    //   return showNotification({
+    //     message: "Please select student image",
+    //     color: "yellow",
+    //   });
+    // }
 
     nextStep({
       ...values,

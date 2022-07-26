@@ -345,7 +345,10 @@ const Students = () => {
               position="center"
               mt={25}
               onChange={(value) => {
-                setPage(value);
+                if (value !== students.meta.current_page) {
+                  setLoading(true);
+                  setPage(value);
+                }
               }}
               initialPage={students.meta.current_page}
               total={students.meta.last_page}
