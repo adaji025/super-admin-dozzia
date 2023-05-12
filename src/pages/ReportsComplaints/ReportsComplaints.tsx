@@ -225,14 +225,6 @@ const Reports = () => {
                         <th
                           style={{
                             borderBottom: `1px solid #0000`,
-                          }}
-                        >
-                          Comment
-                        </th>
-
-                        <th
-                          style={{
-                            borderBottom: `1px solid #0000`,
                             width: "1px",
                           }}
                           className="table-last head large-only"
@@ -315,15 +307,6 @@ const Reports = () => {
                               }}
                             >
                               {item?.status}
-                            </td>
-
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                textTransform: "capitalize",
-                              }}
-                            >
-                              {item?.comment}
                             </td>
 
                             <td

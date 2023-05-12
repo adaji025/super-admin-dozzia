@@ -21,6 +21,7 @@ const UploadComponent = ({
 }: UploadProps) => {
   const uploadFile: any = useRef(null);
   const { dark } = useTheme();
+
   const handleChange = (e: any) => {
     e.preventDefault();
     let selectedFile = e.target.files[0];

@@ -270,7 +270,7 @@ const AcdemicLog = () => {
             >
               {academicLog && academicLog.data && !loading ? (
                 <ScrollArea>
-                  <Table striped verticalSpacing="md" sx={{ minWidth: 900 }}>
+                  <Table striped verticalSpacing="md" sx={{ minWidth: 800 }}>
                     <thead>
                       <tr>
                         <th
