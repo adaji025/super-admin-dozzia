@@ -33,7 +33,7 @@ function App() {
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "color-scheme",
-    defaultValue: "dark",
+    defaultValue: "light",
   });
 
   useEffect(() => {
@@ -69,7 +69,8 @@ function App() {
           theme={{
             colorScheme,
             primaryColor: "green",
-            fontFamily: "Inter, sans-serif",
+            fontFamily: "Aeonik, sans-serif",
+            defaultRadius: 8,
           }}
         >
           <LoadingOverlay visible={showLoader} />
@@ -81,7 +82,7 @@ function App() {
             <Paper
               style={{
                 borderRadius: "0px",
-                background: colorScheme === "dark" ? "#121212" : "#f8f9fa",
+                background: colorScheme === "dark" ? "#121212" : "white",
                 color: colorScheme === "dark" ? "white" : "black",
               }}
             >

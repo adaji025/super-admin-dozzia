@@ -30,21 +30,21 @@ a {
   -ms-user-select: none;
 }
 
-.r-icon {
-  transition: 0.5s;
-  &.rotate-icon {
-    -o-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg);
-  }
-}
-
-.mantine-19f4nr1 {
-  max-width: 375px !important;
-}
-
 input:disabled {
   opacity: 0.9 !important;
+}
+
+.mantine-TextInput-label,
+.mantine-PasswordInput-label {
+  font-size: 13px;
+  color: #121212;
+}
+
+.mantine-TextInput-input,
+.mantine-PasswordInput-innerInput {
+  font-size: 13px;
+}
+
+.mantine-Button-root {
+  font-size: 14px;
 }

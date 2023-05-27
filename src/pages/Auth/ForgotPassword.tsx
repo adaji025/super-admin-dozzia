@@ -1,20 +1,15 @@
 import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TextInput, Button, Group, Box, LoadingOverlay } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
-import { User } from "tabler-icons-react";
-
+import Logo from "../../assets/svg/dozzia-dark.svg";
 import { forgotPassword } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
-import useTheme from "../../hooks/useTheme";
-
-import AuthHeader from "../../components/AuthHeader/AuthHeader";
-import "./auth.scss";
+import { ArrowLeft } from "tabler-icons-react";
 
 const ForgotPassword = () => {
-  const { dark } = useTheme();
   const navigate = useNavigate();
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const { handleError } = useNotification();
@@ -64,39 +59,41 @@ const ForgotPassword = () => {
       </Helmet>
 
       <div className="auth-page">
-        <AuthHeader />
         <LoadingOverlay visible={showLoader} />
 
-        <div className="auth-main center">
-          <div
-            className={`a-m-right ${dark ? "dark-card-bg" : "light-card-bg"}`}
-          >
+        <div className={`forgot-password`}>
+          <div className="logo">
+            <img src={Logo} alt="" />
+          </div>
+
+          <div className="form">
             <div className="form-title">Forgot Password</div>
+            <Box sx={{ maxWidth: 428 }} mx="auto" mt={20}>
+              <form onSubmit={form.onSubmit((values) => submit(values))}>
+                <TextInput
+                  required
+                  label="Username"
+                  placeholder="Enter your username"
+                  size="md"
+                  radius="md"
+                  {...form.getInputProps("username")}
+                />
 
-            <div className="form-desc">
-              Enter your username to get a password reset link from Dozzia
-            </div>
+                <Group position="center" mt={42}>
+                  <Button fullWidth type="submit" color="dark" size="md">
+                    Send password reset link
+                  </Button>
+                </Group>
 
-            <div className="form">
-              <Box sx={{ maxWidth: 340 }} mx="auto">
-                <form onSubmit={form.onSubmit((values) => submit(values))}>
-                  <TextInput
-                    required
-                    label="Username"
-                    placeholder="Username"
-                    variant="filled"
-                    icon={<User size={16} />}
-                    {...form.getInputProps("username")}
-                  />
-
-                  <Group position="center" mt="lg">
-                    <Button fullWidth type="submit">
-                      Submit
-                    </Button>
-                  </Group>
-                </form>
-              </Box>
-            </div>
+                <Group position="center" mt={30}>
+                  <Link to="/sign-in">
+                    <Group position="center" align="center" spacing={8}>
+                      <ArrowLeft size={16} color={"black"} /> back to sign in
+                    </Group>
+                  </Link>
+                </Group>
+              </form>
+            </Box>
           </div>
         </div>
       </div>

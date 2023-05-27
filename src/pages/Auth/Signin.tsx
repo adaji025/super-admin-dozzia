@@ -1,6 +1,5 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import Typewriter from "typewriter-effect";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {
@@ -14,17 +13,21 @@ import {
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { Lock, User } from "tabler-icons-react";
-
-import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { login } from "../../services/auth/auth";
 import { setUserData } from "../../redux/user/user.actions";
-import "./auth.scss";
 import useNotification from "../../hooks/useNotification";
-import useTheme from "../../hooks/useTheme";
+import { useMediaQuery } from "@mantine/hooks";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { Autoplay } from "swiper";
+import { CardOne, CardThree, CardTwo } from "../../components/Auth/AuthCards";
+import "./auth.scss";
+import AuthHeader from "../../components/AuthHeader/AuthHeader";
 
 const Signin = () => {
-  const { dark } = useTheme();
+  const small = useMediaQuery("(max-width: 450px)");
+  const ExSmall = useMediaQuery("(max-width: 370px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -90,67 +93,89 @@ const Signin = () => {
 
       <div className="auth-page">
         <LoadingOverlay visible={showLoader} />
+
         <AuthHeader />
 
         <div className="auth-main">
-          <div className="a-m-left">
-            <Text>
-              Best way to <span className="green-text">effectively</span> manage
-              your{" "}
-              <span className="green-text">
-                <Typewriter
-                  options={{
-                    strings: ["students", "teachers", "curriculum"],
-                    autoStart: true,
-                    loop: true,
-                  }}
-                />
-              </span>
-            </Text>
+          <div className={`a-m-left`}>
+            <Box
+              className="left-container"
+              sx={
+                ExSmall
+                  ? { width: "" }
+                  : small
+                  ? { width: 350 }
+                  : { width: 389 }
+              }
+              mx="auto"
+            >
+              <div className="form-title">Sign In</div>
+              <div className="form-desc">
+                Please enter your login details below
+              </div>
+
+              <div className="form">
+                <Box sx={{ maxWidth: 420 }}>
+                  <form onSubmit={form.onSubmit((values) => submit(values))}>
+                    <TextInput
+                      className="input-field"
+                      required
+                      label="Username"
+                      placeholder="Enter your username"
+                      type="text"
+                      radius="md"
+                      size="md"
+                      {...form.getInputProps("username")}
+                    />
+
+                    <PasswordInput
+                      required
+                      mt="sm"
+                      label="Password"
+                      radius="md"
+                      size="md"
+                      placeholder="*************"
+                      {...form.getInputProps("password")}
+                    />
+
+                    <Group position="right" mt="sm">
+                      <Link to="/forgot-password">
+                        <Text size="sm">Forgot Password</Text>
+                      </Link>
+                    </Group>
+
+                    <Group position="center" mt="lg">
+                      <Button fullWidth type="submit" color="dark" size="md">
+                        Sign in
+                      </Button>
+                    </Group>
+                  </form>
+                </Box>
+              </div>
+            </Box>
           </div>
 
-          <div
-            className={`a-m-right ${dark ? "dark-card-bg" : "light-card-bg"}`}
-          >
-            <div className="form-title">Admin</div>
-
-            <div className="form">
-              <Box sx={{ maxWidth: 300 }} mx="auto">
-                <form onSubmit={form.onSubmit((values) => submit(values))}>
-                  <TextInput
-                    required
-                    label="Username"
-                    placeholder="Username"
-                    variant="filled"
-                    type="text"
-                    icon={<User size={16} />}
-                    {...form.getInputProps("username")}
-                  />
-
-                  <PasswordInput
-                    required
-                    mt="sm"
-                    label="Password"
-                    placeholder="Password"
-                    variant="filled"
-                    icon={<Lock size={16} />}
-                    {...form.getInputProps("password")}
-                  />
-
-                  <Group position="right" mt="sm">
-                    <Link to="/forgot-password">
-                      <Text size="xs">Forgot Password</Text>
-                    </Link>
-                  </Group>
-
-                  <Group position="center" mt="lg">
-                    <Button fullWidth type="submit">
-                      Sign in
-                    </Button>
-                  </Group>
-                </form>
-              </Box>
-            </div>
+          <div className="a-m-right">
+            <Swiper
+              modules={[Autoplay]}
+              loop={true}
+              spaceBetween={30}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              className="mySwiper"
+            >
+              <SwiperSlide>
+                <CardOne />
+              </SwiperSlide>
+              <SwiperSlide>
+                <CardTwo />
+              </SwiperSlide>
+              <SwiperSlide>
+                <CardThree />
+              </SwiperSlide>
+            </Swiper>
           </div>
         </div>
       </div>

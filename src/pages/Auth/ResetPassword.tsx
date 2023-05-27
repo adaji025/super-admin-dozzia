@@ -12,9 +12,8 @@ import {
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
 import queryString from "query-string";
-import { Lock } from "tabler-icons-react";
+import Logo from "../../assets/svg/dozzia-dark.svg";
 
-import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { resetPassword } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
@@ -100,62 +99,56 @@ const ResetPassword = () => {
       </Helmet>
 
       <div className="auth-page">
-        <AuthHeader />
+        {/* <AuthHeader /> */}
         <LoadingOverlay visible={showLoader} />
 
-        <div className="auth-main center">
-          <div
-            className={`a-m-right ${dark ? "dark-card-bg" : "light-card-bg"}`}
-          >
+        <div className={`forgot-password`}>
+          <div className="logo">
+            <img src={Logo} alt="" />
+          </div>
+
+          <div className={`form ${dark ? "dark-card-bg" : "light-card-bg"}`}>
             <div className="form-title">Create New Password</div>
-
-            <div className="form-desc">
-              Enter your new preferred password. Password must be at least 6
-              characters.
-            </div>
-
-            <div className="form">
-              <Box sx={{ maxWidth: 340 }} mx="auto">
-                <form onSubmit={form.onSubmit((values) => submit(values))}>
-                  {!isNewUser && (
-                    <TextInput
-                      required
-                      label="Reset code"
-                      placeholder="Reset code"
-                      variant="filled"
-                      {...form.getInputProps("reset_code")}
-                      icon={<Lock size={16} />}
-                    />
-                  )}
-
-                  <PasswordInput
+            <Box sx={{ maxWidth: 428 }} mx="auto" mt={20}>
+              <form onSubmit={form.onSubmit((values) => submit(values))}>
+                {!isNewUser && (
+                  <TextInput
                     required
-                    mt="sm"
-                    label="New password"
-                    placeholder="Password"
-                    variant="filled"
-                    icon={<Lock size={16} />}
-                    {...form.getInputProps("password")}
+                    label="Reset code"
+                    placeholder="Enter resent code"
+                    size="md"
+                    radius="md"
+                    {...form.getInputProps("reset_code")}
                   />
+                )}
 
-                  <PasswordInput
-                    required
-                    mt="sm"
-                    label="Confirm new password"
-                    placeholder="Confirm password"
-                    variant="filled"
-                    icon={<Lock size={16} />}
-                    {...form.getInputProps("confirmPassword")}
-                  />
+                <PasswordInput
+                  required
+                  mt="sm"
+                  label="New password"
+                  placeholder="Enter new password"
+                  size="md"
+                  radius="md"
+                  {...form.getInputProps("password")}
+                />
 
-                  <Group position="center" mt="lg">
-                    <Button fullWidth type="submit">
-                      Submit
-                    </Button>
-                  </Group>
-                </form>
-              </Box>
-            </div>
+                <PasswordInput
+                  required
+                  mt="sm"
+                  label="Confirm new password"
+                  placeholder="Confirm new password"
+                  size="md"
+                  radius="md"
+                  {...form.getInputProps("confirmPassword")}
+                />
+
+                <Group position="center" mt={42}>
+                  <Button fullWidth type="submit" color="dark" size="md">
+                    Create new password
+                  </Button>
+                </Group>
+              </form>
+            </Box>
           </div>
         </div>
       </div>
