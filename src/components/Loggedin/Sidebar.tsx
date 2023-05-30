@@ -1,27 +1,27 @@
 import { useState, Fragment, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Text } from "@mantine/core";
+import { Burger, Text } from "@mantine/core";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
 import useTheme from "../../hooks/useTheme";
 import {
   LayoutDashboard,
-  Briefcase,
-  Users,
-  Speakerphone,
-  ThumbDown,
-  Settings,
-  Logout,
   ChevronDown,
-  X,
-  Trash,
   FilePencil,
   Books,
   ClipboardList,
   Wall,
 } from "tabler-icons-react";
 import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
+import { ReactComponent as Administration } from "../../assets/svg/navigation/administration.svg";
+import { ReactComponent as Broadcast } from "../../assets/svg/navigation/broadcast.svg";
+import { ReactComponent as Dashboard } from "../../assets/svg/navigation/dashboard.svg";
+import { ReactComponent as Logout } from "../../assets/svg/navigation/logout.svg";
+import { ReactComponent as Management } from "../../assets/svg/navigation/management.svg";
+import { ReactComponent as Reports } from "../../assets/svg/navigation/reports.svg";
+import { ReactComponent as Settings } from "../../assets/svg/navigation/setting.svg";
+import { ReactComponent as Trash } from "../../assets/svg/navigation/trash.svg";
 
 interface SidebarProps {
   toggleSidebar: () => void;
@@ -52,12 +52,12 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
 
   const adminRoutes = [
     {
-      icon: LayoutDashboard,
+      icon: Dashboard,
       name: "Dashboard",
       route: "/dashboard",
     },
     {
-      icon: Briefcase,
+      icon: Management,
       name: "Management",
       route: "/management",
       key: [
@@ -102,7 +102,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       ],
     },
     {
-      icon: Users,
+      icon: Administration,
       name: "Admissions",
       route: "/admissions",
       key: ["add-student", "add-staff", "terms-sessions"],
@@ -122,12 +122,12 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       ],
     },
     {
-      icon: Speakerphone,
+      icon: Broadcast,
       name: "Broadcast",
       route: "/broadcast",
     },
     {
-      icon: ThumbDown,
+      icon: Reports,
       name: "Reports & Complaints",
       route: "/reports",
     },
@@ -180,21 +180,19 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   return (
     <div
       className={`sidebar-container no-select ${
-        dark ? "dark-card-bg" : "light-card-bg"
+        !dark ? "dark-card-bg" : "light-card-bg"
       } ${!showSidebar ? "is-hidden" : ""}`}
-      style={{
-        borderRight: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
-      }}
     >
-      <X className="close-icon click" size={29} onClick={toggleSidebar} />
+      <Burger
+        opened={showSidebar}
+        onClick={toggleSidebar}
+        title={showSidebar ? "Close navigation" : "Open navigation"}
+        className="close-icon click"
+        color="white"
+      />
 
       <div className="sidebar-inner">
-        <div
-          className="school-info"
-          style={{
-            borderBottom: `1px solid ${dark ? "#2c2e33" : "#e9ecef"}`,
-          }}
-        >
+        <div className="school-info">
           <div className="school-info-inner">
             <div className="school-logo-wrapper">
               <SchoolLogo className="school-logo" />
@@ -203,7 +201,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             <Text
               className="school-name"
               style={{
-                color: dark ? "white" : "black",
+                color: !dark ? "white" : "black",
               }}
             >
               {userdata?.profile_details?.school_name
@@ -216,7 +214,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         <div
           className="nav-links"
           style={{
-            color: dark ? "white" : "black",
+            color: !dark ? "white" : "black",
           }}
         >
           {routes.map((item: any) => (
@@ -229,7 +227,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                       showChildren !== item.name
                         ? "is-active"
                         : ""
-                    } ${dark ? "h-dark" : "h-light"}`}
+                    } ${!dark ? "h-dark" : "h-light"}`}
                     key={item.name}
                     onClick={() => {
                       if (showChildren === item.name) {
@@ -240,19 +238,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                     }}
                   >
                     <span>
-                      <item.icon
-                        color={
-                          item.key.includes(location.pathname.split("/")[1]) &&
-                          showChildren !== item.name
-                            ? "#33cc33"
-                            : dark
-                            ? "white"
-                            : "#5e5e5e"
-                        }
-                        size={25}
-                        strokeWidth={1.3}
-                        className="nav-icon"
-                      />
+                      <item.icon className="nav-icon" />
                     </span>
 
                     <Text sx={{ fontSize: "14px" }}>{item.name}</Text>
@@ -262,7 +248,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                         item.key.includes(location.pathname.split("/")[1]) &&
                         showChildren !== item.name
                           ? "#33cc33"
-                          : dark
+                          : !dark
                           ? "white"
                           : "#5e5e5e"
                       }
@@ -281,7 +267,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                           [
                             "nav-item",
                             "child",
-                            dark ? "h-dark" : "h-light",
+                            !dark ? "h-dark" : "h-light",
                             isActive ? "is-active" : null,
                             location.pathname.includes("/class-wall") &&
                             child.name === "Classes"
@@ -308,7 +294,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                   className={({ isActive }) =>
                     [
                       "nav-item",
-                      dark ? "h-dark" : "h-light",
+                      !dark ? "h-dark" : "h-light",
                       isActive ||
                       (item.route === "/dashboard" && location.pathname === "/")
                         ? "is-active"
@@ -325,20 +311,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                   }}
                 >
                   <span>
-                    <item.icon
-                      color={
-                        location.pathname.includes(item.route) ||
-                        (item.route === "/dashboard" &&
-                          location.pathname === "/")
-                          ? "#33cc33"
-                          : dark
-                          ? "white"
-                          : "#5e5e5e"
-                      }
-                      size={25}
-                      strokeWidth={1.3}
-                      className="nav-icon"
-                    />
+                    <item.icon className="nav-icon" />
                   </span>
 
                   <Text sx={{ fontSize: "14px" }}>{item.name}</Text>
@@ -348,7 +321,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           ))}
 
           <div
-            className={`nav-item ${dark ? "h-dark" : "h-light"}`}
+            className={`nav-item ${!dark ? "h-dark" : "h-light"}`}
             onClick={() => {
               dispatch({ type: "LOGOUT" });
               showNotification({
@@ -361,12 +334,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             }}
           >
             <span>
-              <Logout
-                color={dark ? "white" : "#5e5e5e"}
-                size={25}
-                strokeWidth={1.3}
-                className="nav-icon"
-              />
+              <Logout className="nav-icon" />
             </span>
             <Text sx={{ fontSize: "14px" }}>Logout</Text>
           </div>

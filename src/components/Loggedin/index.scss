@@ -6,21 +6,22 @@
   left: 0;
   display: flex;
   flex-direction: row;
+  background: #f8f9fa;
 
   .sidebar-container {
     position: relative;
     z-index: 4;
-    padding: 20px 0px 20px 0;
+    padding: 40px 0px 20px 0;
 
     &.is-hidden {
       @media only screen and (max-width: 1000px) {
-        display: none;
+        visibility: hidden;
       }
     }
 
     @media only screen and (min-width: 500px) {
-      min-width: 280px;
-      max-width: 280px;
+      min-width: 240px;
+      max-width: 240px;
     }
 
     @media only screen and (max-width: 500px) {
@@ -37,7 +38,7 @@
       top: 20px;
       right: 20px;
       padding: 3px;
-      opacity: 0.5;
+
       @media only screen and (max-width: 1000px) {
         display: unset;
       }
@@ -47,8 +48,6 @@
 
       .school-info {
         .school-info-inner {
-          padding-left: 25px;
-          width: fit-content;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -65,7 +64,7 @@
             margin-top: 3px;
             font-size: 17px;
             font-weight: 500;
-            padding-bottom: 15px;
+            margin-bottom: 20px;
           }
         }
       }
@@ -89,10 +88,9 @@
           flex-direction: row;
           align-items: center;
           margin-bottom: 5px;
-          padding: 10px 0 10px 25px;
+          padding: 5px 0 5px 25px;
           cursor: pointer;
           font-weight: 500;
-          opacity: 0.8;
           @media only screen and (max-width: 768px) {
             margin-bottom: 5px;
           }
@@ -110,20 +108,19 @@
           }
 
           &.is-active {
-            transition: 0.3s all ease-in-out;
             color: #33cc33;
-            opacity: 1;
-            border-left: 3px solid #33cc33;
-            padding-left: 22px;
+
+            .nav-icon {
+              path {
+                stroke: #33cc33;
+              }
+            }
           }
 
           &.child {
-            padding-left: 60px;
-            margin-top: -6px;
+            padding-left: 55px;
+            margin-top: -4px;
             opacity: 0.9;
-            &.is-active {
-              padding-left: 57px;
-            }
           }
 
           .nav-icon {
@@ -141,13 +138,14 @@
     .loggedin-header {
       position: fixed;
       top: 0;
-      left: 0;
+      left: 240px;
       right: 0;
       z-index: 3;
-      padding: 12px 30px;
+      padding: 12px 30px 0 30px;
 
-      @media only screen and (max-width: 780px) {
-        padding: 12px 20px;
+      @media only screen and (max-width: 1000px) {
+        left: 0;
+        padding: 12px 12px 0;
       }
 
       .header-items {
@@ -155,6 +153,33 @@
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 10px 16px;
+
+        @media only screen and (max-width: 1000px) {
+          padding: 10px;
+        }
+
+        .h-left {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .menu {
+            display: none;
+            @media only screen and (max-width: 1000px) {
+              display: unset;
+            }
+          }
+
+          .page-title {
+            font-weight: 600;
+            font-size: 18px;
+            text-transform: capitalize;
+            color: #1f1f1f;
+          }
+        }
 
         .h-right {
           display: flex;
@@ -185,17 +210,17 @@
 
     .main-section {
       position: fixed;
-      top: 63px;
+      top: 72px;
       right: 0;
       bottom: 0;
-      left: 280px;
+      left: 240px;
       overflow-y: scroll;
 
       @media only screen and (max-width: 1000px) {
         left: 0;
       }
       @media only screen and (max-width: 768px) {
-        top: 59px;
+        top: 66px;
       }
     }
   }

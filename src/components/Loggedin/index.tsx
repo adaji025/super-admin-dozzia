@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-
 import { Paper } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Dashboard from "../../pages/Dashboard/Dashboard";
@@ -21,7 +19,6 @@ import ReportsComplaints from "../../pages/ReportsComplaints/ReportsComplaints";
 import RecycleBin from "../../pages/RecycleBin/RecycleBin";
 import TermsSessions from "../../pages/TermsSessions/TermsSessions";
 import Grades from "../../pages/Grades/Grades";
-
 import ClassWall from "../../pages/ClassWall/ClassWall";
 import AcdemicLog from "../../pages/ClassWall/AcdemicLog";
 import BehaviouralLog from "../../pages/ClassWall/BehaviouralLog";
@@ -29,7 +26,6 @@ import TestExam from "../../pages/ClassWall/TestExam";
 import StudyResources from "../../pages/ClassWall/StudyResources";
 import ClassEvents from "../../pages/ClassWall/ClassEvents";
 import Curriculum from "../../pages/ClassWall/Curriculum";
-
 import "./index.scss";
 
 const LoggedinContainer = () => {
@@ -52,7 +48,7 @@ const LoggedinContainer = () => {
       <Sidebar toggleSidebar={toggleSidebar} showSidebar={showSidebar} />
 
       <div className="logged-m21">
-        <Header toggleSidebar={toggleSidebar} />
+        <Header toggleSidebar={toggleSidebar} showSidebar={showSidebar} />
 
         <div className="main-section">
           <Routes>

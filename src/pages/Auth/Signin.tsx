@@ -9,7 +9,6 @@ import {
   Button,
   Group,
   Box,
-  LoadingOverlay,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
@@ -30,7 +29,7 @@ const Signin = () => {
   const ExSmall = useMediaQuery("(max-width: 370px)");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
 
   useEffect(() => {
@@ -48,7 +47,7 @@ const Signin = () => {
   });
 
   const submit = (values: { username: string; password: string }) => {
-    setShowLoader(true);
+    setLoading(true);
 
     login(values.username, values.password)
       .then((res) => {
@@ -77,7 +76,7 @@ const Signin = () => {
         handleError(error);
       })
       .finally(() => {
-        setShowLoader(false);
+        setLoading(false);
       });
   };
 
@@ -92,8 +91,6 @@ const Signin = () => {
       </Helmet>
 
       <div className="auth-page">
-        <LoadingOverlay visible={showLoader} />
-
         <AuthHeader />
 
         <div className="auth-main">
@@ -125,6 +122,7 @@ const Signin = () => {
                       type="text"
                       radius="md"
                       size="md"
+                      disabled={loading}
                       {...form.getInputProps("username")}
                     />
 
@@ -135,6 +133,7 @@ const Signin = () => {
                       radius="md"
                       size="md"
                       placeholder="*************"
+                      disabled={loading}
                       {...form.getInputProps("password")}
                     />
 
@@ -145,7 +144,13 @@ const Signin = () => {
                     </Group>
 
                     <Group position="center" mt="lg">
-                      <Button fullWidth type="submit" color="dark" size="md">
+                      <Button
+                        fullWidth
+                        type="submit"
+                        color="dark"
+                        size="md"
+                        loading={loading}
+                      >
                         Sign in
                       </Button>
                     </Group>

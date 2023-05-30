@@ -1,89 +1,83 @@
 import { Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import useStats from "../../hooks/useStats";
-import useTheme from "../../hooks/useTheme";
+import { AxiosError } from "axios";
+import { ReactComponent as Students } from "../../assets/svg/stats/students.svg";
+import { ReactComponent as Staff } from "../../assets/svg/stats/staff.svg";
+import { ReactComponent as Classes } from "../../assets/svg/stats/classes.svg";
+import { ReactComponent as Complaints } from "../../assets/svg/stats/complaints.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { getStats } from "../../services/stats/stats";
+import { setStats } from "../../redux/data/data.actions";
+import useNotification from "../../hooks/useNotification";
+import { StatsType } from "../../types/statsTypes";
 import "./dashboard.scss";
 
 const Dashboard = () => {
-  const { userdata, stats, handleGetStats } = useStats();
-  const { dark } = useTheme();
+  const dispatch = useDispatch();
+  const stats: StatsType = useSelector(
+    (state: { data: { stats: StatsType } }) => {
+      return state.data.stats;
+    }
+  );
+  const { handleError } = useNotification();
 
   useEffect(() => {
     handleGetStats();
     //eslint-disable-next-line
   }, []);
 
+  const handleGetStats = () => {
+    getStats()
+      .then((res) => {
+        dispatch(setStats(res.data));
+      })
+      .catch((error: AxiosError) => {
+        handleError(error);
+      });
+  };
+
   return (
     <Fragment>
       <Helmet>
-        <title>General Overview</title>
-        <meta name="description" content="" />
-        <meta property="og:title" content="General Overview" />
-        <meta property="og:description" content="" />
-        <meta property="og:url" content="" />
+        <title>Dashboard</title>
+        <meta property="og:title" content="Dashboard" />
       </Helmet>
 
-      <div
-        className="dashboard-container"
-        style={{
-          background: dark ? "#1a1b1e" : "#ffffff",
-        }}
-      >
-        <div className="greeting">
-          Welcome! {userdata?.profile_details?.first_name}👋🏼
-        </div>
-
-        <div className="cards-container">
-          <div className="card-item">
-            <div className="c-i-wrapper">
-              <div className="card-title">Total Students</div>
-              <div
-                className="card-value"
-                style={{ background: dark ? "#121212" : "#e5e5e5fc" }}
-              >
-                {stats?.total_student ?? "..."}
-              </div>
-            </div>
-          </div>
-
-          <div className="card-item">
-            <div className="c-i-wrapper">
-              <div className="card-title">Total Staff</div>
-              <div
-                className="card-value"
-                style={{ background: dark ? "#121212" : "#e5e5e5fc" }}
-              >
-                {stats?.total_staff ?? "..."}
-              </div>
-            </div>
-          </div>
-
-          <div className="card-item">
-            <div className="c-i-wrapper">
-              <div className="card-title">Total Classes</div>
-              <div
-                className="card-value"
-                style={{ background: dark ? "#121212" : "#e5e5e5fc" }}
-              >
-                {stats?.total_classroom ?? "..."}
-              </div>
-            </div>
-          </div>
-
-          <div className="card-item">
-            <div className="c-i-wrapper">
-              <div className="card-title">Unresolved Complaints</div>
-              <div
-                className="card-value"
-                style={{ background: dark ? "#121212" : "#e5e5e5fc" }}
-              >
-                {stats ? "0" : "..."}
-              </div>
-            </div>
-          </div>
+      <div className="dashboard-container">
+        <div className="stat-cards">
+          <Stat
+            title="Total Students"
+            value={stats.total_student}
+            Icon={Students}
+          />
+          <Stat title="Total Staff" value={stats.total_staff} Icon={Staff} />
+          <Stat
+            title="Total Classes"
+            value={stats.total_classroom}
+            Icon={Classes}
+          />
+          <Stat title="Unresolved Complaints" value={0} Icon={Complaints} />
         </div>
       </div>
     </Fragment>
+  );
+};
+
+interface StatProps {
+  title: string;
+  value: number;
+  Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+}
+
+const Stat = ({ title, value, Icon }: StatProps) => {
+  return (
+    <div className="stat-card">
+      <div className="stat-icon">
+        <Icon />
+      </div>
+      <div className="stat-title">{title}</div>
+      <div className="stat-value">{value}</div>
+    </div>
   );
 };
 

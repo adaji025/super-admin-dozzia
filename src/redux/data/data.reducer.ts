@@ -5,7 +5,14 @@ const INITIAL_STATE = {
   staff: null,
   events: null,
   attendance: null,
-  stats: null,
+  stats: {
+    total_student: 0,
+    total_staff: 0,
+    total_attendance: 0,
+    total_classroom: 0,
+    total_present_count: 0,
+    total_absent_count: 0,
+  },
   broadcast: null,
   reports: null,
   classWall: {
