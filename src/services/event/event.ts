@@ -6,15 +6,18 @@ import {
   GetEventsParams,
   GetEventsResponse,
 } from "../../types/eventTypes";
+import { SuccessResponse } from "../../types/utilityTypes";
 
 export const createEvent = (data: CreateEventData) => {
-  return AxoisApi.post(`${APIS.EVENT.CREATE_EVENT}`, data)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => {
-      return err;
-    });
+  return new Promise<SuccessResponse>((resolve, reject) => {
+    AxoisApi.post(`${APIS.EVENT.CREATE_EVENT}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
 };
 
 export const getEvents = (params: GetEventsParams) => {
@@ -37,13 +40,15 @@ export const getEvents = (params: GetEventsParams) => {
 };
 
 export const deleteEvent = (id: string) => {
-  return AxoisApi.delete(`${APIS.EVENT.EVENT(id)}`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => {
-      return err;
-    });
+  return new Promise<SuccessResponse>((resolve, reject) => {
+    AxoisApi.delete(`${APIS.EVENT.EVENT(id)}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
 };
 
 export const updateEvent = (
@@ -56,11 +61,13 @@ export const updateEvent = (
   },
   id: string
 ) => {
-  return AxoisApi.put(`${APIS.EVENT.EVENT(id)}`, data)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => {
-      return err;
-    });
+  return new Promise<SuccessResponse>((resolve, reject) => {
+    AxoisApi.put(`${APIS.EVENT.EVENT(id)}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
 };

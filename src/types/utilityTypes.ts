@@ -25,3 +25,14 @@ export const initialMetadata = {
   to: 0,
   total: 0,
 };
+
+export type SuccessResponse = {
+  message: string;
+  status: string;
+  code: number;
+};
+
+export type MedicalType = {
+  medical_id: string;
+  name: string;
+};
