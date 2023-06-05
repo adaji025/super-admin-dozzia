@@ -5,12 +5,34 @@ import {
   Textarea,
   Group,
   Divider,
+  LoadingOverlay,
 } from "@mantine/core";
+import { AxiosError } from "axios";
 import { useForm } from "@mantine/form";
 import { DatePicker, TimeInput } from "@mantine/dates";
 import "./create-event.scss";
+import { createEvent, updateEvent } from "../../../services/event/event";
+import { useState } from "react";
+import moment from "moment";
+import { showNotification } from "@mantine/notifications";
+import useNotification from "../../../hooks/useNotification";
 
-const CreateEvent = ({ closeModal, submit, edit }: any) => {
+interface CreateEventProps {
+  closeModal: () => void;
+  callback?: () => void;
+  edit?: any;
+  classId?: string;
+}
+
+const CreateEvent = ({
+  closeModal,
+  callback,
+  edit,
+  classId,
+}: CreateEventProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const { handleError } = useNotification();
+
   const form = useForm({
     initialValues: {
       title: edit ? edit.title : "",
@@ -28,20 +50,51 @@ const CreateEvent = ({ closeModal, submit, edit }: any) => {
     },
   });
 
+  const submit = (values: typeof form.values) => {
+    return new Promise((resolve) => {
+      setLoading(true);
+
+      const action = edit ? updateEvent : createEvent;
+
+      const payload = {
+        title: values.title,
+        description: values.description,
+        start_at: `${moment(values.startDate).format("YYYY-MM-DD")} ${moment(
+          values.startTime
+        ).format("HH:mm:ss")}`,
+        end_at: `${moment(values.endDate).format("YYYY-MM-DD")} ${moment(
+          values.endTime
+        ).format("HH:mm:ss")}`,
+        visibility: values.visibility,
+        ...(classId && { classroom_id: classId }),
+      };
+
+      action(payload, edit ? edit.id : undefined)
+        .then(() => {
+          showNotification({
+            title: "Success",
+            message: `Event ${edit ? "updated" : "created"} successfully.`,
+            color: "green",
+          });
+          closeModal();
+          callback && callback();
+        })
+        .catch((err: AxiosError) => {
+          handleError(err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    });
+  };
+
   return (
     <div>
       <Divider mb="md" variant="dashed" />
 
-      <form
-        onSubmit={form.onSubmit((values) => {
-          closeModal();
-          if (edit) {
-            submit(edit.id, values);
-          } else {
-            submit(values);
-          }
-        })}
-      >
+      <LoadingOverlay visible={loading} />
+
+      <form onSubmit={form.onSubmit((values) => submit(values))}>
         <TextInput
           required
           mt="sm"
