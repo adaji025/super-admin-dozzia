@@ -13,39 +13,77 @@ import {
   Group,
   Box,
   Table,
+  LoadingOverlay,
 } from "@mantine/core";
 import { X, Search, Trash, CalendarEvent } from "tabler-icons-react";
 import useTheme from "../../hooks/useTheme";
-import useEvent from "../../hooks/useEvent";
+import { getEvents, deleteEvent } from "../../services/event/event";
 import CreateEvent from "../../components/modals/Events/CreateEvent";
 import moment from "moment";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import { useSelector, useDispatch } from "react-redux";
+import { setEvents } from "../../redux/data/data.actions";
+import useNotification from "../../hooks/useNotification";
+import { AxiosError } from "axios";
+import { showNotification } from "@mantine/notifications";
 
 const Events = () => {
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const { dark } = useTheme();
   const [createEventModal, setCreateEventModal] = useState<boolean>(false);
+  const events = useSelector((state: any) => {
+    return state.data.events;
+  });
   const [event, setEvent] = useState<any>(null);
   const [eventId, setEventId] = useState<string>("");
   const deviceWidth = window.innerWidth;
-  const {
-    handleCreateEvent,
-    handleGetEvents,
-    events,
-    handleDeleteEvent,
-    handleUpdateEvent,
-    setLoading,
-    loading,
-  } = useEvent();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { handleError } = useNotification();
 
   useEffect(() => {
-    handleGetEvents(page, perPage, search);
+    handleGetEvents();
     //eslint-disable-next-line
   }, [page, search]);
+
+  const handleGetEvents = () => {
+    if (!events) {
+      setLoading(true);
+    }
+
+    getEvents(page, perPage, search)
+      .then((res) => {
+        dispatch(setEvents(res));
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const handleDeleteEvent = (eventId: string) => {
+    deleteEvent(eventId)
+      .then(() => {
+        showNotification({
+          title: "Success",
+          message: "Event deleted successfully 🗓️.",
+          color: "green",
+        });
+        handleGetEvents();
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <Fragment>
@@ -56,6 +94,8 @@ const Events = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <LoadingOverlay visible={loading} />
 
       <Modal
         opened={createEventModal}
@@ -74,7 +114,7 @@ const Events = () => {
             setEvent(null);
           }}
           edit={event}
-          submit={event ? handleUpdateEvent : handleCreateEvent}
+          callback={handleGetEvents}
         />
       </Modal>
 

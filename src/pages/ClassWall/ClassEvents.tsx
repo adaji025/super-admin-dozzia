@@ -1,6 +1,7 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 import {
   Button,
   Modal,
@@ -14,14 +15,17 @@ import {
   Group,
   Box,
   Table,
+  LoadingOverlay,
 } from "@mantine/core";
 import { X, Search, Trash, CalendarEvent, ArrowLeft } from "tabler-icons-react";
 import useTheme from "../../hooks/useTheme";
-import useEvent from "../../hooks/useEvent";
+import { getEvents, deleteEvent } from "../../services/event/event";
 import CreateEvent from "../../components/modals/Events/CreateEvent";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import useNotification from "../../hooks/useNotification";
+import { showNotification } from "@mantine/notifications";
 
 const ClassEvents = () => {
   const [page, setPage] = useState<number>(1);
@@ -35,55 +39,54 @@ const ClassEvents = () => {
   const navigate = useNavigate();
   const [eventId, setEventId] = useState<string>("");
   const deviceWidth = window.innerWidth;
-  const {
-    handleCreateEvent,
-    handleGetEvents,
-    handleDeleteEvent,
-    handleUpdateEvent,
-    setLoading,
-    loading,
-  } = useEvent();
+  const [loading, setLoading] = useState<boolean>(false);
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
+  const { handleError } = useNotification();
 
   useEffect(() => {
     if (classWall?.activeClassId) {
-      getEvents();
+      handleGetEvents();
     }
 
     //eslint-disable-next-line
   }, [page, search]);
 
-  const getEvents = () => {
-    handleGetEvents(page, perPage, search, classWall?.activeClassId, true).then(
-      (res: any) => {
+  const handleGetEvents = () => {
+    if (!events) {
+      setLoading(true);
+    }
+
+    getEvents(page, perPage, search, classWall?.activeClassId)
+      .then((res) => {
         setEvents(res);
-      }
-    );
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  const createEvent = (values: {
-    title: string;
-    description: string;
-    startDate: string;
-    startTime: string;
-    endDate: string;
-    endTime: string;
-    visibility: string;
-    time: string;
-  }) => {
-    handleCreateEvent({ ...values, classId: classWall?.activeClassId }).then(
-      () => {
-        setLoading(true);
-        handleGetEvents(page, perPage, "", classWall?.activeClassId, true).then(
-          (res: any) => {
-            setEvents(res);
-          }
-        );
-      }
-    );
+  const handleDeleteEvent = (eventId: string) => {
+    deleteEvent(eventId)
+      .then(() => {
+        showNotification({
+          title: "Success",
+          message: "Event deleted successfully 🗓️.",
+          color: "green",
+        });
+        handleGetEvents();
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -98,6 +101,8 @@ const ClassEvents = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <LoadingOverlay visible={loading} />
 
       <Modal
         opened={createEventModal}
@@ -116,7 +121,8 @@ const ClassEvents = () => {
             setEvent(null);
           }}
           edit={event}
-          submit={event ? handleUpdateEvent : createEvent}
+          callback={handleGetEvents}
+          classId={classWall?.activeClassId}
         />
       </Modal>
 
