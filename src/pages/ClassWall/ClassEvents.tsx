@@ -26,10 +26,15 @@ import { useSelector } from "react-redux";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import useNotification from "../../hooks/useNotification";
 import { showNotification } from "@mantine/notifications";
+import { EventType, GetEventsResponse } from "../../types/eventTypes";
+import { initialMetadata } from "../../types/utilityTypes";
 
 const ClassEvents = () => {
   const [page, setPage] = useState<number>(1);
-  const [events, setEvents] = useState<any>(null);
+  const [events, setEvents] = useState<GetEventsResponse>({
+    data: [],
+    meta: initialMetadata,
+  });
   const [perPage] = useState<number>(10);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
@@ -59,8 +64,8 @@ const ClassEvents = () => {
       setLoading(true);
     }
 
-    getEvents(page, perPage, search, classWall?.activeClassId)
-      .then((res) => {
+    getEvents({ page, perPage, search, classId: classWall?.activeClassId })
+      .then((res: GetEventsResponse) => {
         setEvents(res);
       })
       .catch((err: AxiosError) => {
@@ -140,12 +145,7 @@ const ClassEvents = () => {
         hasInput={false}
       />
 
-      <div
-        className="data-page-container"
-        style={{
-          background: dark ? "#1a1b1e" : "#ffffff",
-        }}
-      >
+      <div className="data-page-container">
         <div className="d-p-wrapper">
           <div className="d-p-header">
             <div className="d-p-h-left no-select">
@@ -309,109 +309,96 @@ const ClassEvents = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {events?.data.length > 0 &&
-                        events?.data.map(
-                          (item: {
-                            event_id: string;
-                            description: string;
-                            end_date: string;
-                            start_date: string;
-                            title: string;
-                            visibility: string;
-                          }) => (
-                            <tr key={item.event_id}>
-                              <td
-                                style={{
-                                  borderBottom: `1px solid #0000`,
-                                  fontWeight: "500",
-                                }}
+                      {events.data.length > 0 &&
+                        events.data.map((item: EventType) => (
+                          <tr key={item.event_id}>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                fontWeight: "500",
+                              }}
+                            >
+                              {item.title}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                            >
+                              {moment(item.start_date).format("DD/MM/YYYY")}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                              className="large-only"
+                            >
+                              {moment(item.end_date).format("DD/MM/YYYY")}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                              }}
+                              className="large-only"
+                            >
+                              {moment(item.start_date).format("LT")} -{" "}
+                              {moment(item.end_date).format("LT")}
+                            </td>
+                            <td
+                              style={{
+                                borderBottom: `1px solid #0000`,
+                                width: "20px",
+                              }}
+                              className="table-last"
+                            >
+                              <Menu
+                                position={deviceWidth < 576 ? "left" : "right"}
+                                gutter={15}
+                                withArrow
+                                size="sm"
                               >
-                                {item.title}
-                              </td>
-                              <td
-                                style={{
-                                  borderBottom: `1px solid #0000`,
-                                }}
-                              >
-                                {moment(item.start_date).format("DD/MM/YYYY")}
-                              </td>
-                              <td
-                                style={{
-                                  borderBottom: `1px solid #0000`,
-                                }}
-                                className="large-only"
-                              >
-                                {moment(item.end_date).format("DD/MM/YYYY")}
-                              </td>
-                              <td
-                                style={{
-                                  borderBottom: `1px solid #0000`,
-                                }}
-                                className="large-only"
-                              >
-                                {moment(item.start_date).format("LT")} -{" "}
-                                {moment(item.end_date).format("LT")}
-                              </td>
-                              <td
-                                style={{
-                                  borderBottom: `1px solid #0000`,
-                                  width: "20px",
-                                }}
-                                className="table-last"
-                              >
-                                <Menu
-                                  position={
-                                    deviceWidth < 576 ? "left" : "right"
-                                  }
-                                  gutter={15}
-                                  withArrow
-                                  size="sm"
+                                <Menu.Label>Event Menu</Menu.Label>
+
+                                <Menu.Item
+                                  icon={<CalendarEvent size={14} />}
+                                  onClick={() => {
+                                    setCreateEventModal(true);
+                                    setEvent({
+                                      id: item.event_id,
+                                      title: item.title,
+                                      description: item.description,
+                                      startDate: moment(
+                                        item.start_date
+                                      ).toDate(),
+                                      startTime: moment(
+                                        item.start_date
+                                      ).toDate(),
+                                      endDate: moment(item.end_date).toDate(),
+                                      endTime: moment(item.end_date).toDate(),
+                                      visibility:
+                                        item.visibility === "Staff" ? "1" : "2",
+                                    });
+                                  }}
                                 >
-                                  <Menu.Label>Event Menu</Menu.Label>
+                                  View Details
+                                </Menu.Item>
 
-                                  <Menu.Item
-                                    icon={<CalendarEvent size={14} />}
-                                    onClick={() => {
-                                      setCreateEventModal(true);
-                                      setEvent({
-                                        id: item.event_id,
-                                        title: item.title,
-                                        description: item.description,
-                                        startDate: moment(
-                                          item.start_date
-                                        ).toDate(),
-                                        startTime: moment(
-                                          item.start_date
-                                        ).toDate(),
-                                        endDate: moment(item.end_date).toDate(),
-                                        endTime: moment(item.end_date).toDate(),
-                                        visibility:
-                                          item.visibility === "Staff"
-                                            ? "1"
-                                            : "2",
-                                      });
-                                    }}
-                                  >
-                                    View Details
-                                  </Menu.Item>
+                                <Divider />
 
-                                  <Divider />
-
-                                  <Menu.Item
-                                    color="red"
-                                    icon={<Trash size={14} />}
-                                    onClick={() => {
-                                      setConfirmDeleteEvent(true);
-                                      setEventId(item.event_id);
-                                    }}
-                                  >
-                                    Delete Event
-                                  </Menu.Item>
-                                </Menu>
-                              </td>
-                            </tr>
-                          )
-                        )}
+                                <Menu.Item
+                                  color="red"
+                                  icon={<Trash size={14} />}
+                                  onClick={() => {
+                                    setConfirmDeleteEvent(true);
+                                    setEventId(item.event_id);
+                                  }}
+                                >
+                                  Delete Event
+                                </Menu.Item>
+                              </Menu>
+                            </td>
+                          </tr>
+                        ))}
                     </tbody>
                   </Table>
 
