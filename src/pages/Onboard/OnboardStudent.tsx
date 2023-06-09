@@ -1,4 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
+import { AxiosError } from "axios";
 import {
   Stepper,
   Button,
@@ -11,8 +12,8 @@ import {
   RadioGroup,
   Radio,
   Divider,
+  LoadingOverlay,
 } from "@mantine/core";
-import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
 import moment from "moment";
@@ -26,23 +27,22 @@ import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import Upload from "../../components/Upload/Upload";
 import { onboardStudent } from "../../services/student/student";
-import useAdmin from "../../hooks/useAdmin";
 import useClass from "../../hooks/useClass";
-import { showLoader } from "../../redux/utility/utility.actions";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-
+import { ApiResponseType, MedicalType } from "../../types/utilityTypes";
+import { getMedicalList } from "../../services/helper/helper";
 import "./administration.scss";
 
 const OnboardStudent = () => {
   const { dark } = useTheme();
-  const dispatch = useDispatch();
   const { handleError } = useNotification();
-
+  const [medicals, setMedicals] = useState<MedicalType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
-  const { getMedicals, medicals } = useAdmin();
+
   const { getClassList, allClasses } = useClass();
 
   useEffect(() => {
@@ -51,6 +51,16 @@ const OnboardStudent = () => {
 
     //eslint-disable-next-line
   }, []);
+
+  const getMedicals = () => {
+    getMedicalList()
+      .then((res: ApiResponseType<MedicalType[]>) => {
+        setMedicals(res.data);
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      });
+  };
 
   const nextStep = (data: any) => {
     if (active === 2) {
@@ -67,7 +77,7 @@ const OnboardStudent = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   const handleSubmit = (values: any) => {
-    dispatch(showLoader(true));
+    setLoading(true);
 
     const data = new FormData();
     data.append("age", values?.age);
@@ -114,11 +124,11 @@ const OnboardStudent = () => {
         setActive(0);
         setFormData({});
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         handleError(error);
       })
       .finally(() => {
-        dispatch(showLoader(false));
+        setLoading(false);
       });
   };
 
@@ -131,6 +141,8 @@ const OnboardStudent = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <LoadingOverlay visible={loading} />
 
       <div className="page-container">
         <PageHeader

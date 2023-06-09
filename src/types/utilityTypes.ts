@@ -36,3 +36,19 @@ export type MedicalType = {
   medical_id: string;
   name: string;
 };
+
+export type ApiResponseType<T> = {
+  code: number;
+  data: T;
+  status: string;
+};
+
+export type StateType = {
+  name: string;
+  state_id: string;
+};
+
+export type StaffRoleType = {
+  role_id: string;
+  role_name: string;
+};

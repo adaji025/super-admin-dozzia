@@ -1,4 +1,5 @@
 import { useState, useEffect, Fragment } from "react";
+import { AxiosError } from "axios";
 import {
   Stepper,
   Button,
@@ -11,8 +12,8 @@ import {
   RadioGroup,
   Radio,
   Divider,
+  LoadingOverlay,
 } from "@mantine/core";
-import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
 import moment from "moment";
@@ -25,30 +26,29 @@ import {
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import Upload from "../../components/Upload/Upload";
-import { onboardStaff } from "../../services/staff/staff";
-import useAdmin from "../../hooks/useAdmin";
-import { showLoader } from "../../redux/utility/utility.actions";
+import { getStaffRoleList, onboardStaff } from "../../services/staff/staff";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-
+import { getMedicalList, getStatesList } from "../../services/helper/helper";
+import {
+  ApiResponseType,
+  MedicalType,
+  StaffRoleType,
+  StateType,
+} from "../../types/utilityTypes";
 import "./administration.scss";
 
 const OnboardStaff = () => {
   const { dark } = useTheme();
-  const dispatch = useDispatch();
   const { handleError } = useNotification();
 
+  const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
+  const [medicals, setMedicals] = useState<MedicalType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [states, setStates] = useState<StateType[]>([]);
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useState<any>({});
-  const {
-    getStates,
-    getStaffRoles,
-    states,
-    staffRoles,
-    getMedicals,
-    medicals,
-  } = useAdmin();
 
   useEffect(() => {
     getStates();
@@ -57,6 +57,35 @@ const OnboardStaff = () => {
 
     //eslint-disable-next-line
   }, []);
+
+  const getStates = () => {
+    getStatesList()
+      .then((res: ApiResponseType<StateType[]>) => {
+        setStates(res.data);
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      });
+  };
+
+  const getMedicals = () => {
+    getMedicalList()
+      .then((res: ApiResponseType<MedicalType[]>) => {
+        setMedicals(res.data);
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      });
+  };
+
+  const getStaffRoles = () => {
+    getStaffRoleList()
+      .then((res: ApiResponseType<StaffRoleType[]>) => {
+        setStaffRoles(res.data);
+      })
+      .catch((err: AxiosError) => handleError(err));
+  };
+
   const nextStep = (data: any) => {
     if (active === 2) {
       return handleSubmit({ ...formData, ...data });
@@ -72,7 +101,7 @@ const OnboardStaff = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   const handleSubmit = (values: any) => {
-    dispatch(showLoader(true));
+    setLoading(true);
 
     const data = new FormData();
     data.append("address", values?.address);
@@ -111,7 +140,7 @@ const OnboardStaff = () => {
     }
 
     onboardStaff(data)
-      .then((res) => {
+      .then(() => {
         showNotification({
           title: "Success",
           message: "Staff added successfully 🤗",
@@ -120,11 +149,11 @@ const OnboardStaff = () => {
         setActive(0);
         setFormData({});
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         handleError(error);
       })
       .finally(() => {
-        dispatch(showLoader(false));
+        setLoading(false);
       });
   };
 
@@ -137,6 +166,8 @@ const OnboardStaff = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <LoadingOverlay visible={loading} />
 
       <div className="page-container">
         <PageHeader
@@ -478,7 +509,7 @@ const PersonalInfo = ({
                 variant="filled"
                 searchable
                 nothingFound="No option"
-                data={states.map(
+                data={states?.map(
                   (state: { state_id: string; name: string }) => ({
                     key: state?.state_id,
                     value: state?.state_id,

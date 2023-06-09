@@ -18,9 +18,12 @@ import {
 import useTheme from "../../hooks/useTheme";
 import { Search, User, Filter, X, UserOff } from "tabler-icons-react";
 import useStaff from "../../hooks/useStaff";
-import useAdmin from "../../hooks/useAdmin";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import StaffDetails from "../../components/modals/Staff/StaffDetails";
+import { ApiResponseType, StaffRoleType } from "../../types/utilityTypes";
+import { getStaffRoleList } from "../../services/staff/staff";
+import { AxiosError } from "axios";
+import useNotification from "../../hooks/useNotification";
 
 const Staff = () => {
   const { dark } = useTheme();
@@ -32,7 +35,9 @@ const Staff = () => {
     handleDeleteStaff,
     username,
   } = useStaff();
-  const { staffRoles, getStaffRoles } = useAdmin();
+  const { handleError } = useNotification();
+
+  const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [searchInput, setSearchInput] = useState<string>("");
@@ -52,6 +57,16 @@ const Staff = () => {
     getStaffRoles();
     //eslint-disable-next-line
   }, [page, search, role]);
+
+  const getStaffRoles = () => {
+    getStaffRoleList()
+      .then((res: ApiResponseType<StaffRoleType[]>) => {
+        setStaffRoles(res.data);
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      });
+  };
 
   return (
     <Fragment>
