@@ -1,5 +1,6 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
+import { AxiosError } from "axios";
 
 export const getStaffRoleList = () => {
   return AxoisApi.get(`${APIS.LISTS.GET_STAFF_ROLE_LIST}`)
@@ -34,7 +35,7 @@ export const getStaffList = (data: {
     .then((res) => {
       return res.data;
     })
-    .catch((err) => err);
+    .catch((err: AxiosError) => err);
 };
 
 export const deleteStaff = (id: string) => {
@@ -42,7 +43,7 @@ export const deleteStaff = (id: string) => {
     .then((res) => {
       return res.data;
     })
-    .catch((err) => err);
+    .catch((err: AxiosError) => err);
 };
 
 export const getSuspendedStaff = () => {
@@ -50,7 +51,7 @@ export const getSuspendedStaff = () => {
     .then((res) => {
       return res.data;
     })
-    .catch((err) => err);
+    .catch((err: AxiosError) => err);
 };
 
 export const restoreSuspendedStaff = (id: string) => {
@@ -58,7 +59,7 @@ export const restoreSuspendedStaff = (id: string) => {
     .then((res) => {
       return res.data;
     })
-    .catch((err) => err);
+    .catch((err: AxiosError) => err);
 };
 
 export const getStaffDetails = (id: string) => {
@@ -66,5 +67,5 @@ export const getStaffDetails = (id: string) => {
     .then((res) => {
       return res.data;
     })
-    .catch((err) => err);
+    .catch((err: AxiosError) => err);
 };

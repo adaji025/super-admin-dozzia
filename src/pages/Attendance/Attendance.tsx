@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { AxiosError } from "axios";
 import {
   Button,
   Modal,
@@ -15,14 +16,21 @@ import {
   Popover,
   Badge,
 } from "@mantine/core";
+import { useDispatch, useSelector } from "react-redux";
+import { setAttendance } from "../../redux/data/data.actions";
 import { Calendar } from "@mantine/dates";
 import { X, Search, ClipboardList } from "tabler-icons-react";
 import useTheme from "../../hooks/useTheme";
 import moment from "moment";
-import useAttendance from "../../hooks/useAttendance";
 import ClassAttendance from "../../components/modals/Attendance/ClassAttendance";
+import useNotification from "../../hooks/useNotification";
+import { getGeneralAttendance } from "../../services/attendance/attendance";
+import { GeneralAttendanceType } from "../../types/attendanceTypes";
 
 const Attendance = () => {
+  const dispatch = useDispatch();
+  const { handleError } = useNotification();
+  const [loading, setLoading] = useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
   const [date, setDate] = useState<any>(new Date());
   const [searchInput, setSearchInput] = useState<string>("");
@@ -34,35 +42,35 @@ const Attendance = () => {
     useState<boolean>(false);
   const [activeClass, setActiveClass] = useState<any>(null);
   const deviceWidth = window.innerWidth;
-  const {
-    handleGetGeneralAttendance,
-    loading,
-    setLoading,
-    attendance,
-    handleGetClassAttendance,
-    handleMarkAttendance,
-  } = useAttendance();
+  const attendance = useSelector((state: any) => {
+    return state.data.attendance;
+  });
 
   useEffect(() => {
-    handleGetGeneralAttendance(
+    handleGetGeneralAttendance();
+    //eslint-disable-next-line
+  }, [page, date, search]);
+
+  const handleGetGeneralAttendance = () => {
+    if (!attendance) {
+      setLoading(true);
+    }
+
+    getGeneralAttendance(
       page,
       perPage,
       moment(date).format("YYYY-MM-DD"),
       search
-    );
-    //eslint-disable-next-line
-  }, [page, date, search]);
-
-  const onSubmit = (data: any) => {
-    handleMarkAttendance(data).then((res: any) => {
-      setLoading(true);
-      handleGetGeneralAttendance(
-        page,
-        perPage,
-        moment(date).format("YYYY-MM-DD"),
-        search
-      );
-    });
+    )
+      .then((res) => {
+        dispatch(setAttendance(res));
+      })
+      .catch((error: AxiosError) => {
+        handleError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -97,8 +105,7 @@ const Attendance = () => {
           selectedClass={activeClass}
           modalActive={classAttendanceModal}
           date={date}
-          handleGetClassAttendance={handleGetClassAttendance}
-          onSubmit={onSubmit}
+          callback={handleGetGeneralAttendance}
         />
       </Modal>
 
@@ -110,7 +117,7 @@ const Attendance = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left no-select">Attendance</div>
+            <div className="d-p-h-left no-select"></div>
 
             <div className="d-p-h-right">
               <Popover
@@ -238,15 +245,7 @@ const Attendance = () => {
                   <tbody>
                     {attendance?.data.length > 0 &&
                       attendance?.data.map(
-                        (
-                          item: {
-                            classroom_id: string;
-                            classroom_name: number;
-                            total_present: string;
-                            total_student: string;
-                          },
-                          index: number
-                        ) => (
+                        (item: GeneralAttendanceType, index: number) => (
                           <tr key={item.classroom_id}>
                             <td
                               style={{
@@ -332,7 +331,7 @@ const Attendance = () => {
           {attendance?.meta && attendance?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 800 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== attendance.meta.current_page) {

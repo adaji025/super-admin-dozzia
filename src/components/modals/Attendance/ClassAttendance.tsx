@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AxiosError } from "axios";
 import {
   Button,
   Divider,
@@ -9,17 +10,35 @@ import {
   Alert,
   Checkbox,
   Pagination,
+  LoadingOverlay,
 } from "@mantine/core";
 import moment from "moment";
+import useNotification from "../../../hooks/useNotification";
+import {
+  getClassAttendance,
+  markAttendance,
+} from "../../../services/attendance/attendance";
+import { showNotification } from "@mantine/notifications";
+import {
+  ClassAttendanceType,
+  GeneralAttendanceType,
+} from "../../../types/attendanceTypes";
+
+interface ClassAttendanceProps {
+  closeModal: () => void;
+  selectedClass: GeneralAttendanceType | null;
+  modalActive: boolean;
+  date: Date;
+  callback: () => void;
+}
 
 const ClassAttendance = ({
   closeModal,
   selectedClass,
   modalActive,
   date,
-  handleGetClassAttendance,
-  onSubmit,
-}: any) => {
+  callback,
+}: ClassAttendanceProps) => {
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(10);
   const [classAttendance, setClassAttendance] = useState<any>(null);
@@ -29,21 +48,31 @@ const ClassAttendance = ({
     studentId: "",
     type: "",
   });
+  const { handleError } = useNotification();
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (modalActive) {
-      handleGetClassAttendance(
-        page,
-        perPage,
-        moment(date).format("YYYY-MM-DD"),
-        selectedClass.classroom_id
-      ).then((res: any) => {
-        setClassAttendance(res);
-        createAttendanceData(res.data);
-      });
+      handleGetClassAttendance();
     }
     //eslint-disable-next-line
   }, [page]);
+
+  const handleGetClassAttendance = () => {
+    getClassAttendance(
+      page,
+      perPage,
+      moment(date).format("YYYY-MM-DD"),
+      selectedClass?.classroom_id ?? ""
+    )
+      .then((res) => {
+        setClassAttendance(res);
+        createAttendanceData(res.data);
+      })
+      .catch((error: AxiosError) => {
+        handleError(error);
+      });
+  };
 
   const createAttendanceData = (attendance: any) => {
     let data: any = {};
@@ -105,16 +134,36 @@ const ClassAttendance = ({
 
   const handleSubmit = () => {
     const reqData = {
-      classroom_id: selectedClass.classroom_id,
+      classroom_id: selectedClass?.classroom_id ?? "",
       register: attendanceDataRaw,
     };
-    onSubmit(reqData);
-    closeModal();
+
+    setLoading(true);
+
+    markAttendance(reqData)
+      .then(() => {
+        showNotification({
+          title: "Success",
+          message: "Attendance marked successfully. ✅",
+          color: "green",
+        });
+
+        callback();
+        closeModal();
+      })
+      .catch((error: AxiosError) => {
+        handleError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <div>
       <Divider mb="md" variant="dashed" />
+
+      <LoadingOverlay visible={loading} />
 
       <Box sx={{ minHeight: 450 }} className="d-p-main">
         {classAttendance && attendanceData ? (
@@ -153,81 +202,72 @@ const ClassAttendance = ({
                 </tr>
               </thead>
               <tbody>
-                {classAttendance?.data.map(
-                  (
-                    item: {
-                      first_name: string;
-                      last_name: string;
-                      gender: string;
-                      student_id: string;
-                    },
-                    index: number
-                  ) => (
-                    <tr key={index}>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                        }}
-                        className="large-only"
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          fontWeight: "600",
-                        }}
-                      >
-                        {item.first_name} {item.last_name}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          fontWeight: "600",
-                        }}
-                        className="large-only"
-                      >
-                        {item?.gender}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                        }}
-                      >
-                        <Group>
-                          <Checkbox
-                            checked={
-                              attendanceData[item.student_id]?.is_present
-                            }
-                            label="Present"
-                            onChange={() => {
-                              setAttendanceTrigger({
-                                studentId: item?.student_id,
-                                type: "present",
-                              });
+                {classAttendance &&
+                  classAttendance?.data.map(
+                    (item: ClassAttendanceType, index: number) => (
+                      <tr key={index}>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                          className="large-only"
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                        >
+                          {item.first_name} {item.last_name}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                          className="large-only"
+                        >
+                          {item?.gender}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                        >
+                          <Group>
+                            <Checkbox
+                              checked={
+                                attendanceData[item.student_id]?.is_present
+                              }
+                              label="Present"
+                              onChange={() => {
+                                setAttendanceTrigger({
+                                  studentId: item?.student_id,
+                                  type: "present",
+                                });
 
-                              updateAttendanceRaw(index, "present");
-                            }}
-                          />
-                          <Checkbox
-                            checked={
-                              attendanceData[item.student_id]?.is_present ===
-                              false
-                            }
-                            label="Absent"
-                            onChange={() => {
-                              setAttendanceTrigger({
-                                studentId: item?.student_id,
-                                type: "absent",
-                              });
-                              updateAttendanceRaw(index, "absent");
-                            }}
-                          />
-                        </Group>
-                      </td>
-                    </tr>
-                  )
-                )}
+                                updateAttendanceRaw(index, "present");
+                              }}
+                            />
+                            <Checkbox
+                              checked={
+                                attendanceData[item.student_id]?.is_present ===
+                                false
+                              }
+                              label="Absent"
+                              onChange={() => {
+                                setAttendanceTrigger({
+                                  studentId: item?.student_id,
+                                  type: "absent",
+                                });
+                                updateAttendanceRaw(index, "absent");
+                              }}
+                            />
+                          </Group>
+                        </td>
+                      </tr>
+                    )
+                  )}
               </tbody>
             </Table>
 
@@ -256,7 +296,7 @@ const ClassAttendance = ({
       {classAttendance?.meta && classAttendance?.data.length > 0 && (
         <Pagination
           sx={{ maxWidth: 800 }}
-          position="center"
+          position="left"
           mt={25}
           onChange={(value) => {
             if (value !== classAttendance.meta.current_page) {
