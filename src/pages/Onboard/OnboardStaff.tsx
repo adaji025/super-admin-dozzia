@@ -37,18 +37,20 @@ import {
   StaffRoleType,
   StateType,
 } from "../../types/utilityTypes";
-import "./administration.scss";
+import { useLocalStorage } from "@mantine/hooks";
 
 const OnboardStaff = () => {
   const { dark } = useTheme();
   const { handleError } = useNotification();
-
   const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
   const [medicals, setMedicals] = useState<MedicalType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<StateType[]>([]);
   const [active, setActive] = useState<number>(0);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useLocalStorage<any>({
+    key: "onboardStaff",
+    defaultValue: {},
+  });
 
   useEffect(() => {
     getStates();
@@ -97,8 +99,17 @@ const OnboardStaff = () => {
     setActive((current) => (current < 3 ? current + 1 : current));
   };
 
-  const prevStep = () =>
+  const prevStep = (data?: any) => {
+    if (data) {
+      setFormData({ ...formData, ...data });
+    }
     setActive((current) => (current > 0 ? current - 1 : current));
+  };
+
+  const clearData = () => {
+    setFormData({});
+    setActive(0);
+  };
 
   const handleSubmit = (values: any) => {
     setLoading(true);
@@ -146,8 +157,7 @@ const OnboardStaff = () => {
           message: "Staff added successfully 🤗",
           color: "green",
         });
-        setActive(0);
-        setFormData({});
+        clearData();
       })
       .catch((error: AxiosError) => {
         handleError(error);
@@ -197,12 +207,11 @@ const OnboardStaff = () => {
               >
                 <PersonalInfo
                   {...{
-                    active,
                     nextStep,
-                    prevStep,
                     formData,
                     states,
                     staffRoles,
+                    clearData,
                   }}
                 />
               </Stepper.Step>
@@ -234,14 +243,21 @@ const OnboardStaff = () => {
   );
 };
 
+interface PersonalInfoProps {
+  nextStep: (data: any) => void;
+  formData: any;
+  states: StateType[];
+  staffRoles: StaffRoleType[];
+  clearData: () => void;
+}
+
 const PersonalInfo = ({
-  active,
   nextStep,
-  prevStep,
   formData,
   states,
   staffRoles,
-}: any) => {
+  clearData,
+}: PersonalInfoProps) => {
   const [age, setAge] = useState<number>(0);
   const [file, setFile] = useState<any>(
     formData?.image ? formData?.image : null
@@ -439,6 +455,7 @@ const PersonalInfo = ({
                 data={[
                   { value: "Male", label: "Male 🧑" },
                   { value: "Female", label: "Female 👧" },
+                  { value: "Other", label: "Other" },
                 ]}
                 {...form.getInputProps("gender")}
               />
@@ -491,7 +508,6 @@ const PersonalInfo = ({
 
               <TextInput
                 className="form-item"
-                required
                 label="Postal Code"
                 placeholder="Postal code"
                 variant="filled"
@@ -589,7 +605,7 @@ const PersonalInfo = ({
                 </div>
 
                 <Upload
-                  text={file ? file?.name : "Upload Image"}
+                  text={file ? file?.name ?? "Image selected" : "Upload Image"}
                   accept={["image/jpeg", "image/png", "image/jpg"]}
                   extraClasses={`${file ? "file-selected" : ""}`}
                   setFile={setFile}
@@ -599,11 +615,18 @@ const PersonalInfo = ({
 
             <Divider mb="lg" variant="dashed" />
 
-            <Group position="left" mt="xl">
-              <Button variant="default" onClick={prevStep} disabled={!active}>
-                Previous
+            <Group position="apart" mt="xl">
+              <Button type="submit">Next</Button>
+
+              <Button
+                onClick={() => {
+                  clearData();
+                  form.reset();
+                }}
+                color="red"
+              >
+                Clear saved data
               </Button>
-              <Button type="submit">Save & Continue</Button>
             </Group>
           </form>
         </Box>
@@ -612,13 +635,21 @@ const PersonalInfo = ({
   );
 };
 
+interface HealthHistoryProps {
+  active: number;
+  nextStep: (data: any) => void;
+  prevStep: (data?: any) => void;
+  formData: any;
+  medicals: MedicalType[];
+}
+
 const HealthHistory = ({
   active,
   nextStep,
   prevStep,
   formData,
   medicals,
-}: any) => {
+}: HealthHistoryProps) => {
   const [disability, setDisability] = useState<string>(
     formData?.disability ? formData?.disability : "No"
   );
@@ -780,10 +811,14 @@ const HealthHistory = ({
             <Divider mb="lg" variant="dashed" />
 
             <Group position="left" mt="xl">
-              <Button variant="default" onClick={prevStep} disabled={!active}>
+              <Button
+                variant="default"
+                onClick={() => prevStep(form.values)}
+                disabled={!active}
+              >
                 Previous
               </Button>
-              <Button type="submit">Save & Continue</Button>
+              <Button type="submit">Next</Button>
             </Group>
           </form>
         </Box>
@@ -792,7 +827,19 @@ const HealthHistory = ({
   );
 };
 
-const WorkHistory = ({ active, nextStep, prevStep, formData }: any) => {
+interface WorkHistoryProps {
+  active: number;
+  nextStep: (values: any) => void;
+  prevStep: (values: any) => void;
+  formData: any;
+}
+
+const WorkHistory = ({
+  active,
+  nextStep,
+  prevStep,
+  formData,
+}: WorkHistoryProps) => {
   const form = useForm({
     initialValues: {
       year_of_experience: formData?.year_of_experience
@@ -808,7 +855,7 @@ const WorkHistory = ({ active, nextStep, prevStep, formData }: any) => {
     },
   });
 
-  const onSave = (values: any) => {
+  const onSave = (values: typeof form.values) => {
     nextStep(values);
   };
 
@@ -873,7 +920,11 @@ const WorkHistory = ({ active, nextStep, prevStep, formData }: any) => {
             <Divider mb="lg" variant="dashed" />
 
             <Group position="left" mt="xl">
-              <Button variant="default" onClick={prevStep} disabled={!active}>
+              <Button
+                variant="default"
+                onClick={() => prevStep(form.values)}
+                disabled={!active}
+              >
                 Previous
               </Button>
               <Button type="submit">Submit</Button>
