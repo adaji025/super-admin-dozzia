@@ -1,9 +1,10 @@
 .data-page-container {
   padding: 30px 30px 60px 30px;
-  min-height: calc(100vh - 153px);
+  min-height: calc(100vh - 167px);
+
   @media only screen and (max-width: 768px) {
     padding: 20px 20px 80px 20px;
-    min-height: calc(100vh - 159px);
+    min-height: calc(100vh - 172px);
   }
 
   .d-p-wrapper {
@@ -28,8 +29,8 @@
       }
 
       .d-p-h-left {
-        font-size: 25px;
-        font-weight: 700;
+        font-size: 23px;
+        font-weight: 500;
         @media only screen and (max-width: 768px) {
           font-size: 20px;
         }
