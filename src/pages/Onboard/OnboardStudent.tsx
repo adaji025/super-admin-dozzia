@@ -33,6 +33,7 @@ import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import { ApiResponseType, MedicalType } from "../../types/utilityTypes";
 import { getMedicalList } from "../../services/helper/helper";
+import { useLocalStorage } from "@mantine/hooks";
 import "./administration.scss";
 
 const OnboardStudent = () => {
@@ -41,8 +42,10 @@ const OnboardStudent = () => {
   const [medicals, setMedicals] = useState<MedicalType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [active, setActive] = useState<number>(0);
-  const [formData, setFormData] = useState<any>({});
-
+  const [formData, setFormData] = useLocalStorage<any>({
+    key: "onboardStudent",
+    defaultValue: {},
+  });
   const { getClassList, allClasses } = useClass();
 
   useEffect(() => {
@@ -73,8 +76,17 @@ const OnboardStudent = () => {
     setActive((current) => (current < 3 ? current + 1 : current));
   };
 
-  const prevStep = () =>
+  const prevStep = (data?: any) => {
+    if (data) {
+      setFormData({ ...formData, ...data });
+    }
     setActive((current) => (current > 0 ? current - 1 : current));
+  };
+
+  const clearData = () => {
+    setFormData({});
+    setActive(0);
+  };
 
   const handleSubmit = (values: any) => {
     setLoading(true);
@@ -121,8 +133,7 @@ const OnboardStudent = () => {
           message: "Student added successfully 🤗",
           color: "green",
         });
-        setActive(0);
-        setFormData({});
+        clearData();
       })
       .catch((error: AxiosError) => {
         handleError(error);
@@ -170,7 +181,7 @@ const OnboardStudent = () => {
                 description="First step"
                 allowStepSelect={false}
               >
-                <PersonalInfo {...{ formData, active, nextStep, prevStep }} />
+                <PersonalInfo {...{ formData, nextStep, clearData }} />
               </Stepper.Step>
 
               <Stepper.Step
@@ -202,7 +213,13 @@ const OnboardStudent = () => {
   );
 };
 
-const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
+interface PersonalInfoProps {
+  nextStep: (data: any) => void;
+  formData: any;
+  clearData: () => void;
+}
+
+const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
   const [age, setAge] = useState<number>(0);
   const [file, setFile] = useState<any>(
     formData?.image ? formData?.image : null
@@ -342,6 +359,7 @@ const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
                 data={[
                   { value: "Male", label: "Male 🧑" },
                   { value: "Female", label: "Female 👧" },
+                  { value: "Other", label: "Other" },
                 ]}
                 {...form.getInputProps("gender")}
               />
@@ -449,11 +467,18 @@ const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
 
             <Divider mb="lg" variant="dashed" />
 
-            <Group position="left" mt="xl">
-              <Button variant="default" onClick={prevStep} disabled={!active}>
-                Previous
+            <Group position="apart" mt="xl">
+              <Button type="submit">Next</Button>
+
+              <Button
+                onClick={() => {
+                  clearData();
+                  form.reset();
+                }}
+                color="red"
+              >
+                Clear saved data
               </Button>
-              <Button type="submit">Save & Continue</Button>
             </Group>
           </form>
         </Box>
@@ -462,13 +487,21 @@ const PersonalInfo = ({ active, nextStep, prevStep, formData }: any) => {
   );
 };
 
+interface HealthHistoryProps {
+  active: number;
+  nextStep: (data: any) => void;
+  prevStep: (data?: any) => void;
+  formData: any;
+  medicals: MedicalType[];
+}
+
 const HealthHistory = ({
   active,
   nextStep,
   prevStep,
   formData,
   medicals,
-}: any) => {
+}: HealthHistoryProps) => {
   const [disability, setDisability] = useState<string>(
     formData?.disability ? formData?.disability : "No"
   );
@@ -631,10 +664,14 @@ const HealthHistory = ({
             <Divider mb="lg" variant="dashed" />
 
             <Group position="left" mt="xl">
-              <Button variant="default" onClick={prevStep} disabled={!active}>
+              <Button
+                variant="default"
+                onClick={() => prevStep(form.values)}
+                disabled={!active}
+              >
                 Previous
               </Button>
-              <Button type="submit">Save & Continue</Button>
+              <Button type="submit">Next</Button>
             </Group>
           </form>
         </Box>
@@ -643,13 +680,21 @@ const HealthHistory = ({
   );
 };
 
+interface AcademicHistoryProps {
+  active: number;
+  nextStep: (values: any) => void;
+  prevStep: (values: any) => void;
+  formData: any;
+  allClasses: any[];
+}
+
 const AcademicHistory = ({
   active,
   nextStep,
   prevStep,
   formData,
   allClasses,
-}: any) => {
+}: AcademicHistoryProps) => {
   const form = useForm({
     initialValues: {
       entry_class: formData?.entry_class ? formData?.entry_class : "",
@@ -660,7 +705,7 @@ const AcademicHistory = ({
     },
   });
 
-  const onSave = (values: any) => {
+  const onSave = (values: typeof form.values) => {
     nextStep(values);
   };
 
@@ -718,7 +763,11 @@ const AcademicHistory = ({
             <Divider mb="lg" variant="dashed" />
 
             <Group position="left" mt="xl">
-              <Button variant="default" onClick={prevStep} disabled={!active}>
+              <Button
+                variant="default"
+                onClick={() => prevStep(form.values)}
+                disabled={!active}
+              >
                 Previous
               </Button>
               <Button type="submit">Submit</Button>
