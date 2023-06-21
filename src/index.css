@@ -74,3 +74,22 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.divider {
+  border: none;
+  margin: 0 !important;
+  border-top-color: none;
+}
+
+.divider:not(:last-child) {
+  border-top: 1px solid #DDE2E5 ;
+  margin: 0 !important;
+}
+
+.menu-item {
+  border-radius: 0;
+  color: #5d5d5d;
+  padding-top: 13px;
+  padding-bottom: 13px;
+  text-align: left;
+}

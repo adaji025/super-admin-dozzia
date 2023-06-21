@@ -1,28 +1,67 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AxiosError } from "axios";
-import { ReactComponent as Students } from "../../assets/svg/stats/students.svg";
-import { ReactComponent as Staff } from "../../assets/svg/stats/staff.svg";
-import { ReactComponent as Classes } from "../../assets/svg/stats/classes.svg";
-import { ReactComponent as Complaints } from "../../assets/svg/stats/complaints.svg";
+import {
+  Button,
+  Divider,
+  Menu,
+  ScrollArea,
+  LoadingOverlay,
+} from "@mantine/core";
+import { ChevronDown } from "tabler-icons-react";
+import { FiChevronRight } from "react-icons/fi";
+import moment from "moment";
+
 import { useDispatch, useSelector } from "react-redux";
 import { getStats } from "../../services/stats/stats";
-import { setStats } from "../../redux/data/data.actions";
+import { setEvents, setReports, setStats } from "../../redux/data/data.actions";
 import useNotification from "../../hooks/useNotification";
-import { StatsType } from "../../types/statsTypes";
+import { getReports } from "../../services/reports/reports";
+import { EventType, GetEventsResponse } from "../../types/eventTypes";
+import { getEvents } from "../../services/event/event";
+import { ReportStatusTypes } from "../../types/reportsTypes";
+import RemoveNote from "../../assets/svg/note-remove.svg";
+import Mountain from "../../assets/svg/mountains.svg";
+import Student from "../../assets/images/student.png";
+import Calendar from "../../assets/svg/calendar.svg";
+import EmptyReportState from "../../assets/svg/EmptyState.svg";
 import "./dashboard.scss";
 
+enum DateRangeTypes {
+  THIS_WEEK = "This Week",
+  LAST_WEEK = "Last Week",
+  LAST_MONTH = "Last Month",
+  THIS_MONTH = "This Month",
+  CHOOSE_MONTH = "Choose month",
+  ALL_TIME = "All time",
+  CUSTOM = "Custom",
+}
+
 const Dashboard = () => {
+  const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const dispatch = useDispatch();
-  const stats: StatsType = useSelector(
-    (state: { data: { stats: StatsType } }) => {
-      return state.data.stats;
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  const reports = useSelector((state: any) => {
+    return state.data.reports;
+  });
+  const events = useSelector(
+    (state: { data: { events: GetEventsResponse } }) => {
+      return state.data.events;
     }
   );
   const { handleError } = useNotification();
+  const [selectedDateRange, setSelectedDateRange] = useState<DateRangeTypes>(
+    DateRangeTypes.THIS_WEEK
+  );
 
   useEffect(() => {
     handleGetStats();
+    handleGetReports();
+    handleGetEvents();
     //eslint-disable-next-line
   }, []);
 
@@ -36,6 +75,66 @@ const Dashboard = () => {
       });
   };
 
+  const handleGetReports = () => {
+    if (!reports) {
+      setLoading(true);
+    }
+
+    getReports(1, 50, ReportStatusTypes.UNRESOLVED)
+      .then((res) => {
+        dispatch(setReports(res));
+      })
+      .catch(() => {})
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const handleGetEvents = () => {
+    if (!events) {
+      setLoading(true);
+    }
+
+    getEvents({ page: 1, perPage: 10 })
+      .then((res: GetEventsResponse) => {
+        dispatch(setEvents(res));
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  const callToAction = [
+    {
+      title: "You have 3 events",
+      btnText: "Create broadcast",
+      variant: "dark",
+    },
+    {
+      title: "Go to class wall",
+      btnText: "Class wall",
+      variant: "green",
+    },
+    {
+      title: "Staff",
+      btnText: "Find staff",
+      variant: "yellow",
+    },
+  ];
+
+  const dates = [
+    DateRangeTypes.THIS_WEEK,
+    DateRangeTypes.LAST_WEEK,
+    DateRangeTypes.LAST_MONTH,
+    DateRangeTypes.THIS_MONTH,
+    DateRangeTypes.CHOOSE_MONTH,
+    DateRangeTypes.ALL_TIME,
+    DateRangeTypes.CUSTOM,
+  ];
+
   return (
     <Fragment>
       <Helmet>
@@ -43,40 +142,195 @@ const Dashboard = () => {
         <meta property="og:title" content="Dashboard" />
       </Helmet>
 
-      <div className="dashboard-container">
-        <div className="stat-cards">
-          <Stat
-            title="Total Students"
-            value={stats.total_student}
-            Icon={Students}
-          />
-          <Stat title="Total Staff" value={stats.total_staff} Icon={Staff} />
-          <Stat
-            title="Total Classes"
-            value={stats.total_classroom}
-            Icon={Classes}
-          />
-          <Stat title="Unresolved Complaints" value={0} Icon={Complaints} />
+      <LoadingOverlay visible={loading} />
+
+      <div className="dashboard">
+        <div className="left">
+          <div className="graph">
+            <div className="header">
+              <span className="analytic">Analytics</span>
+              <Menu
+                withinPortal={true}
+                size="xs"
+                control={
+                  <Button
+                    rightIcon={<ChevronDown size={14} />}
+                    className="dropdown-target"
+                  >
+                    {selectedDateRange}
+                  </Button>
+                }
+              >
+                {dates.map((item, index) => (
+                  <>
+                    <Menu.Item
+                      style={{ fontSize: 12 }}
+                      key={index}
+                      className="menu-item"
+                      onClick={() => setSelectedDateRange(item)}
+                    >
+                      {item}
+                    </Menu.Item>
+                    <Divider className="divider" />
+                  </>
+                ))}
+              </Menu>
+            </div>
+            <div className="tabs">
+              <Button
+                className={`tab-item ${active === "attendance" && "active"}`}
+                onClick={() => setActive("attendance")}
+              >
+                Attendance
+              </Button>
+              <Button
+                className={`tab-item ${active === "reports" && "active"}`}
+                onClick={() => setActive("reports")}
+              >
+                Reports
+              </Button>
+            </div>
+          </div>
+          <div className="cards">
+            {callToAction.map((action) => (
+              <ActionCard key={action.title} {...{ action }} />
+            ))}
+          </div>
+        </div>
+        <div className="right">
+          <div className="complaints">
+            <span className="title">Reports and complaints</span>
+            <div className="complaints-statistics">
+              <img src={RemoveNote} alt="remove note" />
+              <p>Unresolved Complaints</p>
+              <div className="count">{reports ? reports?.meta.total : "0"}</div>
+              <img src={Mountain} alt="mountain" className="mountain" />
+            </div>
+            {reports?.data.length > 0 ? (
+              <div>
+                {reports.data.map((_: any, index: number) => (
+                  <ComplaintCard key={index} />
+                ))}
+              </div>
+            ) : (
+              <div className="empty-report">
+                <img
+                  src={EmptyReportState}
+                  alt=""
+                  className="empty-report-image"
+                />
+                <h2 className="empty-report-text">
+                  You have no upcoming events
+                </h2>
+                <span className="empty-report-desc">
+                  Recents unresolved complaints will be listed here
+                </span>
+              </div>
+            )}
+          </div>
+
+          <div className="events">
+            <div className="events-title" onClick={() => navigate("/events")}>
+              <span>Upcoming Events</span>
+              <FiChevronRight className="chevron" />
+            </div>
+
+            {events && events?.data.length > 0 ? (
+              <ScrollArea type="auto" style={{ paddingBottom: 20 }}>
+                <div className="events-row">
+                  {events?.data.map((event) => (
+                    <Event key={event.event_id} event={event} />
+                  ))}
+                </div>
+              </ScrollArea>
+            ) : (
+              <div className="empty-event">
+                <div>
+                  <img src={Calendar} alt="" />
+                  <h2>You have no upcoming events</h2>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </Fragment>
   );
 };
 
-interface StatProps {
-  title: string;
-  value: number;
-  Icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+const ComplaintCard = () => {
+  return (
+    <div className="complaint-box">
+      <table>
+        <thead>
+          <tr>
+            <th className="c-title">Issue Number</th>
+            <th className="c-title">Title</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td className="c-desc">IS 012345</td>
+            <td className="c-desc">Noise making in class</td>
+          </tr>
+          <tr>
+            <td className="c-title date-status">Date</td>
+            <td className="c-title date-status">Status</td>
+          </tr>
+          <tr>
+            <td className="c-desc">Sept 9, 2023</td>
+            <td className="status">Unresolved</td>
+            <button>
+              <span>View report</span>
+              <FiChevronRight />
+            </button>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+interface ActionProps {
+  action: {
+    title: string;
+    btnText: string;
+    variant: string;
+  };
 }
 
-const Stat = ({ title, value, Icon }: StatProps) => {
+const ActionCard = ({ action }: ActionProps) => {
   return (
-    <div className="stat-card">
-      <div className="stat-icon">
-        <Icon />
+    <div className={`call-to-action card-${action.variant}`}>
+      <h2 className={`call-to-action-text card-${action.variant}`}>
+        {action.title}
+      </h2>
+      <Button className={`card-${action.variant}`}>{action.btnText}</Button>
+      <img src={Mountain} alt="mountains" />
+    </div>
+  );
+};
+
+interface EventProps {
+  event: EventType;
+}
+
+const Event = ({ event }: EventProps) => {
+  const navigate = useNavigate();
+
+  return (
+    <div
+      className="event-item"
+      onClick={() => navigate(`/events?eventId=${event.event_id}`)}
+    >
+      <img src={!event.image ? Student : event.image} alt="" />
+      <div className="event-overlay">
+        <div className="overlay-content">
+          <span>{event.title.substring(0, 15) + "..."}</span>
+          <span>{moment(event.start_date).format("MMM DD, YYYY")}</span>
+        </div>
       </div>
-      <div className="stat-title">{title}</div>
-      <div className="stat-value">{value}</div>
+      <div className="event-overlay-2" />
     </div>
   );
 };
