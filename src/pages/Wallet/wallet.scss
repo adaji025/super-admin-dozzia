@@ -1,0 +1,171 @@
+.wallet {
+  padding: 32px;
+  display: flex;
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+
+    @media (max-width: 1100px) {
+      width: 65%;
+    }
+    @media (max-width: 800px) {
+      width: 100%;
+    }
+
+    .wallet-features {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      transform: translateX(40px);
+
+      .feature {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        gap: 16px;
+        padding: 24px 22px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
+
+        .feature-box {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 24px;
+          width: 24px;
+          background: #33cc33;
+          border-radius: 4px;
+        }
+        .feature-text {
+          font-size: 16px;
+          font-weight: 600;
+
+          @media (max-width: 1100px) {
+            font-size: 14px;
+          }
+        }
+      }
+    }
+
+    .mascot-wallet {
+      display: flex;
+      align-items: end;
+      height: fit-content;
+
+      .purse {
+        transform: translateX(50px);
+      }
+    }
+  }
+  .right {
+    background: #fff;
+    padding-top: 42px;
+    padding-bottom: 37px;
+    flex: 1;
+
+    @media (max-width: 800px) {
+      width: 80%;
+      margin-inline: auto;
+    }
+
+    @media (max-width: 567px) {
+      width: 100% !important;
+    }
+
+    .title {
+      display: block;
+      font-weight: 500;
+      padding-left: 24px;
+      padding-right: 24px;
+      font-size: 16px;
+    }
+
+    .divider {
+      display: block;
+      margin: 24px 0 !important;
+    }
+
+    .acc-title {
+      display: block;
+      padding: 24px;
+      font-size: 14px;
+    }
+
+    .form {
+      padding: 0 24px;
+
+      .label {
+        font-weight: 400 !important;
+        color: #121212 !important;
+        font-size: 14px;
+      }
+
+      input::placeholder {
+        font-weight: 300 !important;
+      }
+
+      .title {
+        padding: 24px 0;
+      }
+
+      .card-details-desc {
+        display: block;
+        font-size: 14px;
+        padding-bottom: 16px;
+      }
+
+      .card-details-inputs {
+        display: flex;
+        gap: 17px;
+      }
+      .btn {
+        display: flex;
+        justify-content: end;
+
+        Button {
+          background: #000;
+        }
+      }
+    }
+  }
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .title {
+    display: block;
+    font-weight: 500;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 24px;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .modal-desc {
+    max-width: 314px;
+    font-size: 12px;
+    padding-top: 12px;
+    text-align: center;
+  }
+
+  .download-btn {
+    background: #121212;
+    color: #fff;
+    max-width: 327px;
+    width: 100%;
+    margin-top: 24px;
+    margin-bottom: 42px;
+  }
+}
