@@ -13,9 +13,11 @@ import Purse from "../../assets/images/purse.png";
 import Success from "../../assets/images/Smile.png";
 import Mascot from "../../assets/svg/smile-mascot.svg";
 import Tick from "../../assets/svg/tick.svg";
+import { useNavigate } from "react-router-dom";
 
 const Wallet = () => {
   const [isOpened, setIsOpened] = React.useState(false);
+  const navigate = useNavigate()
   const features = [
     "Send money to teachers",
     "Receive funds from parents",
@@ -33,8 +35,9 @@ const Wallet = () => {
         <div className="modal-content">
           <img src={Success} alt="" />
           <span className="title">Transaction successful</span>
-          <span className="modal-desc">You have successfully sent NGN 250,000 to Olubamise williams</span>
-          <Button className="download-btn">Download Receipt</Button>
+          <span className="modal-desc">Virtual account created successfully</span>
+          <Button className="download-btn"
+          onClick={() => navigate("/settings")}>Go to settings</Button>
         </div>
       </Modal>
       <div className="wallet">
