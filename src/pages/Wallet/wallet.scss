@@ -2,6 +2,10 @@
   padding: 32px;
   display: flex;
 
+  @media (max-width: 1100px) {
+    padding: 16px;
+  }
+
   @media (max-width: 800px) {
     flex-direction: column;
     gap: 24px;
@@ -11,11 +15,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 70%;
+    width: 65%;
 
     @media (max-width: 1100px) {
-      width: 65%;
+      width: 60%;
     }
+
     @media (max-width: 800px) {
       width: 100%;
     }
@@ -26,6 +31,10 @@
       gap: 24px;
       transform: translateX(40px);
 
+      @media (max-width: 567px) {
+        transform: unset;
+      }
+
       .feature {
         display: flex;
         align-items: center;
@@ -34,6 +43,10 @@
         padding: 24px 22px;
         border-radius: 8px;
         box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
+
+        @media (max-width: 1100px) {
+          padding: 16;
+        }
 
         .feature-box {
           display: flex;
@@ -51,6 +64,10 @@
           @media (max-width: 1100px) {
             font-size: 14px;
           }
+
+          @media (max-width: 567px) {
+            font-size: 12px;
+          }
         }
       }
     }
@@ -63,13 +80,26 @@
       .purse {
         transform: translateX(50px);
       }
+
+      .mascot {
+        width: 70%;
+
+        @media (max-width: 1100px) {
+          width: 60%;
+        }
+      }
+
     }
   }
   .right {
     background: #fff;
     padding-top: 42px;
     padding-bottom: 37px;
-    flex: 1;
+    width: 35%;
+
+    @media (max-width: 1100px) {
+        width: 40%;
+      }
 
     @media (max-width: 800px) {
       width: 80%;
@@ -86,6 +116,11 @@
       padding-left: 24px;
       padding-right: 24px;
       font-size: 16px;
+
+      @media (max-width: 1100px) {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
     }
 
     .divider {

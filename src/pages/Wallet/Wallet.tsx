@@ -54,7 +54,7 @@ const Wallet = () => {
           </div>
           <div className="mascot-wallet">
             <img src={Purse} alt="purse" className="purse" />
-            <img src={Mascot} alt="mascot" />
+            <img src={Mascot} alt="mascot" className="mascot" />
           </div>
         </div>
         <div className="right">
