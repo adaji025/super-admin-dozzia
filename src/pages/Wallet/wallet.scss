@@ -114,53 +114,24 @@
 }
 
 .wallet-drawer {
-  background: #fff;
-  padding-top: 42px;
-  padding-bottom: 37px;
-  overflow: auto;
-  z-index: 1000 !important;
-
   .title {
     display: block;
     font-weight: 500;
-    padding-left: 24px;
-    padding-right: 24px;
     font-size: 16px;
 
-    @media (max-width: 1100px) {
-      padding-left: 16px;
-      padding-right: 16px;
+    &.with-mt {
+      margin-top: 24px;
     }
   }
 
   .acc-title {
-    display: block;
-    padding: 24px;
     font-size: 14px;
+    margin-top: 8px;
+    color: gray;
   }
 
   .wallet-form {
-    padding: 0 24px;
-
-    .label {
-      font-weight: 400 !important;
-      color: #121212 !important;
-      font-size: 14px;
-    }
-
-    input::placeholder {
-      font-weight: 300 !important;
-    }
-
-    .title {
-      padding: 24px 0;
-    }
-
-    .card-details-desc {
-      display: block;
-      font-size: 14px;
-      padding-bottom: 16px;
-    }
+    margin-top: 24px;
 
     .card-details-inputs {
       display: flex;
@@ -208,4 +179,10 @@
     margin-top: 24px;
     margin-bottom: 42px;
   }
+}
+
+.drawer-scroll-container {
+  height: calc(100vh - 84px);
+  margin-right: -16px;
+  padding-right: 16px;
 }
