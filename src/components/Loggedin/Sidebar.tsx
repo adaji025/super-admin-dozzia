@@ -22,6 +22,7 @@ import { ReactComponent as Management } from "../../assets/svg/navigation/manage
 import { ReactComponent as Reports } from "../../assets/svg/navigation/reports.svg";
 import { ReactComponent as Settings } from "../../assets/svg/navigation/setting.svg";
 import { ReactComponent as Trash } from "../../assets/svg/navigation/trash.svg";
+import { ReactComponent as Wallet } from "../../assets/svg/navigation/wallet.svg";
 
 interface SidebarProps {
   toggleSidebar: () => void;
@@ -120,6 +121,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           route: "/terms-sessions",
         },
       ],
+    },
+    {
+      icon: Wallet,
+      name: "Wallet",
+      route: "/wallet",
     },
     {
       icon: Broadcast,

@@ -27,6 +27,7 @@ import StudyResources from "../../pages/ClassWall/StudyResources";
 import ClassEvents from "../../pages/ClassWall/ClassEvents";
 import Curriculum from "../../pages/ClassWall/Curriculum";
 import "./index.scss";
+import Wallet from "../../pages/Wallet/Wallet";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
@@ -81,6 +82,7 @@ const LoggedinContainer = () => {
             />
             <Route path="/class-wall/class-events" element={<ClassEvents />} />
             <Route path="/class-wall/curriculum" element={<Curriculum />} />
+            <Route path="/wallet" element={<Wallet />} />
           </Routes>
         </div>
       </div>
