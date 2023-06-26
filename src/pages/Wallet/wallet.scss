@@ -1,29 +1,30 @@
 .wallet {
   padding: 32px;
-  display: flex;
+  margin-top: 52px;
 
   @media (max-width: 1100px) {
     padding: 16px;
   }
 
-  @media (max-width: 800px) {
-    flex-direction: column;
-    gap: 24px;
+  .purse-on-mobile {
+    display: none;
+    width: 100%;
+    margin-bottom: 32px;
+
+    @media (max-width: 567px) {
+      display: flex;
+      justify-content: center;
+    }
+
+    .purse-2 {
+      width: 60px;
+    }
   }
 
-  .left {
+  .wallet-empty-state {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 65%;
-
-    @media (max-width: 1100px) {
-      width: 60%;
-    }
-
-    @media (max-width: 800px) {
-      width: 100%;
-    }
 
     .wallet-features {
       display: flex;
@@ -56,7 +57,13 @@
           width: 24px;
           background: #33cc33;
           border-radius: 4px;
+
+          @media (max-width: 1100px) {
+            height: 18px;
+            width: 18px;
+          }
         }
+
         .feature-text {
           font-size: 16px;
           font-weight: 600;
@@ -79,95 +86,93 @@
 
       .purse {
         transform: translateX(50px);
+
+        @media (max-width: 567px) {
+          display: none;
+        }
       }
 
       .mascot {
         width: 70%;
 
         @media (max-width: 1100px) {
-          width: 60%;
+          width: 80%;
         }
       }
-
     }
   }
-  .right {
-    background: #fff;
-    padding-top: 42px;
-    padding-bottom: 37px;
-    width: 35%;
 
-    @media (max-width: 1100px) {
-        width: 40%;
-      }
+  .setup-wallet-btn-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
 
-    @media (max-width: 800px) {
-      width: 80%;
+    .setup-btn {
       margin-inline: auto;
     }
+  }
+}
 
-    @media (max-width: 567px) {
-      width: 100% !important;
+.wallet-drawer {
+  background: #fff;
+  padding-top: 42px;
+  padding-bottom: 37px;
+  overflow: auto;
+  z-index: 1000 !important;
+
+  .title {
+    display: block;
+    font-weight: 500;
+    padding-left: 24px;
+    padding-right: 24px;
+    font-size: 16px;
+
+    @media (max-width: 1100px) {
+      padding-left: 16px;
+      padding-right: 16px;
     }
+  }
 
-    .title {
-      display: block;
-      font-weight: 500;
-      padding-left: 24px;
-      padding-right: 24px;
-      font-size: 16px;
+  .acc-title {
+    display: block;
+    padding: 24px;
+    font-size: 14px;
+  }
 
-      @media (max-width: 1100px) {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-    }
+  .wallet-form {
+    padding: 0 24px;
 
-    .divider {
-      display: block;
-      margin: 24px 0 !important;
-    }
-
-    .acc-title {
-      display: block;
-      padding: 24px;
+    .label {
+      font-weight: 400 !important;
+      color: #121212 !important;
       font-size: 14px;
     }
 
-    .form {
-      padding: 0 24px;
+    input::placeholder {
+      font-weight: 300 !important;
+    }
 
-      .label {
-        font-weight: 400 !important;
-        color: #121212 !important;
-        font-size: 14px;
-      }
+    .title {
+      padding: 24px 0;
+    }
 
-      input::placeholder {
-        font-weight: 300 !important;
-      }
+    .card-details-desc {
+      display: block;
+      font-size: 14px;
+      padding-bottom: 16px;
+    }
 
-      .title {
-        padding: 24px 0;
-      }
+    .card-details-inputs {
+      display: flex;
+      gap: 17px;
+    }
 
-      .card-details-desc {
-        display: block;
-        font-size: 14px;
-        padding-bottom: 16px;
-      }
+    .btn {
+      display: flex;
+      justify-content: end;
 
-      .card-details-inputs {
-        display: flex;
-        gap: 17px;
-      }
-      .btn {
-        display: flex;
-        justify-content: end;
-
-        Button {
-          background: #000;
-        }
+      Button {
+        background: #000;
       }
     }
   }
