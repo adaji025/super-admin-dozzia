@@ -1,7 +1,7 @@
 import {
   Button,
-  Divider,
   Drawer,
+  Group,
   NumberInput,
   ScrollArea,
   Select,
@@ -34,9 +34,8 @@ const SetupWallet = ({
     >
       {drawerOpen && (
         <ScrollArea className="drawer-scroll-container" type="auto">
-          <Divider mb={20} />
-
           <div className="title">Primary bank account</div>
+
           <div className="acc-title">
             Add your school’s primary bank account details
           </div>
@@ -99,10 +98,10 @@ const SetupWallet = ({
               />
             </div>
 
-            <div className="btn">
+            <Group mt={16} position="right">
               <Button
-                size="md"
-                mt="lg"
+                mt="md"
+                color="dark"
                 onClick={() => {
                   close();
                   openSuccessModal(true);
@@ -110,7 +109,7 @@ const SetupWallet = ({
               >
                 Save
               </Button>
-            </div>
+            </Group>
           </form>
         </ScrollArea>
       )}

@@ -1,30 +1,29 @@
-import { useNavigate } from 'react-router-dom';
-import { Modal, Button } from "@mantine/core"
+import { Modal, Button } from "@mantine/core";
 import Success from "../../assets/images/Smile.png";
 
 interface SuccessModalProps {
-  successOpen: boolean
-  close: () => void
+  modalOpen: boolean;
+  close: () => void;
 }
 
-const SuccessModal = ({ close, successOpen }: SuccessModalProps) => {
-  const navigate = useNavigate()
+const SuccessModal = ({ close, modalOpen }: SuccessModalProps) => {
   return (
-    <Modal
-        size={490}
-        opened={successOpen}
-        onClose={close}
-        centered
-      >
+    <Modal size={490} opened={modalOpen} onClose={close} centered>
+      {modalOpen && (
         <div className="modal-content">
           <img src={Success} alt="" />
-          <span className="title">Transaction successful</span>
-          <span className="modal-desc">Virtual account created successfully</span>
-          <Button className="download-btn"
-            onClick={() => navigate("/settings")}>Go to settings</Button>
-        </div>
-      </Modal>
-  )
-}
 
-export default SuccessModal
+          <div className="title">Transaction successful</div>
+
+          <div className="modal-desc">Virtual account created successfully</div>
+
+          <Button fullWidth color="dark" my={24} onClick={close}>
+            Close
+          </Button>
+        </div>
+      )}
+    </Modal>
+  );
+};
+
+export default SuccessModal;
