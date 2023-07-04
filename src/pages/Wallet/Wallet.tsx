@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Group, Table } from "@mantine/core";
+import { Button, Group, Table, Text } from "@mantine/core";
 import { HiChevronRight } from "react-icons/hi";
 import SetupWallet from "./SetupWallet";
 import AccountSuccessModal from "./SuccessModal";
@@ -15,6 +15,9 @@ import Frame from "../../assets/images/frame.png";
 import FundWallet from "./FundWallet";
 import CreateBill from "./CreateBill";
 import "./wallet.scss";
+import { useNavigate } from "react-router-dom";
+import EmptyImg from "../../assets/svg/EmptyState-2.svg";
+import TransactionDetails from "./TransactionDetails";
 
 const tableData = [
   {
@@ -57,10 +60,13 @@ const tableData = [
 const Wallet = () => {
   const [successOpen, setSuccessOpen] = React.useState<boolean>(false);
   const [setupWalletDrawer, setSetupWalletDrawer] =
-    React.useState<boolean>(true);
+    React.useState<boolean>(false);
   const [sendMoneyDrawer, setSendMoneyDrawer] = React.useState<boolean>(false);
   const [fundWallet, setFundWallet] = React.useState<boolean>(false);
   const [createBill, setCreateBill] = React.useState<boolean>(false);
+  const [openDetails, setOpenDetails] = React.useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   const features = [
     "Send money to teachers",
@@ -132,6 +138,12 @@ const Wallet = () => {
         openSuccessModal={setSuccessOpen}
       />
 
+      <TransactionDetails
+        callback={() => {}}
+        close={() => setOpenDetails(false)}
+        drawerOpen={openDetails}
+      />
+
       {tableData.length === 0 ? (
         <div className="wallet">
           <div className="purse-on-mobile">
@@ -169,7 +181,7 @@ const Wallet = () => {
         <div className="wallet-container">
           <div className="wallet-header">
             <div className="wallet-header-box balance">
-              <div className="title">Wallet Balance</div>
+              <Text weight={500}>Wallet Balance</Text>
               <div className="balance-box">
                 <WalletIcon />
                 <h2>NGN 1,000,000</h2>
@@ -182,26 +194,77 @@ const Wallet = () => {
               ))}
             </div>
           </div>
-          <div className="wallet-table-desc">
-            <div className="title">Recent Transactions</div>
-            <div className="view-all-btn">
-              View All <HiChevronRight />
+
+          <Group position="apart" mb={18}>
+            <Text weight={500}>Recent Transactions</Text>
+
+            <Button
+              compact
+              variant="subtle"
+              rightIcon={<HiChevronRight />}
+              onClick={() => navigate("/wallet/transaction-history")}
+            >
+              View all
+            </Button>
+          </Group>
+
+          {tableData.length === 0 && (
+            <div className="empty-state">
+              <img src={EmptyImg} alt="" />
+              <div className="title">No recent transactions</div>
+              <div className="desc">
+                Start carrying out transactions on Dozzia
+              </div>
             </div>
-          </div>
-          <div className="table-container">
-            <Table horizontalSpacing="sm">
-              <thead>
-                <tr>
-                  <th>TRANSACTION ID</th>
-                  <th>DATE</th>
-                  <th>TRANSACTION TYPE</th>
-                  <th>AMOUNT</th>
-                  <th>STATUS</th>
-                </tr>
-              </thead>
-              <tbody>{rows}</tbody>
-            </Table>
-          </div>
+          )}
+
+          {tableData.length !== 0 && (
+            <div className="table-container">
+              <Table horizontalSpacing="sm">
+                <thead>
+                  <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>Transaction Type</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableData.map((data) => (
+                    <tr className="wallet-table-row">
+                      <td className="start">{data.transaction_id}</td>
+                      <td>{data.date}</td>
+                      <td>{data.transaction_type}</td>
+                      <td>NGN {data.amount}</td>
+                      <td>
+                        <div
+                          className={`status ${
+                            data.status === "Success"
+                              ? "success"
+                              : data.status === "Pending"
+                              ? "pending"
+                              : "failed"
+                          }`}
+                        >
+                          {data.status}
+                        </div>
+                      </td>
+                      <td className="end">
+                        <Button
+                          variant="default"
+                          size="xs"
+                          onClick={() => setOpenDetails(true)}
+                        >
+                          Details
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+          )}
         </div>
       )}
     </>
@@ -217,33 +280,6 @@ const Wallet = () => {
 //     status: string;
 //   };
 // }
-
-const rows = tableData.map((data) => (
-  <tr className="wallet-table-row">
-    <td className="start">{data.transaction_id}</td>
-    <td>{data.date}</td>
-    <td>{data.transaction_type}</td>
-    <td>NGN {data.amount}</td>
-    <td>
-      <div
-        className={`status ${
-          data.status === "Success"
-            ? "success"
-            : data.status === "Pending"
-            ? "pending"
-            : "failed"
-        }`}
-      >
-        {data.status}
-      </div>
-    </td>
-    <td className="end">
-      <Button variant="default" size="xs">
-        Details
-      </Button>
-    </td>
-  </tr>
-));
 
 interface ActionProps {
   handleAction: (title: string) => void;

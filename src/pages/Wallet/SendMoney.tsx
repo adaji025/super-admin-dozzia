@@ -16,7 +16,6 @@ const SendMoney = ({ drawerOpen, callback, close }: SendMoneyProps) => {
   const [activeView, setActiveView] = React.useState<
     "select-type" | "manual" | "beneficiary"
   >("select-type");
-
   return (
     <Drawer
       opened={drawerOpen}
