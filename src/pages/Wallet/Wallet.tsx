@@ -189,8 +189,12 @@ const Wallet = () => {
               </div>
             </div>
             <div className="wallet-header-box actions">
-              {actions.map((action) => (
-                <ActionCard {...{ action }} handleAction={actionHandler} />
+              {actions.map((action, index: number) => (
+                <ActionCard
+                  key={index}
+                  {...{ action }}
+                  handleAction={actionHandler}
+                />
               ))}
             </div>
           </div>
@@ -220,7 +224,7 @@ const Wallet = () => {
 
           {tableData.length !== 0 && (
             <div className="table-container">
-              <Table horizontalSpacing="sm">
+              <Table horizontalSpacing="sm" verticalSpacing="md">
                 <thead>
                   <tr>
                     <th>Transaction ID</th>
@@ -231,8 +235,8 @@ const Wallet = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {tableData.map((data) => (
-                    <tr className="wallet-table-row">
+                  {tableData.map((data, index: number) => (
+                    <tr className="wallet-table-row" key={index}>
                       <td className="start">{data.transaction_id}</td>
                       <td>{data.date}</td>
                       <td>{data.transaction_type}</td>

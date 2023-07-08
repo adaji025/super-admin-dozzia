@@ -128,6 +128,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       route: "/wallet",
     },
     {
+      icon: Wallet,
+      name: "Buses",
+      route: "/school-buses",
+    },
+    {
       icon: Broadcast,
       name: "Broadcast",
       route: "/broadcast",

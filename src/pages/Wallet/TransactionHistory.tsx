@@ -1,5 +1,5 @@
 import { Button, Divider, Menu, Tabs } from "@mantine/core";
-import React from "react";
+import React, { Fragment } from "react";
 import { HiChevronLeft } from "react-icons/hi";
 import { ChevronDown } from "tabler-icons-react";
 import TransactionTable from "./Table";
@@ -48,7 +48,6 @@ const TransactionHistory = () => {
           control={
             <Button
               rightIcon={<ChevronDown size={14} />}
-              // variant="default"
               className="target-dropdown"
               size="xs"
             >
@@ -57,17 +56,16 @@ const TransactionHistory = () => {
           }
         >
           {dates.map((item, index) => (
-            <>
+            <Fragment key={index}>
               <Menu.Item
                 style={{ fontSize: 12 }}
-                key={index}
                 className="menu-item"
                 onClick={() => setSelectedDateRange(item)}
               >
                 {item}
               </Menu.Item>
               <Divider className="divider" />
-            </>
+            </Fragment>
           ))}
         </Menu>
       </div>
