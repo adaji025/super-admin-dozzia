@@ -33,7 +33,6 @@ const AddSubject = ({ closeModal, submit, loading }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Grade Name"
           placeholder="e.g. A"
           {...form.getInputProps("name")}
@@ -42,7 +41,6 @@ const AddSubject = ({ closeModal, submit, loading }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Remark"
           placeholder="e.g. Excellent"
           {...form.getInputProps("remark")}
@@ -54,7 +52,6 @@ const AddSubject = ({ closeModal, submit, loading }: any) => {
           mt="sm"
           label="Min Score"
           placeholder="e.g. 85"
-          variant="filled"
           {...form.getInputProps("min_score")}
         />
 
@@ -64,7 +61,6 @@ const AddSubject = ({ closeModal, submit, loading }: any) => {
           mt="sm"
           label="Max Score"
           placeholder="e.g. 100"
-          variant="filled"
           {...form.getInputProps("max_score")}
         />
 

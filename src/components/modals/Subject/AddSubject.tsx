@@ -7,13 +7,24 @@ import {
   Divider,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import {
+  CreateSubjectData,
+  SubjectCategories,
+  SubjectType,
+} from "../../../types/subjectsTypes";
 
-const AddSubject = ({ closeModal, submit, edit }: any) => {
+interface AddSubjectProps {
+  closeModal: () => void;
+  submit: (values: CreateSubjectData, subjectId?: string) => void;
+  edit?: SubjectType | null;
+}
+
+const AddSubject = ({ closeModal, submit, edit }: AddSubjectProps) => {
   const form = useForm({
     initialValues: {
-      name: edit ? edit.subject_name : "",
-      category: edit ? edit.subject_category : "",
-      description: edit ? edit.subject_description : "",
+      name: edit ? edit.name : "",
+      category: edit ? edit.category : "",
+      description: edit ? edit.description ?? "" : "",
     },
 
     validate: {
@@ -29,7 +40,7 @@ const AddSubject = ({ closeModal, submit, edit }: any) => {
         onSubmit={form.onSubmit((values) => {
           closeModal();
           if (edit) {
-            submit(edit.subject_id, values);
+            submit(values, edit.subject_id);
           } else {
             submit(values);
           }
@@ -38,7 +49,6 @@ const AddSubject = ({ closeModal, submit, edit }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Subject Name"
           placeholder="Subject name"
           {...form.getInputProps("name")}
@@ -49,21 +59,18 @@ const AddSubject = ({ closeModal, submit, edit }: any) => {
           required
           label="Subject Category"
           placeholder="Select Subject category"
-          variant="filled"
           data={[
-            { value: "Core Course", label: "Core Course" },
-            { value: "Selective Course", label: "Selective Course" },
-            { value: "Elective Course", label: "Elective Course" },
+            { value: SubjectCategories.Core, label: "Core Course" },
+            { value: SubjectCategories.Selective, label: "Selective Course" },
+            { value: SubjectCategories.Elective, label: "Elective Course" },
           ]}
           {...form.getInputProps("category")}
         />
 
         <Textarea
           mt="md"
-          required
           label="Subject Description"
           placeholder="Subject description"
-          variant="filled"
           autosize
           minRows={3}
           maxRows={5}
@@ -74,7 +81,9 @@ const AddSubject = ({ closeModal, submit, edit }: any) => {
           <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" color="dark">
+            Submit
+          </Button>
         </Group>
       </form>
     </div>

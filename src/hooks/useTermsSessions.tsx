@@ -22,6 +22,7 @@ const useTermsSessions = () => {
   const terms = useSelector((state: any) => {
     return state.data.terms;
   });
+
   const sessions = useSelector((state: any) => {
     return state.data.sessions;
   });

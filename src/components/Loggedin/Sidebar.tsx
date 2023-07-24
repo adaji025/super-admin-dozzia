@@ -13,7 +13,6 @@ import {
   ClipboardList,
   Wall,
 } from "tabler-icons-react";
-import { ReactComponent as SchoolLogo } from "../../assets/svg/school-logo.svg";
 import { ReactComponent as Administration } from "../../assets/svg/navigation/administration.svg";
 import { ReactComponent as Broadcast } from "../../assets/svg/navigation/broadcast.svg";
 import { ReactComponent as Dashboard } from "../../assets/svg/navigation/dashboard.svg";
@@ -23,6 +22,9 @@ import { ReactComponent as Reports } from "../../assets/svg/navigation/reports.s
 import { ReactComponent as Settings } from "../../assets/svg/navigation/setting.svg";
 import { ReactComponent as Trash } from "../../assets/svg/navigation/trash.svg";
 import { ReactComponent as Wallet } from "../../assets/svg/navigation/wallet.svg";
+import { ReactComponent as Location } from "../../assets/svg/navigation/location.svg";
+import { UserState } from "../../redux/user/user.reducer";
+import { Roles } from "../../types/authTypes";
 
 interface SidebarProps {
   toggleSidebar: () => void;
@@ -37,14 +39,17 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const userdata = useSelector((state: any) => {
+  const userdata = useSelector((state: { user: UserState }) => {
     return state.user.userdata;
   });
 
   useEffect(() => {
-    if (userdata?.role?.name === "School Admin") {
+    if (
+      userdata.role.name === Roles.Principal ||
+      userdata.role.name === Roles.SchoolAdmin
+    ) {
       setRoutes(adminRoutes);
-    } else if (userdata?.role?.name === "Teacher") {
+    } else if (userdata?.role?.name === Roles.Teacher) {
       setRoutes(teacherRoutes);
     }
 
@@ -128,7 +133,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       route: "/wallet",
     },
     {
-      icon: Wallet,
+      icon: Location,
       name: "Buses",
       route: "/school-buses",
     },
@@ -206,7 +211,13 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         <div className="school-info">
           <div className="school-info-inner">
             <div className="school-logo-wrapper">
-              <SchoolLogo className="school-logo" />
+              <img
+                src={userdata.school.logo ?? ""}
+                alt="school brand"
+                className="school-logo"
+                height={62}
+                width={62}
+              />
             </div>
 
             <Text
@@ -215,9 +226,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                 color: !dark ? "white" : "black",
               }}
             >
-              {userdata?.profile_details?.school_name
-                ? userdata?.profile_details?.school_name
-                : ""}
+              {userdata.school.name}
             </Text>
           </div>
         </div>

@@ -28,12 +28,22 @@ import useSubject from "../../hooks/useSubject";
 import { useSelector } from "react-redux";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import ViewStudyResource from "../../components/modals/ClassWall/ViewStudyResource";
+import {
+  StudyResourceType,
+  StudyResourcesState,
+} from "../../types/studyResourcesTypes";
+import { initialMetadata } from "../../lib/util";
+import { ApiResponseType } from "../../types/utilityTypes";
+import { SubjectType } from "../../types/subjectsTypes";
 
 const StudyResources = () => {
   const { dark } = useTheme();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(20);
-  const [studyResources, setStudyResources] = useState<any>(null);
+  const [studyResources, setStudyResources] = useState<StudyResourcesState>({
+    data: [],
+    meta: initialMetadata,
+  });
   const [activeSubjectId, setActiveSubjectId] = useState<string>("");
   const [activeSubjectName, setActiveSubjectName] = useState<string>("");
   const [addResourceModal, setAddResourceModal] = useState<boolean>(false);
@@ -59,7 +69,7 @@ const StudyResources = () => {
   const [confirmDeleteResource, setConfirmDeleteresource] =
     useState<boolean>(false);
   const [resourceId, setresourceId] = useState<string>("");
-  const [resource, setResource] = useState<any>(null);
+  const [resource, setResource] = useState<StudyResourceType | null>(null);
 
   useEffect(() => {
     if (classWall?.activeClassId) {
@@ -102,7 +112,7 @@ const StudyResources = () => {
       perPage,
       classWall?.activeClassId,
       activeSubjectId
-    ).then((res: any) => {
+    ).then((res: ApiResponseType<StudyResourceType[]>) => {
       setStudyResources(res);
     });
   };
@@ -158,7 +168,7 @@ const StudyResources = () => {
         onClose={() => {
           setViewStudyResourceModal(false);
           setTimeout(() => {
-            setResource(null);
+            setResource({} as StudyResourceType);
           }, 500);
         }}
         title={<Text weight={600}>View Resource</Text>}
@@ -168,7 +178,7 @@ const StudyResources = () => {
           closeModal={() => {
             setViewStudyResourceModal(false);
             setTimeout(() => {
-              setResource(null);
+              setResource({} as StudyResourceType);
             }, 500);
           }}
           resource={resource}
@@ -232,23 +242,21 @@ const StudyResources = () => {
                   All Subjects
                 </Menu.Item>
 
-                {allSubjects.map(
-                  (item: { subject_id: string; subject_name: string }) => (
-                    <Menu.Item
-                      key={item.subject_id}
-                      onClick={() => {
-                        setLoading(true);
-                        setActiveSubjectId(item.subject_id);
-                        setActiveSubjectName(item.subject_name);
-                      }}
-                      disabled={activeSubjectId === item.subject_id}
-                    >
-                      {item.subject_name.length > 21
-                        ? `${item.subject_name.substring(0, 21)}...`
-                        : item.subject_name}
-                    </Menu.Item>
-                  )
-                )}
+                {allSubjects.map((item: SubjectType) => (
+                  <Menu.Item
+                    key={item.subject_id}
+                    onClick={() => {
+                      setLoading(true);
+                      setActiveSubjectId(item.subject_id);
+                      setActiveSubjectName(item.name);
+                    }}
+                    disabled={activeSubjectId === item.subject_id}
+                  >
+                    {item.name.length > 21
+                      ? `${item.name.substring(0, 21)}...`
+                      : item.name}
+                  </Menu.Item>
+                ))}
               </Menu>
 
               <Button
@@ -330,16 +338,7 @@ const StudyResources = () => {
                     </thead>
                     <tbody>
                       {studyResources?.data.map(
-                        (
-                          item: {
-                            id: string;
-                            title: string;
-                            subject: {
-                              subject_name: string;
-                            };
-                          },
-                          index: number
-                        ) => (
+                        (item: StudyResourceType, index: number) => (
                           <tr key={item.id}>
                             <td
                               style={{
@@ -362,7 +361,7 @@ const StudyResources = () => {
                                 borderBottom: `1px solid #0000`,
                               }}
                             >
-                              {item?.subject?.subject_name}
+                              {item?.title}
                             </td>
 
                             <td
@@ -436,7 +435,7 @@ const StudyResources = () => {
           {studyResources?.meta && studyResources?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== studyResources.meta.current_page) {

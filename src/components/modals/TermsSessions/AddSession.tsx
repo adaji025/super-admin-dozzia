@@ -3,9 +3,18 @@ import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import useTermsSessions from "../../../hooks/useTermsSessions";
 import "../Events/create-event.scss";
+import { useEffect } from "react";
 
 const AddSession = ({ closeModal }: any) => {
   const { loading, handleAddSession } = useTermsSessions();
+
+  useEffect(() => {
+    form.setValues({
+      start_year: null as any,
+      end_year: null as any,
+    });
+    //eslint-disable-next-line
+  }, []);
 
   const form = useForm({
     initialValues: {
@@ -41,7 +50,6 @@ const AddSession = ({ closeModal }: any) => {
           className="form-item"
           label="Start Year"
           placeholder="Start year"
-          variant="filled"
           required
           {...form.getInputProps("start_year")}
         />
@@ -53,7 +61,6 @@ const AddSession = ({ closeModal }: any) => {
           className="form-item"
           label="End Year"
           placeholder="End year"
-          variant="filled"
           required
           {...form.getInputProps("end_year")}
         />

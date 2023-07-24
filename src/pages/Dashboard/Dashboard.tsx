@@ -12,10 +12,8 @@ import {
 import { ChevronDown } from "tabler-icons-react";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
-
 import { useDispatch, useSelector } from "react-redux";
-import { getStats } from "../../services/stats/stats";
-import { setEvents, setReports, setStats } from "../../redux/data/data.actions";
+import { setEvents, setReports } from "../../redux/data/data.actions";
 import useNotification from "../../hooks/useNotification";
 import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
@@ -42,9 +40,7 @@ const Dashboard = () => {
   const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
-
   const navigate = useNavigate();
-
   const reports = useSelector((state: any) => {
     return state.data.reports;
   });
@@ -59,21 +55,10 @@ const Dashboard = () => {
   );
 
   useEffect(() => {
-    handleGetStats();
     handleGetReports();
     handleGetEvents();
     //eslint-disable-next-line
   }, []);
-
-  const handleGetStats = () => {
-    getStats()
-      .then((res) => {
-        dispatch(setStats(res.data));
-      })
-      .catch((error: AxiosError) => {
-        handleError(error);
-      });
-  };
 
   const handleGetReports = () => {
     if (!reports) {
@@ -84,7 +69,9 @@ const Dashboard = () => {
       .then((res) => {
         dispatch(setReports(res));
       })
-      .catch(() => {})
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -200,6 +187,7 @@ const Dashboard = () => {
         <div className="right">
           <div className="complaints">
             <span className="title">Reports and complaints</span>
+
             <div className="complaints-statistics">
               <img src={RemoveNote} alt="remove note" />
               <p>Unresolved Complaints</p>
@@ -280,10 +268,9 @@ const ComplaintCard = () => {
           <tr>
             <td className="c-desc">Sept 9, 2023</td>
             <td className="status">Unresolved</td>
-            <button>
-              <span>View report</span>
-              <FiChevronRight />
-            </button>
+            <Button variant="subtle" rightIcon={<FiChevronRight />}>
+              View
+            </Button>
           </tr>
         </tbody>
       </table>

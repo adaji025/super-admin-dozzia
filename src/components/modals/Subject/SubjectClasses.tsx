@@ -7,31 +7,36 @@ import {
   Table,
   Box,
   Alert,
+  LoadingOverlay,
 } from "@mantine/core";
 import useSubject from "../../../hooks/useSubject";
+import { SubjectType } from "../../../types/subjectsTypes";
+import { ClassroomType } from "../../../types/classTypes";
+
+interface SubjectClassesProps {
+  closeModal: () => void;
+  subject: SubjectType | null;
+  modalActive: boolean;
+}
 
 const SubjectClasses = ({
   closeModal,
   subject,
   modalActive,
-}: {
-  closeModal: () => void;
-  subject: {
-    subject_id: string;
-    subject_name: string;
-    subject_category: string;
-    subject_description: string;
-  };
-  modalActive: boolean;
-}) => {
+}: SubjectClassesProps) => {
   const { handleGetSubjectClasses } = useSubject();
-  const [classes, setClasses] = useState<any>(null);
+  const [classes, setClasses] = useState<ClassroomType[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (modalActive) {
-      handleGetSubjectClasses(subject?.subject_id).then((res: any) => {
-        setClasses(res?.data);
-      });
+      setLoading(true);
+
+      handleGetSubjectClasses(subject?.subject_id ?? "")
+        .then((res: ClassroomType[]) => {
+          setClasses(res);
+        })
+        .finally(() => setLoading(false));
     }
     //eslint-disable-next-line
   }, []);
@@ -39,6 +44,8 @@ const SubjectClasses = ({
   return (
     <div>
       <Divider mb="md" variant="dashed" />
+
+      <LoadingOverlay visible={loading} />
 
       <Box sx={{ minHeight: 350 }} className="d-p-main">
         {classes ? (
@@ -77,72 +84,44 @@ const SubjectClasses = ({
                 </tr>
               </thead>
               <tbody>
-                {classes.map(
-                  (
-                    item: {
-                      classroom_id: string;
-                      classroom_name: string;
-                      classroom_level: number;
-                      classroom_teacher: {
-                        title: string;
-                        first_name: string;
-                        last_name: string;
-                        staff_id: string;
-                      };
-                      subjects_and_teachers: any;
-                    },
-                    index: number
-                  ) => (
-                    <tr key={item?.classroom_id}>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                        }}
-                        className="large-only"
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          fontWeight: "600",
-                        }}
-                      >
-                        {item?.classroom_name}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          fontWeight: "600",
-                        }}
-                        className="large-only"
-                      >
-                        {item?.classroom_level}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                        }}
-                      >
-                        {item?.subjects_and_teachers.map(
-                          (item: {
-                            subject: {
-                              subject_id: string;
-                            };
-                            teacher: {
-                              title: string;
-                              first_name: string;
-                              last_name: string;
-                              staff_id: string;
-                            };
-                          }) =>
-                            item?.subject?.subject_id === subject?.subject_id &&
-                            `${item?.teacher?.title} ${item?.teacher?.first_name} ${item?.teacher?.last_name}`
-                        )}
-                      </td>
-                    </tr>
-                  )
-                )}
+                {classes.map((item: ClassroomType, index: number) => (
+                  <tr key={item?.classroom_id}>
+                    <td
+                      style={{
+                        borderBottom: `1px solid #0000`,
+                      }}
+                      className="large-only"
+                    >
+                      {index + 1}
+                    </td>
+                    <td
+                      style={{
+                        borderBottom: `1px solid #0000`,
+                        fontWeight: "600",
+                      }}
+                    >
+                      {item.name}
+                    </td>
+                    <td
+                      style={{
+                        borderBottom: `1px solid #0000`,
+                        fontWeight: "600",
+                      }}
+                      className="large-only"
+                    >
+                      {item.level}
+                    </td>
+                    <td
+                      style={{
+                        borderBottom: `1px solid #0000`,
+                      }}
+                    >
+                      {item.class_teacher.title ?? ""}{" "}
+                      {item.class_teacher.first_name ?? ""}{" "}
+                      {item.class_teacher.last_name ?? ""}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
 

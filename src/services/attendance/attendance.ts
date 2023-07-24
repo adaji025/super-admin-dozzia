@@ -14,9 +14,7 @@ export const getGeneralAttendance = (
   search: string
 ) => {
   return new Promise<GetGeneralAttendanceResponse>((resolve, reject) => {
-    AxoisApi.get(
-      APIS.ATTENDANCE.GET_GENERAL_ATTENDANCE(page, perPage, date, search)
-    )
+    AxoisApi.get(APIS.ATTENDANCE.GET_ATTENDANCE(page, perPage, date, search))
       .then((res: { data: GetGeneralAttendanceResponse }) => {
         resolve(res.data);
       })

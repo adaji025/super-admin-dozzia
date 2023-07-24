@@ -42,7 +42,6 @@ const Confirmation = ({
               placeholder=""
               label={`Type "${confirmText}" to continue`}
               size="md"
-              variant="filled"
               value={inputText}
               onChange={(e) => {
                 setInputText(e.target.value);

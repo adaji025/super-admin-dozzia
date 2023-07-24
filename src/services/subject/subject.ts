@@ -52,9 +52,3 @@ export const assignClassAndTeacher = (
     return res.data;
   });
 };
-
-export const getSubjectClasses = (id: string) => {
-  return AxoisApi.get(`${APIS.SUBJECT.GET_SUBJECT_CLASSES(id)}`).then((res) => {
-    return res.data;
-  });
-};

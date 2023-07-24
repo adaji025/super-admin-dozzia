@@ -1,16 +1,34 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
+import { ApiResponseType } from "../../types/utilityTypes";
+import { ProfileType, SigninResponse } from "../../types/authTypes";
+import { AxiosError } from "axios";
 
 export const login = (username: string, password: string) => {
   return AxoisApi.post(`${APIS.AUTH.LOGIN}`, {
     username,
     password,
-  }).then((res) => {
-    if (res.data.token) {
-      localStorage.setItem("token", res.data.token);
+  }).then((res: { data: ApiResponseType<SigninResponse> }) => {
+    if (res.data.data.access_token) {
+      localStorage.setItem("token", res.data.data.access_token);
     }
 
-    return res.data;
+    return res.data.data;
+  });
+};
+
+export const getProfileInfo = (token?: string, include?: string) => {
+  return new Promise<ProfileType>((resolve, reject) => {
+    AxoisApi.get(
+      APIS.AUTH.PROFILE,
+      ...(token ? [{ headers: { Authorization: `Bearer ${token}` } }] : [])
+    )
+      .then((res: { data: ApiResponseType<ProfileType> }) => {
+        resolve(res.data.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
   });
 };
 
@@ -56,16 +74,10 @@ export const updateProfile = (
   });
 };
 
-export const getProfileInfo = () => {
-  return AxoisApi.get(`${APIS.AUTH.PROFILE}`).then((res) => {
-    return res.data;
-  });
-};
-
 export const changePassword = (
   current_password: string,
   password: string,
-  password_confirmation: string
+  password_confirmation: string,
 ) => {
   return AxoisApi.post(`${APIS.AUTH.CHANGE_PASSWORD}`, {
     current_password,

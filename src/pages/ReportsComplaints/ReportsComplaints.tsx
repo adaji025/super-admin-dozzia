@@ -25,30 +25,53 @@ import {
 import useReports from "../../hooks/useReports";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import ViewReport from "../../components/modals/Reports/ViewReport";
+import { getReports } from "../../services/reports/reports";
+import useNotification from "../../hooks/useNotification";
+import { ReportStatusTypes } from "../../types/reportsTypes";
+import { useDispatch } from "react-redux";
+import { setReports } from "../../redux/data/data.actions";
+import { AxiosError } from "axios";
 
 const Reports = () => {
   const { dark } = useTheme();
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [confirmResolve, setConfirmResolve] = useState<boolean>(false);
   const [reportId, setReportId] = useState<string>("");
-  const [status, setStatus] = useState<string>("");
+  const [status, setStatus] = useState<ReportStatusTypes | "">("");
   const [report, setReport] = useState<any>(null);
+  const { handleError } = useNotification();
 
   const [statusChangeText, setStatusChangeText] = useState<{
     from: string;
     to: string;
   }>({ from: "", to: "" });
 
-  const { handleGetReports, reports, loading, setLoading, handleUpdateStatus } =
-    useReports();
+  const { reports, loading, setLoading, handleUpdateStatus } = useReports();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    handleGetReports(page, perPage, status);
-
+    handleGetReports();
     //eslint-disable-next-line
   }, [page, status]);
+
+  const handleGetReports = () => {
+    if (!reports) {
+      setLoading(true);
+    }
+
+    getReports(page, perPage, status)
+      .then((res) => {
+        dispatch(setReports(res));
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <Fragment>
@@ -83,6 +106,7 @@ const Reports = () => {
             }, 500);
           }}
           report={report}
+          callback={() => handleGetReports()}
         />
       </Modal>
 
@@ -96,7 +120,7 @@ const Reports = () => {
         submit={() => {
           setConfirmResolve(false);
           handleUpdateStatus(reportId, statusChangeText.to).then(() => {
-            handleGetReports(page, perPage, status);
+            handleGetReports();
           });
         }}
         hasInput={false}
@@ -138,9 +162,9 @@ const Reports = () => {
                 <Menu.Item
                   onClick={() => {
                     setLoading(true);
-                    setStatus("resolved");
+                    setStatus(ReportStatusTypes.RESOLVED);
                   }}
-                  disabled={status === "resolved"}
+                  disabled={status === ReportStatusTypes.RESOLVED}
                 >
                   Resolved
                 </Menu.Item>
@@ -148,9 +172,9 @@ const Reports = () => {
                 <Menu.Item
                   onClick={() => {
                     setLoading(true);
-                    setStatus("in-progress");
+                    setStatus(ReportStatusTypes.PENDING);
                   }}
-                  disabled={status === "in-progress"}
+                  disabled={status === ReportStatusTypes.PENDING}
                 >
                   In-progress
                 </Menu.Item>
@@ -158,9 +182,9 @@ const Reports = () => {
                 <Menu.Item
                   onClick={() => {
                     setLoading(true);
-                    setStatus("unresolved");
+                    setStatus(ReportStatusTypes.UNRESOLVED);
                   }}
-                  disabled={status === "unresolved"}
+                  disabled={status === ReportStatusTypes.UNRESOLVED}
                 >
                   Unresolved
                 </Menu.Item>
@@ -406,7 +430,7 @@ const Reports = () => {
           {reports?.meta && reports?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 1100 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== reports.meta.current_page) {

@@ -18,6 +18,7 @@ import useTermsSessions from "../../hooks/useTermsSessions";
 import AddTerm from "../../components/modals/TermsSessions/AddTerm";
 import AddSession from "../../components/modals/TermsSessions/AddSession";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import { SessionType } from "../../types/termSessionTypes";
 
 const TermsSessions = () => {
   const { dark } = useTheme();
@@ -170,62 +171,52 @@ const TermsSessions = () => {
                   </thead>
                   <tbody>
                     {sessions?.data.length > 0 &&
-                      sessions?.data.map(
-                        (
-                          item: {
-                            id: string;
-                            end_year: number;
-                            start_year: number;
-                            is_current: boolean;
-                          },
-                          index: number
-                        ) => (
-                          <tr key={item.id}>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                fontWeight: "500",
-                              }}
-                            >
-                              {item.start_year}/{item?.end_year}
-                            </td>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                              }}
-                            >
-                              {item?.is_current ? "Active" : ""}
-                            </td>
+                      sessions?.data.map((item: SessionType) => (
+                        <tr key={item.session_id}>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              fontWeight: "500",
+                            }}
+                          >
+                            {item.start_year}/{item?.end_year}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                          >
+                            {item?.is_current ? "Active" : ""}
+                          </td>
 
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                width: "20px",
-                              }}
-                              className="table-last"
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              width: "20px",
+                            }}
+                            className="table-last"
+                          >
+                            <Menu
+                              position={deviceWidth < 576 ? "left" : "right"}
+                              gutter={15}
+                              withArrow
+                              size="sm"
                             >
-                              <Menu
-                                position={deviceWidth < 576 ? "left" : "right"}
-                                gutter={15}
-                                withArrow
-                                size="sm"
+                              <Menu.Label>Menu</Menu.Label>
+
+                              <Menu.Item
+                                icon={<ClipboardList size={14} />}
+                                onClick={() => {
+                                  setConfirmSetSession(true);
+                                  setSessionId(item?.session_id);
+                                }}
                               >
-                                <Menu.Label>Menu</Menu.Label>
-
-                                <Menu.Item
-                                  icon={<ClipboardList size={14} />}
-                                  onClick={() => {
-                                    setConfirmSetSession(true);
-                                    setSessionId(item?.id);
-                                  }}
-                                >
-                                  Set as active
-                                </Menu.Item>
-                              </Menu>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                                Set as active
+                              </Menu.Item>
+                            </Menu>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </Table>
 

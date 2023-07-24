@@ -3,8 +3,19 @@ import { Button, Group, Divider, LoadingOverlay } from "@mantine/core";
 import { ArrowUpRight } from "tabler-icons-react";
 import useTheme from "../../../hooks/useTheme";
 import useStudyResources from "../../../hooks/useStudyResources";
+import { StudyResourceType } from "../../../types/studyResourcesTypes";
 
-const ViewStudyResource = ({ closeModal, resource, modalActive }: any) => {
+interface ViewStudyResourceProps {
+  closeModal: () => void;
+  modalActive: boolean;
+  resource: StudyResourceType | null;
+}
+
+const ViewStudyResource = ({
+  closeModal,
+  modalActive,
+  resource,
+}: ViewStudyResourceProps) => {
   const { dark } = useTheme();
   const { handleGetStudyResourceFiles, loading } = useStudyResources();
   const [resourceFiles, setResourceFiles] = useState<
@@ -12,7 +23,7 @@ const ViewStudyResource = ({ closeModal, resource, modalActive }: any) => {
   >([]);
 
   useEffect(() => {
-    if (modalActive) {
+    if (modalActive && resource) {
       handleGetStudyResourceFiles(resource?.id).then((res: any) => {
         setResourceFiles(res?.data);
       });
@@ -53,32 +64,10 @@ const ViewStudyResource = ({ closeModal, resource, modalActive }: any) => {
             borderBottom: `1px solid ${dark ? "#2c2e336b" : "#e9ecef61"}`,
           }}
         >
-          <div className="d-r-left">Classroom Name:</div>
-          <div className="d-r-right">{resource?.classroom?.classroom_name}</div>
-        </div>
-
-        <div
-          className="v-d-row"
-          style={{
-            borderBottom: `1px solid ${dark ? "#2c2e336b" : "#e9ecef61"}`,
-          }}
-        >
-          <div className="d-r-left">Classroom Level:</div>
-          <div className="d-r-right">
-            {resource?.classroom?.classroom_level}
-          </div>
-        </div>
-
-        <div
-          className="v-d-row"
-          style={{
-            borderBottom: `1px solid ${dark ? "#2c2e336b" : "#e9ecef61"}`,
-          }}
-        >
           <div className="d-r-left">Subject:</div>
           <div className="d-r-right">
-            {resource?.subject?.subject_name} (
-            {resource?.subject?.subject_category})
+            {/* {resource?.subject?.subject_name} (
+            {resource?.subject?.subject_category}) */}
           </div>
         </div>
 

@@ -40,7 +40,7 @@ const ClassAttendance = ({
   callback,
 }: ClassAttendanceProps) => {
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const [classAttendance, setClassAttendance] = useState<any>(null);
   const [attendanceData, setAttendanceData] = useState<any>(null);
   const [attendanceDataRaw, setAttendanceDataRaw] = useState<any>(null);

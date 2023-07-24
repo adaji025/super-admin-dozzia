@@ -27,7 +27,8 @@ import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import useNotification from "../../hooks/useNotification";
 import { showNotification } from "@mantine/notifications";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
-import { initialMetadata } from "../../types/utilityTypes";
+import { initialMetadata } from "../../lib/util";
+import { ClassWallState } from "../../types/classWallTypes";
 
 const ClassEvents = () => {
   const [page, setPage] = useState<number>(1);
@@ -35,7 +36,7 @@ const ClassEvents = () => {
     data: [],
     meta: initialMetadata,
   });
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const { dark } = useTheme();
@@ -46,9 +47,11 @@ const ClassEvents = () => {
   const deviceWidth = window.innerWidth;
   const [loading, setLoading] = useState<boolean>(false);
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
-  const classWall = useSelector((state: any) => {
-    return state.data.classWall;
-  });
+  const classWall = useSelector(
+    (state: { data: { classWall: ClassWallState } }) => {
+      return state.data.classWall;
+    }
+  );
   const { handleError } = useNotification();
 
   useEffect(() => {
@@ -60,9 +63,7 @@ const ClassEvents = () => {
   }, [page, search]);
 
   const handleGetEvents = () => {
-    if (!events) {
-      setLoading(true);
-    }
+    setLoading(true);
 
     getEvents({ page, perPage, search, classId: classWall?.activeClassId })
       .then((res: GetEventsResponse) => {
@@ -77,6 +78,8 @@ const ClassEvents = () => {
   };
 
   const handleDeleteEvent = (eventId: string) => {
+    setLoading(true);
+
     deleteEvent(eventId)
       .then(() => {
         showNotification({
@@ -429,7 +432,7 @@ const ClassEvents = () => {
           {events?.meta && events?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 1000 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== events.meta.current_page) {

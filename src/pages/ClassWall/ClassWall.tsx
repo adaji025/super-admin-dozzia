@@ -5,7 +5,7 @@ import useTheme from "../../hooks/useTheme";
 import { useDispatch, useSelector } from "react-redux";
 import { setClassWall } from "../../redux/data/data.actions";
 import useClass from "../../hooks/useClass";
-import { Button, Menu } from "@mantine/core";
+import { Button, Menu, ScrollArea } from "@mantine/core";
 import { ChevronDown, ArrowLeft } from "tabler-icons-react";
 import { showNotification } from "@mantine/notifications";
 import RelaxedMascot from "../../assets/svg/relaxed-mascot.svg";
@@ -26,35 +26,42 @@ import CurriculumIcon from "../../assets/svg/curriculum-icon.svg";
 
 import "./class-wall.scss";
 import "../Classes/classes.scss";
+import { ClassWallState } from "../../types/classWallTypes";
+import { ClassroomType } from "../../types/classTypes";
+import { Roles } from "../../types/authTypes";
 
 const ClassWall = () => {
   const { dark } = useTheme();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const classWall = useSelector((state: any) => {
-    return state.data.classWall;
-  });
+  const classWall = useSelector(
+    (state: { data: { classWall: ClassWallState } }) => {
+      return state.data.classWall;
+    }
+  );
   const userdata = useSelector((state: any) => {
     return state.user.userdata;
   });
   const { getClassList } = useClass();
 
   useEffect(() => {
-    if (userdata?.role?.name === "Teacher") {
-      getClassList(1, 300, "", "", true, userdata?.user_id).then((res: any) => {
-        dispatch(
-          setClassWall({
-            ...classWall,
-            classes: res?.data,
-          })
-        );
-      });
+    if (userdata?.role?.name === Roles.Teacher) {
+      getClassList(1, 300, "", "", true, userdata?.user_id).then(
+        (res: ClassroomType[]) => {
+          dispatch(
+            setClassWall({
+              ...classWall,
+              classes: res,
+            })
+          );
+        }
+      );
     } else {
-      getClassList(1, 300, "", "", true).then((res: any) => {
+      getClassList(1, 300, "", "", true).then((res: ClassroomType[]) => {
         dispatch(
           setClassWall({
             ...classWall,
-            classes: res?.data,
+            classes: res,
           })
         );
       });
@@ -159,27 +166,26 @@ const ClassWall = () => {
               >
                 <Menu.Label>Classroom List</Menu.Label>
 
-                {classWall?.classes.map(
-                  (item: { classroom_id: string; classroom_name: string }) => (
+                <ScrollArea sx={{ height: 300 }} type="auto">
+                  {classWall?.classes.map((item: ClassroomType) => (
                     <Menu.Item
                       key={item.classroom_id}
                       onClick={() => {
                         dispatch(
                           setClassWall({
                             ...classWall,
-                            activeClassName: item?.classroom_name,
+                            activeClassName: item.name,
                             activeClassId: item?.classroom_id,
+                            classTeacherId: item.class_teacher?.staff_id,
                           })
                         );
                       }}
                       disabled={classWall?.activeClassId === item.classroom_id}
                     >
-                      {item.classroom_name.length > 18
-                        ? `${item.classroom_name.substring(0, 18)}...`
-                        : item.classroom_name}
+                      {item.name}
                     </Menu.Item>
-                  )
-                )}
+                  ))}
+                </ScrollArea>
               </Menu>
             </div>
           </div>

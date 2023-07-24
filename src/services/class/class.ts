@@ -1,12 +1,8 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
+import { CreateClassData } from "../../types/classTypes";
 
-export const addClass = (data: {
-  classroom_level: string;
-  classroom_name: string;
-  classroom_teacher: string;
-  classroom_description: string;
-}) => {
+export const addClass = (data: CreateClassData) => {
   return AxoisApi.post(`${APIS.CLASS.CREATE_CLASS}`, data).then((res) => {
     return res.data;
   });
@@ -17,10 +13,18 @@ export const getClasses = (
   perPage: number,
   level: string,
   search: string,
-  staffId?: string
+  staffId?: string,
+  subjectId?: string
 ) => {
   return AxoisApi.get(
-    `${APIS.CLASS.GET_CLASS_LIST(page, perPage, level, search, staffId)}`
+    `${APIS.CLASS.GET_CLASS_LIST(
+      page,
+      perPage,
+      level,
+      search,
+      staffId,
+      subjectId
+    )}`
   ).then((res) => {
     return res.data;
   });
@@ -32,15 +36,7 @@ export const getClassInfo = (id: string) => {
   });
 };
 
-export const updateClass = (
-  id: string,
-  data: {
-    classroom_level: string;
-    classroom_name: string;
-    classroom_teacher: string;
-    classroom_description: string;
-  }
-) => {
+export const updateClass = (id: string, data: CreateClassData) => {
   return AxoisApi.put(`${APIS.CLASS.CLASS(id)}`, data).then((res) => {
     return res.data;
   });

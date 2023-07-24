@@ -30,20 +30,19 @@ import { getStaffRoleList, onboardStaff } from "../../services/staff/staff";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-import { getMedicalList, getStatesList } from "../../services/helper/helper";
+import { getStatesList } from "../../services/helper/helper";
 import {
   ApiResponseType,
-  MedicalType,
   StaffRoleType,
   StateType,
 } from "../../types/utilityTypes";
 import { useLocalStorage } from "@mantine/hooks";
+import { objectToFormData } from "../../lib/util";
 
 const OnboardStaff = () => {
   const { dark } = useTheme();
   const { handleError } = useNotification();
   const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
-  const [medicals, setMedicals] = useState<MedicalType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [states, setStates] = useState<StateType[]>([]);
   const [active, setActive] = useState<number>(0);
@@ -55,7 +54,6 @@ const OnboardStaff = () => {
   useEffect(() => {
     getStates();
     getStaffRoles();
-    getMedicals();
 
     //eslint-disable-next-line
   }, []);
@@ -64,16 +62,6 @@ const OnboardStaff = () => {
     getStatesList()
       .then((res: ApiResponseType<StateType[]>) => {
         setStates(res.data);
-      })
-      .catch((err: AxiosError) => {
-        handleError(err);
-      });
-  };
-
-  const getMedicals = () => {
-    getMedicalList()
-      .then((res: ApiResponseType<MedicalType[]>) => {
-        setMedicals(res.data);
       })
       .catch((err: AxiosError) => {
         handleError(err);
@@ -111,46 +99,52 @@ const OnboardStaff = () => {
     setActive(0);
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: Record<string, any>) => {
     setLoading(true);
 
-    const data = new FormData();
-    data.append("address", values?.address);
-    data.append("age", values?.age);
-    data.append("blood_group", values?.blood_group);
-    data.append("blood_type", values?.blood_type);
-    data.append("disability", values?.disability);
-    data.append("dob", moment(values.dob).format("L"));
-    data.append("email", values?.email);
-    data.append("first_name", values?.first_name);
-    data.append("middle_name", values?.middle_name);
-    data.append("gender", values?.gender);
-    data.append("guarantor_employment_role", values?.guarantor_employment_role);
-    data.append("guarantor_name", values?.guarantor_name);
-    data.append("guarantor_phone_number", values?.guarantor_phone_number);
-    data.append("marital_status", values?.marital_status);
-    data.append("next_of_kin_email", values?.next_of_kin_email);
-    data.append("next_of_kin_name", values?.next_of_kin_name);
-    data.append("next_of_kin_phone_number", values?.next_of_kin_phone_number);
-    data.append("phone_number", values?.phone_number);
-    data.append("postal_code", values?.postal_code);
-    data.append("religion", values?.religion);
-    data.append("role_id", values?.role_id);
-    data.append("last_name", values?.last_name);
-    data.append("state_disability", values?.state_disability);
-    data.append("weight", values?.weight);
-    data.append("height", values?.height);
-    data.append("year_of_experience", values.year_of_experience.toString());
-    data.append("title", values?.title);
-    data.append("image", values?.image);
-    for (let i = 0; i < values?.existing_conditions.length; i++) {
-      data.append("existing_conditions[]", values?.existing_conditions[i]);
-    }
-    for (let i = 0; i < values?.hereditary_conditions.length; i++) {
-      data.append("hereditary_conditions[]", values?.hereditary_conditions[i]);
-    }
+    const data = {
+      extra: {
+        role_id: values.role_id,
+      },
+      profile: {
+        title: values.title,
+        first_name: values.first_name,
+        last_name: values.last_name,
+        middle_name: values.middle_name,
+        gender: values.gender,
+        phone_number: values.phone_number,
+        email: values.email,
+      },
+      meta: {
+        dob: moment(values.dob).format("YYYY-MM-DD"),
+        address: values.address,
+        state_of_origin: values.state_of_origin,
+        religion: values.religion,
+        postal_code: values.postal_code,
+        height: values.height,
+        weight: values.weight,
+        genotype: values.genotype,
+        blood_group: values.blood_group,
+        state_disability: values.state_disability,
+        years_of_experience: values.years_of_experience,
+        existing_medical_condition: values.existing_conditions,
+        hereditary_health_condition: values.hereditary_conditions,
+      },
+      next_of_kin: {
+        full_name: values.next_of_kin_name,
+        phone_number: values.next_of_kin_phone_number,
+        email: values.next_of_kin_email,
+      },
+      guarantor: {
+        full_name: values.guarantor_name,
+        employment_role: values.guarantor_employment_role,
+        phone_number: values.guarantor_phone_number,
+      },
+    };
 
-    onboardStaff(data)
+    const formData = objectToFormData(data);
+
+    onboardStaff(formData)
       .then(() => {
         showNotification({
           title: "Success",
@@ -222,9 +216,7 @@ const OnboardStaff = () => {
                 description="Second step"
                 allowStepSelect={false}
               >
-                <HealthHistory
-                  {...{ active, nextStep, prevStep, formData, medicals }}
-                />
+                <HealthHistory {...{ active, nextStep, prevStep, formData }} />
               </Stepper.Step>
 
               <Stepper.Step
@@ -350,14 +342,11 @@ const PersonalInfo = ({
                 required
                 label="Staff Role"
                 placeholder="Select role"
-                variant="filled"
-                data={staffRoles.map(
-                  (role: { role_id: string; role_name: string }) => ({
-                    key: role?.role_id,
-                    value: role?.role_id,
-                    label: role.role_name,
-                  })
-                )}
+                data={staffRoles.map((role: StaffRoleType) => ({
+                  key: role?.role_id,
+                  value: role?.role_id,
+                  label: role.name,
+                }))}
                 {...form.getInputProps("role_id")}
               />
             </div>
@@ -375,7 +364,6 @@ const PersonalInfo = ({
                 required
                 label="Title"
                 placeholder="Title"
-                variant="filled"
                 data={[
                   { value: "Mr", label: "Mr 🧑" },
                   { value: "Mrs", label: "Mrs 👱‍♀️" },
@@ -389,7 +377,6 @@ const PersonalInfo = ({
                 required
                 label="First Name"
                 placeholder="First name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("first_name")}
               />
@@ -401,7 +388,6 @@ const PersonalInfo = ({
                 required
                 label="Last Name"
                 placeholder="Last name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("last_name")}
               />
@@ -411,7 +397,6 @@ const PersonalInfo = ({
                 required
                 label="Middle Name"
                 placeholder="Middle name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("middle_name")}
               />
@@ -423,7 +408,6 @@ const PersonalInfo = ({
                 required
                 label="Marital Status"
                 placeholder="Marital status"
-                variant="filled"
                 data={[
                   { value: "Single", label: "Single" },
                   { value: "Married", label: "Married" },
@@ -439,7 +423,6 @@ const PersonalInfo = ({
                 className="form-item"
                 label="Date of Birth"
                 placeholder="Date of birth"
-                variant="filled"
                 required
                 {...form.getInputProps("dob")}
               />
@@ -451,7 +434,6 @@ const PersonalInfo = ({
                 required
                 label="Gender"
                 placeholder="Gender"
-                variant="filled"
                 data={[
                   { value: "Male", label: "Male 🧑" },
                   { value: "Female", label: "Female 👧" },
@@ -465,7 +447,6 @@ const PersonalInfo = ({
                 required
                 label="Age"
                 placeholder="Age"
-                variant="filled"
                 max={100}
                 min={0}
                 disabled
@@ -479,7 +460,6 @@ const PersonalInfo = ({
                 required
                 label="Phone Number"
                 placeholder="Phone number"
-                variant="filled"
                 type="tel"
                 {...form.getInputProps("phone_number")}
               />
@@ -489,7 +469,6 @@ const PersonalInfo = ({
                 required
                 label="Email"
                 placeholder="Email"
-                variant="filled"
                 type="email"
                 {...form.getInputProps("email")}
               />
@@ -501,7 +480,6 @@ const PersonalInfo = ({
                 required
                 label="House Address"
                 placeholder="Address"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("address")}
               />
@@ -510,7 +488,6 @@ const PersonalInfo = ({
                 className="form-item"
                 label="Postal Code"
                 placeholder="Postal code"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("postal_code")}
               />
@@ -522,7 +499,6 @@ const PersonalInfo = ({
                 required
                 label="State of Origin"
                 placeholder="Select State"
-                variant="filled"
                 searchable
                 nothingFound="No option"
                 data={states?.map(
@@ -540,7 +516,6 @@ const PersonalInfo = ({
                 required
                 label="Religion"
                 placeholder="Select religion"
-                variant="filled"
                 data={[
                   { value: "Christianity", label: "Christianity" },
                   { value: "Islam", label: "Islam" },
@@ -563,7 +538,6 @@ const PersonalInfo = ({
                 required
                 label="Full Name"
                 placeholder="Next of kin"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("next_of_kin_name")}
               />
@@ -576,16 +550,13 @@ const PersonalInfo = ({
                 type="tel"
                 label="Phone Number"
                 placeholder="Phone number"
-                variant="filled"
                 {...form.getInputProps("next_of_kin_phone_number")}
               />
 
               <TextInput
                 className="form-item"
-                required
                 label="Email"
                 placeholder="Email"
-                variant="filled"
                 type="email"
                 {...form.getInputProps("next_of_kin_email")}
               />
@@ -640,7 +611,6 @@ interface HealthHistoryProps {
   nextStep: (data: any) => void;
   prevStep: (data?: any) => void;
   formData: any;
-  medicals: MedicalType[];
 }
 
 const HealthHistory = ({
@@ -648,7 +618,6 @@ const HealthHistory = ({
   nextStep,
   prevStep,
   formData,
-  medicals,
 }: HealthHistoryProps) => {
   const [disability, setDisability] = useState<string>(
     formData?.disability ? formData?.disability : "No"
@@ -658,7 +627,7 @@ const HealthHistory = ({
       height: formData?.height ? formData?.height : "",
       weight: formData?.weight ? formData?.weight : "",
       blood_group: formData?.blood_group ? formData?.blood_group : "",
-      blood_type: formData?.blood_type ? formData?.blood_type : "",
+      genotype: formData?.genotype ? formData?.genotype : "",
       existing_conditions: formData?.existing_conditions
         ? formData?.existing_conditions
         : [],
@@ -671,7 +640,7 @@ const HealthHistory = ({
     },
 
     validate: {
-      blood_type: (value) => (value === "" ? "Please select genotype" : null),
+      genotype: (value) => (value === "" ? "Please select genotype" : null),
       blood_group: (value) =>
         value === "" ? "Please select blood group" : null,
       state_disability: (value) =>
@@ -696,7 +665,6 @@ const HealthHistory = ({
                 required
                 label="Height (cm)"
                 placeholder="Height"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("height")}
               />
@@ -706,7 +674,6 @@ const HealthHistory = ({
                 required
                 label="Weight (kg)"
                 placeholder="Weight"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("weight")}
               />
@@ -718,7 +685,6 @@ const HealthHistory = ({
                 required
                 label="Blood Group"
                 placeholder="Blood group"
-                variant="filled"
                 data={[
                   { value: "O+", label: "O+" },
                   { value: "O-", label: "O-" },
@@ -737,7 +703,6 @@ const HealthHistory = ({
                 required
                 label="Genotype"
                 placeholder="Genotype"
-                variant="filled"
                 data={[
                   { value: "AA", label: "AA" },
                   { value: "AS", label: "AS" },
@@ -745,38 +710,59 @@ const HealthHistory = ({
                   { value: "SS", label: "SS" },
                   { value: "SC", label: "SC" },
                 ]}
-                {...form.getInputProps("blood_type")}
+                {...form.getInputProps("genotype")}
               />
             </div>
 
             <div className="form-row">
               <MultiSelect
                 className="form-item"
-                data={medicals.map(
-                  (condition: { medical_id: string; name: string }) => ({
-                    key: condition?.medical_id,
-                    value: condition?.medical_id,
-                    label: condition.name,
-                  })
-                )}
+                radius={8}
+                data={[
+                  "Arthritis",
+                  "Cardiovascular Disease",
+                  "Chronic Obstructive Pulmonary Disease (COPD)",
+                  "Depression",
+                  "Diabetes",
+                  "Gastroesophageal Reflux Disease (GERD)",
+                  "Hypertension",
+                  "Migraine",
+                  "Obesity",
+                  "Osteoporosis",
+                  "Rheumatoid Arthritis",
+                  "Sleep Apnea",
+                  "Stroke",
+                  "Type 2 Diabetes",
+                ]}
                 label="Existing Medical Condition(s)"
                 placeholder="Select all that applies"
-                variant="filled"
                 {...form.getInputProps("existing_conditions")}
               />
 
               <MultiSelect
                 className="form-item"
-                data={medicals.map(
-                  (condition: { medical_id: string; name: string }) => ({
-                    key: condition?.medical_id,
-                    value: condition?.medical_id,
-                    label: condition.name,
-                  })
-                )}
+                radius={8}
+                data={[
+                  "Breast Cancer",
+                  "Colon Cancer",
+                  "Huntington's Disease",
+                  "Lung Cancer",
+                  "Ovarian Cancer",
+                  "Polycystic Kidney Disease",
+                  "Prostate Cancer",
+                  "Cystic Fibrosis",
+                  "Down Syndrome",
+                  "Hemophilia",
+                  "Huntington's Disease",
+                  "Muscular Dystrophy",
+                  "Phenylketonuria (PKU)",
+                  "Sickle Cell Anemia",
+                  "Tay-Sachs Disease",
+                  "Thalassemia",
+                  "Turner Syndrome",
+                ]}
                 label="Hereditary Health Condition(s)"
                 placeholder="Select all that applies"
-                variant="filled"
                 {...form.getInputProps("hereditary_conditions")}
               />
             </div>
@@ -801,7 +787,6 @@ const HealthHistory = ({
                   className="form-item"
                   label="State Disability"
                   placeholder="Disability"
-                  variant="filled"
                   type="text"
                   {...form.getInputProps("state_disability")}
                 />
@@ -842,8 +827,8 @@ const WorkHistory = ({
 }: WorkHistoryProps) => {
   const form = useForm({
     initialValues: {
-      year_of_experience: formData?.year_of_experience
-        ? formData?.year_of_experience
+      years_of_experience: formData?.years_of_experience
+        ? formData?.years_of_experience
         : "",
       guarantor_name: formData?.guarantor_name ? formData?.guarantor_name : "",
       guarantor_employment_role: formData?.guarantor_employment_role
@@ -870,9 +855,8 @@ const WorkHistory = ({
                 className="form-item"
                 label="Years of Experience"
                 placeholder="Enter number"
-                variant="filled"
                 type="number"
-                {...form.getInputProps("year_of_experience")}
+                {...form.getInputProps("years_of_experience")}
               />
             </div>
 
@@ -889,7 +873,6 @@ const WorkHistory = ({
                 className="form-item"
                 label="Guarantor Name"
                 placeholder="Enter name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("guarantor_name")}
               />
@@ -899,7 +882,6 @@ const WorkHistory = ({
                 className="form-item"
                 label="Employment Role"
                 placeholder="e.g. Architect"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("guarantor_employment_role")}
               />
@@ -911,7 +893,6 @@ const WorkHistory = ({
                 required
                 label="Phone Number"
                 placeholder="Guarantor number"
-                variant="filled"
                 type="tel"
                 {...form.getInputProps("guarantor_phone_number")}
               />

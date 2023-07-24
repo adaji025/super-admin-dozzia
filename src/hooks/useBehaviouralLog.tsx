@@ -9,6 +9,8 @@ import {
 } from "../services/behaviouralLog/behaviouralLog";
 import useNotification from "./useNotification";
 import { showNotification } from "@mantine/notifications";
+import { ApiResponseType } from "../types/utilityTypes";
+import { BehavioralLogRemarkType } from "../types/behaviouralLogTypes";
 
 const useBehaviouralLog = () => {
   const { handleError } = useNotification();
@@ -47,20 +49,22 @@ const useBehaviouralLog = () => {
     perPage: number,
     studentId: string
   ) => {
-    return new Promise((resolve) => {
-      setLoading(true);
+    return new Promise<ApiResponseType<BehavioralLogRemarkType[]>>(
+      (resolve) => {
+        setLoading(true);
 
-      getRemarks(page, perPage, studentId)
-        .then((res) => {
-          resolve(res);
-        })
-        .catch((error) => {
-          handleError(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    });
+        getRemarks(page, perPage, studentId)
+          .then((res: ApiResponseType<BehavioralLogRemarkType[]>) => {
+            resolve(res);
+          })
+          .catch((error) => {
+            handleError(error);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+    );
   };
 
   const handleUpdateRemark = (

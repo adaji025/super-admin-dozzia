@@ -10,6 +10,9 @@ import {
 import { showLoader } from "../redux/utility/utility.actions";
 import useNotification from "./useNotification";
 import { showNotification } from "@mantine/notifications";
+import { ApiResponseType } from "../types/utilityTypes";
+import { StudyResourceType } from "../types/studyResourcesTypes";
+import { AxiosError } from "axios";
 
 const useStudyResources = () => {
   const dispatch = useDispatch();
@@ -22,7 +25,7 @@ const useStudyResources = () => {
       setLoading(true);
 
       const data = new FormData();
-      data.append("study_resource_file", file);
+      data.append("file", file);
 
       uploadStudyResourceFile(data)
         .then((res) => {
@@ -70,14 +73,14 @@ const useStudyResources = () => {
     classId: string,
     subjectId: string
   ) => {
-    return new Promise((resolve) => {
+    return new Promise<ApiResponseType<StudyResourceType[]>>((resolve) => {
       setLoading(true);
 
       getStudyResources(page, perPage, classId, subjectId)
-        .then((res) => {
+        .then((res: ApiResponseType<StudyResourceType[]>) => {
           resolve(res);
         })
-        .catch((error) => {
+        .catch((error: AxiosError) => {
           handleError(error);
         })
         .finally(() => {

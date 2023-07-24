@@ -11,15 +11,19 @@ import { setStaff } from "../redux/data/data.actions";
 import { showLoader } from "../redux/utility/utility.actions";
 import useNotification from "./useNotification";
 import { showNotification } from "@mantine/notifications";
+import { StaffState, StaffType } from "../types/staffTypes";
+import { ApiResponseType } from "../types/utilityTypes";
+import { initialArrayDataState } from "../redux/data/data.reducer";
 
 const useStaff = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
-  const [allStaff, setAllStaff] = useState<any>({ data: [] });
+  const [allStaff, setAllStaff] = useState<StaffState>(initialArrayDataState);
   const [loading, setLoading] = useState<boolean>(false);
-  const staffList = useSelector((state: any) => {
+  const staffList = useSelector((state: { data: { staff: StaffState } }) => {
     return state.data.staff;
   });
+
   const username = useSelector((state: any) => {
     return state.user.userdata.username;
   });
@@ -31,16 +35,14 @@ const useStaff = () => {
     role: string,
     all?: boolean
   ) => {
-    if (!staffList) {
-      setLoading(true);
-    }
+    if (!staffList.dataFetched) setLoading(true);
 
     getStaffList({ page, perPage, query, role })
-      .then((res) => {
+      .then((res: ApiResponseType<StaffType[]>) => {
         if (all) {
-          setAllStaff(res);
+          setAllStaff({ ...res, dataFetched: true });
         } else {
-          dispatch(setStaff(res));
+          dispatch(setStaff({ ...res, dataFetched: true }));
         }
       })
       .catch(() => {})
@@ -50,11 +52,11 @@ const useStaff = () => {
   };
 
   const handleGetStaffDetails = (id: string) => {
-    return new Promise((resolve) => {
+    return new Promise<ApiResponseType<StaffType>>((resolve) => {
       setLoading(true);
 
       getStaffDetails(id)
-        .then((res) => {
+        .then((res: ApiResponseType<StaffType>) => {
           resolve(res);
         })
         .catch((error) => {

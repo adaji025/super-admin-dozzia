@@ -31,15 +31,15 @@ import useClass from "../../hooks/useClass";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-import { ApiResponseType, MedicalType } from "../../types/utilityTypes";
-import { getMedicalList } from "../../services/helper/helper";
 import { useLocalStorage } from "@mantine/hooks";
 import "./administration.scss";
+import { AddStudentData } from "../../types/studentTypes";
+import { objectToFormData } from "../../lib/util";
+import { ClassroomType } from "../../types/classTypes";
 
 const OnboardStudent = () => {
   const { dark } = useTheme();
   const { handleError } = useNotification();
-  const [medicals, setMedicals] = useState<MedicalType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useLocalStorage<any>({
@@ -49,21 +49,10 @@ const OnboardStudent = () => {
   const { getClassList, allClasses } = useClass();
 
   useEffect(() => {
-    getMedicals();
     getClassList(1, 200, "", "", true);
 
     //eslint-disable-next-line
   }, []);
-
-  const getMedicals = () => {
-    getMedicalList()
-      .then((res: ApiResponseType<MedicalType[]>) => {
-        setMedicals(res.data);
-      })
-      .catch((err: AxiosError) => {
-        handleError(err);
-      });
-  };
 
   const nextStep = (data: any) => {
     if (active === 2) {
@@ -88,45 +77,43 @@ const OnboardStudent = () => {
     setActive(0);
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (values: Record<string, any>) => {
     setLoading(true);
 
-    const data = new FormData();
-    data.append("age", values?.age);
-    data.append("blood_group", values?.blood_group);
-    data.append("disability", values?.disability);
-    data.append("dob", moment(values?.dob).format("YYYY-MM-DD"));
-    data.append("entry_class", values?.entry_class);
-    data.append("entry_test_result", values?.entry_test_result);
-    data.append("entry_year", values.entry_year.toString());
-    data.append("first_name", values?.first_name);
-    data.append("middle_name", values?.middle_name);
-    data.append("gender", values?.gender);
-    data.append("genotype", values?.genotype);
-    data.append("guardian_email", values?.guardian_email);
-    data.append("guardian_first_name", values?.guardian_first_name);
-    data.append("guardian_last_name", values?.guardian_last_name);
-    data.append("guardian_phone_number", values?.guardian_phone_number);
-    data.append("guardian_title", values?.guardian_title);
-    data.append("height", values?.height);
-    data.append("last_name", values?.last_name);
-    data.append("state_disability", values?.state_disability);
-    data.append("weight", values?.weight);
-    data.append("image", values?.image);
-    for (let i = 0; i < values?.existing_medical_condition.length; i++) {
-      data.append(
-        "existing_medical_condition[]",
-        values?.existing_medical_condition[i]
-      );
-    }
-    for (let i = 0; i < values?.hereditary_health_condition.length; i++) {
-      data.append(
-        "hereditary_health_condition[]",
-        values?.hereditary_health_condition[i]
-      );
-    }
+    const data: AddStudentData = {
+      profile: {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        middle_name: values.middle_name,
+        gender: values.gender,
+        picture: values.image,
+      },
+      guardian: {
+        email: values.guardian_email,
+        first_name: values.guardian_first_name,
+        last_name: values.guardian_last_name,
+        phone_number: values.guardian_phone_number,
+        title: values.guardian_title,
+      },
+      meta: {
+        dob: moment(values.dob).format("YYYY-MM-DD"),
+        state_disability: values.state_disability,
+        blood_group: values.blood_group,
+        genotype: values.genotype,
+        previous_school_name: values.previous_school_name,
+        entry_year: values.entry_year,
+        entry_test_result: values.entry_test_result,
+        weight: values.weight,
+        height: values.height,
+        entry_class: values.entry_class,
+        existing_medical_condition: values.existing_medical_condition,
+        hereditary_health_condition: values.hereditary_health_condition,
+      },
+    };
 
-    onboardStudent(data)
+    const formData = objectToFormData(data);
+
+    onboardStudent(formData)
       .then((res) => {
         showNotification({
           title: "Success",
@@ -190,9 +177,7 @@ const OnboardStudent = () => {
                 description="Second step"
                 allowStepSelect={false}
               >
-                <HealthHistory
-                  {...{ formData, active, nextStep, prevStep, medicals }}
-                />
+                <HealthHistory {...{ formData, active, nextStep, prevStep }} />
               </Stepper.Step>
 
               <Stepper.Step
@@ -220,7 +205,6 @@ interface PersonalInfoProps {
 }
 
 const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
-  const [age, setAge] = useState<number>(0);
   const [file, setFile] = useState<any>(
     formData?.image ? formData?.image : null
   );
@@ -230,7 +214,7 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
       first_name: formData?.first_name ? formData?.first_name : "",
       last_name: formData?.last_name ? formData?.last_name : "",
       middle_name: formData?.middle_name ? formData?.middle_name : "",
-      dob: formData?.dob ? formData?.dob : "",
+      dob: formData?.dob ? new Date(formData?.dob) : "",
       gender: formData?.gender ? formData?.gender : "",
       guardian_title: formData?.guardian_title ? formData?.guardian_title : "",
       guardian_first_name: formData?.guardian_first_name
@@ -258,7 +242,7 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
       guardian_last_name: (value) =>
         value === "" ? "Input guardian last name" : null,
       guardian_phone_number: (value) =>
-        value.length < 7 ? "Enter valid phone number" : null,
+        value.length !== 11 ? "Phone number must be 11 digits" : null,
       guardian_email: (value) =>
         /^\S+@\S+$/.test(value) ? null : "Invalid email",
     },
@@ -276,21 +260,8 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
 
     nextStep({
       ...values,
-      age,
       image: file,
     });
-  };
-
-  useEffect(() => {
-    onDobChange();
-
-    //eslint-disable-next-line
-  }, [form.values.dob]);
-
-  const onDobChange = () => {
-    var age = moment().diff(form.values.dob, "years");
-
-    setAge(age ? age : 0);
   };
 
   return (
@@ -311,7 +282,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="First Name"
                 placeholder="First name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("first_name")}
               />
@@ -321,7 +291,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Last Name"
                 placeholder="Last name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("last_name")}
               />
@@ -333,7 +302,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Middle Name"
                 placeholder="Middle name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("middle_name")}
               />
@@ -343,7 +311,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 className="form-item"
                 label="Date of Birth"
                 placeholder="Date of birth"
-                variant="filled"
                 required
                 {...form.getInputProps("dob")}
               />
@@ -355,25 +322,12 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Gender"
                 placeholder="Gender"
-                variant="filled"
                 data={[
                   { value: "Male", label: "Male 🧑" },
                   { value: "Female", label: "Female 👧" },
                   { value: "Other", label: "Other" },
                 ]}
                 {...form.getInputProps("gender")}
-              />
-
-              <NumberInput
-                className="form-item"
-                required
-                label="Age"
-                placeholder="Age"
-                variant="filled"
-                max={100}
-                min={0}
-                disabled
-                value={age}
               />
             </div>
 
@@ -390,7 +344,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Guardian Title"
                 placeholder="Guardian Title"
-                variant="filled"
                 data={[
                   { value: "Mr", label: "Mr 🧑" },
                   { value: "Mrs", label: "Mrs 👱‍♀️" },
@@ -406,7 +359,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Guardian’s First Name"
                 placeholder="Guardian’s first name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("guardian_first_name")}
               />
@@ -416,7 +368,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Guardian’s Last Name"
                 placeholder="Guardian’s last name"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("guardian_last_name")}
               />
@@ -428,7 +379,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Guardian’s Phone Number"
                 placeholder="Guardian’s phone number"
-                variant="filled"
                 {...form.getInputProps("guardian_phone_number")}
               />
 
@@ -437,7 +387,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 required
                 label="Guardian’s Email"
                 placeholder="Guardian’s email"
-                variant="filled"
                 type="email"
                 {...form.getInputProps("guardian_email")}
               />
@@ -492,7 +441,6 @@ interface HealthHistoryProps {
   nextStep: (data: any) => void;
   prevStep: (data?: any) => void;
   formData: any;
-  medicals: MedicalType[];
 }
 
 const HealthHistory = ({
@@ -500,7 +448,6 @@ const HealthHistory = ({
   nextStep,
   prevStep,
   formData,
-  medicals,
 }: HealthHistoryProps) => {
   const [disability, setDisability] = useState<string>(
     formData?.disability ? formData?.disability : "No"
@@ -549,7 +496,6 @@ const HealthHistory = ({
                 required
                 label="Height (cm)"
                 placeholder="Height"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("height")}
               />
@@ -559,7 +505,6 @@ const HealthHistory = ({
                 required
                 label="Weight (kg)"
                 placeholder="Weight"
-                variant="filled"
                 type="text"
                 {...form.getInputProps("weight")}
               />
@@ -571,7 +516,6 @@ const HealthHistory = ({
                 required
                 label="Blood Group"
                 placeholder="Blood group"
-                variant="filled"
                 data={[
                   { value: "O+", label: "O+" },
                   { value: "O-", label: "O-" },
@@ -590,7 +534,6 @@ const HealthHistory = ({
                 required
                 label="Genotype"
                 placeholder="Genotype"
-                variant="filled"
                 data={[
                   { value: "AA", label: "AA" },
                   { value: "AS", label: "AS" },
@@ -605,31 +548,49 @@ const HealthHistory = ({
             <div className="form-row">
               <MultiSelect
                 className="form-item"
-                data={medicals.map(
-                  (condition: { medical_id: string; name: string }) => ({
-                    key: condition?.medical_id,
-                    value: condition?.medical_id,
-                    label: condition.name,
-                  })
-                )}
+                radius={8}
+                data={[
+                  "Asthma",
+                  "Attention Deficit Hyperactivity Disorder (ADHD)",
+                  "Autism Spectrum Disorder (ASD)",
+                  "Celiac Disease",
+                  "Chickenpox",
+                  "Common Cold",
+                  "Croup",
+                  "Ear Infections",
+                  "Eczema",
+                  "Fever",
+                  "Hand, Foot, and Mouth Disease",
+                  "Measles",
+                  "Pediatric Migraine",
+                  "Pneumonia",
+                  "Respiratory Syncytial Virus (RSV) Infection",
+                  "Strep Throat",
+                  "Urinary Tract Infection (UTI)",
+                  "Whooping Cough",
+                ]}
                 label="Existing Medical Condition(s)"
                 placeholder="Select all that applies"
-                variant="filled"
                 {...form.getInputProps("existing_medical_condition")}
               />
 
               <MultiSelect
                 className="form-item"
-                data={medicals.map(
-                  (condition: { medical_id: string; name: string }) => ({
-                    key: condition?.medical_id,
-                    value: condition?.medical_id,
-                    label: condition.name,
-                  })
-                )}
+                radius={8}
+                data={[
+                  "Cystic Fibrosis",
+                  "Down Syndrome",
+                  "Hemophilia",
+                  "Huntington's Disease",
+                  "Muscular Dystrophy",
+                  "Phenylketonuria (PKU)",
+                  "Sickle Cell Anemia",
+                  "Tay-Sachs Disease",
+                  "Thalassemia",
+                  "Turner Syndrome",
+                ]}
                 label="Hereditary Health Condition(s)"
                 placeholder="Select all that applies"
-                variant="filled"
                 {...form.getInputProps("hereditary_health_condition")}
               />
             </div>
@@ -654,7 +615,6 @@ const HealthHistory = ({
                   className="form-item"
                   label="State Disability"
                   placeholder="Disability"
-                  variant="filled"
                   type="text"
                   {...form.getInputProps("state_disability")}
                 />
@@ -685,7 +645,7 @@ interface AcademicHistoryProps {
   nextStep: (values: any) => void;
   prevStep: (values: any) => void;
   formData: any;
-  allClasses: any[];
+  allClasses: ClassroomType[];
 }
 
 const AcademicHistory = ({
@@ -701,6 +661,9 @@ const AcademicHistory = ({
       entry_year: formData?.entry_year ? formData?.entry_year : "",
       entry_test_result: formData?.entry_test_result
         ? formData?.entry_test_result
+        : "",
+      previous_school_name: formData?.previous_school_name
+        ? formData?.previous_school_name
         : "",
     },
   });
@@ -719,17 +682,14 @@ const AcademicHistory = ({
                 required
                 label="Class of Entry"
                 placeholder="Select class"
-                variant="filled"
                 searchable
                 className="form-item"
                 nothingFound="No class found"
-                data={allClasses.map(
-                  (item: { classroom_id: string; classroom_name: string }) => ({
-                    key: item?.classroom_id,
-                    value: item?.classroom_name,
-                    label: item.classroom_name,
-                  })
-                )}
+                data={allClasses.map((item: ClassroomType) => ({
+                  key: item?.classroom_id,
+                  value: item.name,
+                  label: item.name,
+                }))}
                 {...form.getInputProps("entry_class")}
               />
             </div>
@@ -740,7 +700,6 @@ const AcademicHistory = ({
                 className="form-item"
                 label="Year of Entry"
                 placeholder="Enter year"
-                variant="filled"
                 type="number"
                 {...form.getInputProps("entry_year")}
               />
@@ -752,11 +711,20 @@ const AcademicHistory = ({
                 required
                 label="Entry Test Score (%)"
                 placeholder="Score"
-                variant="filled"
                 type="number"
                 max={100}
                 min={0}
                 {...form.getInputProps("entry_test_result")}
+              />
+            </div>
+
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                label="Previous School Name"
+                placeholder="Previous School"
+                type="text"
+                {...form.getInputProps("previous_school_name")}
               />
             </div>
 

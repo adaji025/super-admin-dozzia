@@ -1,15 +1,41 @@
-import { Button, TextInput, Select, Group, Divider } from "@mantine/core";
+import {
+  Button,
+  TextInput,
+  Select,
+  Group,
+  Divider,
+  LoadingOverlay,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
-import useStudent from "../../../hooks/useStudent";
+import useClass from "../../../hooks/useClass";
+import { ClassroomType } from "../../../types/classTypes";
+import { useState } from "react";
 
-const AddStudentToClass = ({ closeModal, student, allClasses }: any) => {
-  const { addToClass } = useStudent();
+interface AddStudentToClassProps {
+  closeModal: () => void;
+  student: {
+    fullName: string;
+    studentId: string;
+    username: string;
+  } | null;
+  allClasses: ClassroomType[];
+  callback: () => void;
+}
+
+const AddStudentToClass = ({
+  closeModal,
+  student,
+  allClasses,
+  callback,
+}: AddStudentToClassProps) => {
+  const { addMultipleStudents } = useClass();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
       username: student ? student.username : "",
       fullname: student ? student.fullName : "",
-      class_id: student ? student.subject_description : "",
+      class_id: "",
     },
 
     validate: {
@@ -17,23 +43,32 @@ const AddStudentToClass = ({ closeModal, student, allClasses }: any) => {
     },
   });
 
+  const submit = (values: typeof form.values) => {
+    setLoading(true);
+
+    addMultipleStudents(values.class_id, {
+      students: [student?.studentId ?? ""],
+    })
+      .then(() => {
+        setLoading(false);
+        callback();
+        closeModal();
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <div>
       <Divider mb="md" variant="dashed" />
 
-      <form
-        onSubmit={form.onSubmit((values) => {
-          addToClass({
-            studentId: student.studentId,
-            classId: values.class_id,
-          });
-          closeModal();
-        })}
-      >
+      <LoadingOverlay visible={loading} />
+
+      <form onSubmit={form.onSubmit((values) => submit(values))}>
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Reg No."
           placeholder="Reg no"
           {...form.getInputProps("username")}
@@ -43,7 +78,6 @@ const AddStudentToClass = ({ closeModal, student, allClasses }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Full Name"
           placeholder="Full name"
           {...form.getInputProps("fullname")}
@@ -55,27 +89,21 @@ const AddStudentToClass = ({ closeModal, student, allClasses }: any) => {
           required
           label="Select Class"
           placeholder="Select class to add student"
-          variant="filled"
           searchable
           nothingFound="No class found"
-          data={allClasses.map(
-            (item: {
-              classroom_id: string;
-              classroom_level: number;
-              classroom_name: string;
-            }) => ({
-              key: item?.classroom_id,
-              value: item?.classroom_id,
-              label: item?.classroom_name,
-            })
-          )}
+          data={allClasses.map((item: ClassroomType) => ({
+            key: item.classroom_id,
+            value: item.classroom_id,
+            label: item.name,
+          }))}
           {...form.getInputProps("class_id")}
         />
 
         <Group position="right" mt="lg">
-          <Button variant="light" onClick={closeModal}>
+          <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
+
           <Button type="submit">Submit</Button>
         </Group>
       </form>

@@ -7,6 +7,7 @@ export type CreateEventData = {
   end_at: string;
   visibility: string;
   classroom_id?: string;
+  image?: File | null;
 };
 
 export type GetEventsParams = {

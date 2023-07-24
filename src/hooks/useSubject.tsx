@@ -6,26 +6,31 @@ import {
   getSubjects,
   updateSubject,
   assignClassAndTeacher,
-  getSubjectClasses,
 } from "../services/subject/subject";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 import { setSubjects } from "../redux/data/data.actions";
+import {
+  CreateSubjectData,
+  SubjectType,
+  SubjectsState,
+} from "../types/subjectsTypes";
+import { ApiResponseType } from "../types/utilityTypes";
+import { ClassroomType } from "../types/classTypes";
+import { getClasses } from "../services/class/class";
 
 const useSubject = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
   const [allSubjects, setAllSubjects] = useState<any>([]);
-  const subjects = useSelector((state: any) => {
-    return state.data.subjects;
-  });
+  const subjects = useSelector(
+    (state: { data: { subjects: SubjectsState } }) => {
+      return state.data.subjects;
+    }
+  );
 
-  const handleAddSubject = (values: {
-    name: string;
-    category: string;
-    description: string;
-  }) => {
+  const handleAddSubject = (values: CreateSubjectData) => {
     dispatch(showLoader(true));
 
     addSubject({
@@ -58,16 +63,14 @@ const useSubject = () => {
     classId?: string
   ) => {
     return new Promise((resolve) => {
-      if (subjects === null || all) {
-        setLoading(true);
-      }
+      if (!subjects.dataFetched) setLoading(true);
 
       getSubjects(page, perPage, search, staffId ?? "", classId ?? "")
-        .then((res) => {
+        .then((res: ApiResponseType<SubjectType>) => {
           if (all) {
             setAllSubjects(res.data);
           } else {
-            dispatch(setSubjects(res));
+            dispatch(setSubjects({ ...res, dataFetched: true }));
           }
           resolve(res);
         })
@@ -78,14 +81,7 @@ const useSubject = () => {
     });
   };
 
-  const handleUpdateSubject = (
-    id: string,
-    data: {
-      name: string;
-      category: string;
-      description: string;
-    }
-  ) => {
+  const handleUpdateSubject = (data: CreateSubjectData, id: string) => {
     dispatch(showLoader(true));
 
     updateSubject(id, data)
@@ -130,11 +126,11 @@ const useSubject = () => {
       });
   };
 
-  const handleGetSubjectClasses = (id: string) => {
-    return new Promise((resolve, reject) => {
-      getSubjectClasses(id)
-        .then((res) => {
-          resolve(res);
+  const handleGetSubjectClasses = (subjectId: string) => {
+    return new Promise<ClassroomType[]>((resolve, reject) => {
+      getClasses(1, 100, "", "", "", subjectId)
+        .then((res: ApiResponseType<ClassroomType[]>) => {
+          resolve(res.data);
         })
         .catch((error) => {
           reject(error);

@@ -110,7 +110,6 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Title"
           placeholder="Title"
           {...form.getInputProps("title")}
@@ -121,7 +120,6 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
           required
           label="Description"
           placeholder="Resource description"
-          variant="filled"
           autosize
           minRows={3}
           maxRows={5}
@@ -133,16 +131,15 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
           required
           label="Subject"
           placeholder="Select subject"
-          variant="filled"
           data={allSubjects.map(
             (item: {
               subject_id: string;
-              subject_name: string;
-              subject_category: string;
+              name: string;
+              category: string;
             }) => ({
               key: item?.subject_id,
               value: item?.subject_id,
-              label: `${item?.subject_name} (${item?.subject_category})`,
+              label: `${item?.name} (${item?.category})`,
             })
           )}
           {...form.getInputProps("subject_id")}
@@ -153,7 +150,6 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
           required
           label="Classroom"
           placeholder="Select classroom"
-          variant="filled"
           disabled
           data={classWall?.classes.map(
             (item: { classroom_id: string; classroom_name: string }) => ({
@@ -167,7 +163,6 @@ const AddStudyResource = ({ closeModal, submit, allSubjects }: any) => {
 
         <TextInput
           mt="md"
-          variant="filled"
           label="External File URL"
           placeholder="Enter file download URL"
           {...form.getInputProps("external_link")}

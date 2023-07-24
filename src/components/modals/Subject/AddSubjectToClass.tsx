@@ -11,28 +11,29 @@ import { useForm } from "@mantine/form";
 import useSubject from "../../../hooks/useSubject";
 import useClass from "../../../hooks/useClass";
 import useStaff from "../../../hooks/useStaff";
+import { ClassroomType } from "../../../types/classTypes";
+import { Roles } from "../../../types/authTypes";
+import { StaffType } from "../../../types/staffTypes";
+import { SubjectType } from "../../../types/subjectsTypes";
 
-const AssignToClass = ({
+interface AddSubjectToClassProps {
+  closeModal: () => void;
+  subject: SubjectType | null;
+  modalActive: boolean;
+}
+
+const AddSubjectToClass = ({
   closeModal,
   subject,
   modalActive,
-}: {
-  closeModal: () => void;
-  subject: {
-    subject_id: string;
-    subject_name: string;
-    subject_category: string;
-    subject_description: string;
-  };
-  modalActive: boolean;
-}) => {
+}: AddSubjectToClassProps) => {
   const { handleAssignClassAndTeacher } = useSubject();
   const { allClasses, getClassList } = useClass();
   const { allStaff, handleGetStaffList } = useStaff();
 
   useEffect(() => {
     if (modalActive) {
-      handleGetStaffList(1, 500, "", "teacher", true);
+      handleGetStaffList(1, 500, "", Roles.Teacher, true);
       getClassList(1, 300, "", "", true);
     }
     //eslint-disable-next-line
@@ -40,8 +41,8 @@ const AssignToClass = ({
 
   const form = useForm({
     initialValues: {
-      name: subject ? subject.subject_name : "",
-      category: subject ? subject.subject_category : "",
+      name: subject ? subject.name : "",
+      category: subject ? subject.category : "",
       teacher: "",
       classroom: "",
     },
@@ -52,7 +53,7 @@ const AssignToClass = ({
   });
 
   const submit = (values: any) => {
-    handleAssignClassAndTeacher(subject.subject_id, {
+    handleAssignClassAndTeacher(subject?.subject_id ?? "", {
       teacher: values.teacher,
       classroom: values.classroom,
     });
@@ -73,7 +74,6 @@ const AssignToClass = ({
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Subject Name"
           placeholder="Subject name"
           disabled
@@ -85,7 +85,6 @@ const AssignToClass = ({
           mt="md"
           label="Subject Category"
           placeholder="Subject category"
-          variant="filled"
           disabled
           {...form.getInputProps("category")}
         />
@@ -95,22 +94,13 @@ const AssignToClass = ({
           mt="md"
           label="Select Teacher"
           placeholder="Select teacher"
-          variant="filled"
           searchable
           nothingFound="No teacher found"
-          data={allStaff.data.map(
-            (teacher: {
-              staff_id: string;
-              first_name: string;
-              middle_name: string;
-              last_name: string;
-              title: string;
-            }) => ({
-              key: teacher?.staff_id,
-              value: teacher?.staff_id,
-              label: `${teacher.title} ${teacher.first_name} ${teacher.middle_name} ${teacher.last_name}`,
-            })
-          )}
+          data={allStaff.data.map((teacher: StaffType) => ({
+            key: teacher.staff_id,
+            value: teacher?.staff_id,
+            label: `${teacher.title} ${teacher.first_name} ${teacher.last_name}`,
+          }))}
           {...form.getInputProps("teacher")}
         />
 
@@ -119,28 +109,27 @@ const AssignToClass = ({
           mt="md"
           label="Select Class"
           placeholder="Select class"
-          variant="filled"
           searchable
           nothingFound="No class found"
-          data={allClasses.map(
-            (item: { classroom_id: string; classroom_name: string }) => ({
-              key: item?.classroom_id,
-              value: item?.classroom_id,
-              label: item.classroom_name,
-            })
-          )}
+          data={allClasses.map((item: ClassroomType) => ({
+            key: item?.classroom_id,
+            value: item?.classroom_id,
+            label: item.name,
+          }))}
           {...form.getInputProps("classroom")}
         />
 
         <Group position="right" mt="lg">
-          <Button variant="light" onClick={closeModal}>
+          <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
-          <Button type="submit">Submit</Button>
+          <Button type="submit" color="dark">
+            Submit
+          </Button>
         </Group>
       </form>
     </div>
   );
 };
 
-export default AssignToClass;
+export default AddSubjectToClass;

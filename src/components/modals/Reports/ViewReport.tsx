@@ -1,22 +1,23 @@
 import { useState, useEffect } from "react";
-import { Button, Group, Tabs, Select } from "@mantine/core";
+import { Button, Group, Tabs, Select, LoadingOverlay } from "@mantine/core";
 import { InfoCircle, Messages } from "tabler-icons-react";
 import useTheme from "../../../hooks/useTheme";
 import useReports from "../../../hooks/useReports";
 import Conversation from "./../../Conversation/Conversation";
 import useConversation from "../../../hooks/useConversation";
 import "./view-report.scss";
+import { ReportStatusTypes, ReportType } from "../../../types/reportsTypes";
 
-const ViewReport = ({
-  report,
-  closeModal,
-}: {
-  report: any;
+interface Props {
+  report: ReportType | null;
   closeModal: () => void;
-}) => {
+  callback: () => void;
+}
+
+const ViewReport = ({ report, closeModal, callback }: Props) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const { handleGetConversation, loading, setLoading, handlePostConversation } =
-    useConversation(report?.id);
+    useConversation(report?.id ?? "");
 
   const onChange = (active: number, tabKey: string) => {
     setActiveTab(active);
@@ -26,7 +27,11 @@ const ViewReport = ({
     <div className="r32">
       <Tabs active={activeTab} onTabChange={onChange} variant="outline">
         <Tabs.Tab icon={<InfoCircle size={14} />} label="Details" tabKey="1">
-          <Details closeModal={closeModal} report={report} />
+          <Details
+            closeModal={closeModal}
+            report={report}
+            callback={callback}
+          />
         </Tabs.Tab>
         <Tabs.Tab icon={<Messages size={14} />} label="Conversation" tabKey="2">
           <Conversation
@@ -46,18 +51,35 @@ const ViewReport = ({
   );
 };
 
-const Details = ({ closeModal, report }: any) => {
-  const [status, setStatus] = useState<string>("");
+const Details = ({ closeModal, report, callback }: Props) => {
+  const [status, setStatus] = useState<ReportStatusTypes | "">("");
   const { handleUpdateStatus } = useReports();
   const { dark } = useTheme();
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    setStatus(report?.status);
+    if (report) setStatus(report?.status);
     //eslint-disable-next-line
   }, []);
 
+  const handleStatusChange = () => {
+    setLoading(true);
+
+    handleUpdateStatus(report?.id ?? "", status)
+      .then(() => {
+        callback();
+        closeModal();
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <div className="view-details">
+      <LoadingOverlay visible={loading} />
+
       <div
         className="v-d-row"
         style={{
@@ -65,7 +87,7 @@ const Details = ({ closeModal, report }: any) => {
         }}
       >
         <div className="d-r-left">Title:</div>
-        <div className="d-r-right">{report?.title}</div>
+        <div className="d-r-right">{report?.title}</div>l
       </div>
 
       <div
@@ -99,8 +121,7 @@ const Details = ({ closeModal, report }: any) => {
       >
         <div className="d-r-left">Concerned Staff:</div>{" "}
         <div className="d-r-right">
-          {report?.teacher?.title} {report?.teacher?.first_name}{" "}
-          {report?.teacher?.last_name}
+          {report?.staff_name ?? "No staff assigned"}
         </div>
       </div>
 
@@ -137,15 +158,14 @@ const Details = ({ closeModal, report }: any) => {
           {" "}
           <Select
             placeholder="Pick one"
-            variant="filled"
             value={status}
-            onChange={(value: string) => {
+            onChange={(value: ReportStatusTypes) => {
               setStatus(value);
             }}
             data={[
-              { value: "resolved", label: "Resolved" },
-              { value: "in-progress", label: "In-progress" },
-              { value: "unresolved", label: "Unresolved" },
+              { value: ReportStatusTypes.RESOLVED, label: "Resolved" },
+              { value: ReportStatusTypes.PENDING, label: "In-progress" },
+              { value: ReportStatusTypes.UNRESOLVED, label: "Unresolved" },
             ]}
           />
         </div>
@@ -157,10 +177,7 @@ const Details = ({ closeModal, report }: any) => {
         </Button>
 
         <Button
-          onClick={() => {
-            closeModal();
-            handleUpdateStatus(report?.id, status);
-          }}
+          onClick={handleStatusChange}
           disabled={report?.status === status}
         >
           Update Status

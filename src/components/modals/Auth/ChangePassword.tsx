@@ -1,16 +1,20 @@
-import React from "react";
-import { Button, PasswordInput, Group, Divider } from "@mantine/core";
+import React, { useState } from "react";
+import {
+  Button,
+  PasswordInput,
+  Group,
+  Divider,
+  LoadingOverlay,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import { Lock } from "tabler-icons-react";
 import { changePassword } from "../../../services/auth/auth";
-import { useDispatch } from "react-redux";
 import useNotification from "../../../hooks/useNotification";
-import { showLoader } from "../../../redux/utility/utility.actions";
 
 const ChangePassword = ({ closeModal }: any) => {
-  const dispatch = useDispatch();
   const { handleError } = useNotification();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -28,8 +32,7 @@ const ChangePassword = ({ closeModal }: any) => {
   });
 
   const submit = (values: any) => {
-    closeModal();
-    dispatch(showLoader(true));
+    setLoading(true);
 
     changePassword(
       values.current_password,
@@ -42,12 +45,14 @@ const ChangePassword = ({ closeModal }: any) => {
           message: `${"Password changed."} 🔒`,
           color: "green",
         });
+
+        closeModal();
       })
       .catch((error) => {
         handleError(error);
       })
       .finally(() => {
-        dispatch(showLoader(false));
+        setLoading(false);
       });
   };
 
@@ -55,11 +60,12 @@ const ChangePassword = ({ closeModal }: any) => {
     <div>
       <Divider mb="md" variant="dashed" />
 
+      <LoadingOverlay visible={loading} />
+
       <form onSubmit={form.onSubmit((values) => submit(values))}>
         <PasswordInput
           required
           mt="sm"
-          variant="filled"
           label="Current Password"
           placeholder="Current password"
           icon={<Lock size={16} />}
@@ -69,7 +75,6 @@ const ChangePassword = ({ closeModal }: any) => {
         <PasswordInput
           required
           mt="sm"
-          variant="filled"
           label="New Password"
           placeholder="New password"
           icon={<Lock size={16} />}
@@ -79,7 +84,6 @@ const ChangePassword = ({ closeModal }: any) => {
         <PasswordInput
           required
           mt="sm"
-          variant="filled"
           label="Confirm New Password"
           placeholder="Confirm new password"
           icon={<Lock size={16} />}
@@ -87,10 +91,12 @@ const ChangePassword = ({ closeModal }: any) => {
         />
 
         <Group position="right" mt="lg">
-          <Button variant="light" onClick={closeModal}>
+          <Button variant="default" onClick={closeModal}>
             Cancel
           </Button>
-          <Button type="submit">Change password</Button>
+          <Button color="dark" type="submit">
+            Change password
+          </Button>
         </Group>
       </form>
     </div>

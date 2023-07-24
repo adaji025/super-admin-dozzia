@@ -466,7 +466,7 @@ const TaskResponses = ({ closeModal, modalActive, task }: any) => {
         taskResponses?.data.length > 0 && (
           <Pagination
             sx={{ maxWidth: 1000 }}
-            position="center"
+            position="left"
             mt={25}
             onChange={(value) => {
               if (value !== taskResponses.meta.current_page) {

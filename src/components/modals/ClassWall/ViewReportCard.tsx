@@ -22,15 +22,17 @@ import useTermsSessions from "../../../hooks/useTermsSessions";
 import useTestExams from "../../../hooks/useTestExams";
 import "./class-wall-modals.scss";
 
+interface ViewReportCardProps {
+  closeModal: () => void;
+  modalActive: boolean;
+  studentId: string;
+}
+
 const ViewReportCard = ({
   closeModal,
   studentId,
   modalActive,
-}: {
-  closeModal: () => void;
-  modalActive: boolean;
-  studentId: string;
-}) => {
+}: ViewReportCardProps) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const { loading, setLoading, handleGetStudentReportCard } = useReportCard();
   const { handlePostTestExam } = useTestExams();
@@ -347,7 +349,6 @@ const EditScores = ({ onChange, edit, submit }: any) => {
             mt="sm"
             label="CA 1 Score"
             placeholder="e.g. 10"
-            variant="filled"
             precision={1}
             {...form.getInputProps("first_ca_score")}
           />
@@ -357,7 +358,6 @@ const EditScores = ({ onChange, edit, submit }: any) => {
             mt="sm"
             label="CA 2 Score"
             placeholder="e.g. 10"
-            variant="filled"
             precision={1}
             {...form.getInputProps("second_ca_score")}
           />
@@ -367,7 +367,6 @@ const EditScores = ({ onChange, edit, submit }: any) => {
             mt="sm"
             label="CA 3 Score"
             placeholder="e.g. 10"
-            variant="filled"
             precision={1}
             {...form.getInputProps("third_ca_score")}
           />
@@ -377,7 +376,6 @@ const EditScores = ({ onChange, edit, submit }: any) => {
             mt="sm"
             label="Exam Score"
             placeholder="e.g. 70"
-            variant="filled"
             precision={1}
             {...form.getInputProps("exam_score")}
           />
@@ -386,7 +384,6 @@ const EditScores = ({ onChange, edit, submit }: any) => {
             mt="sm"
             label="Select Grade"
             placeholder="Select subject grade"
-            variant="filled"
             searchable
             nothingFound="No grade found"
             data={grades?.data.map(

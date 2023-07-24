@@ -9,6 +9,7 @@ import {
 } from "@mantine/core";
 import { ReactComponent as Notification } from "../../assets/svg/notification.svg";
 import { ReactComponent as UserImage } from "../../assets/svg/user-image.svg";
+import { UserState } from "../../redux/user/user.reducer";
 
 interface HeaderProps {
   toggleSidebar: () => void;
@@ -20,7 +21,7 @@ const Header = ({ toggleSidebar, showSidebar }: HeaderProps) => {
   const dark = colorScheme === "dark";
   const location = useLocation();
 
-  const userdata = useSelector((state: any) => {
+  const userdata = useSelector((state: { user: UserState }) => {
     return state.user.userdata;
   });
 
@@ -51,11 +52,11 @@ const Header = ({ toggleSidebar, showSidebar }: HeaderProps) => {
           <div className="h-item user">
             <div className="h-name no-select">
               <Text mr="xs" color={dark ? "" : "#121212"}>
-                {`Hi ${userdata?.profile_details?.first_name ?? "there!"}`}
+                {`Hi ${userdata.first_name ?? "there!"}`}
               </Text>
             </div>
 
-            {userdata?.picture ? (
+            {userdata.picture ? (
               <Avatar
                 className="avatar"
                 src={userdata.picture}

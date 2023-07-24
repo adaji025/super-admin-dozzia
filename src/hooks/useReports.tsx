@@ -30,7 +30,7 @@ const useReports = () => {
   };
 
   const handleUpdateStatus = (id: string, status: string) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       dispatch(showLoader(true));
 
       updateStatus(id, { status })

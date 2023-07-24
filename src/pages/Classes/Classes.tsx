@@ -33,6 +33,9 @@ import useClass from "../../hooks/useClass";
 import { setClassWall } from "../../redux/data/data.actions";
 import ClassSubjects from "../../components/modals/Class/ClassSubjects";
 import "./classes.scss";
+import { UserState } from "../../redux/user/user.reducer";
+import { Roles } from "../../types/authTypes";
+import { ClassroomType, CreateClassData } from "../../types/classTypes";
 
 const Classes = () => {
   const navigate = useNavigate();
@@ -41,13 +44,7 @@ const Classes = () => {
   const [addClassModal, setAddClassModal] = useState<boolean>(false);
   const [classStudentsModal, setClassStudentsModal] = useState<boolean>(false);
   const [classSubjectsModal, setClassSubjectsModal] = useState<boolean>(false);
-  const [editClass, setEditClass] = useState<null | {
-    classroom_id: string;
-    classroom_level: string;
-    classroom_name: string;
-    classroom_teacher: string;
-    classroom_description: string;
-  }>(null);
+  const [editClass, setEditClass] = useState<null | ClassroomType>(null);
   const {
     getClassList,
     loading,
@@ -58,7 +55,7 @@ const Classes = () => {
     classLevels,
   } = useClass();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [level, setLevel] = useState<string>("");
@@ -69,13 +66,12 @@ const Classes = () => {
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
-  const userdata = useSelector((state: any) => {
+  const userdata = useSelector((state: { user: UserState }) => {
     return state.user.userdata;
   });
-
   useEffect(() => {
-    if (userdata?.role?.name === "Teacher") {
-      getClassList(page, perPage, level, search, false, userdata?.user_id);
+    if (userdata?.role?.name === Roles.Teacher) {
+      getClassList(page, perPage, level, search, false, userdata.staff_id);
     } else {
       getClassList(page, perPage, level, search);
     }
@@ -111,7 +107,13 @@ const Classes = () => {
             }, 500);
           }}
           edit={editClass}
-          submit={editClass ? handleUpdateClass : handleAddClass}
+          submit={(values: CreateClassData, classId?: string) => {
+            if (classId) {
+              handleUpdateClass(values, classId);
+            } else {
+              handleAddClass(values);
+            }
+          }}
           modalActive={addClassModal}
         />
       </Modal>
@@ -176,7 +178,10 @@ const Classes = () => {
                 onClick={() => {
                   setAddClassModal(true);
                 }}
-                disabled={userdata?.role?.name !== "School Admin"}
+                disabled={
+                  userdata?.role?.name !== Roles.SchoolAdmin &&
+                  userdata?.role?.name !== Roles.Principal
+                }
               >
                 Add Class
               </Button>
@@ -285,7 +290,7 @@ const Classes = () => {
             </div>
           </div>
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
-            {classes && classes.data && !loading ? (
+            {classes.dataFetched && !loading ? (
               <>
                 <Table striped verticalSpacing="md">
                   <thead>
@@ -328,139 +333,114 @@ const Classes = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {classes?.data.map(
-                      (
-                        item: {
-                          classroom_id: string;
-                          classroom_level: number;
-                          classroom_name: string;
-                          classroom_description: string;
-                          classroom_teacher: {
-                            title: string;
-                            first_name: string;
-                            last_name: string;
-                            staff_id: string;
-                          };
-                          subjects_and_teachers: any;
-                        },
-                        index: number
-                      ) => (
-                        <tr key={item.classroom_id}>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                            }}
-                            className="large-only"
-                          >
-                            {index + 1}
-                          </td>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              fontWeight: "600",
-                            }}
-                          >
-                            {item?.classroom_name}
-                          </td>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                            }}
-                          >
-                            {`${item.classroom_teacher?.title ?? ""} ${
-                              item.classroom_teacher?.first_name ?? ""
-                            } ${item?.classroom_teacher?.last_name ?? ""}`}
-                          </td>
-                          <td
-                            className="large-only"
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              paddingLeft: "30px",
+                    {classes?.data.map((item: ClassroomType, index: number) => (
+                      <tr key={item.classroom_id}>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                          className="large-only"
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            fontWeight: "600",
+                          }}
+                        >
+                          {item.name}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                        >
+                          {`${item.class_teacher?.title ?? ""} ${
+                            item.class_teacher?.first_name ?? ""
+                          } ${item?.class_teacher?.last_name ?? ""}`}
+                        </td>
+                        <td
+                          className="large-only"
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            paddingLeft: "30px",
 
-                              fontWeight: "500",
-                            }}
+                            fontWeight: "500",
+                          }}
+                        >
+                          {item.level}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            width: "20px",
+                          }}
+                          className="table-last"
+                        >
+                          <Menu
+                            position={deviceWidth < 576 ? "left" : "right"}
+                            gutter={15}
+                            withArrow
+                            size="sm"
                           >
-                            {item.classroom_level}
-                          </td>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              width: "20px",
-                            }}
-                            className="table-last"
-                          >
-                            <Menu
-                              position={deviceWidth < 576 ? "left" : "right"}
-                              gutter={15}
-                              withArrow
-                              size="sm"
+                            <Menu.Label>Class Menu</Menu.Label>
+                            <Menu.Item
+                              icon={<Users size={14} />}
+                              onClick={() => {
+                                setClassName(item.name);
+                                setClassId(item.classroom_id);
+                                setClassStudentsModal(true);
+                              }}
                             >
-                              <Menu.Label>Class Menu</Menu.Label>
-                              <Menu.Item
-                                icon={<Users size={14} />}
-                                onClick={() => {
-                                  setClassName(item.classroom_name);
-                                  setClassId(item.classroom_id);
-                                  setClassStudentsModal(true);
-                                }}
-                              >
-                                Students
-                              </Menu.Item>
-                              <Menu.Item
-                                icon={<Book size={14} />}
-                                onClick={() => {
-                                  setClassName(item?.classroom_name);
-                                  setClassId(item.classroom_id);
-                                  setClassSubjects(item?.subjects_and_teachers);
-                                  setClassSubjectsModal(true);
-                                }}
-                              >
-                                Subjects
-                              </Menu.Item>
-                              <Menu.Item
-                                icon={<ClipboardList size={14} />}
-                                onClick={() => {
-                                  dispatch(
-                                    setClassWall({
-                                      ...classWall,
-                                      activeClassName: item?.classroom_name,
-                                      activeClassId: item?.classroom_id,
-                                    })
-                                  );
-                                  navigate("/class-wall");
-                                }}
-                              >
-                                Class Wall
-                              </Menu.Item>
-                              <Divider />
-                              <Menu.Item
-                                icon={<Edit size={14} />}
-                                onClick={() => {
-                                  setEditClass({
-                                    classroom_id: item.classroom_id,
-                                    classroom_name: item.classroom_name,
-                                    classroom_level:
-                                      item.classroom_level.toString(),
-                                    classroom_description:
-                                      item.classroom_description,
-                                    classroom_teacher: item.classroom_teacher
-                                      ?.staff_id
-                                      ? item.classroom_teacher?.staff_id
-                                      : "",
-                                  });
-                                  setAddClassModal(true);
-                                }}
-                                disabled={
-                                  userdata?.role?.name !== "School Admin"
-                                }
-                              >
-                                Edit Class
-                              </Menu.Item>
-                            </Menu>
-                          </td>
-                        </tr>
-                      )
-                    )}
+                              Students
+                            </Menu.Item>
+                            <Menu.Item
+                              icon={<Book size={14} />}
+                              onClick={() => {
+                                setClassName(item.name);
+                                setClassId(item.classroom_id);
+                                setClassSubjectsModal(true);
+                              }}
+                            >
+                              Subjects
+                            </Menu.Item>
+                            <Menu.Item
+                              icon={<ClipboardList size={14} />}
+                              onClick={() => {
+                                dispatch(
+                                  setClassWall({
+                                    ...classWall,
+                                    activeClassName: item.name,
+                                    activeClassId: item?.classroom_id,
+                                  })
+                                );
+                                navigate("/class-wall");
+                              }}
+                            >
+                              Class Wall
+                            </Menu.Item>
+
+                            {(userdata?.role?.name === Roles.SchoolAdmin ||
+                              userdata?.role?.name === Roles.Principal) && (
+                              <>
+                                <Divider />
+
+                                <Menu.Item
+                                  icon={<Edit size={14} />}
+                                  onClick={() => {
+                                    setEditClass(item);
+                                    setAddClassModal(true);
+                                  }}
+                                >
+                                  Edit Class
+                                </Menu.Item>
+                              </>
+                            )}
+                          </Menu>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
 
@@ -490,7 +470,7 @@ const Classes = () => {
           {classes?.meta && classes?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== classes.meta.current_page) {

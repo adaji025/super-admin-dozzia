@@ -12,7 +12,7 @@ import {
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { login } from "../../services/auth/auth";
+import { login, getProfileInfo } from "../../services/auth/auth";
 import { setUserData } from "../../redux/user/user.actions";
 import useNotification from "../../hooks/useNotification";
 import { useMediaQuery } from "@mantine/hooks";
@@ -21,8 +21,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Autoplay } from "swiper";
 import { CardOne, CardThree, CardTwo } from "../../components/Auth/AuthCards";
-import "./auth.scss";
 import AuthHeader from "../../components/AuthHeader/AuthHeader";
+import { ProfileType, SigninResponse } from "../../types/authTypes";
+import "./auth.scss";
 
 const Signin = () => {
   const small = useMediaQuery("(max-width: 450px)");
@@ -50,27 +51,38 @@ const Signin = () => {
     setLoading(true);
 
     login(values.username, values.password)
-      .then((res) => {
-        if (res.required_new_password) {
+      .then((res: SigninResponse) => {
+        if (res.required_new_password && res.reset_code) {
           showNotification({
             title: "Password reset required!",
             message: `${"This is a one-time step."} 🥲`,
             color: "yellow",
           });
 
-          localStorage.setItem("reset_code", res?.reset_code);
-          navigate("/reset-password?new=true");
+          navigate(`/reset-password?code=${res?.reset_code}`);
         } else {
-          showNotification({
-            title: "Success",
-            message: `${"Login successful."} 😎`,
-            color: "green",
-          });
-
-          localStorage.setItem("token", res?.access_token);
-          dispatch(setUserData(res.user));
-          navigate("/dashboard");
+          getProfile(res.access_token);
         }
+      })
+      .catch((error) => {
+        handleError(error);
+        setLoading(false);
+      });
+  };
+
+  const getProfile = (token: string) => {
+    setLoading(true);
+
+    getProfileInfo(token, "role")
+      .then((res: ProfileType) => {
+        showNotification({
+          title: "Success",
+          message: `${"Login successful."} 😎`,
+          color: "green",
+        });
+
+        dispatch(setUserData(res));
+        navigate("/dashboard");
       })
       .catch((error) => {
         handleError(error);

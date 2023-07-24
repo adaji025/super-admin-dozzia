@@ -53,8 +53,11 @@
           align-items: center;
           .school-logo-wrapper {
             .school-logo {
-              height: 60px;
-              width: 60px;
+              min-height: 62px;
+              max-height: 62px;
+              min-width: 62px;
+              max-width: 62px;
+              background-color: white;
               border-radius: 50%;
               border: 1px solid rgba(134, 134, 134, 0.177);
             }

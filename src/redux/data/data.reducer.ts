@@ -1,23 +1,44 @@
-const INITIAL_STATE = {
-  classes: null,
-  students: null,
-  subjects: null,
-  staff: null,
+import { initialMetadata } from "../../lib/util";
+import { ClassesState } from "../../types/classTypes";
+import { ClassWallState } from "../../types/classWallTypes";
+import { StaffState } from "../../types/staffTypes";
+import { StudentsState } from "../../types/studentTypes";
+import { SubjectsState } from "../../types/subjectsTypes";
+
+export const initialArrayDataState = {
+  data: [],
+  meta: initialMetadata,
+  dataFetched: false,
+};
+
+export type DataState = {
+  classes: ClassesState;
+  students: StudentsState;
+  subjects: SubjectsState;
+  staff: StaffState;
+  events: any;
+  attendance: any;
+  broadcast: any;
+  reports: any;
+  classWall: ClassWallState;
+  terms: any;
+  sesions: any;
+  grades: any;
+};
+
+const INITIAL_STATE: DataState = {
+  classes: initialArrayDataState,
+  students: initialArrayDataState,
+  subjects: initialArrayDataState,
+  staff: initialArrayDataState,
   events: null,
   attendance: null,
-  stats: {
-    total_student: 0,
-    total_staff: 0,
-    total_attendance: 0,
-    total_classroom: 0,
-    total_present_count: 0,
-    total_absent_count: 0,
-  },
   broadcast: null,
   reports: null,
   classWall: {
     activeClassName: "",
     activeClassId: "",
+    classTeacherId: "",
     classes: [],
   },
   terms: null,

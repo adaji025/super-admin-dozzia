@@ -35,8 +35,8 @@ const ResetPassword = () => {
 
     let parseddata: any = queryString.parse(location.search);
 
-    if (parseddata.new) {
-      const code: string = localStorage.getItem("reset_code")!;
+    if (parseddata.code) {
+      const code: string = parseddata.code.toString();
       setResetCode(code.toString());
       setIsNewUser(true);
     }
@@ -99,7 +99,6 @@ const ResetPassword = () => {
       </Helmet>
 
       <div className="auth-page">
-        {/* <AuthHeader /> */}
         <LoadingOverlay visible={showLoader} />
 
         <div className={`forgot-password`}>

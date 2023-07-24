@@ -56,13 +56,13 @@ const UploadComponent = ({
       />
       <div
         className={`d-upload click no-select ${extraClasses}`}
-        style={{ background: dark ? "#2C2E33" : "#F1F3F5" }}
+        style={{ background: dark ? "#2C2E33" : "white" }}
         onClick={() => {
           uploadFile.current.click();
         }}
       >
         {extraClasses === "file-selected" ? <CircleCheck /> : <Upload />}
-        <div className="d-u-text">{text}</div>
+        <div className="d-u-text">{text ?? "File Selected"}</div>
       </div>
     </Fragment>
   );

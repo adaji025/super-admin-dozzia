@@ -1,4 +1,6 @@
-export const setUserData = (userdata: any) => ({
+import { ProfileType } from "../../types/authTypes";
+
+export const setUserData = (userdata: ProfileType) => ({
   type: "SET_USER_DATA",
   payload: { userdata },
 });

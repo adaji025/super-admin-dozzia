@@ -254,7 +254,6 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Title"
           placeholder="Title"
           {...form.getInputProps("title")}
@@ -265,7 +264,6 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
           required
           label="Description"
           placeholder="Enter brief description of the topic"
-          variant="filled"
           autosize
           minRows={3}
           maxRows={5}
@@ -279,7 +277,6 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
             className="form-item"
             label="Start Date"
             placeholder="Date"
-            variant="filled"
             required
             {...form.getInputProps("start_date")}
           />
@@ -290,7 +287,6 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
             className="form-item"
             label="End Date"
             placeholder="Date"
-            variant="filled"
             required
             {...form.getInputProps("end_date")}
           />
@@ -298,7 +294,6 @@ const AddTopic = ({ closeModal, edit, submit }: any) => {
 
         <MultiSelect
           mt="md"
-          variant="filled"
           required
           data={[
             { value: "Classwork", label: "Classwork" },

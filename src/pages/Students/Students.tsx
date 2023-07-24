@@ -21,6 +21,7 @@ import AddStudentToClass from "../../components/modals/Student/AddStudentToClass
 import StudentDetails from "../../components/modals/Student/StudentDetails";
 import useStudent from "../../hooks/useStudent";
 import useClass from "../../hooks/useClass";
+import { StudentType } from "../../types/studentTypes";
 
 const Students = () => {
   const { dark } = useTheme();
@@ -29,7 +30,7 @@ const Students = () => {
     useState<boolean>(false);
   const { students, handleGetStudents, loading, setLoading } = useStudent();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [studentInfo, setStudentInfo] = useState<{
@@ -60,7 +61,6 @@ const Students = () => {
         opened={addToClassModal}
         onClose={() => {
           setAddToClassModal(false);
-          setStudentInfo(null);
         }}
         title={<Text weight={600}>Add to Class</Text>}
         size="lg"
@@ -68,11 +68,10 @@ const Students = () => {
         <AddStudentToClass
           closeModal={() => {
             setAddToClassModal(false);
-            setStudentInfo(null);
           }}
           student={studentInfo}
-          modalActive={addToClassModal}
           allClasses={allClasses}
+          callback={() => handleGetStudents(page, perPage, "")}
         />
       </Modal>
 
@@ -163,7 +162,7 @@ const Students = () => {
             <div className="s-right">
               <Button
                 onClick={() => {
-                  if (searchInput !== "") {
+                  if (searchInput !== "" && search !== searchInput) {
                     setLoading(true);
                     setSearch(searchInput);
                   }
@@ -175,7 +174,7 @@ const Students = () => {
           </div>
 
           <Box sx={{ maxWidth: 900, minHeight: 173 }} className="d-p-main">
-            {students && students.data && !loading ? (
+            {!loading ? (
               <>
                 <Table striped verticalSpacing="sm">
                   <thead>
@@ -201,6 +200,15 @@ const Students = () => {
                       >
                         Name
                       </th>
+
+                      <th
+                        style={{
+                          borderBottom: `1px solid #0000`,
+                        }}
+                      >
+                        Class
+                      </th>
+
                       <th
                         style={{
                           borderBottom: `1px solid #0000`,
@@ -220,99 +228,97 @@ const Students = () => {
                   </thead>
                   <tbody>
                     {students?.data.length > 0 &&
-                      students?.data.map(
-                        (
-                          item: {
-                            student_id: string;
-                            first_name: number;
-                            last_name: string;
-                            picture: string;
-                            username: string;
-                          },
-                          index: number
-                        ) => (
-                          <tr key={item.student_id}>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                              }}
-                              className="large-only"
-                            >
-                              {index + 1}
-                            </td>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                              }}
-                              className="large-only"
-                            >
-                              <Avatar
-                                className="avatar"
-                                src={item?.picture ? item?.picture : null}
-                                radius="xl"
-                              />
-                            </td>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                fontWeight: "500",
-                              }}
-                            >
-                              {`${item.first_name} ${item.last_name}`}
-                            </td>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                              }}
-                            >
-                              {item.username}
-                            </td>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                width: "20px",
-                              }}
-                              className="table-last"
-                            >
-                              <Menu
-                                position={deviceWidth < 576 ? "left" : "right"}
-                                gutter={15}
-                                withArrow
-                                size="sm"
-                              >
-                                <Menu.Label>Menu</Menu.Label>
+                      students?.data.map((item: StudentType, index: number) => (
+                        <tr key={item.student_id}>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                            className="large-only"
+                          >
+                            {index + 1}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                            className="large-only"
+                          >
+                            <Avatar
+                              className="avatar"
+                              src={item?.picture ? item?.picture : null}
+                              radius="xl"
+                            />
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              fontWeight: "500",
+                            }}
+                          >
+                            {`${item.first_name} ${item.last_name}`}
+                          </td>
 
-                                <Menu.Item
-                                  icon={<PlaylistAdd size={14} />}
-                                  onClick={() => {
-                                    setStudentInfo({
-                                      fullName: `${item.first_name} ${item.last_name}`,
-                                      studentId: item.student_id,
-                                      username: item.username,
-                                    });
-                                    setAddToClassModal(true);
-                                  }}
-                                >
-                                  Add to Class
-                                </Menu.Item>
-                                <Menu.Item
-                                  icon={<User size={14} />}
-                                  onClick={() => {
-                                    setStudentDetailsModal(true);
-                                    setStudentInfo({
-                                      fullName: `${item?.first_name} ${item?.last_name}`,
-                                      studentId: item.student_id,
-                                      username: item.username,
-                                    });
-                                  }}
-                                >
-                                  View Student
-                                </Menu.Item>
-                              </Menu>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                          >
+                            {item?.current_class?.classroom?.name ?? "--"}
+                          </td>
+
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                          >
+                            {item.reg_no}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              width: "20px",
+                            }}
+                            className="table-last"
+                          >
+                            <Menu
+                              position={deviceWidth < 576 ? "left" : "right"}
+                              gutter={15}
+                              withArrow
+                              size="sm"
+                            >
+                              <Menu.Label>Menu</Menu.Label>
+
+                              <Menu.Item
+                                icon={<PlaylistAdd size={14} />}
+                                onClick={() => {
+                                  setStudentInfo({
+                                    fullName: `${item.first_name} ${item.last_name}`,
+                                    studentId: item.student_id,
+                                    username: item.reg_no,
+                                  });
+                                  setAddToClassModal(true);
+                                }}
+                              >
+                                Add to Class
+                              </Menu.Item>
+                              <Menu.Item
+                                icon={<User size={14} />}
+                                onClick={() => {
+                                  setStudentDetailsModal(true);
+                                  setStudentInfo({
+                                    fullName: `${item?.first_name} ${item?.last_name}`,
+                                    studentId: item.student_id,
+                                    username: item.reg_no,
+                                  });
+                                }}
+                              >
+                                View Student
+                              </Menu.Item>
+                            </Menu>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </Table>
 
@@ -342,7 +348,6 @@ const Students = () => {
           {students?.meta && students?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
-              position="center"
               mt={25}
               onChange={(value) => {
                 if (value !== students.meta.current_page) {

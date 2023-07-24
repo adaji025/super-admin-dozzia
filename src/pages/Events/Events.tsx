@@ -71,6 +71,8 @@ const Events = () => {
   };
 
   const handleDeleteEvent = (eventId: string) => {
+    setLoading(true);
+
     deleteEvent(eventId)
       .then(() => {
         showNotification({
@@ -373,7 +375,7 @@ const Events = () => {
           {events?.meta && events?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 1000 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== events.meta.current_page) {

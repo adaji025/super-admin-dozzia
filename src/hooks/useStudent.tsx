@@ -10,22 +10,25 @@ import {
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 import { setStudents } from "../redux/data/data.actions";
+import { StudentsState, StudentType } from "../types/studentTypes";
+import { ApiResponseType } from "../types/utilityTypes";
 
 const useStudent = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const students = useSelector((state: any) => {
-    return state.data.students;
-  });
+  const students = useSelector(
+    (state: { data: { students: StudentsState } }) => {
+      return state.data.students;
+    }
+  );
 
   const handleGetStudents = (page: number, perPage: number, search: string) => {
-    if (students === null) {
-      setLoading(true);
-    }
+    if (!students.dataFetched) setLoading(true);
+
     getStudents(page, perPage, search)
-      .then((res) => {
-        dispatch(setStudents(res));
+      .then((res: ApiResponseType<StudentType>) => {
+        dispatch(setStudents({ ...res, dataFetched: true }));
       })
       .catch(() => {})
       .finally(() => {
@@ -34,11 +37,11 @@ const useStudent = () => {
   };
 
   const handleGetStudentDetails = (id: string) => {
-    return new Promise((resolve) => {
+    return new Promise<ApiResponseType<StudentType>>((resolve) => {
       setLoading(true);
 
       getStudentDetails(id)
-        .then((res) => {
+        .then((res: ApiResponseType<StudentType>) => {
           resolve(res);
         })
         .catch((error) => {

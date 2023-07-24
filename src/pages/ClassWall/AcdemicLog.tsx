@@ -27,12 +27,25 @@ import useSubject from "../../hooks/useSubject";
 import { useSelector } from "react-redux";
 import ViewAcademicTask from "../../components/modals/ClassWall/ViewAcademicTask";
 import moment from "moment";
+import { UserState } from "../../redux/user/user.reducer";
+import { Roles } from "../../types/authTypes";
+import { ClassWallState } from "../../types/classWallTypes";
+import {
+  AcademicLogState,
+  AcademicLogTaskType,
+} from "../../types/academicLogTypes";
+import { initialMetadata } from "../../lib/util";
+import { ApiResponseType } from "../../types/utilityTypes";
+import { SubjectType } from "../../types/subjectsTypes";
 
 const AcdemicLog = () => {
   const { dark } = useTheme();
   const [page, setPage] = useState<number>(1);
   const [perPage] = useState<number>(20);
-  const [academicLog, setAcademicLog] = useState<any>(null);
+  const [academicLog, setAcademicLog] = useState<AcademicLogState>({
+    data: [],
+    meta: initialMetadata,
+  });
   const [activeSubjectId, setActiveSubjectId] = useState<string>("");
   const [activeSubjectName, setActiveSubjectName] = useState<string>("");
   const [addTaskModal, setAddTaskModal] = useState<boolean>(false);
@@ -42,10 +55,12 @@ const AcdemicLog = () => {
   const navigate = useNavigate();
   const { getSubjectList, allSubjects } = useSubject();
   const deviceWidth = window.innerWidth;
-  const classWall = useSelector((state: any) => {
-    return state.data.classWall;
-  });
-  const userdata = useSelector((state: any) => {
+  const classWall = useSelector(
+    (state: { data: { classWall: ClassWallState } }) => {
+      return state.data.classWall;
+    }
+  );
+  const userdata = useSelector((state: { user: UserState }) => {
     return state.user.userdata;
   });
   const [task, setTask] = useState<any>(null);
@@ -53,45 +68,44 @@ const AcdemicLog = () => {
   useEffect(() => {
     if (classWall?.activeClassId) {
       if (
-        userdata?.role?.name === "Teacher" &&
-        userdata?.user_id === classWall?.classes?.classroom_teacher?.staff_id
+        userdata?.role?.name === Roles.Teacher &&
+        userdata.staff_id === classWall?.classTeacherId
       ) {
-        getSubjectList(1, 300, "", true, "", classWall?.activeClassId);
+        getSubjectList(1, 100, "", true, "", classWall?.activeClassId);
       } else if (
-        userdata?.role?.name === "Teacher" &&
-        userdata?.user_id !== classWall?.classes?.classroom_teacher?.staff_id
+        userdata?.role?.name === Roles.Teacher &&
+        userdata?.staff_id !== classWall?.classTeacherId
       ) {
         getSubjectList(
           1,
           300,
           "",
           true,
-          userdata?.user_id,
+          userdata?.staff_id,
           classWall?.activeClassId
         );
       } else {
-        getSubjectList(1, 300, "", true, "");
+        getSubjectList(1, 100, "", true, "", classWall?.activeClassId);
       }
     }
-
     //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     if (classWall?.activeClassId) {
-      getResources();
+      getTasks();
     }
 
     //eslint-disable-next-line
   }, [activeSubjectId, page, trigger]);
 
-  const getResources = () => {
+  const getTasks = () => {
     handleGetTasks(
       page,
       perPage,
       classWall?.activeClassId,
       activeSubjectId
-    ).then((res: any) => {
+    ).then((res: ApiResponseType<AcademicLogTaskType[]>) => {
       setAcademicLog(res);
     });
   };
@@ -207,23 +221,21 @@ const AcdemicLog = () => {
                   All Subjects
                 </Menu.Item>
 
-                {allSubjects.map(
-                  (item: { subject_id: string; subject_name: string }) => (
-                    <Menu.Item
-                      key={item.subject_id}
-                      onClick={() => {
-                        setLoading(true);
-                        setActiveSubjectId(item.subject_id);
-                        setActiveSubjectName(item.subject_name);
-                      }}
-                      disabled={activeSubjectId === item.subject_id}
-                    >
-                      {item.subject_name.length > 21
-                        ? `${item.subject_name.substring(0, 21)}...`
-                        : item.subject_name}
-                    </Menu.Item>
-                  )
-                )}
+                {allSubjects.map((item: SubjectType) => (
+                  <Menu.Item
+                    key={item.subject_id}
+                    onClick={() => {
+                      setLoading(true);
+                      setActiveSubjectId(item.subject_id);
+                      setActiveSubjectName(item.name);
+                    }}
+                    disabled={activeSubjectId === item.subject_id}
+                  >
+                    {item.name.length > 21
+                      ? `${item.name.substring(0, 21)}...`
+                      : item.name}
+                  </Menu.Item>
+                ))}
               </Menu>
 
               <Button
@@ -322,19 +334,7 @@ const AcdemicLog = () => {
                     </thead>
                     <tbody>
                       {academicLog?.data.map(
-                        (
-                          item: {
-                            task_id: string;
-                            title: string;
-                            end_at: string;
-                            created_at: string;
-                            subject: {
-                              name: string;
-                              subject_id: string;
-                            };
-                          },
-                          index: number
-                        ) => (
+                        (item: AcademicLogTaskType, index: number) => (
                           <tr key={item.task_id}>
                             <td
                               style={{
@@ -358,7 +358,7 @@ const AcdemicLog = () => {
                                 borderBottom: `1px solid #0000`,
                               }}
                             >
-                              {item?.subject?.name}
+                              {item.subject.name}
                             </td>
 
                             <td
@@ -374,7 +374,9 @@ const AcdemicLog = () => {
                                 borderBottom: `1px solid #0000`,
                               }}
                             >
-                              {moment(item?.end_at).format("Do MMM, YYYY")}
+                              {item.end_date
+                                ? moment(item.end_date).format("Do MMM, YYYY")
+                                : "No due date"}
                             </td>
 
                             <td
@@ -435,7 +437,7 @@ const AcdemicLog = () => {
           {academicLog?.meta && academicLog?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 1000 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== academicLog.meta.current_page) {

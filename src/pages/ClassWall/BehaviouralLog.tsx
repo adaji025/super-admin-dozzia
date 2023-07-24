@@ -19,18 +19,19 @@ import { ArrowLeft, FileText } from "tabler-icons-react";
 import { useSelector } from "react-redux";
 import ViewBehaviouralLog from "../../components/modals/ClassWall/ViewBehaviouralLog";
 import useClass from "../../hooks/useClass";
+import { StudentType } from "../../types/studentTypes";
 
 const BehaviouralLog = () => {
   const { dark } = useTheme();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(20);
+  const [perPage] = useState<number>(50);
   const [viewLogModal, setViewLogModal] = useState<boolean>(false);
   const navigate = useNavigate();
   const deviceWidth = window.innerWidth;
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
-  const [student, setStudent] = useState<any>(null);
+  const [student, setStudent] = useState<StudentType | null>(null);
   const { handleGetClassStudents, classStudents, loading } = useClass();
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const BehaviouralLog = () => {
               setStudent(null);
             }, 500);
           }}
-          studentId={student?.student_id}
+          studentId={student?.student_id ?? ""}
           modalActive={viewLogModal}
         />
       </Modal>
@@ -135,7 +136,7 @@ const BehaviouralLog = () => {
               sx={{ maxWidth: 900, minHeight: 173 }}
               className="d-p-main"
             >
-              {classStudents?.data && !loading ? (
+              {classStudents.dataFetched && !loading ? (
                 <ScrollArea>
                   <Table striped verticalSpacing="md">
                     <thead>
@@ -181,16 +182,7 @@ const BehaviouralLog = () => {
                     <tbody>
                       {classStudents?.data.length > 0 &&
                         classStudents?.data.map(
-                          (
-                            item: {
-                              student_id: string;
-                              first_name: number;
-                              last_name: string;
-                              picture: string;
-                              username: string;
-                            },
-                            index: number
-                          ) => (
+                          (item: StudentType, index: number) => (
                             <tr key={item.student_id}>
                               <td
                                 style={{
@@ -225,7 +217,7 @@ const BehaviouralLog = () => {
                                   borderBottom: `1px solid #0000`,
                                 }}
                               >
-                                {item.username}
+                                {item.reg_no}
                               </td>
                               <td
                                 style={{
@@ -288,7 +280,7 @@ const BehaviouralLog = () => {
           {classStudents?.meta && classStudents?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== classStudents.meta.current_page) {

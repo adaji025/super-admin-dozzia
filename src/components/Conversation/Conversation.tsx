@@ -89,7 +89,6 @@ const Conversation = ({
           onChange={(e: any) => {
             setTextInput(e.target.value);
           }}
-          variant="filled"
           disabled={disable}
           onKeyDown={(e) => {
             if (e.key === "Enter") {

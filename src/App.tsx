@@ -20,11 +20,13 @@ import { getProfileInfo } from "./services/auth/auth";
 import { setUserData } from "./redux/user/user.actions";
 import useNotification from "./hooks/useNotification";
 import "./App.scss";
+import { UserState } from "./redux/user/user.reducer";
+import { ProfileType } from "./types/authTypes";
 
 function App() {
   const dispatch = useDispatch();
-  const userdata = useSelector((state: any) => {
-    return state.user.userdata;
+  const loggedIn = useSelector((state: { user: UserState }) => {
+    return state.user.loggedIn;
   });
   const showLoader = useSelector((state: any) => {
     return state.utility.showLoader;
@@ -37,7 +39,7 @@ function App() {
   });
 
   useEffect(() => {
-    if (userdata) {
+    if (loggedIn) {
       getProfile();
     }
     //eslint-disable-next-line
@@ -51,8 +53,8 @@ function App() {
 
   const getProfile = () => {
     getProfileInfo()
-      .then((res) => {
-        dispatch(setUserData(res.user));
+      .then((res: ProfileType) => {
+        dispatch(setUserData(res));
       })
       .catch((error) => {
         handleError(error);
@@ -92,7 +94,7 @@ function App() {
                 <Route path="/reset-password" element={<ResetPassword />} />
                 <Route
                   path="/*"
-                  element={userdata ? <LoggedinContainer /> : <Signin />}
+                  element={loggedIn ? <LoggedinContainer /> : <Signin />}
                 />
               </Routes>
             </Paper>

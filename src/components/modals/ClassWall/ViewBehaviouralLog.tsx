@@ -20,16 +20,24 @@ import useBehaviouralLog from "../../../hooks/useBehaviouralLog";
 import moment from "moment";
 import Conversation from "./../../Conversation/Conversation";
 import "./class-wall-modals.scss";
+import { ApiResponseType } from "../../../types/utilityTypes";
+import {
+  BehavioralLogRemarkType,
+  BehaviouralLogState,
+} from "../../../types/behaviouralLogTypes";
+import { initialMetadata } from "../../../lib/util";
+
+interface ViewBehaviouralLogProps {
+  closeModal: () => void;
+  studentId: string;
+  modalActive: boolean;
+}
 
 const ViewBehaviouralLog = ({
   closeModal,
   studentId,
   modalActive,
-}: {
-  closeModal: () => void;
-  studentId: string;
-  modalActive: boolean;
-}) => {
+}: ViewBehaviouralLogProps) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const {
     handleCreateRemark,
@@ -42,8 +50,11 @@ const ViewBehaviouralLog = ({
     handlePostComment,
   } = useBehaviouralLog();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
-  const [log, setLog] = useState<any>(null);
+  const [perPage] = useState<number>(20);
+  const [log, setLog] = useState<BehaviouralLogState>({
+    data: [],
+    meta: initialMetadata,
+  });
   const [edit, setEdit] = useState<any>(null);
 
   useEffect(() => {
@@ -55,22 +66,14 @@ const ViewBehaviouralLog = ({
   }, [page]);
 
   const getRemarks = () => {
-    handleGetRemarks(page, perPage, studentId).then((res) => {
-      setLog(res);
-    });
+    handleGetRemarks(page, perPage, studentId).then(
+      (res: ApiResponseType<BehavioralLogRemarkType[]>) => {
+        setLog(res);
+      }
+    );
   };
 
-  const onPressEdit = (remark: {
-    description: string;
-    is_draft: boolean;
-    published_at: string;
-    remark_id: string;
-    teacher: {
-      first_name: string;
-      last_name: string;
-      title: string;
-    };
-  }) => {
+  const onPressEdit = (remark: BehavioralLogRemarkType) => {
     setEdit(remark);
     onChange(1);
   };
@@ -176,6 +179,18 @@ const ViewBehaviouralLog = ({
   );
 };
 
+interface ViewLogProps {
+  closeModal: () => void;
+  log: BehaviouralLogState;
+  setPage: (page: number) => void;
+  onPressEdit: (remark: BehavioralLogRemarkType) => void;
+  deleteRemark: (remarkId: string) => void;
+  handleGetComments: (remarkId: string) => Promise<any>;
+  handlePostComment: (remarkId: string, text: string) => Promise<any>;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+}
+
 const ViewLog = ({
   closeModal,
   log,
@@ -186,9 +201,10 @@ const ViewLog = ({
   handleGetComments,
   loading,
   setLoading,
-}: any) => {
+}: ViewLogProps) => {
   const { dark } = useTheme();
-  const [activeRemark, setActiveRemark] = useState<any>(null);
+  const [activeRemark, setActiveRemark] =
+    useState<BehavioralLogRemarkType | null>(null);
   const [confirmDeleteRemark, setConfirmDeleteRemark] =
     useState<boolean>(false);
   const [activeView, setActiveView] = useState<string>("details");
@@ -202,6 +218,8 @@ const ViewLog = ({
   }, [activeView]);
 
   const getComments = () => {
+    if (!activeRemark) return;
+
     return new Promise((resolve) => {
       handleGetComments(activeRemark?.remark_id).then((res: any) => {
         resolve(res);
@@ -210,6 +228,8 @@ const ViewLog = ({
   };
 
   const postComment = (text: string) => {
+    if (!activeRemark) return;
+
     return new Promise((resolve) => {
       handlePostComment(activeRemark?.remark_id, text).then((res: any) => {
         resolve(res);
@@ -223,57 +243,45 @@ const ViewLog = ({
         {log &&
           log?.data &&
           log?.data.length > 0 &&
-          log?.data.map(
-            (item: {
-              description: string;
-              is_draft: boolean;
-              published_at: string;
-              remark_id: string;
-              teacher: {
-                first_name: string;
-                last_name: string;
-                title: string;
-              };
-            }) => (
-              <div
-                className={`b-l-item click no-select ${
-                  activeRemark && activeRemark?.remark_id !== item?.remark_id
-                    ? "hide"
-                    : ""
-                }`}
-                style={{ background: dark ? "#121212" : "#f6f6f6fc" }}
-                key={item?.remark_id}
-                onClick={() => {
-                  if (activeRemark?.remark_id === item?.remark_id) {
-                    setActiveRemark(null);
-                    setActiveView("details");
-                  } else {
-                    setActiveRemark(item);
-                  }
-                }}
-              >
-                <div className="b-i-left">
-                  {item?.description && item?.description.length > 70
-                    ? `${item.description.substring(0, 70)}...`
-                    : item.description}
-                </div>
-
-                <div className="b-i-right">
-                  {moment(item?.published_at).format("Do MMM, YYYY")}{" "}
-                  <span>
-                    <ChevronDown
-                      className={`arrow-down r-arr ${
-                        activeRemark?.remark_id === item?.remark_id
-                          ? "rotate"
-                          : ""
-                      }`}
-                      size={18}
-                    />
-                  </span>
-                </div>
+          log?.data.map((item: BehavioralLogRemarkType) => (
+            <div
+              className={`b-l-item click no-select ${
+                activeRemark && activeRemark?.remark_id !== item?.remark_id
+                  ? "hide"
+                  : ""
+              }`}
+              style={{ background: dark ? "#121212" : "#f6f6f6fc" }}
+              key={item?.remark_id}
+              onClick={() => {
+                if (activeRemark?.remark_id === item?.remark_id) {
+                  setActiveRemark(null);
+                  setActiveView("details");
+                } else {
+                  setActiveRemark(item);
+                }
+              }}
+            >
+              <div className="b-i-left">
+                {item?.description && item?.description.length > 70
+                  ? `${item.description.substring(0, 70)}...`
+                  : item.description}
               </div>
-            )
-          )}
+
+              <div className="b-i-right">
+                {moment(item?.published_at).format("Do MMM, YYYY")}{" "}
+                <span>
+                  <ChevronDown
+                    className={`arrow-down r-arr ${
+                      activeRemark?.remark_id === item?.remark_id
+                        ? "rotate"
+                        : ""
+                    }`}
+                    size={18}
+                  />
+                </span>
+              </div>
+            </div>
+          ))}
 
         {activeRemark && activeView === "details" && (
           <div className="view-details">
@@ -358,7 +366,7 @@ const ViewLog = ({
       {log?.meta && log?.data.length > 0 && !activeRemark && (
         <Pagination
           sx={{ maxWidth: 900 }}
-          position="center"
+          position="left"
           mt={25}
           onChange={(value) => {
             if (value !== log.meta.current_page) {
@@ -485,7 +493,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
           required
           label="Concern"
           placeholder="Concern Category"
-          variant="filled"
           className="form-item"
           data={[
             { value: "Behavior", label: "Behavior" },
@@ -501,7 +508,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
           required
           label="Draft?"
           placeholder="Save as draft?"
-          variant="filled"
           className="form-item"
           data={[
             { value: "false", label: "Don't save as draft" },
@@ -515,7 +521,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
           required
           label="Note"
           placeholder="Enter brief description on this concern"
-          variant="filled"
           autosize
           minRows={5}
           maxRows={5}
@@ -529,7 +534,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
             className="form-item"
             label="Send Date"
             placeholder="Date"
-            variant="filled"
             required
             {...form.getInputProps("date")}
           />
@@ -537,7 +541,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
           <TimeInput
             label="Time"
             className="form-item"
-            variant="filled"
             required
             mt="md"
             clearable

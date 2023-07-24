@@ -13,6 +13,14 @@ import {
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 import { setClasses } from "../redux/data/data.actions";
+import { ApiResponseType } from "../types/utilityTypes";
+import {
+  ClassesState,
+  ClassroomType,
+  CreateClassData,
+} from "../types/classTypes";
+import { StudentType, StudentsState } from "../types/studentTypes";
+import { initialArrayDataState } from "../redux/data/data.reducer";
 
 const useClass = () => {
   const dispatch = useDispatch();
@@ -29,12 +37,14 @@ const useClass = () => {
     "9",
     "10",
   ]);
-  const [allClasses, setAllClasses] = useState<any>([]);
+  const [allClasses, setAllClasses] = useState<ClassroomType[]>([]);
   const [classInfo, setClassInfo] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const { handleError } = useNotification();
-  const [classStudents, setClassStudents] = useState<any>({});
-  const classes = useSelector((state: any) => {
+  const [classStudents, setClassStudents] = useState<StudentsState>(
+    initialArrayDataState
+  );
+  const classes = useSelector((state: { data: { classes: ClassesState } }) => {
     return state.data.classes;
   });
 
@@ -51,27 +61,17 @@ const useClass = () => {
       .catch(() => {});
   };
 
-  const handleAddClass = (values: {
-    classroom_level: string;
-    classroom_name: string;
-    classroom_teacher: string;
-    classroom_description: string;
-  }) => {
+  const handleAddClass = (values: CreateClassData) => {
     dispatch(showLoader(true));
 
-    addClass({
-      classroom_level: values.classroom_level,
-      classroom_name: values.classroom_name,
-      classroom_teacher: values.classroom_teacher,
-      classroom_description: values.classroom_description,
-    })
+    addClass(values)
       .then((res) => {
         showNotification({
           title: "Success",
           message: `${"Class added successfully."} 🏫`,
           color: "green",
         });
-        getClassList(1, 10, "", "");
+        getClassList(1, 20, "", "");
       })
       .catch((error) => {
         handleError(error);
@@ -89,19 +89,17 @@ const useClass = () => {
     all?: boolean,
     staffId?: string
   ) => {
-    return new Promise((resolve) => {
-      if (classes === null) {
-        setLoading(true);
-      }
+    return new Promise<ClassroomType[]>((resolve) => {
+      if (!classes.dataFetched) setLoading(true);
 
       getClasses(page, perPage, level, search, staffId)
-        .then((res) => {
+        .then((res: ApiResponseType<ClassroomType[]>) => {
           if (all) {
             setAllClasses(res.data);
           } else {
-            dispatch(setClasses(res));
+            dispatch(setClasses({ ...res, dataFetched: true }));
           }
-          resolve(res);
+          resolve(res.data);
         })
         .catch(() => {})
         .finally(() => {
@@ -120,15 +118,7 @@ const useClass = () => {
       });
   };
 
-  const handleUpdateClass = (
-    id: string,
-    data: {
-      classroom_level: string;
-      classroom_name: string;
-      classroom_teacher: string;
-      classroom_description: string;
-    }
-  ) => {
+  const handleUpdateClass = (data: CreateClassData, id: string) => {
     dispatch(showLoader(true));
 
     updateClass(id, data)
@@ -156,8 +146,8 @@ const useClass = () => {
     setLoading(true);
 
     getClassStudents(id, page, perPage)
-      .then((res) => {
-        setClassStudents(res);
+      .then((res: ApiResponseType<StudentType[]>) => {
+        setClassStudents({ ...res, dataFetched: true });
       })
       .catch((error) => {
         handleError(error);
@@ -173,22 +163,21 @@ const useClass = () => {
       students: string[];
     }
   ) => {
-    dispatch(showLoader(true));
-
-    addMultipleStudentsToClass(id, data)
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: `${"Students added successfully."} ✍️`,
-          color: "green",
+    return new Promise((resolve, reject) => {
+      addMultipleStudentsToClass(id, data)
+        .then((res) => {
+          showNotification({
+            title: "Success",
+            message: `${"Students added successfully."} ✍️`,
+            color: "green",
+          });
+          resolve(res);
+        })
+        .catch((error) => {
+          handleError(error);
+          reject(error);
         });
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        dispatch(showLoader(false));
-      });
+    });
   };
 
   return {

@@ -2,10 +2,16 @@ import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
 
 export const getReports = (page: number, perPage: number, status: string) => {
-  return AxoisApi.get(
-    `${APIS.REPORTS.GET_REPORTS}?per_page=${perPage}&page=${page}&status=${status}`
-  ).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.get(
+      `${APIS.REPORTS.GET_REPORTS}?per_page=${perPage}&page=${page}&status=${status}`
+    )
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err) => {
+        reject(err);
+      });
   });
 };
 

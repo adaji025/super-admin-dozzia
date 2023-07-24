@@ -36,7 +36,7 @@ const Attendance = () => {
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const { dark } = useTheme();
   const [classAttendanceModal, setClassAttendanceModal] =
     useState<boolean>(false);
@@ -312,7 +312,7 @@ const Attendance = () => {
                       color="red"
                       style={{ maxWidth: "300px" }}
                     >
-                      No Class found.
+                      No data found.
                     </Alert>
                   </Group>
                 )}

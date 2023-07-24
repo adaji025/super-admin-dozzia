@@ -39,7 +39,7 @@ const Curriculum = () => {
   });
 
   const [page] = useState<number>(1);
-  const [perPage] = useState<number>(300);
+  const [perPage] = useState<number>(100);
   const deviceWidth = window.innerWidth;
   const navigate = useNavigate();
 

@@ -47,7 +47,6 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Title"
           placeholder="Title"
           {...form.getInputProps("title")}
@@ -58,7 +57,6 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
           required
           label="Summary"
           placeholder="Provide summary"
-          variant="filled"
           autosize
           minRows={3}
           maxRows={5}
@@ -70,7 +68,6 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
           required
           label="Recipients"
           placeholder="Recipients"
-          variant="filled"
           data={[
             { value: "1", label: "Staff Only" },
             { value: "2", label: "Parents and Staff" },
@@ -85,7 +82,6 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
             className="form-item"
             label="Publish Date"
             placeholder="Date"
-            variant="filled"
             required
             {...form.getInputProps("date")}
           />
@@ -93,7 +89,6 @@ const CreateBroadcast = ({ closeModal, submit, edit }: any) => {
           <TimeInput
             label="Time"
             className="form-item"
-            variant="filled"
             required
             mt="md"
             format="12"

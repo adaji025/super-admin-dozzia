@@ -20,8 +20,9 @@ import { Trash, Users, UserPlus, User } from "tabler-icons-react";
 import { useForm, formList } from "@mantine/form";
 import useClass from "../../../hooks/useClass";
 import useStudent from "../../../hooks/useStudent";
-
 import "../modals.scss";
+import { StudentType, StudentsState } from "../../../types/studentTypes";
+import useNotification from "../../../hooks/useNotification";
 
 const ClassStudents = ({
   classId,
@@ -34,7 +35,7 @@ const ClassStudents = ({
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(20);
+  const [perPage] = useState<number>(50);
   const {
     handleGetClassStudents,
     classStudents,
@@ -90,6 +91,7 @@ const AddStudentsToClass = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [studentList, setStudentList] = useState<any>([]);
   const { getInfoWithUsername } = useStudent();
+  const { handleError } = useNotification();
 
   const form = useForm({
     initialValues: {
@@ -110,7 +112,7 @@ const AddStudentsToClass = ({
       }
     }
 
-    if (getUsername.length !== 8) {
+    if (getUsername.length < 7) {
       return showNotification({
         title: "Error",
         message: `${"Please enter a valid Reg No."} 😕`,
@@ -136,7 +138,9 @@ const AddStudentsToClass = ({
         };
         setStudentList(ids);
       })
-      .catch((error) => {})
+      .catch((error) => {
+        handleError(error);
+      })
       .finally(() => {
         setLoading(false);
       });
@@ -171,7 +175,6 @@ const AddStudentsToClass = ({
       <TextInput
         placeholder="Student Reg No."
         required
-        variant="filled"
         disabled={index !== form.values.students.length - 1}
         icon={<User size={14} />}
         className="el231"
@@ -259,32 +262,36 @@ const AddStudentsToClass = ({
       <Divider mt="md" variant="dashed" />
 
       <Group position="right" mt="lg">
-        <Button variant="light" onClick={closeModal}>
+        <Button variant="default" onClick={closeModal}>
           Close
         </Button>
-        <Button onClick={submit}>Submit</Button>
+        <Button onClick={submit} color="dark">
+          Submit
+        </Button>
       </Group>
     </Fragment>
   );
 };
+
+interface ViewStudentsProps {
+  closeModal: () => void;
+  classStudents: StudentsState;
+  loading: boolean;
+  setPage: (value: number) => void;
+}
 
 const ViewStudents = ({
   closeModal,
   classStudents,
   loading,
   setPage,
-}: {
-  closeModal: () => void;
-  classStudents: any;
-  loading: boolean;
-  setPage: (value: number) => void;
-}) => {
+}: ViewStudentsProps) => {
   const deviceWidth = window.innerWidth;
 
   return (
     <Fragment>
       <Box sx={{ maxWidth: 900, minHeight: 173 }} className="list-modal">
-        {classStudents?.data && !loading ? (
+        {classStudents.dataFetched && !loading ? (
           <>
             <Table striped>
               <thead>
@@ -330,16 +337,7 @@ const ViewStudents = ({
               <tbody>
                 {classStudents?.data.length > 0 &&
                   classStudents?.data.map(
-                    (
-                      item: {
-                        student_id: string;
-                        first_name: number;
-                        last_name: string;
-                        picture: string;
-                        username: string;
-                      },
-                      index: number
-                    ) => (
+                    (item: StudentType, index: number) => (
                       <tr key={item.student_id}>
                         <td
                           style={{
@@ -374,7 +372,7 @@ const ViewStudents = ({
                             borderBottom: `1px solid #0000`,
                           }}
                         >
-                          {item.username}
+                          {item.reg_no}
                         </td>
                         <td
                           style={{
@@ -432,7 +430,7 @@ const ViewStudents = ({
       {classStudents?.meta && classStudents?.data.length > 0 && (
         <Pagination
           sx={{ maxWidth: 900 }}
-          position="center"
+          position="left"
           mt={25}
           onChange={(value) => {
             if (value !== classStudents.meta.current_page) {
@@ -446,7 +444,9 @@ const ViewStudents = ({
       <Divider mt="md" variant="dashed" />
 
       <Group position="right" mt="lg">
-        <Button onClick={closeModal}>Close</Button>
+        <Button onClick={closeModal} variant="default">
+          Close
+        </Button>
       </Group>
     </Fragment>
   );

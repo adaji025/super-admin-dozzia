@@ -14,13 +14,16 @@ import {
   Divider,
   Group,
   Alert,
+  LoadingOverlay,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import { X, Search, CheckupList, Book, Edit } from "tabler-icons-react";
 import AddSubject from "../../components/modals/Subject/AddSubject";
-import AssignToClass from "../../components/modals/Subject/AssignToClass";
+import AddSubjectToClass from "../../components/modals/Subject/AddSubjectToClass";
 import SubjectClasses from "../../components/modals/Subject/SubjectClasses";
 import useSubject from "../../hooks/useSubject";
+import { CreateSubjectData, SubjectType } from "../../types/subjectsTypes";
+import { Roles } from "../../types/authTypes";
 
 const Subjects = () => {
   const { dark } = useTheme();
@@ -48,7 +51,7 @@ const Subjects = () => {
   >(null);
 
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const deviceWidth = window.innerWidth;
@@ -58,7 +61,6 @@ const Subjects = () => {
 
   useEffect(() => {
     getSubjectList(page, perPage, search);
-
     //eslint-disable-next-line
   }, [page, search]);
 
@@ -71,6 +73,8 @@ const Subjects = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <LoadingOverlay visible={loading} />
 
       <Modal
         opened={addSubjectModal}
@@ -93,7 +97,13 @@ const Subjects = () => {
             }, 500);
           }}
           edit={activeSubject}
-          submit={activeSubject ? handleUpdateSubject : handleAddSubject}
+          submit={(values: CreateSubjectData, id?: string) => {
+            if (activeSubject) {
+              handleUpdateSubject(values, activeSubject.subject_id ?? "");
+            } else {
+              handleAddSubject(values);
+            }
+          }}
         />
       </Modal>
 
@@ -108,7 +118,7 @@ const Subjects = () => {
         title={<Text weight={600}>Add Subject to Class</Text>}
         size="lg"
       >
-        <AssignToClass
+        <AddSubjectToClass
           closeModal={() => {
             setAssignToClassModal(false);
             setTimeout(() => {
@@ -155,14 +165,18 @@ const Subjects = () => {
       >
         <div className="d-p-wrapper">
           <div className="d-p-header">
-            <div className="d-p-h-left no-select">Subjects</div>
+            <div className="d-p-h-left no-select"></div>
 
             <div className="d-p-h-right">
               <Button
                 onClick={() => {
                   setAddSubjectModal(true);
                 }}
-                disabled={userdata?.role?.name !== "School Admin"}
+                color="dark"
+                disabled={
+                  userdata?.role?.name !== Roles.SchoolAdmin &&
+                  userdata?.role?.name !== Roles.Principal
+                }
               >
                 Add Subject
               </Button>
@@ -221,6 +235,7 @@ const Subjects = () => {
                     setSearch(searchInput);
                   }
                 }}
+                color="dark"
               >
                 Search
               </Button>
@@ -263,113 +278,87 @@ const Subjects = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {subjects?.data.map(
-                      (
-                        item: {
-                          subject_id: string;
-                          subject_name: string;
-                          subject_category: string;
-                          subject_description: string;
-                        },
-                        index: number
-                      ) => (
-                        <tr key={item.subject_id}>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                            }}
-                            className="large-only"
-                          >
-                            {index + 1}
-                          </td>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              fontWeight: "600",
-                            }}
-                          >
-                            {item.subject_name}
-                          </td>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                            }}
-                          >
-                            {item.subject_category}
-                          </td>
+                    {subjects?.data.map((item: SubjectType, index: number) => (
+                      <tr key={item.subject_id}>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                          className="large-only"
+                        >
+                          {index + 1}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            fontWeight: "600",
+                          }}
+                        >
+                          {item.name}
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                        >
+                          {item.category}
+                        </td>
 
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              width: "20px",
-                            }}
-                            className="table-last"
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            width: "20px",
+                          }}
+                          className="table-last"
+                        >
+                          <Menu
+                            position={deviceWidth < 576 ? "left" : "right"}
+                            gutter={15}
+                            withArrow
+                            size="md"
                           >
-                            <Menu
-                              position={deviceWidth < 576 ? "left" : "right"}
-                              gutter={15}
-                              withArrow
-                              size="md"
+                            <Menu.Label>Subject Menu</Menu.Label>
+
+                            <Menu.Item
+                              icon={<Book size={14} />}
+                              onClick={() => {
+                                setActiveSubject(item);
+                                setSubjectClassesModal(true);
+                              }}
                             >
-                              <Menu.Label>Subject Menu</Menu.Label>
-
-                              <Menu.Item
-                                icon={<Book size={14} />}
-                                onClick={() => {
-                                  setActiveSubject({
-                                    subject_id: item.subject_id,
-                                    subject_name: item.subject_name,
-                                    subject_category: item.subject_category,
-                                    subject_description:
-                                      item.subject_description,
-                                  });
-                                  setSubjectClassesModal(true);
-                                }}
-                              >
-                                Classes
-                              </Menu.Item>
-                              <Menu.Item
-                                icon={<CheckupList size={14} />}
-                                onClick={() => {
-                                  setActiveSubject({
-                                    subject_id: item.subject_id,
-                                    subject_name: item.subject_name,
-                                    subject_category: item.subject_category,
-                                    subject_description:
-                                      item.subject_description,
-                                  });
-                                  setAssignToClassModal(true);
-                                }}
-                                disabled={
-                                  userdata?.role?.name !== "School Admin"
-                                }
-                              >
-                                Add to class
-                              </Menu.Item>
-                              <Divider />
-                              <Menu.Item
-                                icon={<Edit size={14} />}
-                                onClick={() => {
-                                  setActiveSubject({
-                                    subject_id: item.subject_id,
-                                    subject_name: item.subject_name,
-                                    subject_category: item.subject_category,
-                                    subject_description:
-                                      item.subject_description,
-                                  });
-                                  setAddSubjectModal(true);
-                                }}
-                                disabled={
-                                  userdata?.role?.name !== "School Admin"
-                                }
-                              >
-                                Edit Subject
-                              </Menu.Item>
-                            </Menu>
-                          </td>
-                        </tr>
-                      )
-                    )}
+                              Classes
+                            </Menu.Item>
+                            <Menu.Item
+                              icon={<CheckupList size={14} />}
+                              onClick={() => {
+                                setActiveSubject(item);
+                                setAssignToClassModal(true);
+                              }}
+                              disabled={
+                                userdata?.role?.name !== Roles.SchoolAdmin &&
+                                userdata?.role?.name !== Roles.Principal
+                              }
+                            >
+                              Add to class
+                            </Menu.Item>
+                            <Divider />
+                            <Menu.Item
+                              icon={<Edit size={14} />}
+                              onClick={() => {
+                                setActiveSubject(item);
+                                setAddSubjectModal(true);
+                              }}
+                              disabled={
+                                userdata?.role?.name !== Roles.SchoolAdmin &&
+                                userdata?.role?.name !== Roles.Principal
+                              }
+                            >
+                              Edit Subject
+                            </Menu.Item>
+                          </Menu>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
 
@@ -399,7 +388,7 @@ const Subjects = () => {
           {subjects?.meta && subjects?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 setPage(value);

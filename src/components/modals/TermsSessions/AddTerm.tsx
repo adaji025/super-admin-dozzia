@@ -45,7 +45,6 @@ const AddTerm = ({ closeModal }: any) => {
           required
           label="Term"
           placeholder="Term"
-          variant="filled"
           data={[
             { value: "1", label: "1" },
             { value: "2", label: "2" },
@@ -60,7 +59,6 @@ const AddTerm = ({ closeModal }: any) => {
           className="form-item"
           label="Start Date"
           placeholder="Start date"
-          variant="filled"
           required
           {...form.getInputProps("start_date")}
         />
@@ -71,7 +69,6 @@ const AddTerm = ({ closeModal }: any) => {
           className="form-item"
           label="End Date"
           placeholder="End date"
-          variant="filled"
           required
           {...form.getInputProps("end_date")}
         />

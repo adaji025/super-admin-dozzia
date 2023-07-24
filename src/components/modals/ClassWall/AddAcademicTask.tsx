@@ -12,12 +12,20 @@ import { useForm } from "@mantine/form";
 import Upload from "../../Upload/Upload";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import { SubjectType } from "../../../types/subjectsTypes";
 
-const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
+interface AddAcademicTaskProps {
+  closeModal: () => void;
+  submit: (values: any) => void;
+  allSubjects: SubjectType[];
+}
+
+const AddAcademicTask = ({
+  closeModal,
+  submit,
+  allSubjects,
+}: AddAcademicTaskProps) => {
   const [file, setFile] = useState<any>(null);
-  const userdata = useSelector((state: any) => {
-    return state.user.userdata;
-  });
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
   });
@@ -27,8 +35,7 @@ const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
       title: "",
       description: "",
       subject_id: "",
-      classroom_id:
-        userdata?.role?.name === "Teacher" ? classWall?.activeClassId : "",
+      classroom_id: classWall?.activeClassId,
       link: "",
       end_at: new Date(),
     },
@@ -65,7 +72,6 @@ const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Title"
           placeholder="Title"
           {...form.getInputProps("title")}
@@ -76,7 +82,6 @@ const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
           required
           label="Description"
           placeholder="Resource description"
-          variant="filled"
           autosize
           minRows={3}
           maxRows={5}
@@ -88,36 +93,12 @@ const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
           required
           label="Subject"
           placeholder="Select subject"
-          variant="filled"
-          data={allSubjects.map(
-            (item: {
-              subject_id: string;
-              subject_name: string;
-              subject_category: string;
-            }) => ({
-              key: item?.subject_id,
-              value: item?.subject_id,
-              label: `${item?.subject_name} (${item?.subject_category})`,
-            })
-          )}
+          data={allSubjects.map((item: SubjectType) => ({
+            key: item?.subject_id,
+            value: item?.subject_id,
+            label: `${item?.name} (${item?.category})`,
+          }))}
           {...form.getInputProps("subject_id")}
-        />
-
-        <Select
-          mt="md"
-          required
-          label="Classroom"
-          placeholder="Select classroom"
-          variant="filled"
-          disabled={userdata?.role?.name === "Teacher"}
-          data={classWall?.classes.map(
-            (item: { classroom_id: string; classroom_name: string }) => ({
-              key: item?.classroom_id,
-              value: item?.classroom_id,
-              label: item.classroom_name,
-            })
-          )}
-          {...form.getInputProps("classroom_id")}
         />
 
         <DatePicker
@@ -125,14 +106,12 @@ const AddAcademicTask = ({ closeModal, submit, allSubjects }: any) => {
           className="form-item"
           label="Due Date"
           placeholder="Due date"
-          variant="filled"
           required
           {...form.getInputProps("end_at")}
         />
 
         <TextInput
           mt="md"
-          variant="filled"
           label="Insert Link"
           placeholder="Enter external URL"
           {...form.getInputProps("link")}

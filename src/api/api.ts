@@ -2,18 +2,17 @@ const api: string = process.env.REACT_APP_API!;
 
 export const APIS = {
   AUTH: {
-    LOGIN: `${api}/login`,
-    FORGOT_PASSWORD: `${api}/forgot/password`,
-    RESET_PASSWORD: `${api}/reset/password`,
-    PROFILE: `${api}/profile`,
-    CHANGE_PASSWORD: `${api}/change/password`,
+    LOGIN: `${api}/auth/login`,
+    FORGOT_PASSWORD: `${api}/auth/request/forgot-password`,
+    RESET_PASSWORD: `${api}/auth/verify/reset-password`,
+    PROFILE: `${api}/profiles`,
+    CHANGE_PASSWORD: `${api}/profiles/change-password`,
     CHANGE_PROFILE_IMAGE: `${api}/picture`,
     LOGOUT: `${api}/logout`,
   },
   LISTS: {
-    GET_STATE_LIST: `${api}/states`,
-    GET_MEDICAL_LIST: `${api}/medicals`,
-    GET_STAFF_ROLE_LIST: `${api}/roles`,
+    GET_STATE_LIST: `${api}/generals/states`,
+    GET_STAFF_ROLE_LIST: `${api}/generals/roles`,
   },
   STAFF: {
     ONBOARD_STAFF: `${api}/staff`,
@@ -44,11 +43,14 @@ export const APIS = {
       perPage: number,
       level: string,
       search: string,
-      staffId?: string
+      staffId?: string,
+      subjectId?: string
     ) =>
       `${api}/classrooms?per_page=${perPage}&page=${page}&staff_id=${
         staffId ?? ""
-      }&level=${level}&search_query=${search}`,
+      }&level=${level}&search_query=${search}${
+        subjectId ? `&subject_id=${subjectId}` : ""
+      }`,
     CLASS: (id: string) => `${api}/classrooms/${id}`,
     GET_CLASS_STUDENTS: (id: string, page: number, perPage: number) =>
       `${api}/classrooms/${id}/students?per_page=${perPage}&page=${page}`,
@@ -67,7 +69,6 @@ export const APIS = {
       `${api}/subjects?per_page=${perPage}&page=${page}&staff_id=${staffId}&classroom_id=${classId}&search_query=${search}`,
     SUBJECT: (id: string) => `${api}/subjects/${id}`,
     ASSIGN_CLASS_AND_TEACHER: (id: string) => `${api}/subjects/${id}/assign`,
-    GET_SUBJECT_CLASSES: (id: string) => `${api}/subjects/${id}/classrooms`,
   },
   EVENT: {
     CREATE_EVENT: `${api}/events`,
@@ -81,7 +82,7 @@ export const APIS = {
     EVENT: (id: string) => `${api}/events/${id}`,
   },
   ATTENDANCE: {
-    GET_GENERAL_ATTENDANCE: (
+    GET_ATTENDANCE: (
       page: number,
       perPage: number,
       date: string,
@@ -119,13 +120,13 @@ export const APIS = {
     RESTORE_STAFF: (id: string) => `${api}/recycle-bin/staff/${id}/restore`,
   },
   STUDY_RESOURCES: {
-    UPLOAD_STUDY_RESOURCE_FILE: `${api}/study-resource-files`,
+    UPLOAD_STUDY_RESOURCE_FILE: `${api}/study-materials/files`,
     GET_STUDY_RESOURCE_FILES: (id: string) =>
-      `${api}/study-resource-files?study_resource_id=${id}`,
+      `${api}/study-materials/files?study_material_id=${id}`,
     DELETE_STUDY_RESOURCE_FILE: (id: string) =>
-      `${api}/study-resource-files/${id}`,
-    STUDY_RESOURCE: `${api}/study-resources`,
-    DELETE_STUDY_RESOURCE: (id: string) => `${api}/study-resources/${id}`,
+      `${api}/study_material_files/${id}`,
+    STUDY_RESOURCE: `${api}/study-materials`,
+    DELETE_STUDY_RESOURCE: (id: string) => `${api}/study-materials/${id}`,
   },
   ACADEMIC_LOG: {
     CREATE_TASK: `${api}/tasks`,
@@ -161,16 +162,15 @@ export const APIS = {
       `${api}/curricula?per_page=${perPage}&page=${page}&subject_id=${subjectId}&classroom_id=${classroomId}`,
   },
   TERMS: {
-    ADD_TERM: `${api}/settings/terms`,
-    DELETE_TERM: (id: string) => `${api}/settings/terms/${id}`,
-    GET_TERMS: (sessionId: string) =>
-      `${api}/settings/terms?session_id=${sessionId}`,
+    ADD_TERM: `${api}/terms`,
+    DELETE_TERM: (id: string) => `${api}/terms/${id}`,
+    GET_TERMS: (sessionId: string) => `${api}/terms?session_id=${sessionId}`,
   },
   SESSIONS: {
-    SESSIONS: `${api}/settings/sessions`,
-    DELETE_SESSION: (id: string) => `${api}/settings/sessions/${id}`,
+    SESSIONS: `${api}/sessions`,
+    DELETE_SESSION: (id: string) => `${api}/sessions/${id}`,
     SET_ACTIVE_SESSION: (sessionId: string) =>
-      `${api}/settings/sessions/${sessionId}/set-active`,
+      `${api}/sessions/${sessionId}/set-active`,
   },
   GRADES: {
     GRADES: `${api}/settings/grades`,

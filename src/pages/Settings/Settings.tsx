@@ -8,6 +8,7 @@ import {
   Box,
   Modal,
   Text,
+  LoadingOverlay,
 } from "@mantine/core";
 import { useDispatch } from "react-redux";
 import { useForm } from "@mantine/form";
@@ -17,35 +18,36 @@ import PageHeader from "../../components/PageHeader/PageHeader";
 import { updateProfile, changeProfileImage } from "../../services/auth/auth";
 import { showNotification } from "@mantine/notifications";
 import useNotification from "../../hooks/useNotification";
-import { showLoader } from "../../redux/utility/utility.actions";
 import { setUserData } from "../../redux/user/user.actions";
 import ChangePassword from "../../components/modals/Auth/ChangePassword";
 import "./settings.scss";
+import { UserState } from "../../redux/user/user.reducer";
 
 const Settings = () => {
   const inputFile: any = useRef();
   const { dark } = useTheme();
   const dispatch = useDispatch();
-  const userdata = useSelector((state: any) => {
+  const userdata = useSelector((state: { user: UserState }) => {
     return state.user.userdata;
   });
   const { handleError } = useNotification();
   const [changePasswordModal, setChangePasswordModal] =
     useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
-      first_name: userdata?.profile_details?.first_name ?? "",
-      last_name: userdata?.profile_details?.last_name ?? "",
-      middle_name: userdata?.profile_details?.middle_name ?? "",
-      email: userdata?.profile_details?.email ?? "",
-      address: userdata?.profile_details?.address ?? "",
-      phone_number: userdata?.profile_details?.phone_number ?? "",
+      first_name: userdata?.first_name ?? "",
+      last_name: userdata?.last_name ?? "",
+      middle_name: userdata?.middle_name ?? "",
+      email: userdata?.email ?? "",
+      address: userdata?.address ?? "",
+      phone_number: userdata?.phone_number ?? "",
     },
   });
 
   const submit = (values: any) => {
-    dispatch(showLoader(true));
+    setLoading(true);
 
     updateProfile(
       values.first_name,
@@ -67,7 +69,7 @@ const Settings = () => {
         handleError(error);
       })
       .finally(() => {
-        dispatch(showLoader(false));
+        setLoading(false);
       });
   };
 
@@ -82,7 +84,7 @@ const Settings = () => {
 
     if (selectedFile) {
       if (types.includes(selectedFile.type)) {
-        dispatch(showLoader(true));
+        setLoading(true);
 
         var formData = new FormData();
         formData.append("image", selectedFile);
@@ -102,7 +104,7 @@ const Settings = () => {
             handleError(error);
           })
           .finally(() => {
-            dispatch(showLoader(false));
+            setLoading(false);
             inputFile.current.value = null;
           });
       } else {
@@ -123,6 +125,8 @@ const Settings = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
+      <LoadingOverlay visible={loading} />
 
       <Modal
         opened={changePasswordModal}
@@ -176,20 +180,20 @@ const Settings = () => {
               <TextInput
                 required
                 label="First Name"
-                placeholder="First mame"
+                placeholder=""
                 type="text"
-                variant="filled"
                 {...form.getInputProps("first_name")}
+                disabled
               />
 
               <TextInput
                 required
                 mt="lg"
                 label="Last Name"
-                placeholder="Last name"
+                placeholder=""
                 type="text"
-                variant="filled"
                 {...form.getInputProps("last_name")}
+                disabled
               />
 
               <TextInput
@@ -197,10 +201,10 @@ const Settings = () => {
                 required
                 mt="lg"
                 label="Middle Name"
-                placeholder="Middle name"
+                placeholder=""
                 type="text"
-                variant="filled"
                 {...form.getInputProps("middle_name")}
+                disabled
               />
 
               <TextInput
@@ -208,10 +212,10 @@ const Settings = () => {
                 required
                 mt="lg"
                 label="Email"
-                placeholder="Email"
+                placeholder=""
                 type="email"
-                variant="filled"
                 {...form.getInputProps("email")}
+                disabled
               />
 
               <TextInput
@@ -219,25 +223,25 @@ const Settings = () => {
                 mt="lg"
                 type="tel"
                 label="Phone Number"
-                placeholder="Phone number"
-                variant="filled"
+                placeholder=""
                 {...form.getInputProps("phone_number")}
+                disabled
               />
 
               <TextInput
                 required
                 mt="lg"
                 label="Address"
-                placeholder="Address"
+                placeholder=""
                 type="text"
-                variant="filled"
                 {...form.getInputProps("address")}
+                disabled
               />
 
               <Group position="left" mt="xl">
-                <Button type="submit">Update Profile</Button>
+                {/* <Button type="submit">Update Profile</Button> */}
                 <Button
-                  variant="light"
+                  color="dark"
                   onClick={() => {
                     setChangePasswordModal(true);
                   }}

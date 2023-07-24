@@ -9,6 +9,9 @@ import {
 import { showLoader } from "../redux/utility/utility.actions";
 import useNotification from "./useNotification";
 import { showNotification } from "@mantine/notifications";
+import { AcademicLogTaskType } from "../types/academicLogTypes";
+import { ApiResponseType } from "../types/utilityTypes";
+import { AxiosError } from "axios";
 
 const useAcademicLog = () => {
   const dispatch = useDispatch();
@@ -61,14 +64,14 @@ const useAcademicLog = () => {
     classId: string,
     subjectId: string
   ) => {
-    return new Promise((resolve) => {
+    return new Promise<ApiResponseType<AcademicLogTaskType[]>>((resolve) => {
       setLoading(true);
 
       getTasks(page, perPage, classId, subjectId)
-        .then((res) => {
+        .then((res: ApiResponseType<AcademicLogTaskType[]>) => {
           resolve(res);
         })
-        .catch((error) => {
+        .catch((error: AxiosError) => {
           handleError(error);
         })
         .finally(() => {

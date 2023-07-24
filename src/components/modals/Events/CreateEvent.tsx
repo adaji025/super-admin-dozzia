@@ -98,7 +98,6 @@ const CreateEvent = ({
         <TextInput
           required
           mt="sm"
-          variant="filled"
           label="Event Title"
           placeholder="Event title"
           {...form.getInputProps("title")}
@@ -109,7 +108,6 @@ const CreateEvent = ({
           required
           label="Event Description"
           placeholder="e.g. Parents and guardians visiting day for 2nd term."
-          variant="filled"
           autosize
           minRows={3}
           maxRows={5}
@@ -121,7 +119,6 @@ const CreateEvent = ({
           required
           label="Participants"
           placeholder="Select participants"
-          variant="filled"
           data={[
             { value: "1", label: "Staff Only" },
             { value: "2", label: "Parents and Staff" },
@@ -136,7 +133,6 @@ const CreateEvent = ({
             className="form-item"
             label="Start Date"
             placeholder="Start date"
-            variant="filled"
             required
             {...form.getInputProps("startDate")}
           />
@@ -144,7 +140,6 @@ const CreateEvent = ({
           <TimeInput
             label="Start Time"
             className="form-item"
-            variant="filled"
             required
             mt="md"
             format="12"
@@ -159,7 +154,6 @@ const CreateEvent = ({
             className="form-item"
             label="End Date"
             placeholder="End date"
-            variant="filled"
             required
             {...form.getInputProps("endDate")}
           />
@@ -167,7 +161,6 @@ const CreateEvent = ({
           <TimeInput
             label="End Time"
             className="form-item"
-            variant="filled"
             required
             mt="md"
             format="12"

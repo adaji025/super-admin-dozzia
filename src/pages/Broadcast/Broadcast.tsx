@@ -22,7 +22,7 @@ import "./broadcast.scss";
 
 const Events = () => {
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const { dark } = useTheme();
   const [createBroadcastModal, setCreateBroadcastModal] =
     useState<boolean>(false);
@@ -271,7 +271,7 @@ const Events = () => {
           {broadcasts?.meta && broadcasts?.data.length > 0 && (
             <Pagination
               sx={{ maxWidth: 900 }}
-              position="center"
+              position="left"
               mt={25}
               onChange={(value) => {
                 if (value !== broadcasts.meta.current_page) {
