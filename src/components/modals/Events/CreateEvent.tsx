@@ -51,41 +51,39 @@ const CreateEvent = ({
   });
 
   const submit = (values: typeof form.values) => {
-    return new Promise((resolve) => {
-      setLoading(true);
+    setLoading(true);
 
-      const action = edit ? updateEvent : createEvent;
+    const action = edit ? updateEvent : createEvent;
 
-      const payload = {
-        title: values.title,
-        description: values.description,
-        start_at: `${moment(values.startDate).format("YYYY-MM-DD")} ${moment(
-          values.startTime
-        ).format("HH:mm:ss")}`,
-        end_at: `${moment(values.endDate).format("YYYY-MM-DD")} ${moment(
-          values.endTime
-        ).format("HH:mm:ss")}`,
-        visibility: values.visibility,
-        ...(classId && { classroom_id: classId }),
-      };
+    const payload = {
+      title: values.title,
+      description: values.description,
+      start_at: `${moment(values.startDate).format("YYYY-MM-DD")} ${moment(
+        values.startTime
+      ).format("HH:mm:ss")}`,
+      end_at: `${moment(values.endDate).format("YYYY-MM-DD")} ${moment(
+        values.endTime
+      ).format("HH:mm:ss")}`,
+      visibility: values.visibility,
+      ...(classId && { classroom_id: classId }),
+    };
 
-      action(payload, edit ? edit.id : undefined)
-        .then(() => {
-          showNotification({
-            title: "Success",
-            message: `Event ${edit ? "updated" : "created"} successfully.`,
-            color: "green",
-          });
-          closeModal();
-          callback && callback();
-        })
-        .catch((err: AxiosError) => {
-          handleError(err);
-        })
-        .finally(() => {
-          setLoading(false);
+    action(payload, edit ? edit.id : undefined)
+      .then(() => {
+        showNotification({
+          title: "Success",
+          message: `Event ${edit ? "updated" : "created"} successfully.`,
+          color: "green",
         });
-    });
+        closeModal();
+        callback && callback();
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

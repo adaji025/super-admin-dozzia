@@ -173,8 +173,8 @@ export const APIS = {
       `${api}/sessions/${sessionId}/set-active`,
   },
   GRADES: {
-    GRADES: `${api}/settings/grades`,
-    GRADE: (id: string) => `${api}/settings/grades/${id}`,
+    GRADES: `${api}/generals/grades`,
+    GRADE: (id: string) => `${api}/generals/grades/${id}`,
   },
   TEST_EXAMS: {
     GET_TEST_EXAMS: (classId: string) =>

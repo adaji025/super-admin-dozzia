@@ -6,10 +6,12 @@ import {
   getGrades,
   deleteGrade,
   updateRemark,
+  updateGrade,
 } from "../services/grades/grades";
 import useNotification from "./useNotification";
 import { showLoader } from "../redux/utility/utility.actions";
 import { setGrades } from "../redux/data/data.actions";
+import { CreateGradeData } from "../types/gradeTypes";
 
 const useGrades = () => {
   const dispatch = useDispatch();
@@ -19,30 +21,28 @@ const useGrades = () => {
     return state.data.grades;
   });
 
-  const handleAddGrade = (values: {
-    name: string;
-    remark: string;
-    min_score: string;
-    max_score: string;
-  }) => {
-    return new Promise((resolve) => {
-      setLoading(true);
-
+  const handleAddGrade = (values: CreateGradeData) => {
+    return new Promise((resolve, reject) => {
       addGrade(values)
         .then((res) => {
-          showNotification({
-            title: "Success",
-            message: "Grade added successfully.",
-            color: "green",
-          });
-          handleGetGrades();
           resolve(res);
         })
         .catch((error) => {
-          handleError(error);
+          reject(error);
+        });
+    });
+  };
+
+  const handleUpdateGrade = (values: CreateGradeData, id: string) => {
+    return new Promise((resolve, reject) => {
+      setLoading(true);
+
+      updateGrade(values, id)
+        .then((res) => {
+          resolve(res);
         })
-        .finally(() => {
-          setLoading(false);
+        .catch((error) => {
+          reject(error);
         });
     });
   };
@@ -115,6 +115,7 @@ const useGrades = () => {
     loading,
     setLoading,
     handleAddGrade,
+    handleUpdateGrade,
     handleGetGrades,
     handleDeleteGrade,
     handleUpdateRemark,

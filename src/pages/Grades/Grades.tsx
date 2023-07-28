@@ -13,24 +13,20 @@ import {
   Alert,
 } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
-import { Trash } from "tabler-icons-react";
+import { Edit, Trash } from "tabler-icons-react";
 import AddGrade from "../../components/modals/Grades/AddGrade";
 import useGrades from "../../hooks/useGrades";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
+import { GradeType } from "../../types/gradeTypes";
 
 const Grades = () => {
   const { dark } = useTheme();
-  const {
-    loading,
-    grades,
-    handleAddGrade,
-    handleGetGrades,
-    handleDeleteGrade,
-  } = useGrades();
+  const { loading, grades, handleGetGrades, handleDeleteGrade } = useGrades();
 
   const [addGradeModal, setAddGradeModal] = useState<boolean>(false);
   const [deleteGradeModal, setDeleteGradeModal] = useState<boolean>(false);
   const [gradeId, setGradeId] = useState<string>("");
+  const [grade, setGrade] = useState<GradeType | null>(null);
 
   const deviceWidth = window.innerWidth;
 
@@ -48,6 +44,7 @@ const Grades = () => {
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
+
       <Modal
         opened={addGradeModal}
         onClose={() => {
@@ -60,8 +57,8 @@ const Grades = () => {
           closeModal={() => {
             setAddGradeModal(false);
           }}
-          submit={handleAddGrade}
-          loading={loading}
+          grade={grade}
+          callback={handleGetGrades}
         />
       </Modal>
 
@@ -93,6 +90,7 @@ const Grades = () => {
               <Button
                 onClick={() => {
                   setAddGradeModal(true);
+                  setGrade(null);
                 }}
               >
                 Add Grade
@@ -144,71 +142,74 @@ const Grades = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {grades?.data.map(
-                      (item: {
-                        id: string;
-                        name: string;
-                        remark: string;
-                        min_score: number;
-                        max_score: number;
-                      }) => (
-                        <tr key={item?.id}>
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              fontWeight: "600",
-                            }}
-                          >
-                            {item?.name}
-                          </td>
+                    {grades?.data.map((item: GradeType) => (
+                      <tr key={item?.id}>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            fontWeight: "600",
+                          }}
+                        >
+                          {item?.name}
+                        </td>
 
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                            }}
-                          >
-                            {item?.min_score} - {item?.max_score}
-                          </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                        >
+                          {item?.min_score} - {item?.max_score}
+                        </td>
 
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                            }}
-                          >
-                            {item?.remark}
-                          </td>
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                          }}
+                        >
+                          {item?.remark}
+                        </td>
 
-                          <td
-                            style={{
-                              borderBottom: `1px solid #0000`,
-                              width: "20px",
-                            }}
-                            className="table-last"
+                        <td
+                          style={{
+                            borderBottom: `1px solid #0000`,
+                            width: "20px",
+                          }}
+                          className="table-last"
+                        >
+                          <Menu
+                            position={deviceWidth < 576 ? "left" : "right"}
+                            gutter={15}
+                            withArrow
+                            size="md"
                           >
-                            <Menu
-                              position={deviceWidth < 576 ? "left" : "right"}
-                              gutter={15}
-                              withArrow
-                              size="md"
+                            <Menu.Label>Grade Menu</Menu.Label>
+                            <Divider />
+
+                            <Menu.Item
+                              icon={<Edit size={14} />}
+                              onClick={() => {
+                                setGrade(item);
+                                setAddGradeModal(true);
+                              }}
                             >
-                              <Menu.Label>Grade Menu</Menu.Label>
+                              Edit Grade
+                            </Menu.Item>
 
-                              <Divider />
-                              <Menu.Item
-                                color="red"
-                                icon={<Trash size={14} />}
-                                onClick={() => {
-                                  setGradeId(item?.id);
-                                  setDeleteGradeModal(true);
-                                }}
-                              >
-                                Delete Grade
-                              </Menu.Item>
-                            </Menu>
-                          </td>
-                        </tr>
-                      )
-                    )}
+                            <Divider />
+                            <Menu.Item
+                              color="red"
+                              icon={<Trash size={14} />}
+                              onClick={() => {
+                                setGradeId(item?.id);
+                                setDeleteGradeModal(true);
+                              }}
+                            >
+                              Delete Grade
+                            </Menu.Item>
+                          </Menu>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </Table>
 

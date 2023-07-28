@@ -1,12 +1,8 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
+import { CreateGradeData } from "../../types/gradeTypes";
 
-export const addGrade = (data: {
-  name: string;
-  remark: string;
-  min_score: string;
-  max_score: string;
-}) => {
+export const addGrade = (data: CreateGradeData) => {
   return AxoisApi.post(`${APIS.GRADES.GRADES}`, data).then((res) => {
     return res.data;
   });
@@ -20,6 +16,12 @@ export const getGrades = () => {
 
 export const deleteGrade = (id: string) => {
   return AxoisApi.delete(`${APIS.GRADES.GRADE(id)}`).then((res) => {
+    return res.data;
+  });
+};
+
+export const updateGrade = (data: CreateGradeData, id: string) => {
+  return AxoisApi.put(`${APIS.GRADES.GRADE(id)}`, data).then((res) => {
     return res.data;
   });
 };
