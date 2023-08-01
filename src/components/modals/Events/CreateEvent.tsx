@@ -86,6 +86,7 @@ const CreateEvent = ({
       });
   };
 
+
   return (
     <div>
       <Divider mb="md" variant="dashed" />

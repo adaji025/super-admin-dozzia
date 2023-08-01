@@ -99,7 +99,7 @@ export const APIS = {
     MARK_ATTENDANCE: `${api}/mark/attendance`,
   },
   STATS: {
-    GET_STATS: `${api}/stats`,
+    GET_STATS: (date: string) => `${api}/dashboard?specific_date=${date}`,
   },
   BROADCAST: {
     GET_BROADCAST_LIST: (page: number, perPage: number) =>
