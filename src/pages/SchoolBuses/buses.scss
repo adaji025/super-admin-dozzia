@@ -151,3 +151,30 @@
     }
   }
 }
+
+.drawer-scroll-container {
+  height: calc(100vh - 84px);
+  margin-right: -16px;
+  padding-right: 16px;
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .a-s-header {
+    width: 100%;
+    margin-top: 24px;
+
+    .a-s-header-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .trash {
+        display: flex;
+        height: 80px;
+        align-items: center;
+      }
+    }
+  }
+}

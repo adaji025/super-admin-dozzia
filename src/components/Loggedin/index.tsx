@@ -32,6 +32,7 @@ import TransactionHistory from "../../pages/Wallet/TransactionHistory";
 import BillTicketHistory from "../../pages/Wallet/BillTicketHistory";
 import Bus from "../../pages/SchoolBuses/SchoolBuses";
 import TrackVehicle from "../../pages/SchoolBuses/TrackVehicle";
+import ViewStudents from "../../pages/SchoolBuses/ViewStudents";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
@@ -99,6 +100,10 @@ const LoggedinContainer = () => {
             <Route
               path="/school-buses/track-vehicle"
               element={<TrackVehicle />}
+            />
+            <Route
+              path="/school-buses/students"
+              element={<ViewStudents />}
             />
           </Routes>
         </div>

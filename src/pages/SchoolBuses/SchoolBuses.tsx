@@ -128,6 +128,13 @@ const Bus = () => {
                         >
                           Track vehicle
                         </Menu.Item>
+                        <Menu.Item
+                          onClick={() =>
+                            navigate("/school-buses/students")
+                          }
+                        >
+                          View students
+                        </Menu.Item>
                         <Menu.Item onClick={() => setOpenVehicleDetails(true)}>
                           View vehicle details
                         </Menu.Item>
