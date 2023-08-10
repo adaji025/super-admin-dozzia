@@ -33,6 +33,7 @@ import BillTicketHistory from "../../pages/Wallet/BillTicketHistory";
 import Bus from "../../pages/SchoolBuses/SchoolBuses";
 import TrackVehicle from "../../pages/SchoolBuses/TrackVehicle";
 import ViewStudents from "../../pages/SchoolBuses/ViewStudents";
+import PromotionRequest from "../../pages/PromotionRequest/PromotionRequest";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
@@ -104,6 +105,10 @@ const LoggedinContainer = () => {
             <Route
               path="/school-buses/students"
               element={<ViewStudents />}
+            />
+            <Route
+              path="/promotion-request"
+              element={<PromotionRequest />}
             />
           </Routes>
         </div>

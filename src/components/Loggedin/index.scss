@@ -289,6 +289,7 @@
           border: none !important;
           margin-bottom: 16px !important;
           white-space: nowrap;
+          text-transform: capitalize;
 
           .status {
             height: 30px;
@@ -313,6 +314,8 @@
               background: #fff5f5;
               color: #ff3a3a;
             }
+
+            
           }
         }
 
@@ -324,6 +327,10 @@
         td:last-child {
           border-top-right-radius: 8px;
           border-bottom-right-radius: 8px;
+        }
+        
+        td.rejected {
+          color: #ff3a3a !important;
         }
       }
     }
