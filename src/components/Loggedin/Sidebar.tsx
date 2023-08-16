@@ -103,6 +103,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           route: "/attendance",
         },
         {
+          icon: Promotion,
+          name: "Promotion Request",
+          route: "/promotion-request",
+        },
+        {
           name: "Grades",
           route: "/grades",
         },
