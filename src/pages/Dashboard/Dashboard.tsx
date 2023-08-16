@@ -2,12 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AxiosError } from "axios";
-import {
-  Button,
-  ScrollArea,
-  LoadingOverlay,
-  Popover,
-} from "@mantine/core";
+import { Button, ScrollArea, LoadingOverlay, Popover } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
@@ -27,11 +22,12 @@ import "./dashboard.scss";
 import { getMetrics } from "../../services/metrics/metrics";
 import { GetMetricsResponse } from "../../types/metricsTypes";
 
-
 const Dashboard = () => {
   const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
+  const [calenderButtonLoading, setCalenderButtonLoading] =
+    useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
   const [metrics, setMetrics] = useState<GetMetricsResponse>();
@@ -45,11 +41,14 @@ const Dashboard = () => {
     }
   );
   const { handleError } = useNotification();
- 
 
   useEffect(() => {
     handleGetReports();
     handleGetEvents();
+    //eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
     handleGetMetrics();
     //eslint-disable-next-line
   }, [date]);
@@ -72,23 +71,18 @@ const Dashboard = () => {
   };
 
   const handleGetEvents = () => {
-    if (!events) {
-      setLoading(true);
-    }
-
     getEvents({ page: 1, perPage: 10 })
       .then((res: GetEventsResponse) => {
         dispatch(setEvents(res));
       })
       .catch((err: AxiosError) => {
         handleError(err);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   };
 
   const handleGetMetrics = () => {
+    setCalenderButtonLoading(true);
+
     getMetrics(moment(date).format("YYYY-MM-DD"))
       .then((res: GetMetricsResponse) => {
         setMetrics(res);
@@ -97,10 +91,9 @@ const Dashboard = () => {
         handleError(error);
       })
       .finally(() => {
-        setLoading(false);
+        setCalenderButtonLoading(false);
       });
   };
-
 
   const callToAction = [
     {
@@ -139,7 +132,12 @@ const Dashboard = () => {
                   opened={calenderPopover}
                   onClose={() => setCalenderPopover(false)}
                   target={
-                    <Button onClick={() => setCalenderPopover((o) => !o)}>
+                    <Button
+                      color="dark"
+                      compact
+                      onClick={() => setCalenderPopover((o) => !o)}
+                      loading={calenderButtonLoading}
+                    >
                       {moment(date).format("MMM DD,YYYY")}
                     </Button>
                   }
@@ -151,7 +149,6 @@ const Dashboard = () => {
                     value={date}
                     initialMonth={date}
                     onChange={(value) => {
-                      setLoading(true);
                       setDate(value);
                       setCalenderPopover(false);
                     }}
