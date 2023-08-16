@@ -2,14 +2,8 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AxiosError } from "axios";
-import {
-  Button,
-  Divider,
-  Menu,
-  ScrollArea,
-  LoadingOverlay,
-} from "@mantine/core";
-import { ChevronDown } from "tabler-icons-react";
+import { Button, ScrollArea, LoadingOverlay, Popover } from "@mantine/core";
+import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,24 +16,21 @@ import { ReportStatusTypes } from "../../types/reportsTypes";
 import RemoveNote from "../../assets/svg/note-remove.svg";
 import Mountain from "../../assets/svg/mountains.svg";
 import Student from "../../assets/images/student.png";
-import Calendar from "../../assets/svg/calendar.svg";
+import CalendarIcon from "../../assets/svg/calendar.svg";
 import EmptyReportState from "../../assets/svg/EmptyState.svg";
 import "./dashboard.scss";
-
-enum DateRangeTypes {
-  THIS_WEEK = "This Week",
-  LAST_WEEK = "Last Week",
-  LAST_MONTH = "Last Month",
-  THIS_MONTH = "This Month",
-  CHOOSE_MONTH = "Choose month",
-  ALL_TIME = "All time",
-  CUSTOM = "Custom",
-}
+import { getMetrics } from "../../services/metrics/metrics";
+import { GetMetricsResponse } from "../../types/metricsTypes";
 
 const Dashboard = () => {
   const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
+  const [calenderButtonLoading, setCalenderButtonLoading] =
+    useState<boolean>(false);
+  const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
+  const [date, setDate] = useState<any>(new Date());
+  const [metrics, setMetrics] = useState<GetMetricsResponse>();
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
     return state.data.reports;
@@ -50,15 +41,17 @@ const Dashboard = () => {
     }
   );
   const { handleError } = useNotification();
-  const [selectedDateRange, setSelectedDateRange] = useState<DateRangeTypes>(
-    DateRangeTypes.THIS_WEEK
-  );
 
   useEffect(() => {
     handleGetReports();
     handleGetEvents();
     //eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    handleGetMetrics();
+    //eslint-disable-next-line
+  }, [date]);
 
   const handleGetReports = () => {
     if (!reports) {
@@ -78,19 +71,27 @@ const Dashboard = () => {
   };
 
   const handleGetEvents = () => {
-    if (!events) {
-      setLoading(true);
-    }
-
     getEvents({ page: 1, perPage: 10 })
       .then((res: GetEventsResponse) => {
         dispatch(setEvents(res));
       })
       .catch((err: AxiosError) => {
         handleError(err);
+      });
+  };
+
+  const handleGetMetrics = () => {
+    setCalenderButtonLoading(true);
+
+    getMetrics(moment(date).format("YYYY-MM-DD"))
+      .then((res: GetMetricsResponse) => {
+        setMetrics(res);
+      })
+      .catch((error: AxiosError) => {
+        handleError(error);
       })
       .finally(() => {
-        setLoading(false);
+        setCalenderButtonLoading(false);
       });
   };
 
@@ -112,16 +113,6 @@ const Dashboard = () => {
     },
   ];
 
-  const dates = [
-    DateRangeTypes.THIS_WEEK,
-    DateRangeTypes.LAST_WEEK,
-    DateRangeTypes.LAST_MONTH,
-    DateRangeTypes.THIS_MONTH,
-    DateRangeTypes.CHOOSE_MONTH,
-    DateRangeTypes.ALL_TIME,
-    DateRangeTypes.CUSTOM,
-  ];
-
   return (
     <Fragment>
       <Helmet>
@@ -135,33 +126,35 @@ const Dashboard = () => {
         <div className="left">
           <div className="graph">
             <div className="header">
-              <span className="analytic">Analytics</span>
-              <Menu
-                withinPortal={true}
-                size="xs"
-                control={
-                  <Button
-                    rightIcon={<ChevronDown size={14} />}
-                    className="dropdown-target"
-                  >
-                    {selectedDateRange}
-                  </Button>
-                }
-              >
-                {dates.map((item, index) => (
-                  <>
-                    <Menu.Item
-                      style={{ fontSize: 12 }}
-                      key={index}
-                      className="menu-item"
-                      onClick={() => setSelectedDateRange(item)}
+              <div className="analytic">Analytics</div>
+              <div className="d-p-h-right">
+                <Popover
+                  opened={calenderPopover}
+                  onClose={() => setCalenderPopover(false)}
+                  target={
+                    <Button
+                      color="dark"
+                      compact
+                      onClick={() => setCalenderPopover((o) => !o)}
+                      loading={calenderButtonLoading}
                     >
-                      {item}
-                    </Menu.Item>
-                    <Divider className="divider" />
-                  </>
-                ))}
-              </Menu>
+                      {moment(date).format("MMM DD,YYYY")}
+                    </Button>
+                  }
+                  position="bottom"
+                  placement="end"
+                  withArrow
+                >
+                  <Calendar
+                    value={date}
+                    initialMonth={date}
+                    onChange={(value) => {
+                      setDate(value);
+                      setCalenderPopover(false);
+                    }}
+                  />
+                </Popover>
+              </div>
             </div>
             <div className="tabs">
               <Button
@@ -234,7 +227,7 @@ const Dashboard = () => {
             ) : (
               <div className="empty-event">
                 <div>
-                  <img src={Calendar} alt="" />
+                  <img src={CalendarIcon} alt="" />
                   <h2>You have no upcoming events</h2>
                 </div>
               </div>
