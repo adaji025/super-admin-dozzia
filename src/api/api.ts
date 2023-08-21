@@ -195,4 +195,9 @@ export const APIS = {
     APPROVE_REPORT_CARD: (reportCardId: string) =>
       `${api}/report-cards/${reportCardId}/approve`,
   },
+  BILLS: {
+    BILLS: (page: number, perPage: number,) => `${api}/bills?page=${page}&per_page=${perPage}`,
+    BILL: ( id: string) =>
+      `${api}/bills/${id}`,
+  },
 };

@@ -136,6 +136,7 @@ const Wallet = () => {
         close={() => setCreateBill(false)}
         drawerOpen={createBill}
         openSuccessModal={setSuccessOpen}
+        edit={null}
       />
 
       <TransactionDetails
@@ -202,14 +203,24 @@ const Wallet = () => {
           <Group position="apart" mb={18}>
             <Text weight={500}>Recent Transactions</Text>
 
-            <Button
-              compact
-              variant="subtle"
-              rightIcon={<HiChevronRight />}
-              onClick={() => navigate("/wallet/transaction-history")}
-            >
-              View all
-            </Button>
+            <Group>
+              <Button
+                compact
+                variant="subtle"
+                onClick={() => navigate("/wallet/bill-ticket-history")}
+              >
+                View bills
+              </Button>
+
+              <Button
+                compact
+                variant="subtle"
+                rightIcon={<HiChevronRight />}
+                onClick={() => navigate("/wallet/transaction-history")}
+              >
+                View all
+              </Button>
+            </Group>
           </Group>
 
           {tableData.length === 0 && (
