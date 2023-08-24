@@ -34,10 +34,17 @@ import Bus from "../../pages/SchoolBuses/SchoolBuses";
 import TrackVehicle from "../../pages/SchoolBuses/TrackVehicle";
 import ViewStudents from "../../pages/SchoolBuses/ViewStudents";
 import PromotionRequest from "../../pages/PromotionRequest/PromotionRequest";
+import TeacherDashboard from "../../pages/Dashboard/TeacherDashboard";
+import { Roles } from "../../types/authTypes";
+import { useSelector } from "react-redux";
+import { UserState } from "../../redux/user/user.reducer";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const userdata = useSelector((state: { user: UserState }) => {
+    return state.user.userdata;
+  });
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
@@ -60,7 +67,16 @@ const LoggedinContainer = () => {
         <div className="main-section">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />{" "}
+            <Route
+              path="/dashboard"
+              element={
+                userdata?.role?.name === Roles.Teacher ? (
+                  <TeacherDashboard />
+                ) : (
+                  <Dashboard />
+                )
+              }
+            />{" "}
             <Route path="/add-student" element={<OnboardStudent />} />
             <Route path="/add-staff" element={<OnboardStaff />} />
             <Route path="/settings" element={<Settings />} />
@@ -102,14 +118,8 @@ const LoggedinContainer = () => {
               path="/school-buses/track-vehicle"
               element={<TrackVehicle />}
             />
-            <Route
-              path="/school-buses/students"
-              element={<ViewStudents />}
-            />
-            <Route
-              path="/promotion-request"
-              element={<PromotionRequest />}
-            />
+            <Route path="/school-buses/students" element={<ViewStudents />} />
+            <Route path="/promotion-request" element={<PromotionRequest />} />
           </Routes>
         </div>
       </div>

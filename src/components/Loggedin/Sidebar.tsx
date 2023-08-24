@@ -22,7 +22,6 @@ import { ReactComponent as Reports } from "../../assets/svg/navigation/reports.s
 import { ReactComponent as Settings } from "../../assets/svg/navigation/setting.svg";
 import { ReactComponent as Trash } from "../../assets/svg/navigation/trash.svg";
 import { ReactComponent as Wallet } from "../../assets/svg/navigation/wallet.svg";
-import { ReactComponent as Location } from "../../assets/svg/navigation/location.svg";
 import { ReactComponent as Promotion } from "../../assets/svg/navigation/promotion.svg";
 import { ReactComponent as Security } from "../../assets/svg/navigation/security-user.svg";
 import { UserState } from "../../redux/user/user.reducer";
