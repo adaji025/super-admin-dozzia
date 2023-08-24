@@ -24,6 +24,7 @@ import { ReactComponent as Trash } from "../../assets/svg/navigation/trash.svg";
 import { ReactComponent as Wallet } from "../../assets/svg/navigation/wallet.svg";
 import { ReactComponent as Location } from "../../assets/svg/navigation/location.svg";
 import { ReactComponent as Promotion } from "../../assets/svg/navigation/promotion.svg";
+import { ReactComponent as Security } from "../../assets/svg/navigation/security-user.svg";
 import { UserState } from "../../redux/user/user.reducer";
 import { Roles } from "../../types/authTypes";
 
@@ -73,7 +74,6 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         "subjects",
         "classes",
         "events",
-        "attendance",
         "class-wall",
         "grades",
       ],
@@ -97,10 +97,6 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
         {
           name: "Subjects",
           route: "/subjects",
-        },
-        {
-          name: "Attendance",
-          route: "/attendance",
         },
         {
           icon: Promotion,
@@ -134,14 +130,25 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       ],
     },
     {
+      icon: Security,
+      name: "Security",
+      route: "/security",
+      key: ["school-buses", "attendance"],
+      children: [
+        {
+          name: "Bus GPS",
+          route: "/school-buses",
+        },
+        {
+          name: "Attendance",
+          route: "/attendance",
+        },
+      ],
+    },
+    {
       icon: Wallet,
       name: "Wallet",
       route: "/wallet",
-    },
-    {
-      icon: Location,
-      name: "Buses",
-      route: "/school-buses",
     },
     {
       icon: Broadcast,
