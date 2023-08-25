@@ -1,15 +1,11 @@
 import { AxiosError } from "axios";
 import AxoisApi from "../../api";
 import { APIS } from "../../api/api";
-import { CreatBillsType } from "../../types/bills";
+import { CreateBillData } from "../../types/billsTypes";
 
-export const createBill = (
-  page: number,
-  perPage: number,
-  data: CreatBillsType
-) => {
+export const createBill = (data: CreateBillData) => {
   return new Promise((resolve, reject) => {
-    AxoisApi.post(`${APIS.BILLS.BILLS(page, perPage)}`, data)
+    AxoisApi.post(APIS.BILLS.CREATE_BILL, data)
       .then((res) => {
         resolve(res);
       })
@@ -43,7 +39,7 @@ export const getBill = (id: string) => {
   });
 };
 
-export const updateBill = (id: string, data: CreatBillsType) => {
+export const updateBill = (id: string, data: CreateBillData) => {
   return new Promise((resolve, reject) => {
     AxoisApi.put(`${APIS.BILLS.BILL(id)}, data)`)
       .then((res) => {
@@ -57,7 +53,7 @@ export const updateBill = (id: string, data: CreatBillsType) => {
 
 export const deleteBill = (id: string) => {
   return new Promise((resolve, reject) => {
-    AxoisApi.delete(`${APIS.BILLS.BILL(id)})`)
+    AxoisApi.delete(`${APIS.BILLS.BILL(id)}`)
       .then((res) => {
         resolve(res);
       })

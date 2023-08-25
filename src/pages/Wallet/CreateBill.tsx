@@ -1,86 +1,44 @@
+import { useEffect, useState } from "react";
 import {
   Button,
   Divider,
   Drawer,
   Group,
+  LoadingOverlay,
   NumberInput,
   ScrollArea,
   Select,
   Text,
   TextInput,
-  
 } from "@mantine/core";
+import { AxiosError } from "axios";
+import moment from "moment";
 import { DatePicker } from "@mantine/dates";
 import { useForm, formList } from "@mantine/form";
-import { useEffect, useState } from "react";
 import { randomId } from "@mantine/hooks";
 import { createBill } from "../../services/bills/bills";
 import useNotification from "../../hooks/useNotification";
 import { showNotification } from "@mantine/notifications";
 import useClass from "../../hooks/useClass";
 import { ClassroomType } from "../../types/classTypes";
-import moment from "moment";
-import { BillsType } from "../../types/bills";
+import { BillType } from "../../types/billsTypes";
 
 interface CreateBillProps {
   drawerOpen: boolean;
   close: () => void;
-  openSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
   callback: () => void;
-  edit: BillsType | null;
+  edit: BillType | null;
 }
 
-const CreateBill = ({
-  callback,
-  close,
-  drawerOpen,
-  openSuccessModal,
-  edit
-}: CreateBillProps) => {
-  const [, setLoading] = useState<boolean>(false);
-
-  const [page] = useState<number>(1);
-  const [perPage] = useState<number>(20);
+const CreateBill = ({ callback, close, drawerOpen, edit }: CreateBillProps) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const [classes, setClasses] = useState<ClassroomType[]>([]);
-  const [search] = useState<string>("");
-  const [level] = useState<string>("");
   const { handleError } = useNotification();
   const { getClassList } = useClass();
 
-  const form = useForm({
-    initialValues: {
-      classroom_id: edit ? edit.classroom.classroom_id : "",
-      title: edit ? edit.title : "",
-      description: edit ? edit.description : "",
-      number_of_installments: edit ? edit.number_of_installments.toString() : "",
-      deadline_date: edit ? moment(edit.deadline_date).format("YYYY-MM-DD"): "",
-      tickets: formList([{ title: "", amount: "", key: randomId() }]),
-    },
-  });
-
-
-  const submit = (values: typeof form.values) => {
-    setLoading(true);
-
-    createBill(page, perPage, values)
-      .then(() => {
-        showNotification({
-          title: "Success",
-          message: "Success",
-          color: "grape",
-        });
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
   useEffect(() => {
-    getClassList(page, perPage, level, search)
-      .then((res: any) => {
+    getClassList(1, 40, "", "")
+      .then((res) => {
         setClasses(res);
       })
       .catch((error) => {
@@ -89,14 +47,51 @@ const CreateBill = ({
     //eslint-disable-next-line
   }, []);
 
+  const form = useForm({
+    initialValues: {
+      classroom_id: edit ? edit.classroom.classroom_id : "",
+      title: edit ? edit.title : "",
+      description: edit ? edit.description : "",
+      number_of_installments: edit
+        ? edit.number_of_installments.toString()
+        : "",
+      deadline_date: edit
+        ? moment(edit.deadline_date).format("YYYY-MM-DD")
+        : "",
+      tickets: formList([{ title: "", amount: "", key: randomId() }]),
+    },
+  });
+
+  const submit = (values: typeof form.values) => {
+    setLoading(true);
+
+    createBill({
+      ...values,
+      deadline_date: moment(values.deadline_date).format("YYYY-MM-DD"),
+    })
+      .then(() => {
+        showNotification({
+          title: "Success",
+          message: "Bill created successfully",
+          color: "green",
+        });
+        callback();
+        close();
+      })
+      .catch((error: AxiosError) => {
+        handleError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const TicketFields = form.values.tickets.map((item, index) => (
-    <div key={item.key}>
+    <Group key={item.key} grow mt="sm">
       <TextInput
         size="sm"
-        mt="sm"
-        label="Title"
-        placeholder="Typer here..."
+        label="Name"
+        placeholder="Input name"
         required
         {...form.getListInputProps("tickets", index, "title")}
       />
@@ -104,13 +99,12 @@ const CreateBill = ({
       <NumberInput
         hideControls
         size="sm"
-        mt="sm"
         label="Amount"
-        placeholder="Typer here..."
+        placeholder="Input amount"
         required
         {...form.getListInputProps("tickets", index, "amount")}
       />
-    </div>
+    </Group>
   ));
 
   return (
@@ -123,16 +117,15 @@ const CreateBill = ({
       className="wallet-drawer"
       title={<Text className="title">Create Bill</Text>}
     >
+      <LoadingOverlay visible={loading} />
+
       {drawerOpen && (
         <ScrollArea className="drawer-scroll-container" type="auto">
           <Divider />
 
           <form
             className="wallet-form"
-            onSubmit={form.onSubmit((values) => {
-              close();
-              submit({...values, deadline_date: moment(values.deadline_date).format("YYYY-MM-DD")});
-            })}
+            onSubmit={form.onSubmit((values) => submit(values))}
           >
             <Select
               label="Class"
@@ -158,8 +151,8 @@ const CreateBill = ({
             <Select
               size="sm"
               mt="sm"
-              label="Instalment payments"
-              placeholder="Select here..."
+              label="Number of installments"
+              placeholder="Select number of installments"
               data={[
                 { value: "1", label: "1" },
                 { value: "2", label: "2" },
@@ -188,21 +181,29 @@ const CreateBill = ({
               {...form.getInputProps("deadline_date")}
             />
 
+            <Divider
+              mt={16}
+              variant="dashed"
+              label="Tickets"
+              labelPosition="center"
+            />
+
             {TicketFields}
 
-            <Group position="right" mt="md">
-              <Button
-                onClick={() =>
-                  form.addListItem("tickets", {
-                    title: "",
-                    amount: "",
-                    key: randomId(),
-                  })
-                }
-              >
-                Add employee
-              </Button>
-            </Group>
+            <Button
+              mt={8}
+              variant="light"
+              compact
+              onClick={() =>
+                form.addListItem("tickets", {
+                  title: "",
+                  amount: "",
+                  key: randomId(),
+                })
+              }
+            >
+              Add Item
+            </Button>
 
             <Group position="right" mt={24}>
               <Button variant="default">Cancel</Button>

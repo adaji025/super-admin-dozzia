@@ -30,7 +30,7 @@ const Dashboard = () => {
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [metrics, setMetrics] = useState<GetMetricsResponse>();
+  const [, setMetrics] = useState<GetMetricsResponse>();
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
     return state.data.reports;

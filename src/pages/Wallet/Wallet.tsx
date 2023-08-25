@@ -58,7 +58,8 @@ const tableData = [
 ];
 
 const Wallet = () => {
-  const [successOpen, setSuccessOpen] = React.useState<boolean>(false);
+  const [showSuccessModal, setShowSuccessModal] =
+    React.useState<boolean>(false);
   const [setupWalletDrawer, setSetupWalletDrawer] =
     React.useState<boolean>(false);
   const [sendMoneyDrawer, setSendMoneyDrawer] = React.useState<boolean>(false);
@@ -107,15 +108,15 @@ const Wallet = () => {
   return (
     <>
       <AccountSuccessModal
-        modalOpen={successOpen}
-        close={() => setSuccessOpen(false)}
+        modalOpen={showSuccessModal}
+        close={() => setShowSuccessModal(false)}
       />
 
       <SetupWallet
         drawerOpen={setupWalletDrawer}
         close={() => setSetupWalletDrawer(false)}
         callback={() => {}}
-        openSuccessModal={setSuccessOpen}
+        openSuccessModal={setShowSuccessModal}
       />
 
       <SendMoney
@@ -128,14 +129,13 @@ const Wallet = () => {
         callback={() => {}}
         close={() => setFundWallet(false)}
         drawerOpen={fundWallet}
-        openSuccessModal={setSuccessOpen}
+        openSuccessModal={() => setShowSuccessModal(true)}
       />
 
       <CreateBill
         callback={() => {}}
         close={() => setCreateBill(false)}
         drawerOpen={createBill}
-        openSuccessModal={setSuccessOpen}
         edit={null}
       />
 

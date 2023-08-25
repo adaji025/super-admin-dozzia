@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, Divider, Menu, Table, LoadingOverlay } from "@mantine/core";
+import {
+  Button,
+  Divider,
+  Menu,
+  Table,
+  LoadingOverlay,
+  Tabs,
+} from "@mantine/core";
 import { useNavigate } from "react-router-dom";
 import { HiChevronLeft } from "react-icons/hi";
 import { ChevronDown, Edit, Trash } from "tabler-icons-react";
@@ -7,7 +14,7 @@ import useNotification from "../../hooks/useNotification";
 import EmptyImg from "../../assets/svg/EmptyState-2.svg";
 import { deleteBill, getBills } from "../../services/bills/bills";
 import { AxiosError } from "axios";
-import { BillsType } from "../../types/bills";
+import { BillType } from "../../types/billsTypes";
 import CreateBill from "./CreateBill";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import { showNotification } from "@mantine/notifications";
@@ -26,8 +33,8 @@ const BillTicketHistory = () => {
   const [selectedDateRange, setSelectedDateRange] =
     React.useState<DateRangeTypes>(DateRangeTypes.THIS_WEEK);
   const [loading, setLoading] = useState(false);
-  const [bills, setBills] = useState<BillsType[]>([]);
-  const [activeBills, setActiveBill] = useState<BillsType | null>(null);
+  const [bills, setBills] = useState<BillType[]>([]);
+  const [activeBill, setActiveBill] = useState<BillType | null>(null);
   const [activebillId, setActiveBillId] = useState<string>("");
   const [page] = useState<number>(1);
   const [perPage] = useState<number>(100);
@@ -92,8 +99,7 @@ const BillTicketHistory = () => {
         callback={() => {}}
         close={() => setCreateBill(false)}
         drawerOpen={createBill}
-        openSuccessModal={() => {}}
-        edit={activeBills}
+        edit={activeBill}
       />
 
       <Confirmation
