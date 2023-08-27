@@ -1,8 +1,9 @@
 import { ClassroomType } from "./classTypes";
 import { StaffType } from "./staffTypes";
+import { ResponseMeta } from "./utilityTypes";
 
 export type CreateBillData = {
-  classroom_id: string;
+  classroom_id: string[];
   title: string;
   description: string;
   number_of_installments: string;
@@ -14,7 +15,7 @@ export type CreateBillData = {
 };
 
 export type BillType = {
-  id: string;
+  school_bill_id: string;
   classroom: ClassroomType;
   created_by_staff: StaffType;
   title: string;
@@ -22,4 +23,10 @@ export type BillType = {
   description: string;
   number_of_installments: number;
   deadline_date: string;
+};
+
+export type BillsState = {
+  data: BillType[];
+  meta: ResponseMeta;
+  dataFetched: boolean;
 };

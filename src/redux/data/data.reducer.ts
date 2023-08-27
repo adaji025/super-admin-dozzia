@@ -1,4 +1,5 @@
 import { initialMetadata } from "../../lib/util";
+import { BillsState } from "../../types/billsTypes";
 import { ClassesState } from "../../types/classTypes";
 import { ClassWallState } from "../../types/classWallTypes";
 import { StaffState } from "../../types/staffTypes";
@@ -24,6 +25,7 @@ export type DataState = {
   terms: any;
   sesions: any;
   grades: any;
+  bills: BillsState;
 };
 
 const INITIAL_STATE: DataState = {
@@ -44,6 +46,7 @@ const INITIAL_STATE: DataState = {
   terms: null,
   sesions: null,
   grades: null,
+  bills: initialArrayDataState,
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -124,6 +127,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         grades: action.payload.grades,
+      };
+
+    case "SET_BILLS":
+      return {
+        ...state,
+        bills: action.payload.bills,
       };
     default:
       return state;

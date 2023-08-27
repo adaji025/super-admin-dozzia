@@ -40,7 +40,7 @@ const tableData = [
   },
 ];
 
-const TransactionTable = () => {
+const Transactions = () => {
   const [openDetails, setOpenDetails] = React.useState<boolean>(false);
   return (
     <>
@@ -48,23 +48,21 @@ const TransactionTable = () => {
         callback={() => {}}
         close={() => setOpenDetails(false)}
         drawerOpen={openDetails}
-        
       />
-          <div className="table-container">
-              
+      <div className="table-container">
         <Table horizontalSpacing="sm">
           <thead>
             <tr>
-              <th>TRANSACTION ID</th>
-              <th>DATE</th>
-              <th>TRANSACTION TYPE</th>
-              <th>AMOUNT</th>
-              <th>STATUS</th>
+              <th>ID</th>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
             </tr>
           </thead>
           <tbody>
-            {tableData.map((data) => (
-              <tr className="wallet-table-row">
+            {tableData.map((data, index) => (
+              <tr className="" key={index}>
                 <td className="start">{data.transaction_id}</td>
                 <td>{data.date}</td>
                 <td>{data.transaction_type}</td>
@@ -100,4 +98,4 @@ const TransactionTable = () => {
   );
 };
 
-export default TransactionTable;
+export default Transactions;

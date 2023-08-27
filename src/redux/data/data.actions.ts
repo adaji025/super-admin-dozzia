@@ -1,4 +1,7 @@
-export const setClasses = (classes: any) => ({
+import { BillsState } from "../../types/billsTypes";
+import { ClassesState } from "../../types/classTypes";
+
+export const setClasses = (classes: ClassesState) => ({
   type: "SET_CLASSES",
   payload: { classes },
 });
@@ -61,4 +64,9 @@ export const setSessions = (sesions: any) => ({
 export const setGrades = (grades: any) => ({
   type: "SET_GRADES",
   payload: { grades },
+});
+
+export const setBills = (bills: BillsState) => ({
+  type: "SET_BILLS",
+  payload: { bills },
 });

@@ -44,9 +44,9 @@ const useClass = () => {
   const [classStudents, setClassStudents] = useState<StudentsState>(
     initialArrayDataState
   );
-  const classes = useSelector((state: { data: { classes: ClassesState } }) => {
-    return state.data.classes;
-  });
+  const classes = useSelector(
+    (state: { data: { classes: ClassesState } }) => state.data.classes
+  );
 
   const getTeachers = (
     page: number,

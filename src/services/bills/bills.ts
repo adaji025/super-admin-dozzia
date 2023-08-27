@@ -1,7 +1,8 @@
 import { AxiosError } from "axios";
 import AxoisApi from "../../api";
 import { APIS } from "../../api/api";
-import { CreateBillData } from "../../types/billsTypes";
+import { BillType, CreateBillData } from "../../types/billsTypes";
+import { ApiResponseType } from "../../types/utilityTypes";
 
 export const createBill = (data: CreateBillData) => {
   return new Promise((resolve, reject) => {
@@ -16,13 +17,13 @@ export const createBill = (data: CreateBillData) => {
 };
 
 export const getBills = (page: number, perPage: number) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<ApiResponseType<BillType[]>>((resolve, reject) => {
     AxoisApi.get(`${APIS.BILLS.BILLS(page, perPage)}`)
-      .then((res: any) => {
-        resolve(res);
+      .then((res: { data: ApiResponseType<BillType[]> }) => {
+        resolve(res.data);
       })
-      .catch((error: AxiosError) => {
-        reject(error);
+      .catch((err: AxiosError) => {
+        reject(err);
       });
   });
 };
@@ -41,7 +42,7 @@ export const getBill = (id: string) => {
 
 export const updateBill = (id: string, data: CreateBillData) => {
   return new Promise((resolve, reject) => {
-    AxoisApi.put(`${APIS.BILLS.BILL(id)}, data)`)
+    AxoisApi.put(APIS.BILLS.BILL(id))
       .then((res) => {
         resolve(res);
       })
@@ -53,7 +54,7 @@ export const updateBill = (id: string, data: CreateBillData) => {
 
 export const deleteBill = (id: string) => {
   return new Promise((resolve, reject) => {
-    AxoisApi.delete(`${APIS.BILLS.BILL(id)}`)
+    AxoisApi.delete(APIS.BILLS.BILL(id))
       .then((res) => {
         resolve(res);
       })

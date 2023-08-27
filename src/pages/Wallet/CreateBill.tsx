@@ -8,6 +8,7 @@ import {
   NumberInput,
   ScrollArea,
   Select,
+  MultiSelect,
   Text,
   TextInput,
 } from "@mantine/core";
@@ -49,15 +50,13 @@ const CreateBill = ({ callback, close, drawerOpen, edit }: CreateBillProps) => {
 
   const form = useForm({
     initialValues: {
-      classroom_id: edit ? edit.classroom.classroom_id : "",
+      classroom_id: [],
       title: edit ? edit.title : "",
       description: edit ? edit.description : "",
       number_of_installments: edit
         ? edit.number_of_installments.toString()
         : "",
-      deadline_date: edit
-        ? moment(edit.deadline_date).format("YYYY-MM-DD")
-        : "",
+      deadline_date: edit ? new Date(edit.deadline_date) : "",
       tickets: formList([{ title: "", amount: "", key: randomId() }]),
     },
   });
@@ -75,6 +74,7 @@ const CreateBill = ({ callback, close, drawerOpen, edit }: CreateBillProps) => {
           message: "Bill created successfully",
           color: "green",
         });
+        form.reset();
         callback();
         close();
       })
@@ -127,9 +127,9 @@ const CreateBill = ({ callback, close, drawerOpen, edit }: CreateBillProps) => {
             className="wallet-form"
             onSubmit={form.onSubmit((values) => submit(values))}
           >
-            <Select
-              label="Class"
-              placeholder="Select class"
+            <MultiSelect
+              label="Classes"
+              placeholder="Select classes"
               data={classes.map((item) => ({
                 key: item.classroom_id,
                 label: item.name,
