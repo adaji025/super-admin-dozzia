@@ -19,6 +19,9 @@ import CreateBroadcast from "../../components/modals/Broadcast/CreateBroadcast";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import moment from "moment";
 import "./broadcast.scss";
+import { useSelector } from "react-redux";
+import { UserState } from "../../redux/user/user.reducer";
+import { Roles } from "../../types/authTypes";
 
 const Events = () => {
   const [page, setPage] = useState<number>(1);
@@ -38,6 +41,10 @@ const Events = () => {
     handleUpdateBroadcast,
   } = useBroadcast();
   const [confirmDeleteEvent, setConfirmDeleteEvent] = useState<boolean>(false);
+
+  const userdata = useSelector((state: { user: UserState }) => {
+    return state.user.userdata;
+  });
 
   useEffect(() => {
     handleGetBroadcastList(page, perPage);
@@ -107,13 +114,15 @@ const Events = () => {
             <div className="d-p-h-left no-select">Broadcast</div>
 
             <div className="d-p-h-right">
-              <Button
-                onClick={() => {
-                  setCreateBroadcastModal(true);
-                }}
-              >
-                Create Broadcast
-              </Button>
+              {userdata?.role?.name !== Roles.Teacher && (
+                <Button
+                  onClick={() => {
+                    setCreateBroadcastModal(true);
+                  }}
+                >
+                  Create Broadcast
+                </Button>
+              )}
             </div>
           </div>
 
@@ -204,18 +213,21 @@ const Events = () => {
                                 View Details
                               </Menu.Item>
 
-                              <Divider />
-
-                              <Menu.Item
-                                color="red"
-                                icon={<Trash size={14} />}
-                                onClick={() => {
-                                  setConfirmDeleteEvent(true);
-                                  setBroadcastId(item?.broadcast_id);
-                                }}
-                              >
-                                Delete Broadcast
-                              </Menu.Item>
+                              {userdata?.role?.name !== Roles.Teacher && (
+                                <>
+                                  <Divider />
+                                  <Menu.Item
+                                    color="red"
+                                    icon={<Trash size={14} />}
+                                    onClick={() => {
+                                      setConfirmDeleteEvent(true);
+                                      setBroadcastId(item?.broadcast_id);
+                                    }}
+                                  >
+                                    Delete Broadcast
+                                  </Menu.Item>
+                                </>
+                              )}
                             </Menu>
                           </div>
                         </div>
