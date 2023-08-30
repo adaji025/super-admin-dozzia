@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Menu, Table, LoadingOverlay, Pagination } from "@mantine/core";
 import { Edit, Trash } from "tabler-icons-react";
 import useNotification from "../../hooks/useNotification";
-import { deleteBill, getBills } from "../../services/bills/bills";
+import { deleteBill, getBills } from "../../services/wallet/bills";
 import { AxiosError } from "axios";
 import { BillType, BillsState } from "../../types/billsTypes";
 import CreateBill from "./CreateBill";
@@ -12,6 +12,7 @@ import EmptyState from "../../components/EmptyState/EmptyState";
 import { setBills } from "../../redux/data/data.actions";
 import { useDispatch, useSelector } from "react-redux";
 import { ApiResponseType } from "../../types/utilityTypes";
+import { useNavigate } from "react-router-dom";
 
 interface BillsProps {
   createBillDrawer: boolean;
@@ -19,6 +20,7 @@ interface BillsProps {
 }
 
 const Bills = ({ createBillDrawer, setCreateBillDrawer }: BillsProps) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [activeBill, setActiveBill] = useState<BillType | null>(null);
@@ -64,7 +66,7 @@ const Bills = ({ createBillDrawer, setCreateBillDrawer }: BillsProps) => {
           message: "Bill deleted successfully",
           color: "green",
         });
-        handleGetBills();
+        actionCallback();
       })
       .catch((error: AxiosError) => {
         handleError(error);
@@ -74,10 +76,15 @@ const Bills = ({ createBillDrawer, setCreateBillDrawer }: BillsProps) => {
       });
   };
 
+  const actionCallback = () => {
+    setLoading(true);
+    handleGetBills();
+  };
+
   return (
     <div className="relative">
       <CreateBill
-        callback={handleGetBills}
+        callback={actionCallback}
         close={() => setCreateBillDrawer(false)}
         drawerOpen={createBillDrawer}
         edit={activeBill}
@@ -114,9 +121,15 @@ const Bills = ({ createBillDrawer, setCreateBillDrawer }: BillsProps) => {
               </thead>
               <tbody>
                 {bills.data.map((bill: BillType) => (
-                  <tr className="click" key={bill.school_bill_id}>
-                    <td className="start">{bill.title}</td>
-                    <td>{bill.deadline_date}</td>
+                  <tr
+                    className="click"
+                    onClick={() =>
+                      navigate(`/wallet/bill/${bill.school_bill_id}`)
+                    }
+                    key={bill.school_bill_id}
+                  >
+                    <td className="start">{bill?.title ?? ""}</td>
+                    <td>{bill?.deadline_date ?? ""}</td>
                     <td className="end">NGN 5666</td>
                     <td>
                       <Menu gutter={15} withArrow size="sm">

@@ -112,8 +112,9 @@ export const APIS = {
     UPDATE_STATUS: (id: string) => `${api}/complains/${id}`,
   },
   CONVERSATION: {
-    GET_CONVERSATION: (id: string) => `${api}/conversations?complain_id=${id}`,
-    POST_CONVERSATION: `${api}/conversations`,
+    GET_CONVERSATION: (id: string) =>
+      `${api}/complain-conversations?complain_id=${id}`,
+    POST_CONVERSATION: `${api}/complain-conversations`,
   },
   RECYCLE_BIN: {
     LIST_SUSPENDED_STAFF: `${api}/recycle-bin/staff`,
@@ -200,5 +201,9 @@ export const APIS = {
     BILLS: (page: number, perPage: number) =>
       `${api}/bills?page=${page}&per_page=${perPage}`,
     BILL: (id: string) => `${api}/bills/${id}`,
+  },
+  TRANSACTIONS: {
+    TRANSACTIONS: (page: number, perPage: number) =>
+      `${api}/transactions?page=${page}&per_page=${perPage}`,
   },
 };

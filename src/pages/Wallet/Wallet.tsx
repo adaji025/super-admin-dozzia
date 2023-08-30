@@ -14,6 +14,7 @@ import FundWallet from "./FundWallet";
 import "./wallet.scss";
 import Bills from "./Bills";
 import Transactions from "./Transactions";
+import { Helmet } from "react-helmet";
 
 const Wallet = () => {
   const [wallet] = useState<boolean>(true);
@@ -113,7 +114,11 @@ const WalletNotEmpty = () => {
   };
 
   return (
-    <>
+    <div>
+      <Helmet>
+        <title>Wallet</title>
+      </Helmet>
+
       <SendMoney
         drawerOpen={sendMoneyDrawer}
         callback={() => {}}
@@ -163,7 +168,7 @@ const WalletNotEmpty = () => {
           <Transactions />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -29,10 +29,10 @@ export const getBills = (page: number, perPage: number) => {
 };
 
 export const getBill = (id: string) => {
-  return new Promise((resolve, reject) => {
-    AxoisApi.get(`${APIS.BILLS.BILL(id)}`)
-      .then((res: any) => {
-        resolve(res);
+  return new Promise<BillType>((resolve, reject) => {
+    AxoisApi.get(APIS.BILLS.BILL(id))
+      .then((res: { data: { data: BillType } }) => {
+        resolve(res.data.data);
       })
       .catch((error: AxiosError) => {
         reject(error);
@@ -42,7 +42,7 @@ export const getBill = (id: string) => {
 
 export const updateBill = (id: string, data: CreateBillData) => {
   return new Promise((resolve, reject) => {
-    AxoisApi.put(APIS.BILLS.BILL(id))
+    AxoisApi.put(APIS.BILLS.BILL(id), data)
       .then((res) => {
         resolve(res);
       })

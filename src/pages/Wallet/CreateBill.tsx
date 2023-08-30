@@ -17,7 +17,7 @@ import moment from "moment";
 import { DatePicker } from "@mantine/dates";
 import { useForm, formList } from "@mantine/form";
 import { randomId } from "@mantine/hooks";
-import { createBill } from "../../services/bills/bills";
+import { createBill } from "../../services/wallet/bills";
 import useNotification from "../../hooks/useNotification";
 import { showNotification } from "@mantine/notifications";
 import useClass from "../../hooks/useClass";
