@@ -2,7 +2,14 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AxiosError } from "axios";
-import { Button, ScrollArea, LoadingOverlay, Popover } from "@mantine/core";
+import {
+  Button,
+  ScrollArea,
+  LoadingOverlay,
+  Popover,
+  Modal,
+  Text,
+} from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
@@ -12,7 +19,7 @@ import useNotification from "../../hooks/useNotification";
 import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
 import { getEvents } from "../../services/event/event";
-import { ReportStatusTypes } from "../../types/reportsTypes";
+import { ReportStatusTypes, ReportType } from "../../types/reportsTypes";
 import RemoveNote from "../../assets/svg/note-remove.svg";
 import Mountain from "../../assets/svg/mountains.svg";
 import Student from "../../assets/images/student.png";
@@ -21,16 +28,21 @@ import EmptyReportState from "../../assets/svg/EmptyState.svg";
 import "./dashboard.scss";
 import { getMetrics } from "../../services/metrics/metrics";
 import { GetMetricsResponse } from "../../types/metricsTypes";
+import CreateBroadcast from "../../components/modals/Broadcast/CreateBroadcast";
+import useBroadcast from "../../hooks/useBroadcast";
 
 const Dashboard = () => {
   const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
+  const [createBroadcastModal, setCreateBroadcastModal] =
+    useState<boolean>(false);
+  const [broadcast, setBroadcast] = useState<any>(null);
   const [calenderButtonLoading, setCalenderButtonLoading] =
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [, setMetrics] = useState<GetMetricsResponse>();
+  const [metrics, setMetrics] = useState<GetMetricsResponse>();
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
     return state.data.reports;
@@ -41,6 +53,7 @@ const Dashboard = () => {
     }
   );
   const { handleError } = useNotification();
+  const { handleCreateBroadcast } = useBroadcast();
 
   useEffect(() => {
     handleGetReports();
@@ -122,6 +135,33 @@ const Dashboard = () => {
 
       <LoadingOverlay visible={loading} />
 
+      <Modal
+        opened={createBroadcastModal}
+        onClose={() => {
+          setCreateBroadcastModal(false);
+          setTimeout(() => {
+            setBroadcast(null);
+          }, 500);
+        }}
+        title={
+          <Text weight={600}>
+            {broadcast ? "Broadcast Details" : "Create Broadcast"}
+          </Text>
+        }
+        size="lg"
+      >
+        <CreateBroadcast
+          closeModal={() => {
+            setCreateBroadcastModal(false);
+            setTimeout(() => {
+              setBroadcast(null);
+            }, 500);
+          }}
+          // edit={broadcast}
+          submit={handleCreateBroadcast}
+        />
+      </Modal>
+
       <div className="dashboard">
         <div className="left">
           <div className="graph">
@@ -173,7 +213,11 @@ const Dashboard = () => {
           </div>
           <div className="cards">
             {callToAction.map((action) => (
-              <ActionCard key={action.title} {...{ action }} />
+              <ActionCard
+                key={action.title}
+                setCreateBroadcastModal={setCreateBroadcastModal}
+                {...{ action }}
+              />
             ))}
           </div>
         </div>
@@ -189,8 +233,8 @@ const Dashboard = () => {
             </div>
             {reports?.data.length > 0 ? (
               <div>
-                {reports.data.map((_: any, index: number) => (
-                  <ComplaintCard key={index} />
+                {reports.data.map((report: ReportType) => (
+                  <ComplaintCard key={report.id} report={report} />
                 ))}
               </div>
             ) : (
@@ -239,7 +283,11 @@ const Dashboard = () => {
   );
 };
 
-const ComplaintCard = () => {
+type ReportsProps = {
+  report: ReportType;
+};
+
+const ComplaintCard: React.FC<ReportsProps> = ({ report }) => {
   return (
     <div className="complaint-box">
       <table>
@@ -251,16 +299,16 @@ const ComplaintCard = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="c-desc">IS 012345</td>
-            <td className="c-desc">Noise making in class</td>
+            <td className="c-desc">{report.tracking_code}</td>
+            <td className="c-desc">{report.title}</td>
           </tr>
           <tr>
             <td className="c-title date-status">Date</td>
             <td className="c-title date-status">Status</td>
           </tr>
           <tr>
-            <td className="c-desc">Sept 9, 2023</td>
-            <td className="status">Unresolved</td>
+            <td className="c-desc">{report.date}</td>
+            <td className="status">{report.status}</td>
             <Button variant="subtle" rightIcon={<FiChevronRight />}>
               View
             </Button>
@@ -277,15 +325,28 @@ interface ActionProps {
     btnText: string;
     variant: string;
   };
+  setCreateBroadcastModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ActionCard = ({ action }: ActionProps) => {
+const ActionCard = ({ action, setCreateBroadcastModal }: ActionProps) => {
+  const navigate = useNavigate();
+
+  const handleAction = (title: string) => {
+    action.title === "You have 3 events" && setCreateBroadcastModal(true);
+    action.title === "Go to class wall" && navigate("/class-wall");
+    action.title === "Staff" && navigate("/staff");
+  };
   return (
     <div className={`call-to-action card-${action.variant}`}>
       <h2 className={`call-to-action-text card-${action.variant}`}>
         {action.title}
       </h2>
-      <Button className={`card-${action.variant}`}>{action.btnText}</Button>
+      <Button
+        className={`card-${action.variant}`}
+        onClick={() => handleAction(action.title)}
+      >
+        {action.btnText}
+      </Button>
       <img src={Mountain} alt="mountains" />
     </div>
   );
