@@ -307,7 +307,7 @@ const Event = ({ event }: EventProps) => {
       <div className="event-overlay">
         <div className="overlay-content">
           <span>{event.title.substring(0, 15) + "..."}</span>
-          <span>{moment(event.start_date).format("MMM DD, YYYY")}</span>
+          <span>{moment(event.start_at).format("MMM DD, YYYY")}</span>
         </div>
       </div>
       <div className="event-overlay-2" />

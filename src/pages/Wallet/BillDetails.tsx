@@ -13,7 +13,7 @@ const BillDetails = () => {
   const [bill, setBill] = useState<BillType | null>(null);
   const { handleError } = useNotification();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(100);
+  const [perPage] = useState<number>(20);
 
   useEffect(() => {
     getBillDetails();
