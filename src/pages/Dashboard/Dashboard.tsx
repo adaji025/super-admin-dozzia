@@ -7,8 +7,6 @@ import {
   ScrollArea,
   LoadingOverlay,
   Popover,
-  Modal,
-  Text,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
@@ -28,16 +26,11 @@ import EmptyReportState from "../../assets/svg/EmptyState.svg";
 import "./dashboard.scss";
 import { getMetrics } from "../../services/metrics/metrics";
 import { GetMetricsResponse } from "../../types/metricsTypes";
-import CreateBroadcast from "../../components/modals/Broadcast/CreateBroadcast";
-import useBroadcast from "../../hooks/useBroadcast";
 
 const Dashboard = () => {
   const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const dispatch = useDispatch();
   const [loading, setLoading] = useState<boolean>(false);
-  const [createBroadcastModal, setCreateBroadcastModal] =
-    useState<boolean>(false);
-  const [broadcast, setBroadcast] = useState<any>(null);
   const [calenderButtonLoading, setCalenderButtonLoading] =
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
@@ -53,7 +46,6 @@ const Dashboard = () => {
     }
   );
   const { handleError } = useNotification();
-  const { handleCreateBroadcast } = useBroadcast();
 
   useEffect(() => {
     handleGetReports();
@@ -135,33 +127,6 @@ const Dashboard = () => {
 
       <LoadingOverlay visible={loading} />
 
-      <Modal
-        opened={createBroadcastModal}
-        onClose={() => {
-          setCreateBroadcastModal(false);
-          setTimeout(() => {
-            setBroadcast(null);
-          }, 500);
-        }}
-        title={
-          <Text weight={600}>
-            {broadcast ? "Broadcast Details" : "Create Broadcast"}
-          </Text>
-        }
-        size="lg"
-      >
-        <CreateBroadcast
-          closeModal={() => {
-            setCreateBroadcastModal(false);
-            setTimeout(() => {
-              setBroadcast(null);
-            }, 500);
-          }}
-          // edit={broadcast}
-          submit={handleCreateBroadcast}
-        />
-      </Modal>
-
       <div className="dashboard">
         <div className="left">
           <div className="graph">
@@ -213,11 +178,7 @@ const Dashboard = () => {
           </div>
           <div className="cards">
             {callToAction.map((action) => (
-              <ActionCard
-                key={action.title}
-                setCreateBroadcastModal={setCreateBroadcastModal}
-                {...{ action }}
-              />
+              <ActionCard key={action.title} {...{ action }} />
             ))}
           </div>
         </div>
@@ -325,14 +286,13 @@ interface ActionProps {
     btnText: string;
     variant: string;
   };
-  setCreateBroadcastModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ActionCard = ({ action, setCreateBroadcastModal }: ActionProps) => {
+const ActionCard = ({ action }: ActionProps) => {
   const navigate = useNavigate();
 
   const handleAction = (title: string) => {
-    action.title === "You have 3 events" && setCreateBroadcastModal(true);
+    action.title === "You have 3 events" && navigate("/broadcast")
     action.title === "Go to class wall" && navigate("/class-wall");
     action.title === "Staff" && navigate("/staff");
   };
