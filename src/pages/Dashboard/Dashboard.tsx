@@ -2,7 +2,12 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AxiosError } from "axios";
-import { Button, ScrollArea, LoadingOverlay, Popover } from "@mantine/core";
+import {
+  Button,
+  ScrollArea,
+  LoadingOverlay,
+  Popover,
+} from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
@@ -12,7 +17,7 @@ import useNotification from "../../hooks/useNotification";
 import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
 import { getEvents } from "../../services/event/event";
-import { ReportStatusTypes } from "../../types/reportsTypes";
+import { ReportStatusTypes, ReportType } from "../../types/reportsTypes";
 import RemoveNote from "../../assets/svg/note-remove.svg";
 import Mountain from "../../assets/svg/mountains.svg";
 import Student from "../../assets/images/student.png";
@@ -30,7 +35,7 @@ const Dashboard = () => {
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [, setMetrics] = useState<GetMetricsResponse>();
+  const [metrics, setMetrics] = useState<GetMetricsResponse>();
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
     return state.data.reports;
@@ -100,16 +105,19 @@ const Dashboard = () => {
       title: "You have 3 events",
       btnText: "Create broadcast",
       variant: "dark",
+      click: "/broadcast"
     },
     {
       title: "Go to class wall",
       btnText: "Class wall",
       variant: "green",
+      click: "/class-wall"
     },
     {
       title: "Staff",
       btnText: "Find staff",
       variant: "yellow",
+      click: "/staff"
     },
   ];
 
@@ -173,7 +181,7 @@ const Dashboard = () => {
           </div>
           <div className="cards">
             {callToAction.map((action) => (
-              <ActionCard key={action.title} {...{ action }} />
+              <ActionCard key={action.title} action={action} />
             ))}
           </div>
         </div>
@@ -189,8 +197,8 @@ const Dashboard = () => {
             </div>
             {reports?.data.length > 0 ? (
               <div>
-                {reports.data.map((_: any, index: number) => (
-                  <ComplaintCard key={index} />
+                {reports.data.map((report: ReportType) => (
+                  <ComplaintCard key={report.id} report={report} />
                 ))}
               </div>
             ) : (
@@ -239,7 +247,11 @@ const Dashboard = () => {
   );
 };
 
-const ComplaintCard = () => {
+type ReportsProps = {
+  report: ReportType;
+};
+
+const ComplaintCard: React.FC<ReportsProps> = ({ report }) => {
   return (
     <div className="complaint-box">
       <table>
@@ -251,16 +263,16 @@ const ComplaintCard = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="c-desc">IS 012345</td>
-            <td className="c-desc">Noise making in class</td>
+            <td className="c-desc">{report.tracking_code}</td>
+            <td className="c-desc">{report.title}</td>
           </tr>
           <tr>
             <td className="c-title date-status">Date</td>
             <td className="c-title date-status">Status</td>
           </tr>
           <tr>
-            <td className="c-desc">Sept 9, 2023</td>
-            <td className="status">Unresolved</td>
+            <td className="c-desc">{report.date}</td>
+            <td className="status">{report.status}</td>
             <Button variant="subtle" rightIcon={<FiChevronRight />}>
               View
             </Button>
@@ -276,16 +288,24 @@ interface ActionProps {
     title: string;
     btnText: string;
     variant: string;
+    click: string;
   };
 }
 
 const ActionCard = ({ action }: ActionProps) => {
+  const navigate = useNavigate();
+ 
   return (
     <div className={`call-to-action card-${action.variant}`}>
       <h2 className={`call-to-action-text card-${action.variant}`}>
         {action.title}
       </h2>
-      <Button className={`card-${action.variant}`}>{action.btnText}</Button>
+      <Button
+        className={`card-${action.variant}`}
+        onClick={() => navigate(action.click)}
+      >
+        {action.btnText}
+      </Button>
       <img src={Mountain} alt="mountains" />
     </div>
   );
