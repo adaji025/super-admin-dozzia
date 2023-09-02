@@ -102,15 +102,16 @@ const TermsSessions = () => {
       <Confirmation
         isOpened={confirmSetSession}
         closeModal={() => {
-          setConfirmDeleteTerm(false);
+          setConfirmSetSession(false);
         }}
         title="Are you sure you want to set this session as active?"
-        confirmText="CONFIRM"
+        confirmText="Set Active Session"
         submit={() => {
           setConfirmSetSession(false);
           handleSetActiveSession(sessionId);
         }}
-        hasInput
+        hasInput={false}
+        confirmButtonColor="dark"
       />
 
       <div
@@ -210,6 +211,7 @@ const TermsSessions = () => {
                                   setConfirmSetSession(true);
                                   setSessionId(item?.session_id);
                                 }}
+                                disabled={item.is_current}
                               >
                                 Set as active
                               </Menu.Item>

@@ -29,7 +29,7 @@ export type EventType = {
   image: string | null;
   visibility: string;
   status: string;
-  start_date: string;
-  end_date: string;
+  start_at: string;
+  end_at: string;
   location: string | null;
 };

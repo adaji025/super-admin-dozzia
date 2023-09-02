@@ -1,0 +1,21 @@
+.empty-state {
+  margin-top: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  .title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 24px;
+  }
+
+  .desc {
+    font-size: 14px;
+    margin-top: 12px;
+    max-width: 250px;
+    text-align: center;
+    color: gray;
+  }
+}

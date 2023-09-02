@@ -328,7 +328,7 @@ const ClassEvents = () => {
                                 borderBottom: `1px solid #0000`,
                               }}
                             >
-                              {moment(item.start_date).format("DD/MM/YYYY")}
+                              {moment(item.start_at).format("DD/MM/YYYY")}
                             </td>
                             <td
                               style={{
@@ -336,7 +336,7 @@ const ClassEvents = () => {
                               }}
                               className="large-only"
                             >
-                              {moment(item.end_date).format("DD/MM/YYYY")}
+                              {moment(item.end_at).format("DD/MM/YYYY")}
                             </td>
                             <td
                               style={{
@@ -344,8 +344,8 @@ const ClassEvents = () => {
                               }}
                               className="large-only"
                             >
-                              {moment(item.start_date).format("LT")} -{" "}
-                              {moment(item.end_date).format("LT")}
+                              {moment(item.start_at).format("LT")} -{" "}
+                              {moment(item.end_at).format("LT")}
                             </td>
                             <td
                               style={{
@@ -370,14 +370,10 @@ const ClassEvents = () => {
                                       id: item.event_id,
                                       title: item.title,
                                       description: item.description,
-                                      startDate: moment(
-                                        item.start_date
-                                      ).toDate(),
-                                      startTime: moment(
-                                        item.start_date
-                                      ).toDate(),
-                                      endDate: moment(item.end_date).toDate(),
-                                      endTime: moment(item.end_date).toDate(),
+                                      startDate: moment(item.start_at).toDate(),
+                                      startTime: moment(item.start_at).toDate(),
+                                      endDate: moment(item.end_at).toDate(),
+                                      endTime: moment(item.end_at).toDate(),
                                       visibility:
                                         item.visibility === "Staff" ? "1" : "2",
                                     });

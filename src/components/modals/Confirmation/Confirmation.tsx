@@ -9,6 +9,7 @@ interface ConfirmationProps {
   confirmText: string;
   submit: any;
   hasInput: boolean;
+  confirmButtonColor?: string;
 }
 
 const Confirmation = ({
@@ -18,6 +19,7 @@ const Confirmation = ({
   confirmText,
   submit,
   hasInput,
+  confirmButtonColor,
 }: ConfirmationProps) => {
   const [inputText, setInputText] = useState<string>("");
 
@@ -62,7 +64,7 @@ const Confirmation = ({
               Cancel
             </Button>
             <Button
-              color="red"
+              color={confirmButtonColor || "red"}
               disabled={hasInput && inputText !== confirmText}
               onClick={() => {
                 setInputText("");

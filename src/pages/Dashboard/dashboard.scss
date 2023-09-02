@@ -30,7 +30,7 @@
 
     @media (max-width: 800px) {
       width: 100%;
-      flex-direction: column-reverse;
+      gap: 24px;
     }
 
     .graph {
@@ -40,10 +40,6 @@
       border-radius: 16px;
       min-height: 300px;
       margin-top: unset;
-
-      @media (max-width: 800px) {
-        margin-top: 34px;
-      }
 
       .header {
         display: flex;

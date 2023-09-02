@@ -73,7 +73,10 @@ const StudentDetails = ({
             }}
           >
             <div className="d-r-left">Class:</div>
-            <div className="d-r-right"></div>
+            <div className="d-r-right">
+              {studentDetails?.current_class &&
+                (studentDetails?.current_class?.classroom?.name ?? "")}
+            </div>
           </div>
 
           <div
@@ -150,7 +153,9 @@ const StudentDetails = ({
             }}
           >
             <div className="d-r-left">Guardian Email:</div>
-            <div className="d-r-right"></div>
+            <div className="d-r-right">
+              {studentDetails.guardian.email || "N/A"}
+            </div>
           </div>
 
           <div

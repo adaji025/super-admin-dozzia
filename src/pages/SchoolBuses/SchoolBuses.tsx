@@ -114,7 +114,7 @@ const Bus = () => {
               </thead>
               <tbody>
                 {tableData.map((data, index: number) => (
-                  <tr className="wallet-table-row" key={index}>
+                  <tr className="" key={index}>
                     <td className="start">{data.vehicle_name}</td>
                     <td>{data.vehicle_color}</td>
                     <td>{data.drivers_name}</td>
@@ -129,9 +129,7 @@ const Bus = () => {
                           Track vehicle
                         </Menu.Item>
                         <Menu.Item
-                          onClick={() =>
-                            navigate("/school-buses/students")
-                          }
+                          onClick={() => navigate("/school-buses/students")}
                         >
                           View students
                         </Menu.Item>
