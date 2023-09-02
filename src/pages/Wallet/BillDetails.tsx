@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { getBill } from "../../services/wallet/bills";
 import { useParams } from "react-router-dom";
 import useNotification from "../../hooks/useNotification";
@@ -6,6 +6,9 @@ import { BillType } from "../../types/billsTypes";
 import { AxiosError } from "axios";
 import { getTransactions } from "../../services/wallet/transactions";
 import { ApiResponseType } from "../../types/utilityTypes";
+import { Button, Group, LoadingOverlay, Text } from "@mantine/core";
+import { ReactComponent as ArrowLeft } from "../../assets/svg/arrow-left.svg";
+import moment from "moment";
 
 const BillDetails = () => {
   const { billId } = useParams();
@@ -28,6 +31,8 @@ const BillDetails = () => {
 
     getBill(billId)
       .then((res: BillType) => {
+        console.log(res);
+
         setBill(res);
       })
       .catch((err: AxiosError) => {
@@ -45,13 +50,83 @@ const BillDetails = () => {
       })
       .catch((err: AxiosError) => {
         handleError(err);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   };
 
-  return <div className="bill-details data-page-container">dssdjsd</div>;
+  return (
+    <div className="bill-details">
+      <LoadingOverlay visible={loading} />
+
+      <Group spacing={8} align="center">
+        <ArrowLeft className="click" />
+        <Text size="lg" weight={500}>
+          {bill?.title ?? "Bill Details"}
+        </Text>
+      </Group>
+
+      <div className="bill-info">
+        <DetailItem title="Description" value={bill?.description ?? "N/A"} />
+
+        <DetailItem
+          title="Date Created"
+          value={moment(bill?.deadline_date).format("YYYY-MM-DD")}
+        />
+
+        <DetailItem
+          title="Deadline Date"
+          value={moment(bill?.deadline_date).format("YYYY-MM-DD")}
+        />
+
+        <DetailItem
+          title="Created by"
+          value={
+            `${bill?.created_by_staff.first_name} ${bill?.created_by_staff.last_name}` ??
+            "N/A"
+          }
+        />
+
+        <DetailItem
+          title="Number of installments"
+          value={bill?.number_of_installments ?? "N/A"}
+        />
+
+        <DetailItem
+          title="Status"
+          value={bill?.status.toUpperCase() ?? "N/A"}
+        />
+
+        <DetailItem
+          title="Classroom(s)"
+          value={
+            bill?.classrooms.map((classroom) => classroom.name).join(", ") ?? ""
+          }
+        />
+
+        <DetailItem
+          title="Tickets"
+          value={
+            <Button variant="default" compact size="sm">
+              View Tickets
+            </Button>
+          }
+        />
+      </div>
+    </div>
+  );
+};
+
+interface DetailItemProps {
+  title: string;
+  value: string | number | ReactElement;
+}
+
+const DetailItem = ({ title, value }: DetailItemProps) => {
+  return (
+    <div className="bill-info__item">
+      <div className="item-title">{title}</div>
+      <div className="item-value">{value}</div>
+    </div>
+  );
 };
 
 export default BillDetails;

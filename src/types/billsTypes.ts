@@ -16,7 +16,7 @@ export type CreateBillData = {
 
 export type BillType = {
   school_bill_id: string;
-  classroom: ClassroomType;
+  classrooms: ClassroomType[];
   created_by_staff: StaffType;
   title: string;
   status: string;
