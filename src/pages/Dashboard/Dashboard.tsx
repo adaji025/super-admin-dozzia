@@ -2,12 +2,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AxiosError } from "axios";
-import {
-  Button,
-  ScrollArea,
-  LoadingOverlay,
-  Popover,
-} from "@mantine/core";
+import { Button, ScrollArea, LoadingOverlay, Popover } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
@@ -35,7 +30,7 @@ const Dashboard = () => {
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [metrics, setMetrics] = useState<GetMetricsResponse>();
+  const [, setMetrics] = useState<GetMetricsResponse>();
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
     return state.data.reports;
@@ -105,19 +100,19 @@ const Dashboard = () => {
       title: "You have 3 events",
       btnText: "Create broadcast",
       variant: "dark",
-      click: "/broadcast"
+      click: () => navigate("/broadcast"),
     },
     {
       title: "Go to class wall",
       btnText: "Class wall",
       variant: "green",
-      click: "/class-wall"
+      click: () => navigate("/class-wall"),
     },
     {
       title: "Staff",
       btnText: "Find staff",
       variant: "yellow",
-      click: "/staff"
+      click: () => navigate("/staff"),
     },
   ];
 
@@ -288,22 +283,17 @@ interface ActionProps {
     title: string;
     btnText: string;
     variant: string;
-    click: string;
+    click: () => void;
   };
 }
 
 const ActionCard = ({ action }: ActionProps) => {
-  const navigate = useNavigate();
- 
   return (
     <div className={`call-to-action card-${action.variant}`}>
       <h2 className={`call-to-action-text card-${action.variant}`}>
         {action.title}
       </h2>
-      <Button
-        className={`card-${action.variant}`}
-        onClick={() => navigate(action.click)}
-      >
+      <Button className={`card-${action.variant}`} onClick={action.click}>
         {action.btnText}
       </Button>
       <img src={Mountain} alt="mountains" />
