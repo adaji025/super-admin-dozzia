@@ -105,16 +105,19 @@ const Dashboard = () => {
       title: "You have 3 events",
       btnText: "Create broadcast",
       variant: "dark",
+      click: "/broadcast"
     },
     {
       title: "Go to class wall",
       btnText: "Class wall",
       variant: "green",
+      click: "/class-wall"
     },
     {
       title: "Staff",
       btnText: "Find staff",
       variant: "yellow",
+      click: "/staff"
     },
   ];
 
@@ -178,7 +181,7 @@ const Dashboard = () => {
           </div>
           <div className="cards">
             {callToAction.map((action) => (
-              <ActionCard key={action.title} {...{ action }} />
+              <ActionCard key={action.title} action={action} />
             ))}
           </div>
         </div>
@@ -285,17 +288,13 @@ interface ActionProps {
     title: string;
     btnText: string;
     variant: string;
+    click: string;
   };
 }
 
 const ActionCard = ({ action }: ActionProps) => {
   const navigate = useNavigate();
-
-  const handleAction = (title: string) => {
-    action.title === "You have 3 events" && navigate("/broadcast")
-    action.title === "Go to class wall" && navigate("/class-wall");
-    action.title === "Staff" && navigate("/staff");
-  };
+ 
   return (
     <div className={`call-to-action card-${action.variant}`}>
       <h2 className={`call-to-action-text card-${action.variant}`}>
@@ -303,7 +302,7 @@ const ActionCard = ({ action }: ActionProps) => {
       </h2>
       <Button
         className={`card-${action.variant}`}
-        onClick={() => handleAction(action.title)}
+        onClick={() => navigate(action.click)}
       >
         {action.btnText}
       </Button>
