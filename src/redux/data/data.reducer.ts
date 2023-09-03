@@ -5,6 +5,7 @@ import { ClassWallState } from "../../types/classWallTypes";
 import { StaffState } from "../../types/staffTypes";
 import { StudentsState } from "../../types/studentTypes";
 import { SubjectsState } from "../../types/subjectsTypes";
+import { WalletType } from "../../types/walletTypes";
 
 export const initialArrayDataState = {
   data: [],
@@ -26,6 +27,7 @@ export type DataState = {
   sesions: any;
   grades: any;
   bills: BillsState;
+  wallet: WalletType | null;
 };
 
 const INITIAL_STATE: DataState = {
@@ -47,6 +49,7 @@ const INITIAL_STATE: DataState = {
   sesions: null,
   grades: null,
   bills: initialArrayDataState,
+  wallet: null,
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -133,6 +136,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         bills: action.payload.bills,
+      };
+
+    case "SET_WALLET":
+      return {
+        ...state,
+        wallet: action.payload.wallet,
       };
     default:
       return state;

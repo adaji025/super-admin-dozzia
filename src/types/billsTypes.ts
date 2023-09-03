@@ -23,6 +23,13 @@ export type BillType = {
   description: string;
   number_of_installments: number;
   deadline_date: string;
+  school_tickets: SchoolTicket[];
+};
+
+export type SchoolTicket = {
+  school_ticket_id: string;
+  title: string;
+  amount: string;
 };
 
 export type BillsState = {

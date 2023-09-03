@@ -28,16 +28,52 @@ interface CreateBillProps {
   drawerOpen: boolean;
   close: () => void;
   callback: () => void;
-  edit: BillType | null;
+  bill: BillType | null;
 }
 
-const CreateBill = ({ callback, close, drawerOpen, edit }: CreateBillProps) => {
+const CreateBill = ({ callback, close, drawerOpen, bill }: CreateBillProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [classes, setClasses] = useState<ClassroomType[]>([]);
   const { handleError } = useNotification();
   const { getClassList } = useClass();
 
+  const form = useForm({
+    initialValues: {
+      classroom_id: [],
+      title: "",
+      description: "",
+      number_of_installments: "",
+      deadline_date: "",
+      tickets: formList([{ title: "", amount: "", key: randomId() }]),
+    },
+  });
+
   useEffect(() => {
+    getClasses();
+    //eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (bill) {
+      form.setFieldValue("title", bill.title);
+      form.setFieldValue("description", bill.description);
+      form.setFieldValue(
+        "number_of_installments",
+        `${bill.number_of_installments}`
+      );
+      form.setFieldValue(
+        "deadline_date",
+        moment(bill.deadline_date).toDate() as any as string
+      );
+    }
+
+    if (!drawerOpen) {
+      form.reset();
+    }
+    //eslint-disable-next-line
+  }, [drawerOpen]);
+
+  const getClasses = () => {
     getClassList(1, 40, "", "")
       .then((res) => {
         setClasses(res);
@@ -45,21 +81,7 @@ const CreateBill = ({ callback, close, drawerOpen, edit }: CreateBillProps) => {
       .catch((error) => {
         handleError(error);
       });
-    //eslint-disable-next-line
-  }, []);
-
-  const form = useForm({
-    initialValues: {
-      classroom_id: [],
-      title: edit ? edit.title : "",
-      description: edit ? edit.description : "",
-      number_of_installments: edit
-        ? edit.number_of_installments.toString()
-        : "",
-      deadline_date: edit ? new Date(edit.deadline_date) : "",
-      tickets: formList([{ title: "", amount: "", key: randomId() }]),
-    },
-  });
+  };
 
   const submit = (values: typeof form.values) => {
     setLoading(true);
@@ -206,7 +228,9 @@ const CreateBill = ({ callback, close, drawerOpen, edit }: CreateBillProps) => {
             </Button>
 
             <Group position="right" mt={24}>
-              <Button variant="default">Cancel</Button>
+              <Button variant="default" onClick={close}>
+                Cancel
+              </Button>
 
               <Button color="dark" type="submit">
                 Create Bill
