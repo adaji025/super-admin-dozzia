@@ -146,10 +146,15 @@ export const APIS = {
     CREATE_REMARK: `${api}/remarks`,
     REMARK: (id: string) => `${api}/remarks/${id}`,
     GET_REMARKS: (page: number, perPage: number, studentId: string) =>
-      `${api}/remarks?per_page=${perPage}&page=${page}&student_id=${studentId}`,
+      `${api}/remark-comments?per_page=${perPage}&page=${page}&student_id=${studentId}`,
     POST_COMMENT: (id: string) => `${api}/remarks/${id}/comments`,
-    GET_COMMENTS: (id: string, page: number, perPage: number) =>
-      `${api}/remarks/${id}/comments?per_page=${perPage}&page=${page}`,
+    GET_COMMENTS: (
+      page: number,
+      perPage: number,
+      studentId: string,
+      remarkId: string
+    ) =>
+      `${api}/remark-comments?per_page=${perPage}&page=${page}&student_id=${studentId}&student_remark_id=${remarkId}}`,
   },
   CURRICULUM: {
     CREATE_CURRICULUM_ITEM: `${api}/curricula`,

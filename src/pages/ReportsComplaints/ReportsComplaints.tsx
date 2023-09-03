@@ -291,7 +291,6 @@ const Reports = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                fontWeight: "600",
                               }}
                             >
                               {item?.tracking_code}
@@ -318,7 +317,6 @@ const Reports = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                fontWeight: "500",
                               }}
                             >
                               {item.date}

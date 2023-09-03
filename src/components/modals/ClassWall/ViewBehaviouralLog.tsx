@@ -15,7 +15,7 @@ import {
 import { useForm } from "@mantine/form";
 import useTheme from "../../../hooks/useTheme";
 import { List, CirclePlus, ChevronDown, Edit, Trash } from "tabler-icons-react";
-import { DatePicker, TimeInput } from "@mantine/dates";
+import { DatePicker } from "@mantine/dates";
 import useBehaviouralLog from "../../../hooks/useBehaviouralLog";
 import moment from "moment";
 import Conversation from "./../../Conversation/Conversation";
@@ -150,7 +150,9 @@ const ViewBehaviouralLog = ({
             setPage={setPage}
             onPressEdit={onPressEdit}
             deleteRemark={deleteRemark}
-            handleGetComments={handleGetComments}
+            handleGetComments={(remarkId: string) =>
+              handleGetComments(studentId, remarkId)
+            }
             handlePostComment={handlePostComment}
             loading={loading}
             setLoading={setLoading}
@@ -464,7 +466,7 @@ const ViewLog = ({
 const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
   const form = useForm({
     initialValues: {
-      is_draft: edit ? `${edit?.is_draft}` : "",
+      is_draft: edit ? `${edit?.is_draft ?? "false"}` : "false",
       category: edit ? edit?.category : "",
       date: edit ? moment(edit.plublished_at).toDate() : "",
       time: edit ? moment(edit.plublished_at).toDate() : new Date(),
@@ -472,7 +474,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
     },
 
     validate: {
-      is_draft: (value) => (value === "" ? "Save remark as draft?" : null),
       category: (value) => (value === "" ? "Select remark category" : null),
       date: (value) => (value === "" ? "Select send date" : null),
     },
@@ -503,19 +504,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
           {...form.getInputProps("category")}
         />
 
-        <Select
-          mt="md"
-          required
-          label="Draft?"
-          placeholder="Save as draft?"
-          className="form-item"
-          data={[
-            { value: "false", label: "Don't save as draft" },
-            { value: "true", label: "Save as draft" },
-          ]}
-          {...form.getInputProps("is_draft")}
-        />
-
         <Textarea
           mt="md"
           required
@@ -536,15 +524,6 @@ const AddToLog = ({ closeModal, createRemark, updateRemark, edit }: any) => {
             placeholder="Date"
             required
             {...form.getInputProps("date")}
-          />
-
-          <TimeInput
-            label="Time"
-            className="form-item"
-            required
-            mt="md"
-            clearable
-            {...form.getInputProps("time")}
           />
         </div>
 

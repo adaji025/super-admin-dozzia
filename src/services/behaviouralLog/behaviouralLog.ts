@@ -68,10 +68,11 @@ export const postComment = (
 export const getComments = (
   page: number,
   perPage: number,
+  studentId: string,
   remarkId: string
 ) => {
   return AxoisApi.get(
-    `${APIS.BEHAVIOURAL_LOG.GET_COMMENTS(remarkId, page, perPage)}`
+    `${APIS.BEHAVIOURAL_LOG.GET_COMMENTS(page, perPage, studentId, remarkId)}`
   ).then((res) => {
     return res.data;
   });

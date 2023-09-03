@@ -119,10 +119,10 @@ const useBehaviouralLog = () => {
     });
   };
 
-  const handleGetComments = (id: string) => {
+  const handleGetComments = (studentId: string, remarkId: string) => {
     return new Promise((resolve) => {
       setLoading(true);
-      getComments(1, 100, id)
+      getComments(1, 100, studentId, remarkId)
         .then((res) => {
           resolve(res);
         })
