@@ -1,20 +1,24 @@
-import React, { useState } from "react";
-import { Button, Group, Text, Tabs } from "@mantine/core";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
+import { AxiosError } from "axios";
+import { Button, Group, Text, Tabs, Loader } from "@mantine/core";
 import SetupWallet from "./SetupWallet";
 import SendMoney from "./SendMoney";
-
+import { useSelector, useDispatch } from "react-redux";
 import { ReactComponent as WalletIcon } from "../../assets/svg/navigation/wallet.svg";
 import Purse from "../../assets/images/purse.png";
 import Mascot from "../../assets/svg/smile-mascot.svg";
 import Tick from "../../assets/svg/tick.svg";
-
 import Mountain from "../../assets/svg/mountains.svg";
 import Frame from "../../assets/images/frame.png";
 import FundWallet from "./FundWallet";
-import "./wallet.scss";
 import Bills from "./Bills";
 import Transactions from "./Transactions";
-import { Helmet } from "react-helmet";
+import { getWallet } from "../../services/wallet/wallet";
+import useNotification from "../../hooks/useNotification";
+import { WalletType } from "../../types/walletTypes";
+import { setWallet } from "../../redux/data/data.actions";
+import "./wallet.scss";
 
 const Wallet = () => {
   const [wallet] = useState<boolean>(true);
@@ -83,6 +87,32 @@ const WalletNotEmpty = () => {
   const [fundWallet, setFundWallet] = useState<boolean>(false);
   const [createBillDrawer, setCreateBillDrawer] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState(0);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { handleError } = useNotification();
+  const wallet = useSelector(
+    (state: { data: { wallet: WalletType | null } }) => state.data.wallet
+  );
+
+  useEffect(() => {
+    getWalletDetails();
+    //eslint-disable-next-line
+  }, []);
+
+  const getWalletDetails = () => {
+    setLoading(true);
+
+    getWallet()
+      .then((res: WalletType) => {
+        dispatch(setWallet(res));
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const actions = [
     {
@@ -137,7 +167,14 @@ const WalletNotEmpty = () => {
             <Text weight={500}>Wallet Balance</Text>
             <div className="balance-box">
               <WalletIcon />
-              <h2>NGN 1,000,000</h2>
+              <h2>
+                {!wallet && loading && <Loader size={24} color="white" />}
+                {wallet && (
+                  <>
+                    {wallet.currency.code} {wallet.balance}
+                  </>
+                )}
+              </h2>
               <img src={Frame} alt="" className="frame" />
             </div>
           </div>

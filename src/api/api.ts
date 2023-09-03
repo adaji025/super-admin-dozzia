@@ -196,6 +196,9 @@ export const APIS = {
     APPROVE_REPORT_CARD: (reportCardId: string) =>
       `${api}/report-cards/${reportCardId}/approve`,
   },
+  WALLET: {
+    WALLET: `${api}/account/wallet`,
+  },
   BILLS: {
     CREATE_BILL: `${api}/bills`,
     BILLS: (page: number, perPage: number) =>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Menu, Table, LoadingOverlay, Pagination } from "@mantine/core";
-import { Edit, Trash } from "tabler-icons-react";
+import { Edit, Trash, Eye } from "tabler-icons-react";
 import useNotification from "../../hooks/useNotification";
 import { deleteBill, getBills } from "../../services/wallet/bills";
 import { AxiosError } from "axios";
@@ -85,9 +85,12 @@ const Bills = ({ createBillDrawer, setCreateBillDrawer }: BillsProps) => {
     <div className="relative">
       <CreateBill
         callback={actionCallback}
-        close={() => setCreateBillDrawer(false)}
+        close={() => {
+          setCreateBillDrawer(false);
+          setActiveBill(null);
+        }}
         drawerOpen={createBillDrawer}
-        edit={activeBill}
+        bill={activeBill}
       />
 
       <Confirmation
@@ -121,19 +124,22 @@ const Bills = ({ createBillDrawer, setCreateBillDrawer }: BillsProps) => {
               </thead>
               <tbody>
                 {bills.data.map((bill: BillType) => (
-                  <tr
-                    className="click"
-                    onClick={() =>
-                      navigate(`/wallet/bill/${bill.school_bill_id}`)
-                    }
-                    key={bill.school_bill_id}
-                  >
+                  <tr key={bill.school_bill_id}>
                     <td className="start">{bill?.title ?? ""}</td>
                     <td>{bill?.deadline_date ?? ""}</td>
                     <td className="end">NGN 5666</td>
                     <td>
                       <Menu gutter={15} withArrow size="sm">
                         <Menu.Label>Menu</Menu.Label>
+
+                        <Menu.Item
+                          icon={<Eye size={14} />}
+                          onClick={() =>
+                            navigate(`/wallet/bill/${bill.school_bill_id}`)
+                          }
+                        >
+                          View Bill
+                        </Menu.Item>
 
                         <Menu.Item
                           icon={<Edit size={14} />}

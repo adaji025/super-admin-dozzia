@@ -1,5 +1,6 @@
 import { BillsState } from "../../types/billsTypes";
 import { ClassesState } from "../../types/classTypes";
+import { WalletType } from "../../types/walletTypes";
 
 export const setClasses = (classes: ClassesState) => ({
   type: "SET_CLASSES",
@@ -69,4 +70,9 @@ export const setGrades = (grades: any) => ({
 export const setBills = (bills: BillsState) => ({
   type: "SET_BILLS",
   payload: { bills },
+});
+
+export const setWallet = (wallet: WalletType) => ({
+  type: "SET_WALLET",
+  payload: { wallet },
 });
