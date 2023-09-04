@@ -23,7 +23,7 @@ const useSubject = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const [allSubjects, setAllSubjects] = useState<any>([]);
+  const [allSubjects, setAllSubjects] = useState<SubjectType[]>([]);
   const subjects = useSelector(
     (state: { data: { subjects: SubjectsState } }) => {
       return state.data.subjects;
@@ -63,10 +63,10 @@ const useSubject = () => {
     classId?: string
   ) => {
     return new Promise((resolve) => {
-      if (!subjects.dataFetched) setLoading(true);
+      if (!subjects.dataFetched || all) setLoading(true);
 
       getSubjects(page, perPage, search, staffId ?? "", classId ?? "")
-        .then((res: ApiResponseType<SubjectType>) => {
+        .then((res: ApiResponseType<SubjectType[]>) => {
           if (all) {
             setAllSubjects(res.data);
           } else {

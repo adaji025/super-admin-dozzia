@@ -19,9 +19,11 @@ export type DataState = {
   subjects: SubjectsState;
   staff: StaffState;
   events: any;
+  eventsDashboard: any;
   attendance: any;
   broadcast: any;
   reports: any;
+  reportsDashboard: any;
   classWall: ClassWallState;
   terms: any;
   sesions: any;
@@ -36,9 +38,11 @@ const INITIAL_STATE: DataState = {
   subjects: initialArrayDataState,
   staff: initialArrayDataState,
   events: null,
+  eventsDashboard: null,
   attendance: null,
   broadcast: null,
   reports: null,
+  reportsDashboard: null,
   classWall: {
     activeClassName: "",
     activeClassId: "",
@@ -84,6 +88,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
         events: action.payload.events,
       };
 
+    case "SET_EVENTS_DASHBOARD":
+      return {
+        ...state,
+        eventsDashboard: action.payload.eventsDashboard,
+      };
+
     case "SET_ATTENDANCE":
       return {
         ...state,
@@ -106,6 +116,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         reports: action.payload.reports,
+      };
+
+    case "SET_REPORTS_DASHBOARD":
+      return {
+        ...state,
+        reportsDashboard: action.payload.reportsDashboard,
       };
 
     case "SET_CLASS_WALL":

@@ -6,25 +6,42 @@ import {
   Table,
   Box,
   Alert,
+  LoadingOverlay,
 } from "@mantine/core";
+import useSubject from "../../../hooks/useSubject";
+import { useEffect, useState } from "react";
+import { SubjectType } from "../../../types/subjectsTypes";
+
+interface ClassSubjectsProps {
+  closeModal: () => void;
+  classId: string;
+  modalActive: boolean;
+}
 
 const ClassSubjects = ({
   closeModal,
   classId,
   modalActive,
-  subjects,
-}: {
-  closeModal: () => void;
-  classId: string;
-  modalActive: boolean;
-  subjects: any;
-}) => {
+}: ClassSubjectsProps) => {
+  const { getSubjectList, allSubjects, loading } = useSubject();
+  const [page] = useState<number>(1);
+  const [perPage] = useState<number>(50);
+
+  useEffect(() => {
+    if (modalActive) {
+      getSubjectList(page, perPage, "", true, "", classId);
+    }
+    //eslint-disable-next-line
+  }, [classId, modalActive]);
+
   return (
     <div>
       <Divider mb="md" variant="dashed" />
 
+      <LoadingOverlay visible={loading} />
+
       <Box sx={{ minHeight: 350 }} className="d-p-main">
-        {subjects ? (
+        {allSubjects ? (
           <>
             <Table striped>
               <thead>
@@ -50,75 +67,41 @@ const ClassSubjects = ({
                   >
                     Subject Category
                   </th>
-                  <th
-                    style={{
-                      borderBottom: `1px solid #0000`,
-                    }}
-                  >
-                    Teacher
-                  </th>
                 </tr>
               </thead>
 
               <tbody>
-                {subjects.map(
-                  (
-                    item: {
-                      id: string;
-                      subject: {
-                        subject_id: string;
-                        subject_name: string;
-                        subject_category: number;
-                      };
-                      teacher: {
-                        title: string;
-                        first_name: string;
-                        last_name: string;
-                        staff_id: string;
-                      };
-                    },
-                    index: number
-                  ) => (
-                    <tr key={item?.id}>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                        }}
-                        className="large-only"
-                      >
-                        {index + 1}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          fontWeight: "600",
-                        }}
-                      >
-                        {item?.subject?.subject_name}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                          fontWeight: "600",
-                        }}
-                        className="large-only"
-                      >
-                        {item?.subject?.subject_category}
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: `1px solid #0000`,
-                        }}
-                      >
-                        {`${item?.teacher?.title} ${item?.teacher?.first_name} ${item?.teacher?.last_name}`}
-                      </td>
-                    </tr>
-                  )
-                )}
+                {allSubjects.map((item: SubjectType, index: number) => (
+                  <tr key={item?.subject_id}>
+                    <td
+                      style={{
+                        borderBottom: `1px solid #0000`,
+                      }}
+                      className="large-only"
+                    >
+                      {index + 1}
+                    </td>
+                    <td
+                      style={{
+                        borderBottom: `1px solid #0000`,
+                      }}
+                    >
+                      {item.name}
+                    </td>
+
+                    <td
+                      style={{
+                        borderBottom: `1px solid #0000`,
+                      }}
+                    >
+                      {item.category}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
 
-            {subjects && subjects.length === 0 && (
+            {allSubjects && allSubjects.length === 0 && (
               <Group grow position="center" mt={80} mb={60}>
                 <Alert
                   title="Bummer!"

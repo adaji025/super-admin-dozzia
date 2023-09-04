@@ -27,6 +27,11 @@ export const setEvents = (events: any) => ({
   payload: { events },
 });
 
+export const setEventsDashboard = (eventsDashboard: any) => ({
+  type: "SET_EVENTS_DASHBOARD",
+  payload: { eventsDashboard },
+});
+
 export const setAttendance = (attendance: any) => ({
   type: "SET_ATTENDANCE",
   payload: { attendance },
@@ -45,6 +50,11 @@ export const setBroadcast = (broadcast: any) => ({
 export const setReports = (reports: any) => ({
   type: "SET_REPORTS",
   payload: { reports },
+});
+
+export const setReportsDashboard = (reportsDashboard: any) => ({
+  type: "SET_REPORTS_DASHBOARD",
+  payload: { reportsDashboard },
 });
 
 export const setClassWall = (classWall: any) => ({

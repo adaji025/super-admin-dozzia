@@ -7,7 +7,10 @@ import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { setEvents, setReports } from "../../redux/data/data.actions";
+import {
+  setEventsDashboard,
+  setReportsDashboard,
+} from "../../redux/data/data.actions";
 import useNotification from "../../hooks/useNotification";
 import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
@@ -33,11 +36,11 @@ const Dashboard = () => {
   const [, setMetrics] = useState<GetMetricsResponse>();
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
-    return state.data.reports;
+    return state.data.reportsDashboard;
   });
   const events = useSelector(
-    (state: { data: { events: GetEventsResponse } }) => {
-      return state.data.events;
+    (state: { data: { eventsDashboard: GetEventsResponse } }) => {
+      return state.data.eventsDashboard;
     }
   );
   const { handleError } = useNotification();
@@ -60,7 +63,7 @@ const Dashboard = () => {
 
     getReports(1, 50, ReportStatusTypes.UNRESOLVED)
       .then((res) => {
-        dispatch(setReports(res));
+        dispatch(setReportsDashboard(res));
       })
       .catch((err: AxiosError) => {
         handleError(err);
@@ -73,7 +76,7 @@ const Dashboard = () => {
   const handleGetEvents = () => {
     getEvents({ page: 1, perPage: 10 })
       .then((res: GetEventsResponse) => {
-        dispatch(setEvents(res));
+        dispatch(setEventsDashboard(res));
       })
       .catch((err: AxiosError) => {
         handleError(err);
@@ -203,9 +206,7 @@ const Dashboard = () => {
                   alt=""
                   className="empty-report-image"
                 />
-                <h2 className="empty-report-text">
-                  You have no upcoming events
-                </h2>
+                <h2 className="empty-report-text">No unresolved complaint</h2>
                 <span className="empty-report-desc">
                   Recents unresolved complaints will be listed here
                 </span>

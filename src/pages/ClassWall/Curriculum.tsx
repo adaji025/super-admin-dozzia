@@ -16,6 +16,7 @@ import useTheme from "../../hooks/useTheme";
 import { Book, ArrowLeft } from "tabler-icons-react";
 import useSubject from "../../hooks/useSubject";
 import ViewCurriculum from "../../components/modals/ClassWall/ViewCurriculum";
+import { SubjectType } from "../../types/subjectsTypes";
 
 const Curriculum = () => {
   const { dark } = useTheme();
@@ -198,74 +199,63 @@ const Curriculum = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {allSubjects.map(
-                        (
-                          item: {
-                            subject_id: string;
-                            subject_name: string;
-                            subject_category: string;
-                            subject_description: string;
-                          },
-                          index: number
-                        ) => (
-                          <tr key={item.subject_id}>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                              }}
-                              className="large-only"
-                            >
-                              {index + 1}
-                            </td>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                fontWeight: "600",
-                              }}
-                            >
-                              {item.subject_name}
-                            </td>
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                              }}
-                            >
-                              {item.subject_category}
-                            </td>
+                      {allSubjects.map((item: SubjectType, index: number) => (
+                        <tr key={item.subject_id}>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                            className="large-only"
+                          >
+                            {index + 1}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                          >
+                            {item.name}
+                          </td>
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                            }}
+                          >
+                            {item.category}
+                          </td>
 
-                            <td
-                              style={{
-                                borderBottom: `1px solid #0000`,
-                                width: "20px",
-                              }}
-                              className="table-last"
+                          <td
+                            style={{
+                              borderBottom: `1px solid #0000`,
+                              width: "20px",
+                            }}
+                            className="table-last"
+                          >
+                            <Menu
+                              position={deviceWidth < 576 ? "left" : "right"}
+                              gutter={15}
+                              withArrow
+                              size="md"
                             >
-                              <Menu
-                                position={deviceWidth < 576 ? "left" : "right"}
-                                gutter={15}
-                                withArrow
-                                size="md"
+                              <Menu.Label>Curriculum Menu</Menu.Label>
+
+                              <Menu.Item
+                                icon={<Book size={14} />}
+                                onClick={() => {
+                                  setActiveSubject({
+                                    subject_id: item.subject_id,
+                                    subject_name: item.name,
+                                    subject_category: item.category,
+                                  });
+                                  setCurriculumModal(true);
+                                }}
                               >
-                                <Menu.Label>Curriculum Menu</Menu.Label>
-
-                                <Menu.Item
-                                  icon={<Book size={14} />}
-                                  onClick={() => {
-                                    setActiveSubject({
-                                      subject_id: item.subject_id,
-                                      subject_name: item.subject_name,
-                                      subject_category: item.subject_category,
-                                    });
-                                    setCurriculumModal(true);
-                                  }}
-                                >
-                                  View Curriculum
-                                </Menu.Item>
-                              </Menu>
-                            </td>
-                          </tr>
-                        )
-                      )}
+                                View Curriculum
+                              </Menu.Item>
+                            </Menu>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
 

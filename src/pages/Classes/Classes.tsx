@@ -61,7 +61,6 @@ const Classes = () => {
   const [level, setLevel] = useState<string>("");
   const [classId, setClassId] = useState<string>("");
   const [className, setClassName] = useState<string>("");
-  const [classSubjects, setClassSubjects] = useState<any>(null);
   const deviceWidth = window.innerWidth;
   const classWall = useSelector((state: any) => {
     return state.data.classWall;
@@ -141,10 +140,7 @@ const Classes = () => {
         opened={classSubjectsModal}
         onClose={() => {
           setClassSubjectsModal(false);
-          setTimeout(() => {
-            setClassSubjects([]);
-            setClassId("");
-          }, 500);
+          setClassId("");
         }}
         title={<Text weight={600}>{className ?? "Class"} Subjects</Text>}
         size="xl"
@@ -152,13 +148,9 @@ const Classes = () => {
         <ClassSubjects
           closeModal={() => {
             setClassSubjectsModal(false);
-            setTimeout(() => {
-              setClassSubjects([]);
-              setClassId("");
-            }, 500);
+            setClassId("");
           }}
           classId={classId}
-          subjects={classSubjects}
           modalActive={classSubjectsModal}
         />
       </Modal>
@@ -413,6 +405,8 @@ const Classes = () => {
                                     ...classWall,
                                     activeClassName: item.name,
                                     activeClassId: item?.classroom_id,
+                                    classTeacherId:
+                                      item.class_teacher?.staff_id,
                                   })
                                 );
                                 navigate("/class-wall");
