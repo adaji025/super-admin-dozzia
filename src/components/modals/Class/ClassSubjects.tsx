@@ -40,7 +40,7 @@ const ClassSubjects = ({
 
       <LoadingOverlay visible={loading} />
 
-      <Box sx={{ minHeight: 350 }} className="d-p-main">
+      <Box sx={{ minHeight: 350 }}>
         {allSubjects ? (
           <>
             <Table striped>
