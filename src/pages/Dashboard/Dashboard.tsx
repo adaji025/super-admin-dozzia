@@ -21,10 +21,10 @@ import Mountain from "../../assets/svg/mountains.svg";
 import Student from "../../assets/images/student.png";
 import CalendarIcon from "../../assets/svg/calendar.svg";
 import EmptyReportState from "../../assets/svg/EmptyState.svg";
-import "./dashboard.scss";
 import { getMetrics } from "../../services/metrics/metrics";
 import { GetMetricsResponse } from "../../types/metricsTypes";
 import Chart from "../../components/Dashboard/Chart";
+import "./dashboard.scss";
 
 const Dashboard = () => {
   const [active, setActive] = useState<"attendance" | "reports">("attendance");
@@ -34,7 +34,7 @@ const Dashboard = () => {
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [metrics, setMetrics] = useState<GetMetricsResponse>();
+  const [metrics, setMetrics] = useState<GetMetricsResponse | null>(null);
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
     return state.data.reportsDashboard;
@@ -45,13 +45,6 @@ const Dashboard = () => {
     }
   );
   const { handleError } = useNotification();
-  
-  
-
- 
-
-  
-
 
   useEffect(() => {
     handleGetReports();
@@ -96,6 +89,8 @@ const Dashboard = () => {
 
     getMetrics(moment(date).format("YYYY-MM-DD"))
       .then((res: GetMetricsResponse) => {
+        console.log(res);
+
         setMetrics(res);
       })
       .catch((error: AxiosError) => {
@@ -184,7 +179,8 @@ const Dashboard = () => {
                 Reports
               </Button>
             </div>
-            <Chart metric={metrics?.data.chart.attendance_metrics}  />
+
+            {metrics && <Chart metric={metrics.chart.attendance_metrics} />}
           </div>
           <div className="cards">
             {callToAction.map((action) => (

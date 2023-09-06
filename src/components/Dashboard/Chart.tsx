@@ -9,7 +9,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { AttendanceMetricsTypes } from "../../types/metricsTypes";
+import { AttendanceMetrics } from "../../types/metricsTypes";
 
 ChartJS.register(
   CategoryScale,
@@ -21,10 +21,10 @@ ChartJS.register(
 );
 
 type ChartProps = {
-  metric: AttendanceMetricsTypes | undefined,
+  metric: AttendanceMetrics;
 };
 
-const Chart = ({metric}: ChartProps) => {
+const Chart = ({ metric }: ChartProps) => {
   const labels = ["Boys", "Girls", "Total"];
 
   const options = {
@@ -42,13 +42,13 @@ const Chart = ({metric}: ChartProps) => {
       {
         label: "Present",
         // data: [20, 30, 40, 50, 60, 70],
-          data: [metric?.boys_present, metric?.girl_present, 1],
+        data: [metric?.boys_present, metric?.girl_present, 1],
         backgroundColor: "green",
       },
       {
         label: "Absent",
         // data: [20, 30, 40, 50, 60, 70],
-          data: [metric?.boys_absent, metric?.girls_absent, 1],
+        data: [metric?.boys_absent, metric?.girls_absent, 1],
         backgroundColor: "red",
       },
     ],
