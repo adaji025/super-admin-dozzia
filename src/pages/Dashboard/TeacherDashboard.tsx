@@ -31,6 +31,7 @@ import { GetMetricsResponse } from "../../types/metricsTypes";
 import useClass from "../../hooks/useClass";
 import { UserState } from "../../redux/user/user.reducer";
 import { ClassroomType } from "../../types/classTypes";
+import Chart from "../../components/Dashboard/Chart";
 
 const TeacherDashboard = () => {
   const [page] = useState<number>(1);
@@ -43,7 +44,7 @@ const TeacherDashboard = () => {
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [, setMetrics] = useState<GetMetricsResponse>();
+  const [metrics, setMetrics] = useState<GetMetricsResponse>();
   const [classList, setClassList] = useState<ClassroomType[]>([]);
   const [, setClassId] = useState<string>("");
 
@@ -139,8 +140,8 @@ const TeacherDashboard = () => {
       variant: "green",
     },
     {
-      title: "Staff",
-      btnText: "Find staff",
+      title: "Go to subjects",
+      btnText: "Subjects",
       variant: "yellow",
     },
   ];
@@ -214,6 +215,7 @@ const TeacherDashboard = () => {
                 Attendance
               </Button>
             </div>
+            {metrics && <Chart metric={metrics.chart.attendance_metrics} />}
           </div>
           <div className="cards">
             {callToAction.map((action) => (

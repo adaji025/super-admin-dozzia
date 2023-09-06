@@ -27,6 +27,9 @@ type ChartProps = {
 const Chart = ({ metric }: ChartProps) => {
   const labels = ["Boys", "Girls", "Total"];
 
+  const totalPresent = metric.boys_present + metric.girl_present
+  const totalAbsent = metric.boys_absent + metric.girls_absent
+
   const options = {
     responsive: true,
     plugins: {
@@ -35,20 +38,19 @@ const Chart = ({ metric }: ChartProps) => {
       },
     },
   };
+  
 
   const data = {
     labels,
     datasets: [
       {
         label: "Present",
-        // data: [20, 30, 40, 50, 60, 70],
-        data: [metric?.boys_present, metric?.girl_present, 1],
+        data: [metric?.boys_present, metric?.girl_present, totalPresent],
         backgroundColor: "green",
       },
       {
         label: "Absent",
-        // data: [20, 30, 40, 50, 60, 70],
-        data: [metric?.boys_absent, metric?.girls_absent, 1],
+        data: [metric?.boys_absent, metric?.girls_absent, totalAbsent],
         backgroundColor: "red",
       },
     ],
