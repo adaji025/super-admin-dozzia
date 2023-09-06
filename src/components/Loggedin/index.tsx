@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Paper } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
@@ -26,10 +26,7 @@ import TestExam from "../../pages/ClassWall/TestExam";
 import StudyResources from "../../pages/ClassWall/StudyResources";
 import ClassEvents from "../../pages/ClassWall/ClassEvents";
 import Curriculum from "../../pages/ClassWall/Curriculum";
-import "./index.scss";
 import Wallet from "../../pages/Wallet/Wallet";
-import TransactionHistory from "../../pages/Wallet/TransactionHistory";
-import BillTicketHistory from "../../pages/Wallet/BillTicketHistory";
 import Bus from "../../pages/SchoolBuses/SchoolBuses";
 import TrackVehicle from "../../pages/SchoolBuses/TrackVehicle";
 import ViewStudents from "../../pages/SchoolBuses/ViewStudents";
@@ -38,6 +35,9 @@ import TeacherDashboard from "../../pages/Dashboard/TeacherDashboard";
 import { Roles } from "../../types/authTypes";
 import { useSelector } from "react-redux";
 import { UserState } from "../../redux/user/user.reducer";
+import BillDetails from "../../pages/Wallet/BillDetails";
+import useTermsSessions from "../../hooks/useTermsSessions";
+import "./index.scss";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
@@ -45,6 +45,12 @@ const LoggedinContainer = () => {
   const userdata = useSelector((state: { user: UserState }) => {
     return state.user.userdata;
   });
+  const { handleGetSessions } = useTermsSessions();
+
+  useEffect(() => {
+    handleGetSessions();
+    //eslint-disable-next-line
+  }, []);
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
@@ -105,14 +111,6 @@ const LoggedinContainer = () => {
             <Route path="/class-wall/class-events" element={<ClassEvents />} />
             <Route path="/class-wall/curriculum" element={<Curriculum />} />
             <Route path="/wallet" element={<Wallet />} />
-            <Route
-              path="/wallet/transaction-history"
-              element={<TransactionHistory />}
-            />
-            <Route
-              path="/wallet/bill-ticket-history"
-              element={<BillTicketHistory />}
-            />
             <Route path="/school-buses" element={<Bus />} />
             <Route
               path="/school-buses/track-vehicle"
@@ -120,6 +118,7 @@ const LoggedinContainer = () => {
             />
             <Route path="/school-buses/students" element={<ViewStudents />} />
             <Route path="/promotion-request" element={<PromotionRequest />} />
+            <Route path="/wallet/bill/:billId" element={<BillDetails />} />
           </Routes>
         </div>
       </div>

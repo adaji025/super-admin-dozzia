@@ -121,7 +121,7 @@
   }
 
   .wallet-form {
-    margin-top: 24px;
+    margin-top: 16px;
 
     .card-details-inputs {
       display: flex;
@@ -212,7 +212,7 @@
     }
 
     .wallet-header-box {
-      padding: 32px 24px;
+      padding: 16px;
       background: #fff;
       border-radius: 16px;
       box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.05);
@@ -222,7 +222,7 @@
         max-height: 200px;
 
         @media (max-width: 1000px) {
-          width: calc(100% - 64px);
+          width: calc(100% - 32px);
         }
       }
 
@@ -241,6 +241,10 @@
         );
         backdrop-filter: blur(50px);
 
+        @media screen and (max-width: 1200px) {
+          padding: 16px;
+        }
+
         .frame {
           position: absolute;
           top: 0;
@@ -255,13 +259,13 @@
         gap: 16px;
 
         @media (max-width: 1000px) {
-          width: calc(100% - 64px);
+          width: calc(100% - 32px);
         }
 
         .wallet-action {
-          width: 26.5%;
-          min-width: 140px;
-          padding: 16px;
+          width: calc(33% - 42px);
+          min-width: 120px;
+          padding: 24px 16px 16px;
           background: #1f1f1f;
           position: relative;
           border-radius: 8px;
@@ -285,8 +289,7 @@
           }
 
           @media (max-width: 1000px) {
-            width: 28.2%;
-            min-width: 200px;
+            width: calc(33% - 42px);
           }
 
           @media (max-width: 574px) {
@@ -299,7 +302,6 @@
             text-align: left;
             width: 100%;
             user-select: none;
-            margin-top: 16px;
             margin-bottom: 16px;
 
             &.card-dark {
@@ -363,27 +365,6 @@
           }
         }
       }
-    }
-  }
-
-  .empty-state {
-    margin-top: 56px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    .title {
-      font-weight: 600;
-      font-size: 20px;
-      margin-top: 24px;
-    }
-
-    .desc {
-      font-size: 18px;
-      margin-top: 4px;
-      max-width: 250px;
-      text-align: center;
     }
   }
 }
@@ -494,6 +475,50 @@
 
     .title {
       font-weight: 500;
+    }
+  }
+}
+
+.table-content {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+.bill-details {
+  padding: 30px 30px 60px 30px;
+
+  @media only screen and (max-width: 768px) {
+    padding: 20px 20px 80px 20px;
+  }
+
+  .bill-info {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 24px;
+
+    .bill-info__item {
+      border-radius: 8px;
+      background: #fff;
+      border: 1px solid rgb(237, 237, 237);
+      padding: 16px;
+      max-width: 280px;
+      min-width: 100px;
+
+      .item-title {
+        font-size: 12px;
+        color: gray;
+      }
+
+      .item-value {
+        font-size: 14px;
+        font-weight: 500;
+        margin-top: 8px;
+      }
     }
   }
 }

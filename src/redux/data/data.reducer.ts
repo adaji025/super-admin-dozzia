@@ -1,9 +1,12 @@
 import { initialMetadata } from "../../lib/util";
+import { BillsState } from "../../types/billsTypes";
 import { ClassesState } from "../../types/classTypes";
 import { ClassWallState } from "../../types/classWallTypes";
 import { StaffState } from "../../types/staffTypes";
 import { StudentsState } from "../../types/studentTypes";
 import { SubjectsState } from "../../types/subjectsTypes";
+import { SessionType, TermType } from "../../types/termsSessionsTypes";
+import { WalletType } from "../../types/walletTypes";
 
 export const initialArrayDataState = {
   data: [],
@@ -17,13 +20,17 @@ export type DataState = {
   subjects: SubjectsState;
   staff: StaffState;
   events: any;
+  eventsDashboard: any;
   attendance: any;
   broadcast: any;
   reports: any;
+  reportsDashboard: any;
   classWall: ClassWallState;
-  terms: any;
-  sesions: any;
+  terms: TermType[];
+  sessions: SessionType[];
   grades: any;
+  bills: BillsState;
+  wallet: WalletType | null;
 };
 
 const INITIAL_STATE: DataState = {
@@ -32,18 +39,22 @@ const INITIAL_STATE: DataState = {
   subjects: initialArrayDataState,
   staff: initialArrayDataState,
   events: null,
+  eventsDashboard: null,
   attendance: null,
   broadcast: null,
   reports: null,
+  reportsDashboard: null,
   classWall: {
     activeClassName: "",
     activeClassId: "",
     classTeacherId: "",
     classes: [],
   },
-  terms: null,
-  sesions: null,
+  terms: [],
+  sessions: [],
   grades: null,
+  bills: initialArrayDataState,
+  wallet: null,
 };
 
 const dataReducer = (state = INITIAL_STATE, action: any) => {
@@ -78,6 +89,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
         events: action.payload.events,
       };
 
+    case "SET_EVENTS_DASHBOARD":
+      return {
+        ...state,
+        eventsDashboard: action.payload.eventsDashboard,
+      };
+
     case "SET_ATTENDANCE":
       return {
         ...state,
@@ -102,6 +119,12 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
         reports: action.payload.reports,
       };
 
+    case "SET_REPORTS_DASHBOARD":
+      return {
+        ...state,
+        reportsDashboard: action.payload.reportsDashboard,
+      };
+
     case "SET_CLASS_WALL":
       return {
         ...state,
@@ -124,6 +147,18 @@ const dataReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         grades: action.payload.grades,
+      };
+
+    case "SET_BILLS":
+      return {
+        ...state,
+        bills: action.payload.bills,
+      };
+
+    case "SET_WALLET":
+      return {
+        ...state,
+        wallet: action.payload.wallet,
       };
     default:
       return state;

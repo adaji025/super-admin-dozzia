@@ -1,5 +1,6 @@
 const INITIAL_STATE = {
   showLoader: false,
+  activeTerm: null,
 };
 
 const utilityReducer = (state = INITIAL_STATE, action: any) => {
@@ -9,6 +10,13 @@ const utilityReducer = (state = INITIAL_STATE, action: any) => {
         ...state,
         showLoader: action.payload,
       };
+
+    case "SET_ACTIVE_TERM":
+      return {
+        ...state,
+        activeTerm: action.payload,
+      };
+
     default:
       return state;
   }

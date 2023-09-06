@@ -60,7 +60,7 @@ const ViewStudents = () => {
               </thead>
               <tbody>
                 {tableData.map((data, index: number) => (
-                  <tr className="wallet-table-row" key={index}>
+                  <tr className="" key={index}>
                     <td>
                       <Avatar radius="xl" src={null} />
                     </td>

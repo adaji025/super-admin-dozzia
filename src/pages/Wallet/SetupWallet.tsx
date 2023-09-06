@@ -12,16 +12,10 @@ import {
 interface SetupWalletProps {
   drawerOpen: boolean;
   close: () => void;
-  openSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
   callback: () => void;
 }
 
-const SetupWallet = ({
-  drawerOpen,
-  callback,
-  close,
-  openSuccessModal,
-}: SetupWalletProps) => {
+const SetupWallet = ({ drawerOpen, callback, close }: SetupWalletProps) => {
   return (
     <Drawer
       opened={drawerOpen}
@@ -99,14 +93,7 @@ const SetupWallet = ({
             </div>
 
             <Group mt={16} position="right">
-              <Button
-                mt="md"
-                color="dark"
-                onClick={() => {
-                  close();
-                  openSuccessModal(true);
-                }}
-              >
+              <Button mt="md" color="dark" onClick={close}>
                 Save
               </Button>
             </Group>

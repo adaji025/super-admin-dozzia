@@ -1,4 +1,9 @@
-export const setClasses = (classes: any) => ({
+import { BillsState } from "../../types/billsTypes";
+import { ClassesState } from "../../types/classTypes";
+import { SessionType } from "../../types/termsSessionsTypes";
+import { WalletType } from "../../types/walletTypes";
+
+export const setClasses = (classes: ClassesState) => ({
   type: "SET_CLASSES",
   payload: { classes },
 });
@@ -23,6 +28,11 @@ export const setEvents = (events: any) => ({
   payload: { events },
 });
 
+export const setEventsDashboard = (eventsDashboard: any) => ({
+  type: "SET_EVENTS_DASHBOARD",
+  payload: { eventsDashboard },
+});
+
 export const setAttendance = (attendance: any) => ({
   type: "SET_ATTENDANCE",
   payload: { attendance },
@@ -43,6 +53,11 @@ export const setReports = (reports: any) => ({
   payload: { reports },
 });
 
+export const setReportsDashboard = (reportsDashboard: any) => ({
+  type: "SET_REPORTS_DASHBOARD",
+  payload: { reportsDashboard },
+});
+
 export const setClassWall = (classWall: any) => ({
   type: "SET_CLASS_WALL",
   payload: { classWall },
@@ -53,7 +68,7 @@ export const setTerms = (terms: any) => ({
   payload: { terms },
 });
 
-export const setSessions = (sesions: any) => ({
+export const setSessions = (sesions: SessionType[]) => ({
   type: "SET_SESSIONS",
   payload: { sesions },
 });
@@ -61,4 +76,14 @@ export const setSessions = (sesions: any) => ({
 export const setGrades = (grades: any) => ({
   type: "SET_GRADES",
   payload: { grades },
+});
+
+export const setBills = (bills: BillsState) => ({
+  type: "SET_BILLS",
+  payload: { bills },
+});
+
+export const setWallet = (wallet: WalletType) => ({
+  type: "SET_WALLET",
+  payload: { wallet },
 });

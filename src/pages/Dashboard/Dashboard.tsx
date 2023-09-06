@@ -7,12 +7,15 @@ import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { setEvents, setReports } from "../../redux/data/data.actions";
+import {
+  setEventsDashboard,
+  setReportsDashboard,
+} from "../../redux/data/data.actions";
 import useNotification from "../../hooks/useNotification";
 import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
 import { getEvents } from "../../services/event/event";
-import { ReportStatusTypes } from "../../types/reportsTypes";
+import { ReportStatusTypes, ReportType } from "../../types/reportsTypes";
 import RemoveNote from "../../assets/svg/note-remove.svg";
 import Mountain from "../../assets/svg/mountains.svg";
 import Student from "../../assets/images/student.png";
@@ -30,14 +33,14 @@ const Dashboard = () => {
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [metrics, setMetrics] = useState<GetMetricsResponse>();
+  const [, setMetrics] = useState<GetMetricsResponse>();
   const navigate = useNavigate();
   const reports = useSelector((state: any) => {
-    return state.data.reports;
+    return state.data.reportsDashboard;
   });
   const events = useSelector(
-    (state: { data: { events: GetEventsResponse } }) => {
-      return state.data.events;
+    (state: { data: { eventsDashboard: GetEventsResponse } }) => {
+      return state.data.eventsDashboard;
     }
   );
   const { handleError } = useNotification();
@@ -60,7 +63,7 @@ const Dashboard = () => {
 
     getReports(1, 50, ReportStatusTypes.UNRESOLVED)
       .then((res) => {
-        dispatch(setReports(res));
+        dispatch(setReportsDashboard(res));
       })
       .catch((err: AxiosError) => {
         handleError(err);
@@ -73,7 +76,7 @@ const Dashboard = () => {
   const handleGetEvents = () => {
     getEvents({ page: 1, perPage: 10 })
       .then((res: GetEventsResponse) => {
-        dispatch(setEvents(res));
+        dispatch(setEventsDashboard(res));
       })
       .catch((err: AxiosError) => {
         handleError(err);
@@ -100,16 +103,19 @@ const Dashboard = () => {
       title: "You have 3 events",
       btnText: "Create broadcast",
       variant: "dark",
+      click: () => navigate("/broadcast"),
     },
     {
       title: "Go to class wall",
       btnText: "Class wall",
       variant: "green",
+      click: () => navigate("/class-wall"),
     },
     {
       title: "Staff",
       btnText: "Find staff",
       variant: "yellow",
+      click: () => navigate("/staff"),
     },
   ];
 
@@ -173,7 +179,7 @@ const Dashboard = () => {
           </div>
           <div className="cards">
             {callToAction.map((action) => (
-              <ActionCard key={action.title} {...{ action }} />
+              <ActionCard key={action.title} action={action} />
             ))}
           </div>
         </div>
@@ -189,8 +195,8 @@ const Dashboard = () => {
             </div>
             {reports?.data.length > 0 ? (
               <div>
-                {reports.data.map((_: any, index: number) => (
-                  <ComplaintCard key={index} />
+                {reports.data.map((report: ReportType) => (
+                  <ComplaintCard key={report.id} report={report} />
                 ))}
               </div>
             ) : (
@@ -200,9 +206,7 @@ const Dashboard = () => {
                   alt=""
                   className="empty-report-image"
                 />
-                <h2 className="empty-report-text">
-                  You have no upcoming events
-                </h2>
+                <h2 className="empty-report-text">No unresolved complaint</h2>
                 <span className="empty-report-desc">
                   Recents unresolved complaints will be listed here
                 </span>
@@ -239,7 +243,11 @@ const Dashboard = () => {
   );
 };
 
-const ComplaintCard = () => {
+type ReportsProps = {
+  report: ReportType;
+};
+
+const ComplaintCard: React.FC<ReportsProps> = ({ report }) => {
   return (
     <div className="complaint-box">
       <table>
@@ -251,16 +259,16 @@ const ComplaintCard = () => {
         </thead>
         <tbody>
           <tr>
-            <td className="c-desc">IS 012345</td>
-            <td className="c-desc">Noise making in class</td>
+            <td className="c-desc">{report.tracking_code}</td>
+            <td className="c-desc">{report.title}</td>
           </tr>
           <tr>
             <td className="c-title date-status">Date</td>
             <td className="c-title date-status">Status</td>
           </tr>
           <tr>
-            <td className="c-desc">Sept 9, 2023</td>
-            <td className="status">Unresolved</td>
+            <td className="c-desc">{report.date}</td>
+            <td className="status">{report.status}</td>
             <Button variant="subtle" rightIcon={<FiChevronRight />}>
               View
             </Button>
@@ -276,6 +284,7 @@ interface ActionProps {
     title: string;
     btnText: string;
     variant: string;
+    click: () => void;
   };
 }
 
@@ -285,7 +294,9 @@ const ActionCard = ({ action }: ActionProps) => {
       <h2 className={`call-to-action-text card-${action.variant}`}>
         {action.title}
       </h2>
-      <Button className={`card-${action.variant}`}>{action.btnText}</Button>
+      <Button className={`card-${action.variant}`} onClick={action.click}>
+        {action.btnText}
+      </Button>
       <img src={Mountain} alt="mountains" />
     </div>
   );
@@ -307,7 +318,7 @@ const Event = ({ event }: EventProps) => {
       <div className="event-overlay">
         <div className="overlay-content">
           <span>{event.title.substring(0, 15) + "..."}</span>
-          <span>{moment(event.start_date).format("MMM DD, YYYY")}</span>
+          <span>{moment(event.start_at).format("MMM DD, YYYY")}</span>
         </div>
       </div>
       <div className="event-overlay-2" />

@@ -24,6 +24,8 @@ import { DatePicker } from "@mantine/dates";
 import useCurriculum from "../../../hooks/useCurriculum";
 import moment from "moment";
 import "./class-wall-modals.scss";
+import { useSelector } from "react-redux";
+import { TermType } from "../../../types/termsSessionsTypes";
 
 const ViewCurriculum = ({
   closeModal,
@@ -43,6 +45,11 @@ const ViewCurriculum = ({
   const [perPage] = useState<number>(100);
   const [curriculum, setCurriculum] = useState<any>(null);
   const [edit, setEdit] = useState<any>(null);
+  const activeTerm = useSelector(
+    (state: { utility: { activeTerm: TermType | null } }) => {
+      return state.utility.activeTerm;
+    }
+  );
 
   useEffect(() => {
     if (modalActive) {
@@ -77,6 +84,7 @@ const ViewCurriculum = ({
       ...values,
       subject_id: subjectId,
       classroom_id: classId,
+      term_id: activeTerm?.term_id ?? "",
     }).then(() => {
       onChange(0);
       getCurriculum();

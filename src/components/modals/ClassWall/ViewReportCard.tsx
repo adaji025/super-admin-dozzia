@@ -21,6 +21,7 @@ import useReportCard from "../../../hooks/useReportCard";
 import useTermsSessions from "../../../hooks/useTermsSessions";
 import useTestExams from "../../../hooks/useTestExams";
 import "./class-wall-modals.scss";
+import { TermType } from "../../../types/termsSessionsTypes";
 
 interface ViewReportCardProps {
   closeModal: () => void;
@@ -49,9 +50,11 @@ const ViewReportCard = ({
   }, []);
 
   const getReportCard = () => {
-    const term = getActiveTerm();
+    const term: TermType | undefined = getActiveTerm();
 
-    handleGetStudentReportCard(term?.id, studentId).then((res) => {
+    if (!term) return;
+
+    handleGetStudentReportCard(term?.term_id, studentId).then((res) => {
       setReportCard(res);
     });
   };

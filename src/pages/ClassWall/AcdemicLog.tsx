@@ -347,7 +347,6 @@ const AcdemicLog = () => {
                             <td
                               style={{
                                 borderBottom: `1px solid #0000`,
-                                fontWeight: "600",
                               }}
                             >
                               {item?.title}

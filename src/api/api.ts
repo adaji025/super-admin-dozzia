@@ -112,8 +112,9 @@ export const APIS = {
     UPDATE_STATUS: (id: string) => `${api}/complains/${id}`,
   },
   CONVERSATION: {
-    GET_CONVERSATION: (id: string) => `${api}/conversations?complain_id=${id}`,
-    POST_CONVERSATION: `${api}/conversations`,
+    GET_CONVERSATION: (id: string) =>
+      `${api}/complain-conversations?complain_id=${id}`,
+    POST_CONVERSATION: `${api}/complain-conversations`,
   },
   RECYCLE_BIN: {
     LIST_SUSPENDED_STAFF: `${api}/recycle-bin/staff`,
@@ -145,10 +146,15 @@ export const APIS = {
     CREATE_REMARK: `${api}/remarks`,
     REMARK: (id: string) => `${api}/remarks/${id}`,
     GET_REMARKS: (page: number, perPage: number, studentId: string) =>
-      `${api}/remarks?per_page=${perPage}&page=${page}&student_id=${studentId}`,
+      `${api}/remark-comments?per_page=${perPage}&page=${page}&student_id=${studentId}`,
     POST_COMMENT: (id: string) => `${api}/remarks/${id}/comments`,
-    GET_COMMENTS: (id: string, page: number, perPage: number) =>
-      `${api}/remarks/${id}/comments?per_page=${perPage}&page=${page}`,
+    GET_COMMENTS: (
+      page: number,
+      perPage: number,
+      studentId: string,
+      remarkId: string
+    ) =>
+      `${api}/remark-comments?per_page=${perPage}&page=${page}&student_id=${studentId}&student_remark_id=${remarkId}}`,
   },
   CURRICULUM: {
     CREATE_CURRICULUM_ITEM: `${api}/curricula`,
@@ -165,6 +171,7 @@ export const APIS = {
     ADD_TERM: `${api}/terms`,
     DELETE_TERM: (id: string) => `${api}/terms/${id}`,
     GET_TERMS: (sessionId: string) => `${api}/terms?session_id=${sessionId}`,
+    CHANGE_TERM_STATUS: (id: string) => `${api}/terms/${id}/change-status`,
   },
   SESSIONS: {
     SESSIONS: `${api}/sessions`,
@@ -194,5 +201,18 @@ export const APIS = {
       `${api}/report-cards/term/${termId}/student/${studentId}`,
     APPROVE_REPORT_CARD: (reportCardId: string) =>
       `${api}/report-cards/${reportCardId}/approve`,
+  },
+  WALLET: {
+    WALLET: `${api}/account/wallet`,
+  },
+  BILLS: {
+    CREATE_BILL: `${api}/bills`,
+    BILLS: (page: number, perPage: number) =>
+      `${api}/bills?page=${page}&per_page=${perPage}`,
+    BILL: (id: string) => `${api}/bills/${id}`,
+  },
+  TRANSACTIONS: {
+    TRANSACTIONS: (page: number, perPage: number) =>
+      `${api}/transactions?page=${page}&per_page=${perPage}`,
   },
 };

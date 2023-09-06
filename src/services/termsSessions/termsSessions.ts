@@ -24,6 +24,14 @@ export const deleteTerm = (id: string) => {
   });
 };
 
+export const changeTermStatus = (termId: string) => {
+  return AxoisApi.get(`${APIS.TERMS.CHANGE_TERM_STATUS(termId)}`).then(
+    (res) => {
+      return res.data;
+    }
+  );
+};
+
 export const addSession = (data: { start_year: string; end_year: string }) => {
   return AxoisApi.post(`${APIS.SESSIONS.SESSIONS}`, data).then((res) => {
     return res.data;

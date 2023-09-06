@@ -6,6 +6,7 @@ export const createCurriculumItem = (data: {
   description: string;
   subject_id: string;
   classroom_id: string;
+  term_id: string;
   start_date: string;
   end_date: string;
   color: string;

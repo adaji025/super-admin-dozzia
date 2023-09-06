@@ -8,24 +8,29 @@ import {
   setActiveSession,
   deleteTerm,
   deleteSession,
+  changeTermStatus,
 } from "../services/termsSessions/termsSessions";
 import { showNotification } from "@mantine/notifications";
 import useNotification from "./useNotification";
-import { showLoader } from "../redux/utility/utility.actions";
+import { setActiveTerm, showLoader } from "../redux/utility/utility.actions";
 import { setTerms, setSessions } from "../redux/data/data.actions";
 import moment from "moment";
+import { TermType } from "../types/termsSessionsTypes";
+import { SessionType } from "../types/termSessionTypes";
 
 const useTermsSessions = () => {
   const dispatch = useDispatch();
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
-  const terms = useSelector((state: any) => {
+  const terms = useSelector((state: { data: { terms: TermType[] } }) => {
     return state.data.terms;
   });
 
-  const sessions = useSelector((state: any) => {
-    return state.data.sessions;
-  });
+  const sessions = useSelector(
+    (state: { data: { sessions: SessionType[] } }) => {
+      return state.data.sessions;
+    }
+  );
 
   const handleAddTerm = (data: {
     term: string;
@@ -34,7 +39,7 @@ const useTermsSessions = () => {
   }) => {
     return new Promise((resolve) => {
       setLoading(true);
-      const sessionId = getActiveSessionId(sessions?.data);
+      const sessionId = getActiveSessionId(sessions);
 
       addTerm({
         ...data,
@@ -60,12 +65,12 @@ const useTermsSessions = () => {
     });
   };
 
-  const getActiveSessionId = (sessions: any) => {
+  const getActiveSessionId = (sessions: SessionType[]) => {
     let sessionId = "";
 
     for (let i = 0; i < sessions.length; i++) {
       if (sessions[i]?.is_current) {
-        sessionId = sessions[i]?.id;
+        sessionId = sessions[i]?.session_id;
       }
     }
 
@@ -79,7 +84,13 @@ const useTermsSessions = () => {
 
     getTerms(sessionId)
       .then((res) => {
-        dispatch(setTerms(res));
+        dispatch(setTerms(res?.data));
+
+        const term = getActiveTerm(res?.data);
+
+        if (term) {
+          dispatch(setActiveTerm(term));
+        }
       })
       .catch((err) => {
         handleError(err);
@@ -97,6 +108,26 @@ const useTermsSessions = () => {
         showNotification({
           title: "Success",
           message: `${"Term deleted successfully."}`,
+          color: "green",
+        });
+        handleGetSessions();
+      })
+      .catch((error) => {
+        handleError(error);
+      })
+      .finally(() => {
+        dispatch(showLoader(false));
+      });
+  };
+
+  const handleChangeTermStatus = (termId: string) => {
+    dispatch(showLoader(true));
+
+    changeTermStatus(termId)
+      .then((res) => {
+        showNotification({
+          title: "Success",
+          message: `${"Term status changed."}`,
           color: "green",
         });
         handleGetSessions();
@@ -143,7 +174,7 @@ const useTermsSessions = () => {
 
     getSessions()
       .then((res) => {
-        dispatch(setSessions(res));
+        dispatch(setSessions(res.data));
         const sessionId = getActiveSessionId(res?.data);
         handleGetTerms(sessionId);
       })
@@ -195,15 +226,12 @@ const useTermsSessions = () => {
       });
   };
 
-  const getActiveTerm = () => {
-    let activeTerm;
-
-    for (let i = 0; i < terms?.data.length; i++) {
-      if (terms?.data[i]?.is_current) {
-        activeTerm = terms?.data[i];
-      }
-    }
-
+  const getActiveTerm: (termsData?: TermType[]) => TermType | undefined = (
+    termsData?: TermType[]
+  ) => {
+    const activeTerm = (termsData ? termsData : terms).find(
+      (term: TermType) => term.is_current
+    );
     return activeTerm;
   };
 
@@ -220,6 +248,7 @@ const useTermsSessions = () => {
     sessions,
     terms,
     getActiveTerm,
+    handleChangeTermStatus,
   };
 };
 

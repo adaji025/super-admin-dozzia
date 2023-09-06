@@ -4,16 +4,10 @@ import { BiCopy } from "react-icons/bi";
 interface FundWalletProps {
   drawerOpen: boolean;
   close: () => void;
-  openSuccessModal: React.Dispatch<React.SetStateAction<boolean>>;
   callback: () => void;
 }
 
-const FundWallet = ({
-  drawerOpen,
-  callback,
-  close,
-  openSuccessModal,
-}: FundWalletProps) => {
+const FundWallet = ({ drawerOpen, callback, close }: FundWalletProps) => {
   return (
     <Drawer
       opened={drawerOpen}

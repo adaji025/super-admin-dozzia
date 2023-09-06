@@ -199,6 +199,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       route: "/attendance",
     },
     {
+      icon: Broadcast,
+      name: "Broadcast",
+      route: "/broadcast",
+    },
+    {
       icon: Promotion,
       name: "Promotion Request",
       route: "/promotion-request",

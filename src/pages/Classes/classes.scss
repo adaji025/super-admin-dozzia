@@ -29,18 +29,14 @@
       }
 
       .d-p-h-left {
-        font-size: 23px;
+        font-size: 18px;
         font-weight: 500;
-        @media only screen and (max-width: 768px) {
-          font-size: 20px;
-        }
 
         .go-back {
           margin-right: 8px;
-          @media only screen and (max-width: 768px) {
-            svg {
-              transform: translateY(3px);
-            }
+
+          svg {
+            transform: translateY(3px);
           }
         }
       }
