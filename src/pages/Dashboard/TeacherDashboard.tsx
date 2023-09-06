@@ -38,7 +38,6 @@ const TeacherDashboard = () => {
   const [perPage] = useState<number>(20);
   const [search] = useState<string>("");
   const [level] = useState<string>("");
-  const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const [loading, setLoading] = useState<boolean>(false);
   const [calenderButtonLoading, setCalenderButtonLoading] =
     useState<boolean>(false);
@@ -159,9 +158,9 @@ const TeacherDashboard = () => {
         <div className="left">
           <div className="graph">
             <div className="header">
-              <div className="analytic">Analytics</div>
+              <div className="analytic">Attendance</div>
               <div className="d-p-h-right">
-                <Group>
+                <Group align="center">
                   <Popover
                     opened={calenderPopover}
                     onClose={() => setCalenderPopover(false)}
@@ -207,14 +206,7 @@ const TeacherDashboard = () => {
                 </Group>
               </div>
             </div>
-            <div className="tabs">
-              <Button
-                className={`tab-item ${active === "attendance" && "active"}`}
-                onClick={() => setActive("attendance")}
-              >
-                Attendance
-              </Button>
-            </div>
+
             {metrics && <Chart metric={metrics.chart.attendance_metrics} />}
           </div>
           <div className="cards">
