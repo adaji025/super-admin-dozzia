@@ -17,7 +17,6 @@ export type ReportType = {
     first_name: string;
     last_name: string;
   };
-
   parent: {
     id: string;
     title: string;

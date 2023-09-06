@@ -1,37 +1,24 @@
-import { ResponseMeta } from "./utilityTypes";
+import { ReportType } from "./reportsTypes";
 
 export type Chart = {
-  attendance_metrics: AttendanceMetricsTypes;
-  report_and_complains_metrics: ReportAndComplainsMetricsTypes;
+  attendance_metrics: AttendanceMetrics;
+  report_and_complains_metrics: ReportAndComplainsMetrics;
 };
 
-export type AttendanceMetricsTypes = {
+export type AttendanceMetrics = {
   boys_present: number;
   boys_absent: number;
   girl_present: number;
   girls_absent: number;
 };
 
-export type ReportAndComplainsMetricsTypes = {
+export type ReportAndComplainsMetrics = {
   unresolved_complains: number;
   resolved_complains: number;
   in_progress_complains: number;
 };
 
-export type MetricsTypes = {
-  chart: Chart;
-  report_and_complains: DashboardReportType[];
-};
-
 export type GetMetricsResponse = {
-  data: MetricsTypes;
-  meta: ResponseMeta;
-};
-
-type DashboardReportType = {
-  id: string;
-  tracking_code: string;
-  title: string;
-  date: string;
-  status: string;
+  chart: Chart;
+  report_and_complains: ReportType[];
 };

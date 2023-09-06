@@ -31,19 +31,19 @@ import { GetMetricsResponse } from "../../types/metricsTypes";
 import useClass from "../../hooks/useClass";
 import { UserState } from "../../redux/user/user.reducer";
 import { ClassroomType } from "../../types/classTypes";
+import Chart from "../../components/Dashboard/Chart";
 
 const TeacherDashboard = () => {
   const [page] = useState<number>(1);
   const [perPage] = useState<number>(20);
   const [search] = useState<string>("");
   const [level] = useState<string>("");
-  const [active, setActive] = useState<"attendance" | "reports">("attendance");
   const [loading, setLoading] = useState<boolean>(false);
   const [calenderButtonLoading, setCalenderButtonLoading] =
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [, setMetrics] = useState<GetMetricsResponse>();
+  const [metrics, setMetrics] = useState<GetMetricsResponse>();
   const [classList, setClassList] = useState<ClassroomType[]>([]);
   const [, setClassId] = useState<string>("");
 
@@ -139,8 +139,8 @@ const TeacherDashboard = () => {
       variant: "green",
     },
     {
-      title: "Staff",
-      btnText: "Find staff",
+      title: "Go to subjects",
+      btnText: "Subjects",
       variant: "yellow",
     },
   ];
@@ -158,9 +158,9 @@ const TeacherDashboard = () => {
         <div className="left">
           <div className="graph">
             <div className="header">
-              <div className="analytic">Analytics</div>
+              <div className="analytic">Attendance</div>
               <div className="d-p-h-right">
-                <Group>
+                <Group align="center">
                   <Popover
                     opened={calenderPopover}
                     onClose={() => setCalenderPopover(false)}
@@ -206,14 +206,8 @@ const TeacherDashboard = () => {
                 </Group>
               </div>
             </div>
-            <div className="tabs">
-              <Button
-                className={`tab-item ${active === "attendance" && "active"}`}
-                onClick={() => setActive("attendance")}
-              >
-                Attendance
-              </Button>
-            </div>
+
+            {metrics && <Chart metric={metrics.chart.attendance_metrics} />}
           </div>
           <div className="cards">
             {callToAction.map((action) => (
