@@ -5,6 +5,7 @@ import { ClassWallState } from "../../types/classWallTypes";
 import { StaffState } from "../../types/staffTypes";
 import { StudentsState } from "../../types/studentTypes";
 import { SubjectsState } from "../../types/subjectsTypes";
+import { SessionType, TermType } from "../../types/termsSessionsTypes";
 import { WalletType } from "../../types/walletTypes";
 
 export const initialArrayDataState = {
@@ -25,8 +26,8 @@ export type DataState = {
   reports: any;
   reportsDashboard: any;
   classWall: ClassWallState;
-  terms: any;
-  sesions: any;
+  terms: TermType[];
+  sessions: SessionType[];
   grades: any;
   bills: BillsState;
   wallet: WalletType | null;
@@ -49,8 +50,8 @@ const INITIAL_STATE: DataState = {
     classTeacherId: "",
     classes: [],
   },
-  terms: null,
-  sesions: null,
+  terms: [],
+  sessions: [],
   grades: null,
   bills: initialArrayDataState,
   wallet: null,

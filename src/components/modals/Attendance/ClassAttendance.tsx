@@ -165,7 +165,7 @@ const ClassAttendance = ({
 
       <LoadingOverlay visible={loading} />
 
-      <Box sx={{ minHeight: 450 }} className="d-p-main">
+      <Box sx={{ minHeight: 450 }}>
         {classAttendance && attendanceData ? (
           <>
             <Table striped>

@@ -6,7 +6,6 @@ import {
   Box,
   Table,
   Skeleton,
-  Menu,
   Avatar,
   Pagination,
   Alert,
@@ -286,8 +285,6 @@ const ViewStudents = ({
   loading,
   setPage,
 }: ViewStudentsProps) => {
-  const deviceWidth = window.innerWidth;
-
   return (
     <Fragment>
       <Box sx={{ maxWidth: 900, minHeight: 173 }} className="list-modal">
@@ -324,14 +321,6 @@ const ViewStudents = ({
                   >
                     Reg No.
                   </th>
-
-                  <th
-                    style={{
-                      borderBottom: `1px solid #0000`,
-                      width: "1px",
-                    }}
-                    className="table-last head large-only"
-                  ></th>
                 </tr>
               </thead>
               <tbody>
@@ -373,30 +362,6 @@ const ViewStudents = ({
                           }}
                         >
                           {item.reg_no}
-                        </td>
-                        <td
-                          style={{
-                            borderBottom: `1px solid #0000`,
-                            width: "20px",
-                          }}
-                          className="table-last"
-                        >
-                          <Menu
-                            position={deviceWidth < 576 ? "left" : "right"}
-                            gutter={15}
-                            withArrow
-                            size="md"
-                          >
-                            <Menu.Label>Menu</Menu.Label>
-
-                            <Menu.Item
-                              color="red"
-                              icon={<Trash size={14} />}
-                              onClick={() => {}}
-                            >
-                              Remove from Class
-                            </Menu.Item>
-                          </Menu>
                         </td>
                       </tr>
                     )

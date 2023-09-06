@@ -687,7 +687,7 @@ const AcademicHistory = ({
                 nothingFound="No class found"
                 data={allClasses.map((item: ClassroomType) => ({
                   key: item?.classroom_id,
-                  value: item.name,
+                  value: item.classroom_id,
                   label: item.name,
                 }))}
                 {...form.getInputProps("entry_class")}

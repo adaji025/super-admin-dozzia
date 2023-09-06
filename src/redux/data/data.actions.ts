@@ -1,5 +1,6 @@
 import { BillsState } from "../../types/billsTypes";
 import { ClassesState } from "../../types/classTypes";
+import { SessionType } from "../../types/termsSessionsTypes";
 import { WalletType } from "../../types/walletTypes";
 
 export const setClasses = (classes: ClassesState) => ({
@@ -67,7 +68,7 @@ export const setTerms = (terms: any) => ({
   payload: { terms },
 });
 
-export const setSessions = (sesions: any) => ({
+export const setSessions = (sesions: SessionType[]) => ({
   type: "SET_SESSIONS",
   payload: { sesions },
 });

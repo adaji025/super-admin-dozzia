@@ -171,6 +171,7 @@ export const APIS = {
     ADD_TERM: `${api}/terms`,
     DELETE_TERM: (id: string) => `${api}/terms/${id}`,
     GET_TERMS: (sessionId: string) => `${api}/terms?session_id=${sessionId}`,
+    CHANGE_TERM_STATUS: (id: string) => `${api}/terms/${id}/change-status`,
   },
   SESSIONS: {
     SESSIONS: `${api}/sessions`,

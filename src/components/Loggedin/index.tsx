@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Paper } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
@@ -32,11 +32,19 @@ import TrackVehicle from "../../pages/SchoolBuses/TrackVehicle";
 import ViewStudents from "../../pages/SchoolBuses/ViewStudents";
 import PromotionRequest from "../../pages/PromotionRequest/PromotionRequest";
 import BillDetails from "../../pages/Wallet/BillDetails";
+import useTermsSessions from "../../hooks/useTermsSessions";
 import "./index.scss";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const { handleGetSessions } = useTermsSessions();
+
+  useEffect(() => {
+    handleGetSessions();
+
+    //eslint-disable-next-line
+  }, []);
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
