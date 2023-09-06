@@ -43,9 +43,9 @@ const TeacherDashboard = () => {
     useState<boolean>(false);
   const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
   const [date, setDate] = useState<any>(new Date());
-  const [metrics, setMetrics] = useState<GetMetricsResponse>();
+  const [, setMetrics] = useState<GetMetricsResponse>();
   const [classList, setClassList] = useState<ClassroomType[]>([]);
-  const [classId, setClassId] = useState<string>("");
+  const [, setClassId] = useState<string>("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -351,7 +351,7 @@ const Event = ({ event }: EventProps) => {
       <div className="event-overlay">
         <div className="overlay-content">
           <span>{event.title.substring(0, 15) + "..."}</span>
-          <span>{moment(event.start_date).format("MMM DD, YYYY")}</span>
+          <span>{moment(event.start_at).format("MMM DD, YYYY")}</span>
         </div>
       </div>
       <div className="event-overlay-2" />
