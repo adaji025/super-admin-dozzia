@@ -31,6 +31,10 @@ import Bus from "../../pages/SchoolBuses/SchoolBuses";
 import TrackVehicle from "../../pages/SchoolBuses/TrackVehicle";
 import ViewStudents from "../../pages/SchoolBuses/ViewStudents";
 import PromotionRequest from "../../pages/PromotionRequest/PromotionRequest";
+import TeacherDashboard from "../../pages/Dashboard/TeacherDashboard";
+import { Roles } from "../../types/authTypes";
+import { useSelector } from "react-redux";
+import { UserState } from "../../redux/user/user.reducer";
 import BillDetails from "../../pages/Wallet/BillDetails";
 import useTermsSessions from "../../hooks/useTermsSessions";
 import "./index.scss";
@@ -38,11 +42,13 @@ import "./index.scss";
 const LoggedinContainer = () => {
   const { dark } = useTheme();
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
+  const userdata = useSelector((state: { user: UserState }) => {
+    return state.user.userdata;
+  });
   const { handleGetSessions } = useTermsSessions();
 
   useEffect(() => {
     handleGetSessions();
-
     //eslint-disable-next-line
   }, []);
 
@@ -67,7 +73,16 @@ const LoggedinContainer = () => {
         <div className="main-section">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />{" "}
+            <Route
+              path="/dashboard"
+              element={
+                userdata?.role?.name === Roles.Teacher ? (
+                  <TeacherDashboard />
+                ) : (
+                  <Dashboard />
+                )
+              }
+            />{" "}
             <Route path="/add-student" element={<OnboardStudent />} />
             <Route path="/add-staff" element={<OnboardStaff />} />
             <Route path="/settings" element={<Settings />} />
