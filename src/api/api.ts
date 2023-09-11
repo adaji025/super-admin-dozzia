@@ -33,7 +33,7 @@ export const APIS = {
     ADD_STUDENT_TO_CLASS: (studentId: string, classId: string) =>
       `${api}/students/${studentId}/classroom/${classId}`,
     GET_STUDENT_WITH_USERNAME: (username: string) =>
-      `${api}/students/${username}/info`,
+      `${api}/student/reg-no/info?registration_number=${username}`,
     GET_STUDENT_DETAILS: (id: string) => `${api}/students/${id}`,
   },
   CLASS: {

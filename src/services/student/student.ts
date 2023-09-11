@@ -53,9 +53,9 @@ export const addStudentToClass = (studentId: string, classId: string) => {
 };
 
 export const getStudentWithUsername = (username: string) => {
-  return new Promise((resolve, reject) => {
+  return new Promise<{ data: StudentType }>((resolve, reject) => {
     AxoisApi.get(`${APIS.STUDENT.GET_STUDENT_WITH_USERNAME(username)}`)
-      .then((res) => {
+      .then((res: { data: { data: StudentType } }) => {
         resolve(res.data);
       })
       .catch((err: AxiosError) => {
