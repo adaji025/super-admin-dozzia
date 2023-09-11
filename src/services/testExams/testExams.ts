@@ -1,5 +1,6 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
+import { AxiosError } from "axios";
 
 export const postTestExams = (
   id: string,
@@ -11,17 +12,25 @@ export const postTestExams = (
     grade_id: string;
   }
 ) => {
-  return AxoisApi.post(`${APIS.TEST_EXAMS.POST_TEST_EXAMS(id)}`, data).then(
-    (res) => {
-      return res.data;
-    }
-  );
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.TEST_EXAMS.POST_TEST_EXAMS(id)}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
 };
 
 export const getTestExams = (classId: string) => {
-  return AxoisApi.get(`${APIS.TEST_EXAMS.GET_TEST_EXAMS(classId)}`).then(
-    (res) => {
-      return res.data;
-    }
-  );
+  return new Promise((resolve, reject) => {
+    AxoisApi.get(`${APIS.TEST_EXAMS.GET_TEST_EXAMS(classId)}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
 };

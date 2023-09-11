@@ -1,5 +1,6 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
+import { AxiosError } from "axios";
 
 export const createCurriculumItem = (data: {
   title: string;
@@ -12,11 +13,15 @@ export const createCurriculumItem = (data: {
   color: string;
   components: Array<string>;
 }) => {
-  return AxoisApi.post(`${APIS.CURRICULUM.CREATE_CURRICULUM_ITEM}`, data).then(
-    (res) => {
-      return res.data;
-    }
-  );
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.CURRICULUM.CREATE_CURRICULUM_ITEM}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
 };
 
 export const updateCurriculumItem = (
@@ -31,11 +36,14 @@ export const updateCurriculumItem = (
     components: Array<string>;
   }
 ) => {
-  return AxoisApi.put(
-    `${APIS.CURRICULUM.UPDATE_CURRICULUM(curriculumId)}`,
-    data
-  ).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.put(`${APIS.CURRICULUM.UPDATE_CURRICULUM(curriculumId)}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };
 
@@ -45,14 +53,20 @@ export const getSubjectCurriculum = (
   subjectId: string,
   classroomId: string
 ) => {
-  return AxoisApi.get(
-    `${APIS.CURRICULUM.GET_CURRICULUM_LIST(
-      page,
-      perPage,
-      subjectId,
-      classroomId
-    )}`
-  ).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.get(
+      `${APIS.CURRICULUM.GET_CURRICULUM_LIST(
+        page,
+        perPage,
+        subjectId,
+        classroomId
+      )}`
+    )
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };

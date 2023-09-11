@@ -33,10 +33,16 @@ export const getProfileInfo = (token?: string, include?: string) => {
 };
 
 export const forgotPassword = (username: string) => {
-  return AxoisApi.post(`${APIS.AUTH.FORGOT_PASSWORD}`, {
-    username,
-  }).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.FORGOT_PASSWORD}`, {
+      username,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };
 
@@ -45,12 +51,18 @@ export const resetPassword = (
   password: string,
   password_confirmation: string
 ) => {
-  return AxoisApi.post(`${APIS.AUTH.RESET_PASSWORD}`, {
-    reset_code,
-    password,
-    password_confirmation,
-  }).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.RESET_PASSWORD}`, {
+      reset_code,
+      password,
+      password_confirmation,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };
 
@@ -62,42 +74,64 @@ export const updateProfile = (
   phone_number: string,
   address: string
 ) => {
-  return AxoisApi.post(`${APIS.AUTH.PROFILE}`, {
-    first_name,
-    last_name,
-    middle_name,
-    email,
-    phone_number,
-    address,
-  }).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.PROFILE}`, {
+      first_name,
+      last_name,
+      middle_name,
+      email,
+      phone_number,
+      address,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };
 
 export const changePassword = (
   current_password: string,
   password: string,
-  password_confirmation: string,
+  password_confirmation: string
 ) => {
-  return AxoisApi.post(`${APIS.AUTH.CHANGE_PASSWORD}`, {
-    current_password,
-    password,
-    password_confirmation,
-  }).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.CHANGE_PASSWORD}`, {
+      current_password,
+      password,
+      password_confirmation,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };
 
 export const changeProfileImage = (image: any) => {
-  return AxoisApi.post(`${APIS.AUTH.CHANGE_PROFILE_IMAGE}`, image).then(
-    (res) => {
-      return res.data;
-    }
-  );
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.CHANGE_PROFILE_IMAGE}`, image)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
 };
 
 export const logout = () => {
-  return AxoisApi.post(`${APIS.AUTH.LOGOUT}`).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.LOGOUT}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };

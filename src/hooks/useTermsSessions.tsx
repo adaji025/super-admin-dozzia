@@ -15,8 +15,7 @@ import useNotification from "./useNotification";
 import { setActiveTerm, showLoader } from "../redux/utility/utility.actions";
 import { setTerms, setSessions } from "../redux/data/data.actions";
 import moment from "moment";
-import { TermType } from "../types/termsSessionsTypes";
-import { SessionType } from "../types/termSessionTypes";
+import { TermType, SessionType } from "../types/termsSessionsTypes";
 
 const useTermsSessions = () => {
   const dispatch = useDispatch();
@@ -83,7 +82,7 @@ const useTermsSessions = () => {
     }
 
     getTerms(sessionId)
-      .then((res) => {
+      .then((res: { data: TermType[] }) => {
         dispatch(setTerms(res?.data));
 
         const term = getActiveTerm(res?.data);
@@ -173,7 +172,7 @@ const useTermsSessions = () => {
     }
 
     getSessions()
-      .then((res) => {
+      .then((res: { data: SessionType[] }) => {
         dispatch(setSessions(res.data));
         const sessionId = getActiveSessionId(res?.data);
         handleGetTerms(sessionId);

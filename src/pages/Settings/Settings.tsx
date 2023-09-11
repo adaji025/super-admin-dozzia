@@ -57,13 +57,13 @@ const Settings = () => {
       values.phone_number,
       values.address
     )
-      .then((res) => {
+      .then((res: any) => {
         showNotification({
           title: "Success",
           message: `${"Profile updated."} ✍️`,
           color: "green",
         });
-        dispatch(setUserData(res.user));
+        dispatch(setUserData(res));
       })
       .catch((error) => {
         handleError(error);
@@ -90,7 +90,7 @@ const Settings = () => {
         formData.append("image", selectedFile);
 
         changeProfileImage(formData)
-          .then((res) => {
+          .then((res: any) => {
             showNotification({
               title: "Success",
               message: `${"Profile image changed."} 😶‍🌫️`,

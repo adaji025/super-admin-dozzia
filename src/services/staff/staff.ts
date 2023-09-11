@@ -2,6 +2,7 @@ import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
 import { AxiosError } from "axios";
 import { ApiResponseType, StaffRoleType } from "../../types/utilityTypes";
+import { StaffType } from "../../types/staffTypes";
 
 export const getStaffRoleList = () => {
   return new Promise<ApiResponseType<StaffRoleType[]>>((resolve, reject) => {
@@ -14,11 +15,15 @@ export const getStaffRoleList = () => {
 };
 
 export const onboardStaff = (data: any) => {
-  return AxoisApi.post(`${APIS.STAFF.ONBOARD_STAFF}`, data)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => err);
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.STAFF.ONBOARD_STAFF}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
 };
 
 export const getStaffList = (data: {
@@ -27,48 +32,68 @@ export const getStaffList = (data: {
   query: string;
   role: string;
 }) => {
-  return AxoisApi.get(
-    `${APIS.STAFF.GET_STAFF_LIST(
-      data.page,
-      data.perPage,
-      data.query,
-      data.role
-    )}`
-  )
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => err);
+  return new Promise<ApiResponseType<StaffType[]>>((resolve, reject) => {
+    AxoisApi.get(
+      `${APIS.STAFF.GET_STAFF_LIST(
+        data.page,
+        data.perPage,
+        data.query,
+        data.role
+      )}`
+    )
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
 };
 
 export const deleteStaff = (id: string) => {
-  return AxoisApi.delete(`${APIS.STAFF.DELETE_STAFF(id)}`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => err);
+  return new Promise((resolve, reject) => {
+    AxoisApi.delete(`${APIS.STAFF.DELETE_STAFF(id)}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
 };
 
 export const getSuspendedStaff = () => {
-  return AxoisApi.get(`${APIS.RECYCLE_BIN.LIST_SUSPENDED_STAFF}`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => err);
+  return new Promise<ApiResponseType<StaffType[]>>((resolve, reject) => {
+    AxoisApi.get(`${APIS.RECYCLE_BIN.LIST_SUSPENDED_STAFF}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
 };
 
 export const restoreSuspendedStaff = (id: string) => {
-  return AxoisApi.get(`${APIS.RECYCLE_BIN.RESTORE_STAFF(id)}`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => err);
+  return new Promise((resolve, reject) => {
+    AxoisApi.get(`${APIS.RECYCLE_BIN.RESTORE_STAFF(id)}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
 };
 
 export const getStaffDetails = (id: string) => {
-  return AxoisApi.get(`${APIS.STAFF.GET_STAFF_DETAILS(id)}`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err: AxiosError) => err);
+  return new Promise<ApiResponseType<StaffType>>((resolve, reject) => {
+    AxoisApi.get(`${APIS.STAFF.GET_STAFF_DETAILS(id)}`)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
 };

@@ -1,5 +1,6 @@
 import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
+import { AxiosError } from "axios";
 
 export const getReports = (page: number, perPage: number, status: string) => {
   return new Promise((resolve, reject) => {
@@ -9,7 +10,7 @@ export const getReports = (page: number, perPage: number, status: string) => {
       .then((res) => {
         resolve(res.data);
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         reject(err);
       });
   });
@@ -21,7 +22,13 @@ export const updateStatus = (
     status: string;
   }
 ) => {
-  return AxoisApi.put(`${APIS.REPORTS.UPDATE_STATUS(id)}`, data).then((res) => {
-    return res.data;
+  return new Promise((resolve, reject) => {
+    AxoisApi.put(`${APIS.REPORTS.UPDATE_STATUS(id)}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
   });
 };
