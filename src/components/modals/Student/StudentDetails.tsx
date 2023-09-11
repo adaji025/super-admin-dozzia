@@ -48,7 +48,7 @@ const StudentDetails = ({
         <div className="view-details no-next">
           <Avatar
             mb={10}
-            src={studentDetails?.picture ? studentDetails.picture : null}
+            src={studentDetails?.picture ?? null}
             className="avatar"
             size={100}
           />
@@ -61,8 +61,8 @@ const StudentDetails = ({
           >
             <div className="d-r-left">Full Name:</div>
             <div className="d-r-right">
-              {studentDetails.first_name} {studentDetails.middle_name}{" "}
-              {studentDetails.last_name}
+              {studentDetails?.first_name} {studentDetails?.middle_name}{" "}
+              {studentDetails?.last_name}
             </div>
           </div>
 
@@ -86,7 +86,7 @@ const StudentDetails = ({
             }}
           >
             <div className="d-r-left">Date of Birth:</div>
-            <div className="d-r-right">{studentDetails.meta.dob} </div>
+            <div className="d-r-right">{studentDetails?.meta?.dob} </div>
           </div>
 
           <div
@@ -97,7 +97,7 @@ const StudentDetails = ({
           >
             <div className="d-r-left">Age:</div>
             <div className="d-r-right">
-              {getAgeFromDOB(studentDetails.meta.dob)} year(s)
+              {getAgeFromDOB(studentDetails?.meta?.dob)} year(s)
             </div>
           </div>
 
@@ -108,7 +108,9 @@ const StudentDetails = ({
             }}
           >
             <div className="d-r-left">Blood Group:</div>
-            <div className="d-r-right">{studentDetails.meta.blood_group}</div>
+            <div className="d-r-right">
+              {studentDetails?.meta?.blood_group ?? "N/A"}
+            </div>
           </div>
 
           <div
@@ -118,7 +120,9 @@ const StudentDetails = ({
             }}
           >
             <div className="d-r-left">Genotype:</div>
-            <div className="d-r-right">{studentDetails.meta.genotype}</div>
+            <div className="d-r-right">
+              {studentDetails?.meta?.genotype ?? "N/A"}
+            </div>
           </div>
 
           <div
@@ -129,8 +133,8 @@ const StudentDetails = ({
           >
             <div className="d-r-left">Guardian:</div>
             <div className="d-r-right">
-              {studentDetails.guardian.first_name}{" "}
-              {studentDetails.guardian.last_name}
+              {studentDetails?.guardian?.first_name ?? "N/A"}{" "}
+              {studentDetails?.guardian?.last_name ?? ""}
             </div>
           </div>
 
@@ -142,7 +146,7 @@ const StudentDetails = ({
           >
             <div className="d-r-left">Guardian's Phone:</div>
             <div className="d-r-right">
-              {studentDetails.guardian.phone_number || "N/A"}
+              {studentDetails?.guardian?.phone_number || "N/A"}
             </div>
           </div>
 
@@ -154,7 +158,7 @@ const StudentDetails = ({
           >
             <div className="d-r-left">Guardian Email:</div>
             <div className="d-r-right">
-              {studentDetails.guardian.email || "N/A"}
+              {studentDetails?.guardian?.email || "N/A"}
             </div>
           </div>
 
@@ -166,7 +170,8 @@ const StudentDetails = ({
           >
             <div className="d-r-left">Height:</div>
             <div className="d-r-right">
-              {studentDetails.meta.height} {studentDetails.meta.height && "cm"}
+              {studentDetails?.meta?.height ?? "N/A"}{" "}
+              {studentDetails?.meta?.height && "cm"}
             </div>
           </div>
 
@@ -178,7 +183,8 @@ const StudentDetails = ({
           >
             <div className="d-r-left">Weight:</div>
             <div className="d-r-right">
-              {studentDetails.meta.weight} {studentDetails.meta.weight && "kg"}
+              {studentDetails?.meta?.weight ?? "N/A"}{" "}
+              {studentDetails?.meta?.weight && "kg"}
             </div>
           </div>
 

@@ -5,10 +5,10 @@ import { ResponseMeta } from "./utilityTypes";
 export type StudentType = {
   student_id: string;
   reg_no: string;
-  picture: string;
+  picture?: string;
   first_name: string;
   last_name: string;
-  middle_name: string;
+  middle_name?: string;
   gender: string;
   is_default_account: boolean;
   school: SchoolType;

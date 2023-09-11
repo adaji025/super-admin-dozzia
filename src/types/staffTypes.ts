@@ -15,6 +15,7 @@ export type StaffType = {
   first_name: string;
   last_name: string;
   picture: string | null;
+  phone_number: string | null;
   role: RoleType;
   meta: StaffMetaType;
   guarantor: GuarantorType;
