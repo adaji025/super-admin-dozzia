@@ -114,6 +114,7 @@ const OnboardStaff = () => {
         gender: values.gender,
         phone_number: values.phone_number,
         email: values.email,
+        ...(values.image && { picture: values.image }),
       },
       meta: {
         dob: moment(values.dob).format("YYYY-MM-DD"),

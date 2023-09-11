@@ -86,7 +86,7 @@ const OnboardStudent = () => {
         last_name: values.last_name,
         middle_name: values.middle_name,
         gender: values.gender,
-        picture: values.image,
+        ...(values.image && { picture: values.image }),
       },
       guardian: {
         email: values.guardian_email,
@@ -206,7 +206,7 @@ interface PersonalInfoProps {
 
 const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
   const [file, setFile] = useState<any>(
-    formData?.image ? formData?.image : null
+    formData?.image ? formData?.image : undefined
   );
 
   const form = useForm({

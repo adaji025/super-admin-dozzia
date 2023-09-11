@@ -44,9 +44,9 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left">Full Name:</div>
             <div className="d-r-right">
-              {`${staffDetails.title ?? ""} ${staffDetails.first_name ?? ""} ${
-                staffDetails.last_name ?? ""
-              }`}
+              {`${staffDetails?.title ?? ""} ${
+                staffDetails?.first_name ?? ""
+              } ${staffDetails?.last_name ?? ""}`}
             </div>
           </div>
 
@@ -57,7 +57,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
             }}
           >
             <div className="d-r-left">Staff Role:</div>
-            <div className="d-r-right">{staffDetails.role.name ?? ""}</div>
+            <div className="d-r-right">{staffDetails?.role?.name ?? ""}</div>
           </div>
 
           <div
@@ -67,7 +67,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
             }}
           >
             <div className="d-r-left">Username:</div>
-            <div className="d-r-right">{staffDetails.username ?? ""}</div>
+            <div className="d-r-right">{staffDetails?.username ?? "N/A"}</div>
           </div>
 
           <div
@@ -77,7 +77,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
             }}
           >
             <div className="d-r-left">Date of Birth:</div>
-            <div className="d-r-right">{staffDetails.meta.dob ?? ""} </div>
+            <div className="d-r-right">{staffDetails?.meta?.dob ?? "N/A"} </div>
           </div>
 
           <div
@@ -88,7 +88,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left">Years of Experience:</div>
             <div className="d-r-right">
-              {staffDetails.meta.years_of_experience}{" "}
+              {staffDetails?.meta?.years_of_experience ?? "N/A"}{" "}
               {staffDetails.meta.years_of_experience && "year(s)"}
             </div>
           </div>
@@ -100,7 +100,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
             }}
           >
             <div className="d-r-left">Email:</div>
-            <div className="d-r-right">{staffDetails.email} </div>
+            <div className="d-r-right">{staffDetails?.email ?? "N/A"} </div>
           </div>
 
           <div
@@ -110,7 +110,9 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
             }}
           >
             <div className="d-r-left">Phone Number:</div>
-            {/* <div className="d-r-right">{staffDetails.phone_number} </div> */}
+            <div className="d-r-right">
+              {staffDetails?.phone_number ?? "N/A"}{" "}
+            </div>
           </div>
 
           <div
@@ -121,7 +123,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left">Blood Group:</div>
             <div className="d-r-right">
-              {staffDetails.meta.blood_group ?? ""}
+              {staffDetails?.meta?.blood_group ?? ""}
             </div>
           </div>
 
@@ -132,7 +134,9 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
             }}
           >
             <div className="d-r-left">Genotype:</div>
-            <div className="d-r-right">{staffDetails.meta.genotype ?? ""}</div>
+            <div className="d-r-right">
+              {staffDetails?.meta?.genotype ?? "N/A"}
+            </div>
           </div>
 
           <div
@@ -143,7 +147,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left">Guarantor:</div>
             <div className="d-r-right">
-              {staffDetails.guarantor.full_name ?? ""}
+              {staffDetails?.guarantor?.full_name ?? "N/A"}
             </div>
           </div>
 
@@ -155,7 +159,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left">Guarantor's Profession:</div>
             <div className="d-r-right">
-              {staffDetails.guarantor.employment_role ?? ""}
+              {staffDetails?.guarantor?.employment_role ?? "N/A"}
             </div>
           </div>
 
@@ -178,7 +182,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
             <div className="d-r-left">Next of Kin:</div>
             <div className="d-r-right">
               {" "}
-              {staffDetails.relative.full_name ?? ""}
+              {staffDetails?.relative?.full_name ?? "N/A"}
             </div>
           </div>
 
@@ -190,9 +194,9 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left"></div>
             <div className="d-r-right">
-              {staffDetails.relative.email ?? ""}{" "}
-              {staffDetails.relative.email && ","}
-              {staffDetails.relative.phone_number ?? ""}
+              {staffDetails?.relative?.email ?? ""}{" "}
+              {staffDetails?.relative?.email && ","}
+              {staffDetails?.relative?.phone_number ?? "N/A"}
             </div>
           </div>
 
@@ -204,7 +208,7 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left">Height:</div>
             <div className="d-r-right">
-              {staffDetails.meta.height} {staffDetails.meta.height && "cm"}
+              {staffDetails?.meta?.height} {staffDetails?.meta?.height && "cm"}
             </div>
           </div>
 
@@ -216,7 +220,8 @@ const StaffDetails = ({ closeModal, staff, modalActive }: any) => {
           >
             <div className="d-r-left">Weight:</div>
             <div className="d-r-right">
-              {staffDetails.meta.weight} {staffDetails.meta.weight && "kg"}
+              {staffDetails?.meta?.weight ?? "N/A"}{" "}
+              {staffDetails?.meta?.weight && "kg"}
             </div>
           </div>
 

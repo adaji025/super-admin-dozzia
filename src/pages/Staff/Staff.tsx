@@ -305,7 +305,7 @@ const Staff = () => {
                           }}
                           className="large-only"
                         >
-                          {/* {item.phone_no} */}
+                          {item.phone_number ?? "N/A"}
                         </td>
                         <td
                           style={{
