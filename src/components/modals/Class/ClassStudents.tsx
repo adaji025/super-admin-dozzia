@@ -122,19 +122,21 @@ const AddStudentsToClass = ({
     setLoading(true);
 
     getInfoWithUsername(getUsername)
-      .then((res: any) => {
+      .then((res: StudentType) => {
         const student: {
           first_name: string;
           last_name: string;
           student_id: string;
-        } = res.data;
+        } = res;
 
         let ids = studentList;
+
         ids[values.students.length - 1] = {
           name: `${student.first_name} ${student.last_name}`,
           username: getUsername,
           id: student.student_id,
         };
+
         setStudentList(ids);
       })
       .catch((error) => {

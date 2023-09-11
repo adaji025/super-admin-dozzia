@@ -73,10 +73,10 @@ const useStudent = () => {
   };
 
   const getInfoWithUsername = (username: string) => {
-    return new Promise((resolve, reject) => {
+    return new Promise<StudentType>((resolve, reject) => {
       getStudentWithUsername(username)
-        .then((res) => {
-          resolve(res);
+        .then((res: { data: StudentType }) => {
+          resolve(res.data);
         })
         .catch((error) => {
           handleError(error);
