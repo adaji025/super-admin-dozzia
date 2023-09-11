@@ -176,7 +176,7 @@ const OnboardStaff = () => {
       <div className="page-container">
         <PageHeader
           title=" Onboard Staff 👩‍🏫"
-          desc="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          desc="Provide the details below to onboard a new staff"
         />
 
         <div
@@ -288,10 +288,9 @@ const PersonalInfo = ({
       role_id: (value) => (value === "" ? "Select staff role" : null),
       title: (value) => (value === "" ? "Select title" : null),
       gender: (value) => (value === "" ? "Select gender" : null),
-      religion: (value) => (value === "" ? "Select religion" : null),
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
       next_of_kin_email: (value) =>
-        /^\S+@\S+$/.test(value) ? null : "Invalid email",
+        value === "" || /^\S+@\S+$/.test(value) ? null : "Invalid email",
     },
   });
 
@@ -310,13 +309,6 @@ const PersonalInfo = ({
   };
 
   const onSave = (values: any) => {
-    // if (!file) {
-    //   return showNotification({
-    //     message: "Please select staff image",
-    //     color: "yellow",
-    //   });
-    // }
-
     nextStep({
       ...values,
       age,
@@ -394,7 +386,6 @@ const PersonalInfo = ({
 
               <TextInput
                 className="form-item"
-                required
                 label="Middle Name"
                 placeholder="Middle name"
                 type="text"
@@ -442,26 +433,41 @@ const PersonalInfo = ({
                 {...form.getInputProps("gender")}
               />
 
-              <NumberInput
+              <Select
                 className="form-item"
-                required
-                label="Age"
-                placeholder="Age"
-                max={100}
-                min={0}
-                disabled
-                value={age}
+                label="Religion"
+                placeholder="Select religion"
+                data={[
+                  { value: "Christianity", label: "Christianity" },
+                  { value: "Islam", label: "Islam" },
+                  { value: "Other", label: "Other" },
+                ]}
+                {...form.getInputProps("religion")}
               />
             </div>
 
             <div className="form-row">
               <TextInput
-                className="form-item"
                 required
+                className="form-item"
                 label="Phone Number"
                 placeholder="Phone number"
                 type="tel"
-                {...form.getInputProps("phone_number")}
+                value={form.values.phone_number}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length > 11) {
+                    return;
+                  }
+                  if (
+                    e.target.value === "" ||
+                    /^[0-9\b]+$/.test(e.target.value)
+                  ) {
+                    form.setFieldValue("phone_number", e.target.value);
+                  }
+                }}
               />
 
               <TextInput
@@ -474,10 +480,16 @@ const PersonalInfo = ({
               />
             </div>
 
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Address"
+              labelPosition="center"
+            />
+
             <div className="form-row">
               <TextInput
                 className="form-item"
-                required
                 label="House Address"
                 placeholder="Address"
                 type="text"
@@ -510,19 +522,6 @@ const PersonalInfo = ({
                 )}
                 {...form.getInputProps("state_of_origin")}
               />
-
-              <Select
-                className="form-item"
-                required
-                label="Religion"
-                placeholder="Select religion"
-                data={[
-                  { value: "Christianity", label: "Christianity" },
-                  { value: "Islam", label: "Islam" },
-                  { value: "Other", label: "Other" },
-                ]}
-                {...form.getInputProps("religion")}
-              />
             </div>
 
             <Divider
@@ -535,7 +534,6 @@ const PersonalInfo = ({
             <div className="form-row">
               <TextInput
                 className="form-item"
-                required
                 label="Full Name"
                 placeholder="Next of kin"
                 type="text"
@@ -546,11 +544,27 @@ const PersonalInfo = ({
             <div className="form-row">
               <TextInput
                 className="form-item"
-                required
-                type="tel"
                 label="Phone Number"
                 placeholder="Phone number"
-                {...form.getInputProps("next_of_kin_phone_number")}
+                type="tel"
+                value={form.values.next_of_kin_phone_number}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length > 11) {
+                    return;
+                  }
+                  if (
+                    e.target.value === "" ||
+                    /^[0-9\b]+$/.test(e.target.value)
+                  ) {
+                    form.setFieldValue(
+                      "next_of_kin_phone_number",
+                      e.target.value
+                    );
+                  }
+                }}
               />
 
               <TextInput
@@ -572,7 +586,7 @@ const PersonalInfo = ({
                     color: dark ? "#d5d7e0" : "#212529",
                   }}
                 >
-                  Upload Image <span>*</span>
+                  Upload Image
                 </div>
 
                 <Upload
@@ -640,9 +654,6 @@ const HealthHistory = ({
     },
 
     validate: {
-      genotype: (value) => (value === "" ? "Please select genotype" : null),
-      blood_group: (value) =>
-        value === "" ? "Please select blood group" : null,
       state_disability: (value) =>
         value === "" && disability === "Yes"
           ? "Please specify disability"
@@ -662,7 +673,6 @@ const HealthHistory = ({
             <div className="form-row">
               <NumberInput
                 className="form-item"
-                required
                 label="Height (cm)"
                 placeholder="Height"
                 type="text"
@@ -671,7 +681,6 @@ const HealthHistory = ({
 
               <NumberInput
                 className="form-item"
-                required
                 label="Weight (kg)"
                 placeholder="Weight"
                 type="text"
@@ -682,7 +691,6 @@ const HealthHistory = ({
             <div className="form-row">
               <Select
                 className="form-item"
-                required
                 label="Blood Group"
                 placeholder="Blood group"
                 data={[
@@ -700,7 +708,6 @@ const HealthHistory = ({
 
               <Select
                 className="form-item"
-                required
                 label="Genotype"
                 placeholder="Genotype"
                 data={[
@@ -869,7 +876,6 @@ const WorkHistory = ({
 
             <div className="form-row">
               <TextInput
-                required
                 className="form-item"
                 label="Guarantor Name"
                 placeholder="Enter name"
@@ -878,7 +884,6 @@ const WorkHistory = ({
               />
 
               <TextInput
-                required
                 className="form-item"
                 label="Employment Role"
                 placeholder="e.g. Architect"
@@ -890,11 +895,27 @@ const WorkHistory = ({
             <div className="form-row">
               <TextInput
                 className="form-item"
-                required
                 label="Phone Number"
                 placeholder="Guarantor number"
                 type="tel"
-                {...form.getInputProps("guarantor_phone_number")}
+                value={form.values.guarantor_phone_number}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length > 11) {
+                    return;
+                  }
+                  if (
+                    e.target.value === "" ||
+                    /^[0-9\b]+$/.test(e.target.value)
+                  ) {
+                    form.setFieldValue(
+                      "guarantor_phone_number",
+                      e.target.value
+                    );
+                  }
+                }}
               />
             </div>
 

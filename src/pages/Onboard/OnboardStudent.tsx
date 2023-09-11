@@ -145,7 +145,7 @@ const OnboardStudent = () => {
       <div className="page-container">
         <PageHeader
           title="Onboard Student 🧑‍🎓"
-          desc="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+          desc="Provide the details below to onboard a new student"
         />
 
         <div
@@ -232,7 +232,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
     validate: {
       first_name: (value) => (value === "" ? "Input first name" : null),
       last_name: (value) => (value === "" ? "Input last name" : null),
-      middle_name: (value) => (value === "" ? "Input middle name" : null),
       dob: (value) => (value === "" ? "Enter date of birth" : null),
       gender: (value) => (value === "" ? "Select student gender" : null),
       guardian_title: (value) =>
@@ -299,7 +298,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
             <div className="form-row">
               <TextInput
                 className="form-item"
-                required
                 label="Middle Name"
                 placeholder="Middle name"
                 type="text"
@@ -375,11 +373,26 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
 
             <div className="form-row">
               <TextInput
-                className="form-item"
                 required
+                className="form-item"
                 label="Guardian’s Phone Number"
                 placeholder="Guardian’s phone number"
-                {...form.getInputProps("guardian_phone_number")}
+                type="tel"
+                value={form.values.guardian_phone_number}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length > 11) {
+                    return;
+                  }
+                  if (
+                    e.target.value === "" ||
+                    /^[0-9\b]+$/.test(e.target.value)
+                  ) {
+                    form.setFieldValue("guardian_phone_number", e.target.value);
+                  }
+                }}
               />
 
               <TextInput
@@ -402,7 +415,7 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                     color: dark ? "#d5d7e0" : "#212529",
                   }}
                 >
-                  Upload Image <span>*</span>
+                  Upload Image
                 </div>
 
                 <Upload
@@ -471,9 +484,6 @@ const HealthHistory = ({
     },
 
     validate: {
-      genotype: (value) => (value === "" ? "Please select genotype" : null),
-      blood_group: (value) =>
-        value === "" ? "Please select blood group" : null,
       state_disability: (value) =>
         value === "" && disability === "Yes"
           ? "Please specify disability"
@@ -493,7 +503,6 @@ const HealthHistory = ({
             <div className="form-row">
               <NumberInput
                 className="form-item"
-                required
                 label="Height (cm)"
                 placeholder="Height"
                 type="text"
@@ -502,7 +511,6 @@ const HealthHistory = ({
 
               <NumberInput
                 className="form-item"
-                required
                 label="Weight (kg)"
                 placeholder="Weight"
                 type="text"
@@ -513,7 +521,6 @@ const HealthHistory = ({
             <div className="form-row">
               <Select
                 className="form-item"
-                required
                 label="Blood Group"
                 placeholder="Blood group"
                 data={[
@@ -531,7 +538,6 @@ const HealthHistory = ({
 
               <Select
                 className="form-item"
-                required
                 label="Genotype"
                 placeholder="Genotype"
                 data={[
@@ -708,7 +714,6 @@ const AcademicHistory = ({
             <div className="form-row">
               <NumberInput
                 className="form-item"
-                required
                 label="Entry Test Score (%)"
                 placeholder="Score"
                 type="number"
