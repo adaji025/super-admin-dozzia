@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { AttendanceMetrics } from "../../types/metricsTypes";
+import {Box} from"@mantine/core"
 
 ChartJS.register(
   CategoryScale,
@@ -57,9 +58,9 @@ const Chart = ({ metric }: ChartProps) => {
   };
 
   return (
-    <div>
+    <Box mt={50}>
       <Bar options={options} data={data} />
-    </div>
+    </Box>
   );
 };
 
