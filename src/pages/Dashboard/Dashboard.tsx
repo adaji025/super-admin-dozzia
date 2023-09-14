@@ -2,7 +2,15 @@ import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import { AxiosError } from "axios";
-import { Button, ScrollArea, LoadingOverlay, Popover } from "@mantine/core";
+import {
+  Button,
+  ScrollArea,
+  LoadingOverlay,
+  Popover,
+  Group,
+  Table,
+  Text,
+} from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
 import moment from "moment";
@@ -16,14 +24,17 @@ import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
 import { getEvents } from "../../services/event/event";
 import { ReportStatusTypes, ReportType } from "../../types/reportsTypes";
-import RemoveNote from "../../assets/svg/note-remove.svg";
+
+import { getMetrics } from "../../services/metrics/metrics";
+import { GetMetricsResponse } from "../../types/metricsTypes";
+import Chart from "../../components/Dashboard/Chart";
+import { ChevronRight } from "tabler-icons-react";
+
 import Mountain from "../../assets/svg/mountains.svg";
 import Student from "../../assets/images/student.png";
 import CalendarIcon from "../../assets/svg/calendar.svg";
 import EmptyReportState from "../../assets/svg/EmptyState.svg";
-import { getMetrics } from "../../services/metrics/metrics";
-import { GetMetricsResponse } from "../../types/metricsTypes";
-import Chart from "../../components/Dashboard/Chart";
+
 import "./dashboard.scss";
 
 const Dashboard = () => {
@@ -101,24 +112,31 @@ const Dashboard = () => {
       });
   };
 
-  const callToAction = [
+  const bills = [
     {
-      title: "You have 3 events",
-      btnText: "Create broadcast",
-      variant: "dark",
-      click: () => navigate("/broadcast"),
+      title: "School fees",
+      party: "All Parent",
+      amount: 300000,
+      date: "Sept 9, 2023",
+    },
+  ];
+
+  const analyticsData = [
+    {
+      title: "Total Students",
+      value: 1200,
     },
     {
-      title: "Go to class wall",
-      btnText: "Class wall",
-      variant: "green",
-      click: () => navigate("/class-wall"),
+      title: "Total Staffs",
+      value: 300,
     },
     {
-      title: "Staff",
-      btnText: "Find staff",
-      variant: "yellow",
-      click: () => navigate("/staff"),
+      title: "Total Classes",
+      value: 30,
+    },
+    {
+      title: "Active Bills",
+      value: 15,
     },
   ];
 
@@ -130,6 +148,12 @@ const Dashboard = () => {
       </Helmet>
 
       <LoadingOverlay visible={loading} />
+
+      <div className="analytics">
+        {analyticsData.map((item, index) => (
+          <AnalyticsCard item={item} index={index} key={index} />
+        ))}
+      </div>
 
       <div className="dashboard">
         <div className="left">
@@ -182,65 +206,83 @@ const Dashboard = () => {
 
             {metrics && <Chart metric={metrics.chart.attendance_metrics} />}
           </div>
-          <div className="cards">
-            {callToAction.map((action) => (
-              <ActionCard key={action.title} action={action} />
-            ))}
+          <div className="bottom">
+            <div className="events full">
+              <div className="events-title" onClick={() => navigate("/events")}>
+                <span>Upcoming Events</span>
+                <FiChevronRight className="chevron" />
+              </div>
+
+              {events && events?.data.length > 0 && (
+                <ScrollArea type="auto" style={{ paddingBottom: 20 }}>
+                  <div className="events-row">
+                    {events?.data.map((event) => (
+                      <Event key={event.event_id} event={event} />
+                    ))}
+                  </div>
+                </ScrollArea>
+              )}
+
+              {events && events?.data.length === 0 && (
+                <Group py={16} position="center">
+                  <img src={CalendarIcon} alt="" />
+                  <Text align="center">You have no upcoming events</Text>
+                </Group>
+              )}
+            </div>
           </div>
         </div>
         <div className="right">
           <div className="complaints">
-            <span className="title">Reports and complaints</span>
+            <Group grow>
+              <Group position="left">
+                <Text weight={500}>Active Bills</Text>
+              </Group>
+              <Group position="right">
+                <Button
+                  size="xs"
+                  color="gray"
+                  rightIcon={<ChevronRight size={12} />}
+                  variant="subtle"
+                >
+                  View all
+                </Button>
+              </Group>
+            </Group>
 
-            <div className="complaints-statistics">
-              <img src={RemoveNote} alt="remove note" />
-              <p>Unresolved Complaints</p>
-              <div className="count">{reports ? reports?.meta.total : "0"}</div>
-              <img src={Mountain} alt="mountain" className="mountain" />
+            <div className="bills">
+              {[...Array(2)].map((_, index) => (
+                <Bill key={index} />
+              ))}
             </div>
-            {reports?.data.length > 0 ? (
-              <div>
-                {reports.data.map((report: ReportType) => (
-                  <ComplaintCard key={report.id} report={report} />
-                ))}
-              </div>
-            ) : (
-              <div className="empty-report">
-                <img
-                  src={EmptyReportState}
-                  alt=""
-                  className="empty-report-image"
-                />
-                <h2 className="empty-report-text">No unresolved complaint</h2>
-                <span className="empty-report-desc">
-                  Recents unresolved complaints will be listed here
-                </span>
-              </div>
-            )}
+            {bills.length === 0 && <EmptyBills />}
           </div>
 
-          <div className="events">
-            <div className="events-title" onClick={() => navigate("/events")}>
-              <span>Upcoming Events</span>
-              <FiChevronRight className="chevron" />
-            </div>
+          <div className="complaints reports">
+            <Group grow>
+              <Group grow position="left">
+                <Text size="sm" weight={500}>
+                  Report and Complaints
+                </Text>
+              </Group>
+              <Group position="right">
+                <Button
+                  size="xs"
+                  color="gray"
+                  rightIcon={<ChevronRight size={12} />}
+                  variant="subtle"
+                >
+                  View all
+                </Button>
+              </Group>
+            </Group>
 
-            {events && events?.data.length > 0 ? (
-              <ScrollArea type="auto" style={{ paddingBottom: 20 }}>
-                <div className="events-row">
-                  {events?.data.map((event) => (
-                    <Event key={event.event_id} event={event} />
-                  ))}
-                </div>
-              </ScrollArea>
-            ) : (
-              <div className="empty-event">
-                <div>
-                  <img src={CalendarIcon} alt="" />
-                  <h2>You have no upcoming events</h2>
-                </div>
-              </div>
-            )}
+            <div className="bills">
+              {[...Array(2)].map((_, index) => (
+                <ReportComplain key={index} />
+              ))}
+            </div>
+            {bills.length === 0 && <EmptyBills />}
           </div>
         </div>
       </div>
@@ -248,60 +290,19 @@ const Dashboard = () => {
   );
 };
 
-type ReportsProps = {
-  report: ReportType;
-};
-
-const ComplaintCard: React.FC<ReportsProps> = ({ report }) => {
-  return (
-    <div className="complaint-box">
-      <table>
-        <thead>
-          <tr>
-            <th className="c-title">Issue Number</th>
-            <th className="c-title">Title</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="c-desc">{report.tracking_code}</td>
-            <td className="c-desc">{report.title}</td>
-          </tr>
-          <tr>
-            <td className="c-title date-status">Date</td>
-            <td className="c-title date-status">Status</td>
-          </tr>
-          <tr>
-            <td className="c-desc">{report.date}</td>
-            <td className="status">{report.status}</td>
-            <Button variant="subtle" rightIcon={<FiChevronRight />}>
-              View
-            </Button>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-interface ActionProps {
-  action: {
+type AnalyticsProps = {
+  index: number;
+  item: {
     title: string;
-    btnText: string;
-    variant: string;
-    click: () => void;
+    value: number;
   };
-}
+};
 
-const ActionCard = ({ action }: ActionProps) => {
+const AnalyticsCard = ({ item, index }: AnalyticsProps) => {
   return (
-    <div className={`call-to-action card-${action.variant}`}>
-      <h2 className={`call-to-action-text card-${action.variant}`}>
-        {action.title}
-      </h2>
-      <Button className={`card-${action.variant}`} onClick={action.click}>
-        {action.btnText}
-      </Button>
+    <div className={`analytic-card c-${index}`}>
+      <div className="a-title">{item.title}</div>
+      <div className="a-total">{item.value}</div>
       <img src={Mountain} alt="mountains" />
     </div>
   );
@@ -327,6 +328,70 @@ const Event = ({ event }: EventProps) => {
         </div>
       </div>
       <div className="event-overlay-2" />
+    </div>
+  );
+};
+
+const Bill = () => {
+  return (
+    <div className="bill">
+      <div className="report">
+        <div className="left">
+          <div>School Fees</div>
+        </div>
+        <div className="right">
+          <div className="desc">N300, 000</div>
+        </div>
+      </div>
+      <div className="report two">
+        <div className="left">
+          <div>All Parents </div>
+        </div>
+        <div className="right two">
+          <div className="rest"> Sept 9,2023</div>
+          <div className="rest more">
+            <span>More</span> <ChevronRight size={12} className="icon" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ReportComplain = () => {
+  return (
+    <div className="bill">
+      <div className="report">
+        <div className="left">
+          <div>IS 012345</div>
+        </div>
+        <div className="right">
+          <div className="desc"> Noise making in class</div>
+        </div>
+      </div>
+      <div className="report two">
+        <div className="left">
+          <div>Sept 9,2023</div>
+        </div>
+        <div className="right two">
+          <div className="rest unresolved"> Unresolved</div>
+          <div className="rest more">
+            <span>More</span> <ChevronRight size={12} className="icon" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const EmptyBills = () => {
+  return (
+    <div className="empty-report">
+      <img src={EmptyReportState} alt="" className="empty-report-image" />
+      <h2 className="empty-report-text">You have no upcoming events</h2>
+      <span className="empty-report-desc">
+        Recents unresolved complaints will be listed here
+      </span>
     </div>
   );
 };

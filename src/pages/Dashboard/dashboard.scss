@@ -169,6 +169,10 @@
         border-radius: 16px;
         width: 60%;
 
+        &.full {
+          width: calc(100% - 30px);
+        }
+
         @media (max-width: 1280px) {
           width: calc(100% - 24px);
         }

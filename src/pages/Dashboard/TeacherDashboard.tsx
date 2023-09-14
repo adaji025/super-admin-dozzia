@@ -168,6 +168,7 @@ const TeacherDashboard = () => {
       </Helmet>
 
       <LoadingOverlay visible={loading} />
+
       <div className="top">
         <Group position="apart">
           <Text weight={600}>Jss 1A</Text>
@@ -189,6 +190,7 @@ const TeacherDashboard = () => {
           </Menu>
         </Group>
       </div>
+
       <div className="analytics">
         {analyticsData.map((item, index) => (
           <AnalyticsCard item={item} index={index} key={index} />
@@ -386,28 +388,25 @@ const AnalyticsCard = ({ item, index }: AnalyticsProps) => {
 const Bill = () => {
   return (
     <div className="bill">
-      <Table>
-        <tbody>
-          <tr>
-            <td style={{ border: "none" }}>Shool fees</td>
-            <td style={{ border: "0px" }}>N300, 000</td>
-          </tr>
-          <tr>
-            <td>All Parent</td>
-            <td>Sept 9, 2023</td>
-            <td>
-              <Button
-                color="gray"
-                rightIcon={<ChevronRight size={12} />}
-                variant="subtle"
-                size="xs"
-              >
-                More
-              </Button>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+      <div className="report">
+        <div className="left">
+          <div>School Fees</div>
+        </div>
+        <div className="right">
+          <div className="desc">N300, 000</div>
+        </div>
+      </div>
+      <div className="report two">
+        <div className="left">
+          <div>All Parents </div>
+        </div>
+        <div className="right two">
+          <div className="rest"> Sept 9,2023</div>
+          <div className="rest more">
+            <span>More</span> <ChevronRight size={12} className="icon" />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
