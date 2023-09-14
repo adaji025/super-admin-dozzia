@@ -8,7 +8,6 @@ import {
   LoadingOverlay,
   Popover,
   Group,
-  Table,
   Text,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
@@ -36,6 +35,7 @@ import CalendarIcon from "../../assets/svg/calendar.svg";
 import EmptyReportState from "../../assets/svg/EmptyState.svg";
 
 import "./dashboard.scss";
+import { BillType, BillsState } from "../../types/billsTypes";
 
 const Dashboard = () => {
   const [active, setActive] = useState<"attendance" | "reports">("attendance");
@@ -54,6 +54,10 @@ const Dashboard = () => {
     (state: { data: { eventsDashboard: GetEventsResponse } }) => {
       return state.data.eventsDashboard;
     }
+  );
+
+  const bills = useSelector(
+    (state: { data: { bills: BillsState } }) => state.data.bills
   );
   const { handleError } = useNotification();
 
@@ -112,15 +116,6 @@ const Dashboard = () => {
       });
   };
 
-  const bills = [
-    {
-      title: "School fees",
-      party: "All Parent",
-      amount: 300000,
-      date: "Sept 9, 2023",
-    },
-  ];
-
   const analyticsData = [
     {
       title: "Total Students",
@@ -139,6 +134,8 @@ const Dashboard = () => {
       value: 15,
     },
   ];
+
+  console.log("Bills ==>", bills);
 
   return (
     <Fragment>
@@ -232,6 +229,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
         <div className="right">
           <div className="complaints">
             <Group grow>
@@ -251,11 +249,16 @@ const Dashboard = () => {
             </Group>
 
             <div className="bills">
-              {[...Array(2)].map((_, index) => (
-                <Bill key={index} />
+              {bills.data.map((bill: BillType) => (
+                <Bill bill={bill} key={bill.school_bill_id} />
               ))}
             </div>
-            {bills.length === 0 && <EmptyBills />}
+            {bills.data.length === 0 && (
+              <EmptyState
+                title="You have no active bills"
+                desc="Active bills will be listed here"
+              />
+            )}
           </div>
 
           <div className="complaints reports">
@@ -278,11 +281,16 @@ const Dashboard = () => {
             </Group>
 
             <div className="bills">
-              {[...Array(2)].map((_, index) => (
-                <ReportComplain key={index} />
+              {reports?.data.map((report: ReportType) => (
+                <ReportComplain report={report} key={report.id} />
               ))}
             </div>
-            {bills.length === 0 && <EmptyBills />}
+            {reports?.data.length === 0 && (
+              <EmptyState
+                title="You have no unresolved complains"
+                desc="Recents unresolved complaints will be listed here"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -314,7 +322,6 @@ interface EventProps {
 
 const Event = ({ event }: EventProps) => {
   const navigate = useNavigate();
-
   return (
     <div
       className="event-item"
@@ -332,12 +339,16 @@ const Event = ({ event }: EventProps) => {
   );
 };
 
-const Bill = () => {
+type BillProps = {
+  bill: BillType;
+};
+
+const Bill = ({ bill }: BillProps) => {
   return (
     <div className="bill">
       <div className="report">
         <div className="left">
-          <div>School Fees</div>
+          <div>{bill.title}</div>
         </div>
         <div className="right">
           <div className="desc">N300, 000</div>
@@ -348,7 +359,10 @@ const Bill = () => {
           <div>All Parents </div>
         </div>
         <div className="right two">
-          <div className="rest"> Sept 9,2023</div>
+          <div className="rest">
+            {" "}
+            {moment(bill.deadline_date).format("MMM DD,YYYY")}
+          </div>
           <div className="rest more">
             <span>More</span> <ChevronRight size={12} className="icon" />
           </div>
@@ -358,23 +372,27 @@ const Bill = () => {
   );
 };
 
-const ReportComplain = () => {
+type ReportProps = {
+  report: ReportType;
+};
+
+const ReportComplain = ({ report }: ReportProps) => {
   return (
     <div className="bill">
       <div className="report">
         <div className="left">
-          <div>IS 012345</div>
+          <div>{report.tracking_code}</div>
         </div>
         <div className="right">
-          <div className="desc"> Noise making in class</div>
+          <div className="desc"> {report.comment}</div>
         </div>
       </div>
       <div className="report two">
         <div className="left">
-          <div>Sept 9,2023</div>
+          <div>{moment(report.date).format("MMM DD,YYYY")}</div>
         </div>
         <div className="right two">
-          <div className="rest unresolved"> Unresolved</div>
+          <div className="rest unresolved"> {report.status}</div>
           <div className="rest more">
             <span>More</span> <ChevronRight size={12} className="icon" />
           </div>
@@ -384,14 +402,17 @@ const ReportComplain = () => {
   );
 };
 
-const EmptyBills = () => {
+type EmptyStateProps = {
+  title: string;
+  desc: string;
+};
+
+const EmptyState = ({ title, desc }: EmptyStateProps) => {
   return (
     <div className="empty-report">
       <img src={EmptyReportState} alt="" className="empty-report-image" />
-      <h2 className="empty-report-text">You have no upcoming events</h2>
-      <span className="empty-report-desc">
-        Recents unresolved complaints will be listed here
-      </span>
+      <h2 className="empty-report-text">{title}</h2>
+      <span className="empty-report-desc">{desc}</span>
     </div>
   );
 };

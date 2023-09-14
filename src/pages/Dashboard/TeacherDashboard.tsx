@@ -10,7 +10,6 @@ import {
   Group,
   Menu,
   Text,
-  Table,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
@@ -21,7 +20,7 @@ import useNotification from "../../hooks/useNotification";
 import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
 import { getEvents } from "../../services/event/event";
-import { ReportStatusTypes } from "../../types/reportsTypes";
+import { ReportStatusTypes, ReportType } from "../../types/reportsTypes";
 import { getMetrics } from "../../services/metrics/metrics";
 import { GetMetricsResponse } from "../../types/metricsTypes";
 import useClass from "../../hooks/useClass";
@@ -230,8 +229,9 @@ const TeacherDashboard = () => {
                     />
                   </Popover>
 
-                  <Button color="dark"
-                  onClick={() => navigate("/attendance")}>Take Attendance</Button>
+                  <Button color="dark" onClick={() => navigate("/attendance")}>
+                    Take Attendance
+                  </Button>
                 </Group>
               </div>
             </div>
@@ -273,8 +273,12 @@ const TeacherDashboard = () => {
                   Manage your class activities on the class wall
                 </Text>
               </div>
-              <Button variant="outline" color="dark" mt={16}
-              onClick={() => navigate("/class-wall")}>
+              <Button
+                variant="outline"
+                color="dark"
+                mt={16}
+                onClick={() => navigate("/class-wall")}
+              >
                 Go to Class Wall
               </Button>
             </div>
@@ -304,7 +308,12 @@ const TeacherDashboard = () => {
                 <Bill key={index} />
               ))}
             </div>
-            {bills.length === 0 && <EmptyBills />}
+            {bills.length === 0 && (
+              <EmptyState
+                title="You have no unresolved complains"
+                desc="Recents unresolved complaints will be listed here"
+              />
+            )}
           </div>
 
           <div className="complaints reports">
@@ -327,11 +336,17 @@ const TeacherDashboard = () => {
             </Group>
 
             <div className="bills">
-              {[...Array(2)].map((_, index) => (
-                <ReportComplain key={index} />
-              ))}
+              {reports &&
+                reports?.data.map((report: ReportType) => (
+                  <ReportComplain report={report} key={report.id} />
+                ))}
             </div>
-            {bills.length === 0 && <EmptyBills />}
+            {reports?.data.length === 0 && (
+              <EmptyState
+                title="You have no active bills"
+                desc="Active bills will be listed here"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -411,23 +426,27 @@ const Bill = () => {
   );
 };
 
-const ReportComplain = () => {
+type ReportProps = {
+  report: ReportType;
+};
+
+const ReportComplain = ({ report }: ReportProps) => {
   return (
     <div className="bill">
       <div className="report">
         <div className="left">
-          <div>IS 012345</div>
+          <div>{report.tracking_code}</div>
         </div>
         <div className="right">
-          <div className="desc"> Noise making in class</div>
+          <div className="desc"> {report.comment}</div>
         </div>
       </div>
       <div className="report two">
         <div className="left">
-          <div>Sept 9,2023</div>
+          <div>{moment(report.date).format("MMM DD,YYYY")}</div>
         </div>
         <div className="right two">
-          <div className="rest unresolved"> Unresolved</div>
+          <div className="rest unresolved"> {report.status}</div>
           <div className="rest more">
             <span>More</span> <ChevronRight size={12} className="icon" />
           </div>
@@ -437,14 +456,17 @@ const ReportComplain = () => {
   );
 };
 
-const EmptyBills = () => {
+type EmptyStateProps = {
+  title: string;
+  desc: string;
+};
+
+const EmptyState = ({ title, desc }: EmptyStateProps) => {
   return (
     <div className="empty-report">
       <img src={EmptyReportState} alt="" className="empty-report-image" />
-      <h2 className="empty-report-text">You have no upcoming events</h2>
-      <span className="empty-report-desc">
-        Recents unresolved complaints will be listed here
-      </span>
+      <h2 className="empty-report-text">{title}</h2>
+      <span className="empty-report-desc">{desc}</span>
     </div>
   );
 };
