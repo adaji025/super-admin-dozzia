@@ -5,27 +5,15 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { showNotification } from "@mantine/notifications";
 import useTheme from "../../hooks/useTheme";
-import {
-  LayoutDashboard,
-  ChevronDown,
-  FilePencil,
-  Books,
-  ClipboardList,
-  Wall,
-} from "tabler-icons-react";
-import { ReactComponent as Administration } from "../../assets/svg/navigation/administration.svg";
-import { ReactComponent as Broadcast } from "../../assets/svg/navigation/broadcast.svg";
+import { ChevronDown } from "tabler-icons-react";
+import { ReactComponent as Administration } from "../../assets/svg/navigation/people.svg";
+import { ReactComponent as Audit } from "../../assets/svg/navigation/archive-book.svg";
 import { ReactComponent as Dashboard } from "../../assets/svg/navigation/dashboard.svg";
 import { ReactComponent as Logout } from "../../assets/svg/navigation/logout.svg";
-import { ReactComponent as Management } from "../../assets/svg/navigation/management.svg";
-import { ReactComponent as Reports } from "../../assets/svg/navigation/reports.svg";
+import { ReactComponent as Support } from "../../assets/svg/navigation/24-support.svg";
 import { ReactComponent as Settings } from "../../assets/svg/navigation/setting.svg";
-import { ReactComponent as Trash } from "../../assets/svg/navigation/trash.svg";
-import { ReactComponent as Wallet } from "../../assets/svg/navigation/wallet.svg";
-import { ReactComponent as Promotion } from "../../assets/svg/navigation/promotion.svg";
-import { ReactComponent as Security } from "../../assets/svg/navigation/security-user.svg";
+
 import { UserState } from "../../redux/user/user.reducer";
-import { Roles } from "../../types/authTypes";
 
 interface SidebarProps {
   toggleSidebar: () => void;
@@ -35,7 +23,6 @@ interface SidebarProps {
 const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
   const { dark } = useTheme();
   const [showChildren, setShowChildren] = useState<string>("");
-  const [routes, setRoutes] = useState<any>([]);
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -49,107 +36,42 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
       icon: Dashboard,
       name: "Management",
       route: "/dashboard",
-      key: [
-        "students",
-        "staff",
-        "subjects",
-        "classes",
-        "events",
-        "class-wall",
-        "grades",
-      ],
+      key: ["onboard-school", "onboard-staff", "onboard-student"],
       children: [
         {
-          name: "Students",
-          route: "/students",
+          name: "Onboard School",
+          route: "/onboard-school",
         },
         {
-          name: "Staff",
-          route: "/staff",
+          name: "Onboard Staff",
+          route: "/onboard-staff",
         },
         {
-          name: "Classes",
-          route: "/classes",
-        },
-        {
-          name: "Events",
-          route: "/events",
-        },
-        {
-          name: "Subjects",
-          route: "/subjects",
-        },
-        {
-          icon: Promotion,
-          name: "Promotion Request",
-          route: "/promotion-request",
-        },
-        {
-          name: "Grades",
-          route: "/grades",
+          name: "Onboard Student",
+          route: "/onboard-student",
         },
       ],
     },
+
     {
       icon: Administration,
-      name: "Admissions",
-      route: "/admissions",
-      key: ["add-student", "add-staff", "terms-sessions"],
-      children: [
-        {
-          name: "Add Student",
-          route: "/add-student",
-        },
-        {
-          name: "Add Staff",
-          route: "/add-staff",
-        },
-        {
-          name: "Terms & Sessions",
-          route: "/terms-sessions",
-        },
-      ],
+      name: "Admin Management",
+      route: "/admin-management",
     },
     {
-      icon: Security,
-      name: "Security",
-      route: "/security",
-      key: ["school-buses", "attendance"],
-      children: [
-        {
-          name: "Bus GPS",
-          route: "/school-buses",
-        },
-        {
-          name: "Attendance",
-          route: "/attendance",
-        },
-      ],
+      icon: Audit,
+      name: "Audit Log",
+      route: "/audit",
     },
     {
-      icon: Wallet,
-      name: "Wallet",
-      route: "/wallet",
-    },
-    {
-      icon: Broadcast,
-      name: "Broadcast",
-      route: "/broadcast",
-    },
-    {
-      icon: Reports,
-      name: "Reports & Complaints",
-      route: "/reports",
+      icon: Support,
+      name: "Help and support",
+      route: "/supports",
     },
     {
       icon: Settings,
       name: "Settings",
       route: "/settings",
-    },
-    {
-      icon: Trash,
-      name: "Recycle Bin",
-      route: "/recycle-bin",
     },
   ];
 
