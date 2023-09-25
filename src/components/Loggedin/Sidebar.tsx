@@ -44,29 +44,11 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
     return state.user.userdata;
   });
 
-  useEffect(() => {
-    if (
-      userdata.role.name === Roles.Principal ||
-      userdata.role.name === Roles.SchoolAdmin
-    ) {
-      setRoutes(adminRoutes);
-    } else if (userdata?.role?.name === Roles.Teacher) {
-      setRoutes(teacherRoutes);
-    }
-
-    //eslint-disable-next-line
-  }, []);
-
   const adminRoutes = [
     {
       icon: Dashboard,
-      name: "Dashboard",
-      route: "/dashboard",
-    },
-    {
-      icon: Management,
       name: "Management",
-      route: "/management",
+      route: "/dashboard",
       key: [
         "students",
         "staff",
@@ -171,50 +153,6 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
     },
   ];
 
-  const teacherRoutes = [
-    {
-      icon: LayoutDashboard,
-      name: "Dashboard",
-      route: "/dashboard",
-    },
-    {
-      icon: Wall,
-      name: "Classes",
-      route: "/classes",
-    },
-
-    {
-      icon: ClipboardList,
-      name: "Class Wall",
-      route: "/class-wall",
-    },
-    {
-      icon: Books,
-      name: "Subjects",
-      route: "/subjects",
-    },
-    {
-      icon: FilePencil,
-      name: "Attendance",
-      route: "/attendance",
-    },
-    {
-      icon: Broadcast,
-      name: "Broadcast",
-      route: "/broadcast",
-    },
-    {
-      icon: Promotion,
-      name: "Promotion Request",
-      route: "/promotion-request",
-    },
-    {
-      icon: Settings,
-      name: "Settings",
-      route: "/settings",
-    },
-  ];
-
   return (
     <div
       className={`sidebar-container no-select ${
@@ -259,7 +197,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
             color: !dark ? "white" : "black",
           }}
         >
-          {routes.map((item: any) => (
+          {adminRoutes.map((item: any) => (
             <Fragment key={item.name}>
               {item.children ? (
                 <>

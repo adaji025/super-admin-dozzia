@@ -1,0 +1,28 @@
+.d-upload {
+  width: 100%;
+  border-radius: 8px;
+  padding-top: 1.063rem;
+  padding-bottom: 1.5rem;
+  text-align: center;
+  border: 1px solid #ced4da;
+
+  &.add-bottom-margin {
+    margin-bottom: 0.5rem;
+  }
+
+  &.add-bottom-margin-md {
+    margin-bottom: 1.475rem;
+  }
+
+  &.file-selected {
+    .d-u-text {
+      color: #828282 !important;
+    }
+  }
+
+  .d-u-text {
+    color: #bdbdbd;
+    margin-top: 0.313rem;
+    font-size: 0.875rem;
+  }
+}
