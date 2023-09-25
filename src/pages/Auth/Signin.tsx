@@ -9,6 +9,7 @@ import {
   Button,
   Group,
   Box,
+  Divider,
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
@@ -16,13 +17,9 @@ import { login, getProfileInfo } from "../../services/auth/auth";
 import { setUserData } from "../../redux/user/user.actions";
 import useNotification from "../../hooks/useNotification";
 import { useMediaQuery } from "@mantine/hooks";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import { Autoplay } from "swiper";
-import { CardOne, CardThree, CardTwo } from "../../components/Auth/AuthCards";
-import AuthHeader from "../../components/AuthHeader/AuthHeader";
 import { ProfileType, SigninResponse } from "../../types/authTypes";
+import DozziaLogo from "../../assets/svg/dozzia-dark.svg";
+
 import "./auth.scss";
 
 const Signin = () => {
@@ -103,97 +100,68 @@ const Signin = () => {
       </Helmet>
 
       <div className="auth-page">
-        <AuthHeader />
-
+        <Group pt={80} position="center">
+          <img src={DozziaLogo} alt="dozzia" />
+        </Group>
         <div className="auth-main">
-          <div className={`a-m-left`}>
-            <Box
-              className="left-container"
-              sx={
-                ExSmall
-                  ? { width: "" }
-                  : small
-                  ? { width: 350 }
-                  : { width: 389 }
-              }
-              mx="auto"
-            >
-              <div className="form-title">Sign In</div>
-              <div className="form-desc">
+          <Box
+            sx={
+              ExSmall ? { width: "", paddingInline: 8,  } : small ? { width: 300 } : { width: 389 }
+            }
+            mx="auto"
+          >
+            <Box>
+              <Text className="form-title">Sign In</Text>
+              <Text className="form-desc">
                 Please enter your login details below
-              </div>
-
-              <div className="form">
-                <Box sx={{ maxWidth: 420 }}>
-                  <form onSubmit={form.onSubmit((values) => submit(values))}>
-                    <TextInput
-                      className="input-field"
-                      required
-                      label="Username"
-                      placeholder="Enter your username"
-                      type="text"
-                      radius="md"
-                      size="md"
-                      disabled={loading}
-                      {...form.getInputProps("username")}
-                    />
-
-                    <PasswordInput
-                      required
-                      mt="sm"
-                      label="Password"
-                      radius="md"
-                      size="md"
-                      placeholder="*************"
-                      disabled={loading}
-                      {...form.getInputProps("password")}
-                    />
-
-                    <Group position="right" mt="sm">
-                      <Link to="/forgot-password">
-                        <Text size="sm">Forgot Password</Text>
-                      </Link>
-                    </Group>
-
-                    <Group position="center" mt="lg">
-                      <Button
-                        fullWidth
-                        type="submit"
-                        color="dark"
-                        size="md"
-                        loading={loading}
-                      >
-                        Sign in
-                      </Button>
-                    </Group>
-                  </form>
-                </Box>
-              </div>
+              </Text>
             </Box>
-          </div>
+            <Divider my={24} />
+            <Box sx={{ maxWidth: 420 }}>
+              <form onSubmit={form.onSubmit((values) => submit(values))}>
+                <TextInput
+                  className="input-field"
+                  required
+                  label="Username"
+                  placeholder="Enter your username"
+                  type="text"
+                  radius="md"
+                  size="md"
+                  disabled={loading}
+                  {...form.getInputProps("username")}
+                />
 
-          <div className="a-m-right">
-            <Swiper
-              modules={[Autoplay]}
-              loop={true}
-              spaceBetween={30}
-              autoplay={{
-                delay: 3000,
-                disableOnInteraction: false,
-              }}
-              className="mySwiper"
-            >
-              <SwiperSlide>
-                <CardOne />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardTwo />
-              </SwiperSlide>
-              <SwiperSlide>
-                <CardThree />
-              </SwiperSlide>
-            </Swiper>
-          </div>
+                <PasswordInput
+                  required
+                  mt="sm"
+                  label="Password"
+                  radius="md"
+                  size="md"
+                  placeholder="*************"
+                  disabled={loading}
+                  {...form.getInputProps("password")}
+                />
+
+                <Group position="right" mt="sm">
+                  <Link to="/forgot-password">
+                    <Text size="sm">Forgot Password</Text>
+                  </Link>
+                </Group>
+
+                <Group position="center" mt="lg">
+                  <Button
+                    fullWidth
+                    type="submit"
+                    color="dark"
+                    size="md"
+                    loading={loading}
+                  >
+                    Sign in
+                  </Button>
+                </Group>
+              </form>
+            </Box>
+          </Box>
         </div>
       </div>
     </Fragment>
