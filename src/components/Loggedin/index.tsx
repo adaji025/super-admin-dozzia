@@ -10,11 +10,11 @@ import { UserState } from "../../redux/user/user.reducer";
 
 import "./index.scss";
 import Dashboard from "../../pages/Dashboard/Dashboard";
+import OnboardStaff from "../../pages/Dashboard/Onboard/OnboardStaff";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
   const [showSidebar, setShowSidebar] = useState<boolean>(false);
- 
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar);
@@ -37,7 +37,9 @@ const LoggedinContainer = () => {
         <div className="main-section">
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />{" "}
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/staff-onboarding" element={<OnboardStaff />} />
+            <Route path="/student-onboarding" element={<OnboardStaff />} />
           </Routes>
         </div>
       </div>
