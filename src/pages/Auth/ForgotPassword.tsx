@@ -1,15 +1,25 @@
 import { Fragment, useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
-import { TextInput, Button, Group, Box, LoadingOverlay } from "@mantine/core";
+import {
+  TextInput,
+  Button,
+  Group,
+  Box,
+  LoadingOverlay,
+  Text,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { showNotification } from "@mantine/notifications";
 import Logo from "../../assets/svg/dozzia-dark.svg";
 import { forgotPassword } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
 import { ArrowLeft } from "tabler-icons-react";
+import { useMediaQuery } from "@mantine/hooks";
 
 const ForgotPassword = () => {
+  const small = useMediaQuery("(max-width: 450px)");
+  const ExSmall = useMediaQuery("(max-width: 370px)");
   const navigate = useNavigate();
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const { handleError } = useNotification();
@@ -61,13 +71,18 @@ const ForgotPassword = () => {
       <div className="auth-page">
         <LoadingOverlay visible={showLoader} />
 
-        <div className={`forgot-password`}>
-          <div className="logo">
-            <img src={Logo} alt="" />
-          </div>
+        <Group pt={80} position="center">
+          <img src={Logo} alt="" />
+        </Group>
 
-          <div className="form">
-            <div className="form-title">Forgot Password</div>
+        <div className="auth-main">
+          <Box
+            sx={
+              ExSmall ? { width: "", paddingInline: 16 } : small ? { width: 300 } : { width: 389 }
+            }
+            mx="auto"
+          >
+            <Text className="form-title">Forgot Password</Text>
             <Box sx={{ maxWidth: 428 }} mx="auto" mt={20}>
               <form onSubmit={form.onSubmit((values) => submit(values))}>
                 <TextInput
@@ -94,7 +109,7 @@ const ForgotPassword = () => {
                 </Group>
               </form>
             </Box>
-          </div>
+          </Box>
         </div>
       </div>
     </Fragment>
