@@ -72,7 +72,7 @@ const ForgotPassword = () => {
         <LoadingOverlay visible={showLoader} />
 
         <Group pt={80} position="center">
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="dozzia systems" />
         </Group>
 
         <div className="auth-main">
