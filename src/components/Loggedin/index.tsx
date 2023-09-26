@@ -11,6 +11,7 @@ import { UserState } from "../../redux/user/user.reducer";
 import "./index.scss";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import OnboardStaff from "../../pages/Dashboard/Onboard/OnboardStaff";
+import SchoolDetails from "../../pages/Dashboard/SchoolDetails";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
@@ -41,6 +42,7 @@ const LoggedinContainer = () => {
             <Route path="/onboard-school" element={<OnboardStaff />} />
             <Route path="/onboard-staff" element={<OnboardStaff />} />
             <Route path="/onboard-student" element={<OnboardStaff />} />
+            <Route path="/school-details/:id" element={<SchoolDetails />} />
           </Routes>
         </div>
       </div>
