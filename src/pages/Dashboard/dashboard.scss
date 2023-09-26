@@ -20,16 +20,16 @@
     width: 25%;
 
     &.c-0 {
-      background: #fff38a;
+      background: rgba(255, 230, 193, 0.82);
     }
     &.c-1 {
-      background: #8adcff;
+      background: rgba(217, 231, 177, 0.82);
     }
     &.c-2 {
-      background: #a1ff8a;
+      background: rgba(209, 241, 255, 0.82);
     }
     &.c-3 {
-      background: #8affea;
+      background: rgba(183, 243, 229, 0.82);
     }
 
     @media (max-width: 600px) {
@@ -45,7 +45,14 @@
       margin-top: 10px;
     }
 
-    img {
+    .a-desc {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .mountains {
       position: absolute;
       bottom: 0;
       right: 0;

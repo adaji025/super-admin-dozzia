@@ -26,7 +26,7 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      navigate("/dashboard");
+      navigate("/management");
     }
     //eslint-disable-next-line
   }, []);

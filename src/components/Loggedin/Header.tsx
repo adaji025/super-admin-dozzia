@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Route, useLocation } from "react-router-dom";
 import {
   ActionIcon,
   useMantineColorScheme,
@@ -38,7 +38,9 @@ const Header = ({ toggleSidebar, showSidebar }: HeaderProps) => {
           />
 
           <div className="page-title">
-            {location.pathname.split("/")[1].replace("-", " ")}
+            {location.pathname === "/"
+              ? "Management"
+              : location.pathname.split("/")[1].replace("-", " ")}
           </div>
         </div>
 

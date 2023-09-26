@@ -35,9 +35,13 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
     {
       icon: Dashboard,
       name: "Management",
-      route: "/dashboard",
-      key: ["onboard-school", "onboard-staff", "onboard-student"],
+      route: "/management",
+      key: ["School", "onboard-school", "onboard-staff", "onboard-student"],
       children: [
+        {
+          name: "School",
+          route: "/",
+        },
         {
           name: "Onboard School",
           route: "/onboard-school",
@@ -198,7 +202,7 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
                       "nav-item",
                       !dark ? "h-dark" : "h-light",
                       isActive ||
-                      (item.route === "/dashboard" && location.pathname === "/")
+                      (item.route === "/management" && location.pathname === "/")
                         ? "is-active"
                         : null,
                     ]
