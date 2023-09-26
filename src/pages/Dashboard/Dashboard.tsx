@@ -57,7 +57,7 @@ const Dashboard = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Dashboard</title>
+        <title>Management</title>
         <meta property="og:title" content="Dashboard" />
       </Helmet>
 
