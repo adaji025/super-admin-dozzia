@@ -1,12 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-import { Button, LoadingOverlay, Popover, Group, Text } from "@mantine/core";
-import { Calendar } from "@mantine/dates";
-import { FiChevronRight } from "react-icons/fi";
-import moment from "moment";
-
-import { ChevronRight } from "tabler-icons-react";
+import { LoadingOverlay, Text, Table, Button } from "@mantine/core";
 
 import Mountain from "../../assets/svg/mountains.svg";
 import CloudIcon from "../../assets/svg/cloud.svg";
@@ -14,21 +8,13 @@ import CloudIcon from "../../assets/svg/cloud.svg";
 import "./dashboard.scss";
 
 const Dashboard = () => {
-  const [active, setActive] = useState<"attendance" | "reports">("attendance");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [calenderButtonLoading, setCalenderButtonLoading] =
-    useState<boolean>(false);
-  const [calenderPopover, setCalenderPopover] = useState<boolean>(false);
-  const [date, setDate] = useState<any>(new Date());
-  const navigate = useNavigate();
+  const [loading] = useState<boolean>(false);
 
   useEffect(() => {
     //eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    //eslint-disable-next-line
-  }, [date]);
+ 
 
   const analyticsData = [
     {
@@ -53,6 +39,21 @@ const Dashboard = () => {
     },
   ];
 
+  const tableData = [
+    {
+      name: "Grace field school",
+      address: "14, Kunle street Lagos",
+      date_onboarded: "Jun 13, 2023",
+      onboarded_by: "Kunle Remi"
+    },
+    {
+      name: "Grace field school",
+      address: "14, Kunle street Lagos",
+      date_onboarded: "Jun 13, 2023",
+      onboarded_by: "Kunle Remi"
+    },
+  ];
+
   return (
     <Fragment>
       <Helmet>
@@ -69,7 +70,31 @@ const Dashboard = () => {
       </div>
 
       <div className="dashboard">
-        
+        <Text size="xl" weight={600}>
+          Schools
+        </Text>
+        <div className="table-container">
+          <Table>
+            <thead>
+              <tr>
+                <th>School name</th>
+                <th>Address</th>
+                <th>Date Onboarded</th>
+                <th>Onboarded by</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((element, index) => (
+                <tr key={element.name}>
+                  <td>{element.address}</td>
+                  <td>{element.date_onboarded}</td>
+                  <td>{element.onboarded_by}</td>
+                  <td><Button color="dark" variant="outline">Details</Button></td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
       </div>
     </Fragment>
   );
