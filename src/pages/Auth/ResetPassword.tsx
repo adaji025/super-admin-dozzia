@@ -33,7 +33,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      navigate("/dashboard");
+      navigate("/management");
     }
 
     let parseddata: any = queryString.parse(location.search);

@@ -32,7 +32,7 @@ const Signin = () => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      navigate("/dashboard");
+      navigate("/management");
     }
     //eslint-disable-next-line
   }, []);
@@ -79,7 +79,7 @@ const Signin = () => {
         });
 
         dispatch(setUserData(res));
-        navigate("/dashboard");
+        navigate("/management");
       })
       .catch((error) => {
         handleError(error);
