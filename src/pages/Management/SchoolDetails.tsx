@@ -11,18 +11,20 @@ import {
   Divider,
 } from "@mantine/core";
 import { Helmet } from "react-helmet";
-import { ChevronDown } from "tabler-icons-react";
+import { ChevronDown, Filter } from "tabler-icons-react";
 
 import Mountain from "../../assets/svg/mountains.svg";
 import CloudIcon from "../../assets/svg/cloud.svg";
 import StudentDetails from "./StudentDetails";
 import { useNavigate } from "react-router-dom";
+import StafftDetails from "./StaffDetails";
 
 const SchoolDetails = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [openStudentDetails, setOpenStudentDetails] = useState(false);
+  const [openStaffDetails, setOpenStaffDetails] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const analyticsData = [
     {
       title: "School name",
@@ -91,6 +93,23 @@ const SchoolDetails = () => {
     },
   ];
 
+  const staffTableData = [
+    {
+      name: "Tonia James",
+      phone_no: "090887776655",
+      staff_role: "School Admin",
+      date_onboarded: "Jun 13, 2023",
+      onboarded_by: "Kunle Remi",
+    },
+    {
+      name: "Toyosi Ade",
+      phone_no: "090887776655",
+      staff_role: "Teacher",
+      date_onboarded: "Jun 13, 2023",
+      onboarded_by: "Kunle Remi",
+    },
+  ];
+
   return (
     <Fragment>
       <Helmet>
@@ -101,6 +120,11 @@ const SchoolDetails = () => {
       <StudentDetails
         drawerOpen={openStudentDetails}
         close={() => setOpenStudentDetails(false)}
+      />
+
+      <StafftDetails
+        drawerOpen={openStaffDetails}
+        close={() => setOpenStaffDetails(false)}
       />
 
       <div className="details-analytics">
@@ -124,26 +148,55 @@ const SchoolDetails = () => {
         </Tabs>
 
         <Group mt={32} position="right">
-          <Menu
-            gutter={15}
-            withArrow
-            size="xs"
-            control={
-              <Button
-                rightIcon={<ChevronDown />}
-                size="md"
-                color="dark"
-                variant="outline"
-              >
-                Select Class
-              </Button>
-            }
-          >
-            <Menu.Item>Jss 1</Menu.Item>
-            <Menu.Item>Jss 2</Menu.Item>
-          </Menu>
-          <Button size="md" color="dark">
-            Onboard Student
+          {activeTab === 0 && (
+            <Menu
+              gutter={15}
+              withArrow
+              size="md"
+              control={
+                <Button
+                  rightIcon={<ChevronDown />}
+                  size="md"
+                  color="dark"
+                  variant="outline"
+                >
+                  Select Class
+                </Button>
+              }
+            >
+             
+             <Menu.Item>Jss 1</Menu.Item>
+              <Menu.Item>Jss 2</Menu.Item>
+            </Menu>
+          )}
+
+          {activeTab === 1 && (
+            <Menu
+              gutter={15}
+              withArrow
+              size="md"
+              control={
+                <Button
+                  rightIcon={<Filter />}
+                  size="md"
+                  color="dark"
+                  variant="outline"
+                >
+                  Role
+                </Button>
+              }
+            >
+               <Menu.Item>Teacher</Menu.Item>
+              <Menu.Item>School Admin</Menu.Item>
+              <Menu.Item>Principal</Menu.Item>
+            </Menu>
+          )}
+
+          <Button size="md" color="dark" onClick={() => {
+            activeTab=== 0 && navigate("/onboard-student")
+            activeTab=== 1 && navigate("/onboard-staff")
+          }}>
+            Onboard {activeTab === 0 ? "Student" : "Staff"}
           </Button>
         </Group>
 
@@ -153,7 +206,10 @@ const SchoolDetails = () => {
           ))}
         </Box>
 
-        <Box mt={32}>
+        <Box
+          mt={32}
+          className={`table-content ${activeTab === 0 ? "active" : ""}`}
+        >
           <Text size="lg" weight={600}>
             Students
           </Text>
@@ -180,13 +236,64 @@ const SchoolDetails = () => {
                     <td>{element.guardian_name}</td>
                     <td>
                       <Menu>
-                        <Menu.Item onClick={() => navigate("/onboard-student")}>Edit student</Menu.Item>
+                        <Menu.Item onClick={() => navigate("/onboard-student")}>
+                          Edit student
+                        </Menu.Item>
                         <Divider />
                         <Menu.Item onClick={() => setOpenStudentDetails(true)}>
                           View student details
                         </Menu.Item>
                         <Divider />
                         <Menu.Item color="red">Delete student</Menu.Item>
+                      </Menu>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </div>
+        </Box>
+
+        <Box
+          mt={32}
+          className={`table-content ${activeTab === 1 ? "active" : ""}`}
+        >
+          <Text size="lg" weight={600}>
+            Staff/Gracefield high school
+          </Text>
+          <div className="table-container">
+            <Table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Phone Number</th>
+                  <th>Staff Role</th>
+                  <th>Date Onboarded</th>
+                  <th> Onboarded By</th>
+                </tr>
+              </thead>
+              <tbody>
+                {staffTableData.map((element, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Avatar src="avatar.png" alt="it's me" />
+                    </td>
+                    <td>{element.name}</td>
+                    <td>{element.phone_no}</td>
+                    <td>{element.staff_role}</td>
+                    <td>{element.date_onboarded}</td>
+                    <td>{element.onboarded_by}</td>
+                    <td>
+                      <Menu>
+                        <Menu.Item onClick={() => setOpenStaffDetails(true)}>
+                          View staff
+                        </Menu.Item>
+                        <Divider />
+                        <Menu.Item onClick={() => navigate("/onboard-staff")}>
+                          Edit staff
+                        </Menu.Item>
+                        <Divider />
+                        <Menu.Item>Suspend staff</Menu.Item>
                       </Menu>
                     </td>
                   </tr>

@@ -13,7 +13,7 @@ interface TransactionDetailsProps {
   close: () => void;
 }
 
-const StudentDetails = ({
+const StafftDetails = ({
   drawerOpen,
   close,
 }: TransactionDetailsProps) => {
@@ -25,7 +25,7 @@ const StudentDetails = ({
       position="right"
       size={400}
       className="transaction-details"
-      title={<Text className="title">Student Details</Text>}
+      title={<Text className="title">Staff Details</Text>}
     >
       {drawerOpen && (
         <ScrollArea
@@ -46,7 +46,16 @@ const StudentDetails = ({
             <Text weight={500} size="sm">
               Full name
             </Text>
-            <Text size="sm">Tonia James</Text>
+            <Text size="sm">Shola Bade</Text>
+          </Group>
+
+          <Divider variant="dashed" my={16} />
+
+          <Group position="apart" className="details">
+            <Text weight={500} size="sm">
+              Staff role
+            </Text>
+            <Text size="sm">Jss1 Green</Text>
           </Group>
 
           <Divider variant="dashed" my={16} />
@@ -62,9 +71,27 @@ const StudentDetails = ({
 
           <Group position="apart" className="details">
             <Text weight={500} size="sm">
-              Age
+              Email
             </Text>
-            <Text size="sm">22</Text>
+            <Text size="sm">shola@gmail.com</Text>
+          </Group>
+
+          <Divider variant="dashed" my={16} />
+
+          <Group position="apart" className="details">
+            <Text weight={500} size="sm">
+            Years of experience
+            </Text>
+            <Text size="sm">7</Text>
+          </Group>
+
+          <Divider variant="dashed" my={16} />
+
+          <Group position="apart" className="details">
+            <Text weight={500} size="sm">
+            Phone number
+            </Text>
+            <Text size="sm">07066778899</Text>
           </Group>
 
           <Divider variant="dashed" my={16} />
@@ -89,7 +116,7 @@ const StudentDetails = ({
 
           <Group position="apart" className="details">
             <Text weight={500} size="sm">
-              Guardian
+              Guarantor
             </Text>
             <Text size="sm">Mr kola</Text>
           </Group>
@@ -98,31 +125,31 @@ const StudentDetails = ({
 
           <Group position="apart" className="details">
             <Text weight={500} size="sm">
-              Guardian phone
+              Guarantor's Profession
             </Text>
-            <Text size="sm">234 8107898765</Text>
+            <Text size="sm">Software Engineer</Text>
           </Group>
 
           <Divider variant="dashed" my={16} />
 
           <Group position="apart" className="details">
             <Text weight={500} size="sm">
-              Guardian email
+              Marital Status
             </Text>
-            <Text size="sm">kola@gmail.com</Text>
+            <Text size="sm">Married</Text>
           </Group>
 
           <Divider variant="dashed" my={16} />
-
+          
           <Group position="apart" className="details">
             <Text weight={500} size="sm">
-              Disability
+              Next of knin
             </Text>
-            <Text size="sm">Nil</Text>
+            <Text size="sm">Modomawa Toba</Text>
           </Group>
 
           <Divider variant="dashed" my={16} />
-
+          
           <Group position="apart" className="details">
             <Text weight={500} size="sm">
               Height
@@ -150,4 +177,4 @@ const StudentDetails = ({
   );
 };
 
-export default StudentDetails;
+export default StafftDetails;

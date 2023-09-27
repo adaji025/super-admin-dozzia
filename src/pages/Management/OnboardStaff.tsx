@@ -20,39 +20,61 @@ import moment from "moment";
 import {
   UserCircle,
   BuildingHospital,
-  School,
+  History,
   CircleCheck,
 } from "tabler-icons-react";
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
-import Upload from "../../../components/Upload/Upload";
-import { onboardStudent } from "../../../services/student/student";
-import useClass from "../../../hooks/useClass";
-import useNotification from "../../../hooks/useNotification";
-import useTheme from "../../../hooks/useTheme";
-import PageHeader from "../../../components/PageHeader/PageHeader";
+import Upload from "../../components/Upload/Upload";
+import { getStaffRoleList, onboardStaff } from "../../services/staff/staff";
+import useNotification from "../../hooks/useNotification";
+import useTheme from "../../hooks/useTheme";
+import PageHeader from "../../components/PageHeader/PageHeader";
+import { getStatesList } from "../../services/helper/helper";
+import {
+  ApiResponseType,
+  StaffRoleType,
+  StateType,
+} from "../../types/utilityTypes";
 import { useLocalStorage } from "@mantine/hooks";
-import "./administration.scss";
-import { AddStudentData } from "../../../types/studentTypes";
-import { objectToFormData } from "../../../lib/util";
-import { ClassroomType } from "../../../types/classTypes";
+import { objectToFormData } from "../../lib/util";
 
-const OnboardStudent = () => {
+const OnboardStaff = () => {
   const { dark } = useTheme();
   const { handleError } = useNotification();
+  const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [states, setStates] = useState<StateType[]>([]);
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useLocalStorage<any>({
-    key: "onboardStudent",
+    key: "onboardStaff",
     defaultValue: {},
   });
-  const { getClassList, allClasses } = useClass();
 
   useEffect(() => {
-    getClassList(1, 200, "", "", true);
+    getStates();
+    getStaffRoles();
 
     //eslint-disable-next-line
   }, []);
+
+  const getStates = () => {
+    getStatesList()
+      .then((res: ApiResponseType<StateType[]>) => {
+        setStates(res.data);
+      })
+      .catch((err: AxiosError) => {
+        handleError(err);
+      });
+  };
+
+  const getStaffRoles = () => {
+    getStaffRoleList()
+      .then((res: ApiResponseType<StaffRoleType[]>) => {
+        setStaffRoles(res.data);
+      })
+      .catch((err: AxiosError) => handleError(err));
+  };
 
   const nextStep = (data: any) => {
     if (active === 2) {
@@ -80,44 +102,54 @@ const OnboardStudent = () => {
   const handleSubmit = (values: Record<string, any>) => {
     setLoading(true);
 
-    const data: AddStudentData = {
+    const data = {
+      extra: {
+        role_id: values.role_id,
+      },
       profile: {
+        title: values.title,
         first_name: values.first_name,
         last_name: values.last_name,
         middle_name: values.middle_name,
         gender: values.gender,
+        phone_number: values.phone_number,
+        email: values.email,
         ...(values.image && { picture: values.image }),
-      },
-      guardian: {
-        email: values.guardian_email,
-        first_name: values.guardian_first_name,
-        last_name: values.guardian_last_name,
-        phone_number: values.guardian_phone_number,
-        title: values.guardian_title,
       },
       meta: {
         dob: moment(values.dob).format("YYYY-MM-DD"),
-        state_disability: values.state_disability,
-        blood_group: values.blood_group,
-        genotype: values.genotype,
-        previous_school_name: values.previous_school_name,
-        entry_year: values.entry_year,
-        entry_test_result: values.entry_test_result,
-        weight: values.weight,
+        address: values.address,
+        state_of_origin: values.state_of_origin,
+        religion: values.religion,
+        postal_code: values.postal_code,
         height: values.height,
-        entry_class: values.entry_class,
-        existing_medical_condition: values.existing_medical_condition,
-        hereditary_health_condition: values.hereditary_health_condition,
+        weight: values.weight,
+        genotype: values.genotype,
+        blood_group: values.blood_group,
+        state_disability: values.state_disability,
+        years_of_experience: values.years_of_experience,
+        existing_medical_condition: values.existing_conditions,
+        hereditary_health_condition: values.hereditary_conditions,
+      },
+      next_of_kin: {
+        full_name: values.next_of_kin_name,
+        phone_number: values.next_of_kin_phone_number,
+        email: values.next_of_kin_email,
+      },
+      guarantor: {
+        full_name: values.guarantor_name,
+        employment_role: values.guarantor_employment_role,
+        phone_number: values.guarantor_phone_number,
       },
     };
 
     const formData = objectToFormData(data);
 
-    onboardStudent(formData)
-      .then((res) => {
+    onboardStaff(formData)
+      .then(() => {
         showNotification({
           title: "Success",
-          message: "Student added successfully 🤗",
+          message: "Staff added successfully 🤗",
           color: "green",
         });
         clearData();
@@ -133,9 +165,9 @@ const OnboardStudent = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Onboard Student</title>
+        <title>Onboard Staff</title>
         <meta name="description" content="" />
-        <meta property="og:title" content="Onboard Student" />
+        <meta property="og:title" content="Onboard Staff" />
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>
@@ -144,8 +176,8 @@ const OnboardStudent = () => {
 
       <div className="page-container">
         <PageHeader
-          title="Onboard Student 🧑‍🎓"
-          desc="Provide the details below to onboard a new student"
+          title=" Onboard Staff 👩‍🏫"
+          desc="Provide the details below to onboard a new staff"
         />
 
         <div
@@ -168,7 +200,15 @@ const OnboardStudent = () => {
                 description="First step"
                 allowStepSelect={false}
               >
-                <PersonalInfo {...{ formData, nextStep, clearData }} />
+                <PersonalInfo
+                  {...{
+                    nextStep,
+                    formData,
+                    states,
+                    staffRoles,
+                    clearData,
+                  }}
+                />
               </Stepper.Step>
 
               <Stepper.Step
@@ -177,18 +217,16 @@ const OnboardStudent = () => {
                 description="Second step"
                 allowStepSelect={false}
               >
-                <HealthHistory {...{ formData, active, nextStep, prevStep }} />
+                <HealthHistory {...{ active, nextStep, prevStep, formData }} />
               </Stepper.Step>
 
               <Stepper.Step
-                icon={<School size={18} />}
-                label="Academic History"
+                icon={<History size={18} />}
+                label="Work History"
                 description="Final step"
                 allowStepSelect={false}
               >
-                <AcademicHistory
-                  {...{ formData, active, nextStep, prevStep, allClasses }}
-                />
+                <WorkHistory {...{ active, nextStep, prevStep, formData }} />
               </Stepper.Step>
             </Stepper>
           </div>
@@ -201,64 +239,80 @@ const OnboardStudent = () => {
 interface PersonalInfoProps {
   nextStep: (data: any) => void;
   formData: any;
+  states: StateType[];
+  staffRoles: StaffRoleType[];
   clearData: () => void;
 }
 
-const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
+const PersonalInfo = ({
+  nextStep,
+  formData,
+  states,
+  staffRoles,
+  clearData,
+}: PersonalInfoProps) => {
+  const [age, setAge] = useState<number>(0);
   const [file, setFile] = useState<any>(
-    formData?.image ? formData?.image : undefined
+    formData?.image ? formData?.image : null
   );
 
   const form = useForm({
     initialValues: {
+      role_id: formData?.role_id ? formData?.role_id : "",
+      title: formData?.title ? formData?.title : "",
       first_name: formData?.first_name ? formData?.first_name : "",
       last_name: formData?.last_name ? formData?.last_name : "",
       middle_name: formData?.middle_name ? formData?.middle_name : "",
-      dob: formData?.dob ? new Date(formData?.dob) : "",
+      email: formData?.email ? formData?.email : "",
+      phone_number: formData?.phone_number ? formData?.phone_number : "",
+      address: formData?.address ? formData?.address : "",
+      postal_code: formData?.postal_code ? formData?.postal_code : "",
+      dob: formData?.dob ? formData?.dob : "",
       gender: formData?.gender ? formData?.gender : "",
-      guardian_title: formData?.guardian_title ? formData?.guardian_title : "",
-      guardian_first_name: formData?.guardian_first_name
-        ? formData?.guardian_first_name
+      marital_status: formData?.marital_status ? formData?.marital_status : "",
+      state_of_origin: formData?.state_of_origin
+        ? formData?.state_of_origin
         : "",
-      guardian_last_name: formData?.guardian_last_name
-        ? formData?.guardian_last_name
+      religion: formData?.religion ? formData?.religion : "",
+      next_of_kin_name: formData?.next_of_kin_name
+        ? formData?.next_of_kin_name
         : "",
-      guardian_phone_number: formData?.guardian_phone_number
-        ? formData?.guardian_phone_number
+      next_of_kin_phone_number: formData?.next_of_kin_phone_number
+        ? formData?.next_of_kin_phone_number
         : "",
-      guardian_email: formData?.guardian_email ? formData?.guardian_email : "",
+      next_of_kin_email: formData?.next_of_kin_email
+        ? formData?.next_of_kin_email
+        : "",
     },
 
     validate: {
-      first_name: (value) => (value === "" ? "Input first name" : null),
-      last_name: (value) => (value === "" ? "Input last name" : null),
-      dob: (value) => (value === "" ? "Enter date of birth" : null),
-      gender: (value) => (value === "" ? "Select student gender" : null),
-      guardian_title: (value) =>
-        value === "" ? "Select guardian title" : null,
-      guardian_first_name: (value) =>
-        value === "" ? "Input guardian first name" : null,
-      guardian_last_name: (value) =>
-        value === "" ? "Input guardian last name" : null,
-      guardian_phone_number: (value) =>
-        value.length !== 11 ? "Phone number must be 11 digits" : null,
-      guardian_email: (value) =>
-        /^\S+@\S+$/.test(value) ? null : "Invalid email",
+      role_id: (value) => (value === "" ? "Select staff role" : null),
+      title: (value) => (value === "" ? "Select title" : null),
+      gender: (value) => (value === "" ? "Select gender" : null),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+      next_of_kin_email: (value) =>
+        value === "" || /^\S+@\S+$/.test(value) ? null : "Invalid email",
     },
   });
 
   const { dark } = useTheme();
 
-  const onSave = (values: any) => {
-    // if (!file) {
-    //   return showNotification({
-    //     message: "Please select student image",
-    //     color: "yellow",
-    //   });
-    // }
+  useEffect(() => {
+    onDobChange();
 
+    //eslint-disable-next-line
+  }, [form.values.dob]);
+
+  const onDobChange = () => {
+    var age = moment().diff(form.values.dob, "years");
+
+    setAge(age ? age : 0);
+  };
+
+  const onSave = (values: any) => {
     nextStep({
       ...values,
+      age,
       image: file,
     });
   };
@@ -271,11 +325,46 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
             <Divider
               mb="lg"
               variant="dashed"
+              label="Staff Role"
+              labelPosition="center"
+            />
+
+            <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="Staff Role"
+                placeholder="Select role"
+                data={staffRoles.map((role: StaffRoleType) => ({
+                  key: role?.role_id,
+                  value: role?.role_id,
+                  label: role.name,
+                }))}
+                {...form.getInputProps("role_id")}
+              />
+            </div>
+
+            <Divider
+              mb="lg"
+              variant="dashed"
               label="Personal Info"
               labelPosition="center"
             />
 
             <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="Title"
+                placeholder="Title"
+                data={[
+                  { value: "Mr", label: "Mr 🧑" },
+                  { value: "Mrs", label: "Mrs 👱‍♀️" },
+                  { value: "Miss", label: "Miss 👩‍🦰" },
+                ]}
+                {...form.getInputProps("title")}
+              />
+
               <TextInput
                 className="form-item"
                 required
@@ -284,7 +373,9 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 type="text"
                 {...form.getInputProps("first_name")}
               />
+            </div>
 
+            <div className="form-row">
               <TextInput
                 className="form-item"
                 required
@@ -293,15 +384,30 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 type="text"
                 {...form.getInputProps("last_name")}
               />
-            </div>
 
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 label="Middle Name"
                 placeholder="Middle name"
                 type="text"
                 {...form.getInputProps("middle_name")}
+              />
+            </div>
+
+            <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="Marital Status"
+                placeholder="Marital status"
+                data={[
+                  { value: "Single", label: "Single" },
+                  { value: "Married", label: "Married" },
+                  { value: "Widowed", label: "Widowed" },
+                  { value: "Divorced", label: "Divorced" },
+                  { value: "Separated", label: "Separated" },
+                ]}
+                {...form.getInputProps("marital_status")}
               />
 
               <DatePicker
@@ -327,47 +433,17 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 ]}
                 {...form.getInputProps("gender")}
               />
-            </div>
 
-            <Divider
-              mb="lg"
-              variant="dashed"
-              label="Guardian Info"
-              labelPosition="center"
-            />
-
-            <div className="form-row">
               <Select
                 className="form-item"
-                required
-                label="Guardian Title"
-                placeholder="Guardian Title"
+                label="Religion"
+                placeholder="Select religion"
                 data={[
-                  { value: "Mr", label: "Mr 🧑" },
-                  { value: "Mrs", label: "Mrs 👱‍♀️" },
-                  { value: "Miss", label: "Miss 👩‍🦰" },
+                  { value: "Christianity", label: "Christianity" },
+                  { value: "Islam", label: "Islam" },
+                  { value: "Other", label: "Other" },
                 ]}
-                {...form.getInputProps("guardian_title")}
-              />
-            </div>
-
-            <div className="form-row">
-              <TextInput
-                className="form-item"
-                required
-                label="Guardian’s First Name"
-                placeholder="Guardian’s first name"
-                type="text"
-                {...form.getInputProps("guardian_first_name")}
-              />
-
-              <TextInput
-                className="form-item"
-                required
-                label="Guardian’s Last Name"
-                placeholder="Guardian’s last name"
-                type="text"
-                {...form.getInputProps("guardian_last_name")}
+                {...form.getInputProps("religion")}
               />
             </div>
 
@@ -375,10 +451,10 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
               <TextInput
                 required
                 className="form-item"
-                label="Guardian’s Phone Number"
-                placeholder="Guardian’s phone number"
+                label="Phone Number"
+                placeholder="Phone number"
                 type="tel"
-                value={form.values.guardian_phone_number}
+                value={form.values.phone_number}
                 onKeyDown={(e) =>
                   ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                 }
@@ -390,7 +466,7 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                     e.target.value === "" ||
                     /^[0-9\b]+$/.test(e.target.value)
                   ) {
-                    form.setFieldValue("guardian_phone_number", e.target.value);
+                    form.setFieldValue("phone_number", e.target.value);
                   }
                 }}
               />
@@ -398,10 +474,106 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
               <TextInput
                 className="form-item"
                 required
-                label="Guardian’s Email"
-                placeholder="Guardian’s email"
+                label="Email"
+                placeholder="Email"
                 type="email"
-                {...form.getInputProps("guardian_email")}
+                {...form.getInputProps("email")}
+              />
+            </div>
+
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Address"
+              labelPosition="center"
+            />
+
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                label="House Address"
+                placeholder="Address"
+                type="text"
+                {...form.getInputProps("address")}
+              />
+
+              <TextInput
+                className="form-item"
+                label="Postal Code"
+                placeholder="Postal code"
+                type="text"
+                {...form.getInputProps("postal_code")}
+              />
+            </div>
+
+            <div className="form-row">
+              <Select
+                className="form-item"
+                required
+                label="State of Origin"
+                placeholder="Select State"
+                searchable
+                nothingFound="No option"
+                data={states?.map(
+                  (state: { state_id: string; name: string }) => ({
+                    key: state?.state_id,
+                    value: state?.state_id,
+                    label: state.name,
+                  })
+                )}
+                {...form.getInputProps("state_of_origin")}
+              />
+            </div>
+
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Next of kin"
+              labelPosition="center"
+            />
+
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                label="Full Name"
+                placeholder="Next of kin"
+                type="text"
+                {...form.getInputProps("next_of_kin_name")}
+              />
+            </div>
+
+            <div className="form-row">
+              <TextInput
+                className="form-item"
+                label="Phone Number"
+                placeholder="Phone number"
+                type="tel"
+                value={form.values.next_of_kin_phone_number}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length > 11) {
+                    return;
+                  }
+                  if (
+                    e.target.value === "" ||
+                    /^[0-9\b]+$/.test(e.target.value)
+                  ) {
+                    form.setFieldValue(
+                      "next_of_kin_phone_number",
+                      e.target.value
+                    );
+                  }
+                }}
+              />
+
+              <TextInput
+                className="form-item"
+                label="Email"
+                placeholder="Email"
+                type="email"
+                {...form.getInputProps("next_of_kin_email")}
               />
             </div>
 
@@ -419,7 +591,7 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 </div>
 
                 <Upload
-                  text={file ? file?.name : "Upload Image"}
+                  text={file ? file?.name ?? "Image selected" : "Upload Image"}
                   accept={["image/jpeg", "image/png", "image/jpg"]}
                   extraClasses={`${file ? "file-selected" : ""}`}
                   setFile={setFile}
@@ -465,18 +637,17 @@ const HealthHistory = ({
   const [disability, setDisability] = useState<string>(
     formData?.disability ? formData?.disability : "No"
   );
-
   const form = useForm({
     initialValues: {
       height: formData?.height ? formData?.height : "",
       weight: formData?.weight ? formData?.weight : "",
       blood_group: formData?.blood_group ? formData?.blood_group : "",
       genotype: formData?.genotype ? formData?.genotype : "",
-      existing_medical_condition: formData?.existing_medical_condition
-        ? formData?.existing_medical_condition
+      existing_conditions: formData?.existing_conditions
+        ? formData?.existing_conditions
         : [],
-      hereditary_health_condition: formData?.hereditary_health_condition
-        ? formData?.hereditary_health_condition
+      hereditary_conditions: formData?.hereditary_conditions
+        ? formData?.hereditary_conditions
         : [],
       state_disability: formData?.state_disability
         ? formData?.state_disability
@@ -556,34 +727,37 @@ const HealthHistory = ({
                 className="form-item"
                 radius={8}
                 data={[
-                  "Asthma",
-                  "Attention Deficit Hyperactivity Disorder (ADHD)",
-                  "Autism Spectrum Disorder (ASD)",
-                  "Celiac Disease",
-                  "Chickenpox",
-                  "Common Cold",
-                  "Croup",
-                  "Ear Infections",
-                  "Eczema",
-                  "Fever",
-                  "Hand, Foot, and Mouth Disease",
-                  "Measles",
-                  "Pediatric Migraine",
-                  "Pneumonia",
-                  "Respiratory Syncytial Virus (RSV) Infection",
-                  "Strep Throat",
-                  "Urinary Tract Infection (UTI)",
-                  "Whooping Cough",
+                  "Arthritis",
+                  "Cardiovascular Disease",
+                  "Chronic Obstructive Pulmonary Disease (COPD)",
+                  "Depression",
+                  "Diabetes",
+                  "Gastroesophageal Reflux Disease (GERD)",
+                  "Hypertension",
+                  "Migraine",
+                  "Obesity",
+                  "Osteoporosis",
+                  "Rheumatoid Arthritis",
+                  "Sleep Apnea",
+                  "Stroke",
+                  "Type 2 Diabetes",
                 ]}
                 label="Existing Medical Condition(s)"
                 placeholder="Select all that applies"
-                {...form.getInputProps("existing_medical_condition")}
+                {...form.getInputProps("existing_conditions")}
               />
 
               <MultiSelect
                 className="form-item"
                 radius={8}
                 data={[
+                  "Breast Cancer",
+                  "Colon Cancer",
+                  "Huntington's Disease",
+                  "Lung Cancer",
+                  "Ovarian Cancer",
+                  "Polycystic Kidney Disease",
+                  "Prostate Cancer",
                   "Cystic Fibrosis",
                   "Down Syndrome",
                   "Hemophilia",
@@ -597,7 +771,7 @@ const HealthHistory = ({
                 ]}
                 label="Hereditary Health Condition(s)"
                 placeholder="Select all that applies"
-                {...form.getInputProps("hereditary_health_condition")}
+                {...form.getInputProps("hereditary_conditions")}
               />
             </div>
 
@@ -646,30 +820,30 @@ const HealthHistory = ({
   );
 };
 
-interface AcademicHistoryProps {
+interface WorkHistoryProps {
   active: number;
   nextStep: (values: any) => void;
   prevStep: (values: any) => void;
   formData: any;
-  allClasses: ClassroomType[];
 }
 
-const AcademicHistory = ({
+const WorkHistory = ({
   active,
   nextStep,
   prevStep,
   formData,
-  allClasses,
-}: AcademicHistoryProps) => {
+}: WorkHistoryProps) => {
   const form = useForm({
     initialValues: {
-      entry_class: formData?.entry_class ? formData?.entry_class : "",
-      entry_year: formData?.entry_year ? formData?.entry_year : "",
-      entry_test_result: formData?.entry_test_result
-        ? formData?.entry_test_result
+      years_of_experience: formData?.years_of_experience
+        ? formData?.years_of_experience
         : "",
-      previous_school_name: formData?.previous_school_name
-        ? formData?.previous_school_name
+      guarantor_name: formData?.guarantor_name ? formData?.guarantor_name : "",
+      guarantor_employment_role: formData?.guarantor_employment_role
+        ? formData?.guarantor_employment_role
+        : "",
+      guarantor_phone_number: formData?.guarantor_phone_number
+        ? formData?.guarantor_phone_number
         : "",
     },
   });
@@ -684,52 +858,65 @@ const AcademicHistory = ({
         <Box sx={{ maxWidth: 900 }}>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
-              <Select
-                required
-                label="Class of Entry"
-                placeholder="Select class"
-                searchable
-                className="form-item"
-                nothingFound="No class found"
-                data={allClasses.map((item: ClassroomType) => ({
-                  key: item?.classroom_id,
-                  value: item.classroom_id,
-                  label: item.name,
-                }))}
-                {...form.getInputProps("entry_class")}
-              />
-            </div>
-
-            <div className="form-row">
               <NumberInput
                 required
                 className="form-item"
-                label="Year of Entry"
-                placeholder="Enter year"
+                label="Years of Experience"
+                placeholder="Enter number"
                 type="number"
-                {...form.getInputProps("entry_year")}
+                {...form.getInputProps("years_of_experience")}
               />
             </div>
 
+            <Divider
+              mb="lg"
+              variant="dashed"
+              label="Guarantor"
+              labelPosition="center"
+            />
+
             <div className="form-row">
-              <NumberInput
+              <TextInput
                 className="form-item"
-                label="Entry Test Score (%)"
-                placeholder="Score"
-                type="number"
-                max={100}
-                min={0}
-                {...form.getInputProps("entry_test_result")}
+                label="Guarantor Name"
+                placeholder="Enter name"
+                type="text"
+                {...form.getInputProps("guarantor_name")}
+              />
+
+              <TextInput
+                className="form-item"
+                label="Employment Role"
+                placeholder="e.g. Architect"
+                type="text"
+                {...form.getInputProps("guarantor_employment_role")}
               />
             </div>
 
             <div className="form-row">
               <TextInput
                 className="form-item"
-                label="Previous School Name"
-                placeholder="Previous School"
-                type="text"
-                {...form.getInputProps("previous_school_name")}
+                label="Phone Number"
+                placeholder="Guarantor number"
+                type="tel"
+                value={form.values.guarantor_phone_number}
+                onKeyDown={(e) =>
+                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.value.length > 11) {
+                    return;
+                  }
+                  if (
+                    e.target.value === "" ||
+                    /^[0-9\b]+$/.test(e.target.value)
+                  ) {
+                    form.setFieldValue(
+                      "guarantor_phone_number",
+                      e.target.value
+                    );
+                  }
+                }}
               />
             </div>
 
@@ -752,4 +939,4 @@ const AcademicHistory = ({
   );
 };
 
-export default OnboardStudent;
+export default OnboardStaff;

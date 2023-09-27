@@ -6,9 +6,11 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 
 import Management from "../../pages/Management/Management";
-import OnboardStaff from "../../pages/Management/Onboard/OnboardStaff";
+import OnboardStaff from "../../pages/Management/OnboardStaff";
 import SchoolDetails from "../../pages/Management/SchoolDetails";
 import "./index.scss";
+import OnboardSchool from "../../pages/Management/OnboardSchool";
+import OnboardStudent from "../../pages/Management/OnboardStudent";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
@@ -36,9 +38,9 @@ const LoggedinContainer = () => {
           <Routes>
             <Route path="/" element={<Management />} />
             <Route path="/management" element={<Management />} />
-            <Route path="/onboard-school" element={<OnboardStaff />} />
+            <Route path="/onboard-school" element={<OnboardSchool />} />
             <Route path="/onboard-staff" element={<OnboardStaff />} />
-            <Route path="/onboard-student" element={<OnboardStaff />} />
+            <Route path="/onboard-student" element={<OnboardStudent />} />
             <Route path="/school-details/:id" element={<SchoolDetails />} />
           </Routes>
         </div>

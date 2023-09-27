@@ -348,3 +348,13 @@
   margin-right: -16px;
   padding-right: 16px;
 }
+
+.table-content {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+

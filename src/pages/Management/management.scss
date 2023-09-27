@@ -109,7 +109,7 @@
     }
 
     @media (max-width: 600px) {
-      width: 100%;
+      width: calc(100% - 48px);
     }
 
     .a-title {
@@ -154,11 +154,6 @@
     @media only screen and (max-width: 768px) {
       width: calc(100% - 40px);
     }
-  }
-
-  .drawer-scroll-container {
-    height: calc(100vh - 84px);
-    margin-right: -16px;
-    padding-right: 16px;
-  }
+  }  
 }
+
