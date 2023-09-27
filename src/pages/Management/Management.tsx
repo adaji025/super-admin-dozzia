@@ -8,6 +8,8 @@ import CloudIcon from "../../assets/svg/cloud.svg";
 import "./management.scss";
 import { useNavigate } from "react-router-dom";
 
+
+
 const Management = () => {
   const [loading] = useState<boolean>(false);
 

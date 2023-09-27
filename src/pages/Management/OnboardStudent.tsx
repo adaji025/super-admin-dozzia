@@ -25,17 +25,17 @@ import {
 } from "tabler-icons-react";
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
-import Upload from "../../../components/Upload/Upload";
-import { onboardStudent } from "../../../services/student/student";
-import useClass from "../../../hooks/useClass";
-import useNotification from "../../../hooks/useNotification";
-import useTheme from "../../../hooks/useTheme";
-import PageHeader from "../../../components/PageHeader/PageHeader";
+import Upload from "../../components/Upload/Upload";
+import { onboardStudent } from "../../services/student/student";
+import useClass from "../../hooks/useClass";
+import useNotification from "../../hooks/useNotification";
+import useTheme from "../../hooks/useTheme";
+import PageHeader from "../../components/PageHeader/PageHeader";
 import { useLocalStorage } from "@mantine/hooks";
-import "./administration.scss";
-import { AddStudentData } from "../../../types/studentTypes";
-import { objectToFormData } from "../../../lib/util";
-import { ClassroomType } from "../../../types/classTypes";
+import { AddStudentData } from "../../types/studentTypes";
+import { objectToFormData } from "../../lib/util";
+import { ClassroomType } from "../../types/classTypes";
+import "./onboarding.scss";
 
 const OnboardStudent = () => {
   const { dark } = useTheme();

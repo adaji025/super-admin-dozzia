@@ -6,7 +6,7 @@
     }
 
     .pm-inner-wrapper {
-      max-width: 900px;
+      // max-width: 900px;
 
       .onboard-group {
         margin-top: 50px;
@@ -19,6 +19,7 @@
           flex-direction: row;
           justify-content: space-between;
           margin-bottom: 30px;
+          gap: 24px;
           @media only screen and (max-width: 576px) {
             display: block;
             margin-bottom: unset;
