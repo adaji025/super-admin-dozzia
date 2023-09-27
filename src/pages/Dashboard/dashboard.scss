@@ -155,4 +155,10 @@
       width: calc(100% - 40px);
     }
   }
+
+  .drawer-scroll-container {
+    height: calc(100vh - 84px);
+    margin-right: -16px;
+    padding-right: 16px;
+  }
 }

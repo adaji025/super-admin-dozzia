@@ -11,13 +11,18 @@ import {
   Divider,
 } from "@mantine/core";
 import { Helmet } from "react-helmet";
-import { ChevronDown, ExternalLink } from "tabler-icons-react";
+import { ChevronDown } from "tabler-icons-react";
 
 import Mountain from "../../assets/svg/mountains.svg";
 import CloudIcon from "../../assets/svg/cloud.svg";
+import StudentDetails from "./StudentDetails";
+import { useNavigate } from "react-router-dom";
 
 const SchoolDetails = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [openStudentDetails, setOpenStudentDetails] = useState(false);
+
+  const navigate = useNavigate()
   const analyticsData = [
     {
       title: "School name",
@@ -92,6 +97,11 @@ const SchoolDetails = () => {
         <title>Management</title>
         <meta property="og:title" content="Dashboard" />
       </Helmet>
+
+      <StudentDetails
+        drawerOpen={openStudentDetails}
+        close={() => setOpenStudentDetails(false)}
+      />
 
       <div className="details-analytics">
         <Text weight={600} size="lg">
@@ -170,9 +180,11 @@ const SchoolDetails = () => {
                     <td>{element.guardian_name}</td>
                     <td>
                       <Menu>
-                        <Menu.Item>Edit student</Menu.Item>
+                        <Menu.Item onClick={() => navigate("/onboard-student")}>Edit student</Menu.Item>
                         <Divider />
-                        <Menu.Item>View student details</Menu.Item>
+                        <Menu.Item onClick={() => setOpenStudentDetails(true)}>
+                          View student details
+                        </Menu.Item>
                         <Divider />
                         <Menu.Item color="red">Delete student</Menu.Item>
                       </Menu>
@@ -184,8 +196,6 @@ const SchoolDetails = () => {
           </div>
         </Box>
       </div>
-
-      <div className="dashboard"></div>
     </Fragment>
   );
 };
