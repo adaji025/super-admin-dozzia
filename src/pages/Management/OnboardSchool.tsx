@@ -212,43 +212,41 @@ const OnboardSchool = () => {
                     </div>
 
                     <div className="form-row">
-                      <TextInput
-                        className="form-item"
-                        label="Middle Name"
-                        placeholder="Middle name"
-                        type="text"
-                        {...form.getInputProps("middle_name")}
-                      />
-
-                      <DatePicker
-                        initialLevel="year"
-                        className="form-item"
-                        label="Date of Birth"
-                        placeholder="Date of birth"
-                        required
-                        {...form.getInputProps("dob")}
-                      />
-                    </div>
-
-                    <div className="form-row">
                       <Select
                         className="form-item"
                         required
-                        label="Gender"
-                        placeholder="Gender"
+                        label="School Category"
+                        placeholder="Choose category"
                         data={[
-                          { value: "Male", label: "Male 🧑" },
-                          { value: "Female", label: "Female 👧" },
-                          { value: "Other", label: "Other" },
+                          { value: "primary", label: "Primary school" },
+                          { value: "secondary", label: "Secondary school" },
                         ]}
                         {...form.getInputProps("gender")}
+                      />
+
+                      <TextInput
+                        className="form-item"
+                        required
+                        label="School Phone Number"
+                        placeholder="Enter phone number"
+                        type="text"
+                        {...form.getInputProps("last_name")}
+                      />
+
+                      <TextInput
+                        className="form-item"
+                        required
+                        label="School email address"
+                        placeholder="Enter email address"
+                        type="text"
+                        {...form.getInputProps("last_name")}
                       />
                     </div>
 
                     <Divider
                       mb="lg"
                       variant="dashed"
-                      label="Guardian Info"
+                      label="Principal/Admin Info"
                       labelPosition="center"
                     />
 
@@ -257,7 +255,7 @@ const OnboardSchool = () => {
                         className="form-item"
                         required
                         label="Guardian Title"
-                        placeholder="Guardian Title"
+                        placeholder="Principal Title"
                         data={[
                           { value: "Mr", label: "Mr 🧑" },
                           { value: "Mrs", label: "Mrs 👱‍♀️" },
@@ -265,13 +263,10 @@ const OnboardSchool = () => {
                         ]}
                         {...form.getInputProps("guardian_title")}
                       />
-                    </div>
-
-                    <div className="form-row">
                       <TextInput
                         className="form-item"
                         required
-                        label="Guardian’s First Name"
+                        label="Principal First Name"
                         placeholder="Guardian’s first name"
                         type="text"
                         {...form.getInputProps("guardian_first_name")}
@@ -280,51 +275,54 @@ const OnboardSchool = () => {
                       <TextInput
                         className="form-item"
                         required
-                        label="Guardian’s Last Name"
+                        label="Principal’s Last Name"
                         placeholder="Guardian’s last name"
                         type="text"
                         {...form.getInputProps("guardian_last_name")}
                       />
                     </div>
 
-                    <div className="form-row">
-                      <TextInput
-                        required
-                        className="form-item"
-                        label="Guardian’s Phone Number"
-                        placeholder="Guardian’s phone number"
-                        type="tel"
-                        value={form.values.guardian_phone_number}
-                        onKeyDown={(e) =>
-                          ["e", "E", "+", "-"].includes(e.key) &&
-                          e.preventDefault()
-                        }
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          if (e.target.value.length > 11) {
-                            return;
+                    <Box sx={{ maxWidth: 690 }}>
+                      <div className="form-row">
+                        <TextInput
+                          required
+                          className="form-item"
+                          label="Principal Phone Number"
+                          placeholder="Principal phone number"
+                          type="tel"
+                          value={form.values.guardian_phone_number}
+                          onKeyDown={(e) =>
+                            ["e", "E", "+", "-"].includes(e.key) &&
+                            e.preventDefault()
                           }
-                          if (
-                            e.target.value === "" ||
-                            /^[0-9\b]+$/.test(e.target.value)
-                          ) {
-                            form.setFieldValue(
-                              "guardian_phone_number",
-                              e.target.value
-                            );
-                          }
-                        }}
-                      />
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            if (e.target.value.length > 11) {
+                              return;
+                            }
+                            if (
+                              e.target.value === "" ||
+                              /^[0-9\b]+$/.test(e.target.value)
+                            ) {
+                              form.setFieldValue(
+                                "guardian_phone_number",
+                                e.target.value
+                              );
+                            }
+                          }}
+                        />
 
-                      <TextInput
-                        className="form-item"
-                        required
-                        label="Guardian’s Email"
-                        placeholder="Guardian’s email"
-                        type="email"
-                        {...form.getInputProps("guardian_email")}
-                      />
-                    </div>
-
+                        <TextInput
+                          className="form-item"
+                          required
+                          label="Pricipal Email"
+                          placeholder="Pricipal email"
+                          type="email"
+                          {...form.getInputProps("guardian_email")}
+                        />
+                      </div>
+                    </Box>
                     <Divider mb="lg" variant="dashed" />
 
                     <div className="form-row">
@@ -347,18 +345,9 @@ const OnboardSchool = () => {
                       </div>
                     </div>
 
-                    <Divider mb="lg" variant="dashed" />
-
                     <Group position="apart" mt="xl">
-                      <Button type="submit">Next</Button>
-
-                      <Button
-                        onClick={() => {
-                          form.reset();
-                        }}
-                        color="red"
-                      >
-                        Clear saved data
+                      <Button size="md" type="submit" color="dark">
+                        Submit
                       </Button>
                     </Group>
                   </form>
