@@ -1,17 +1,14 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Paper } from "@mantine/core";
 import useTheme from "../../hooks/useTheme";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
-import { useSelector } from "react-redux";
-import { UserState } from "../../redux/user/user.reducer";
-
+import Management from "../../pages/Management/Management";
+import OnboardStaff from "../../pages/Management/Onboard/OnboardStaff";
+import SchoolDetails from "../../pages/Management/SchoolDetails";
 import "./index.scss";
-import Dashboard from "../../pages/Dashboard/Dashboard";
-import OnboardStaff from "../../pages/Dashboard/Onboard/OnboardStaff";
-import SchoolDetails from "../../pages/Dashboard/SchoolDetails";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();
@@ -37,8 +34,8 @@ const LoggedinContainer = () => {
 
         <div className="main-section">
           <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/management" element={<Dashboard />} />
+            <Route path="/" element={<Management />} />
+            <Route path="/management" element={<Management />} />
             <Route path="/onboard-school" element={<OnboardStaff />} />
             <Route path="/onboard-staff" element={<OnboardStaff />} />
             <Route path="/onboard-student" element={<OnboardStaff />} />
