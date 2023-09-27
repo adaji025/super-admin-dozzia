@@ -6,9 +6,12 @@ import Mountain from "../../assets/svg/mountains.svg";
 import CloudIcon from "../../assets/svg/cloud.svg";
 
 import "./management.scss";
+import { useNavigate } from "react-router-dom";
 
 const Management = () => {
   const [loading] = useState<boolean>(false);
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     //eslint-disable-next-line
@@ -89,7 +92,8 @@ const Management = () => {
                   <td>{element.address}</td>
                   <td>{element.date_onboarded}</td>
                   <td>{element.onboarded_by}</td>
-                  <td><Button color="dark" variant="outline">Details</Button></td>
+                  <td><Button color="dark" variant="outline"
+                  onClick={() => navigate("/school-details/1")}>Details</Button></td>
                 </tr>
               ))}
             </tbody>
