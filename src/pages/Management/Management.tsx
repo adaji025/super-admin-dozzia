@@ -5,9 +5,9 @@ import { LoadingOverlay, Text, Table, Button } from "@mantine/core";
 import Mountain from "../../assets/svg/mountains.svg";
 import CloudIcon from "../../assets/svg/cloud.svg";
 
-import "./dashboard.scss";
+import "./management.scss";
 
-const Dashboard = () => {
+const Management = () => {
   const [loading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -123,4 +123,4 @@ const AnalyticsCard = ({ item, index }: AnalyticsProps) => {
   );
 };
 
-export default Dashboard;
+export default Management;
