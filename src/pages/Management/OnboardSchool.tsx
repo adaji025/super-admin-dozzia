@@ -148,7 +148,7 @@ const OnboardSchool = () => {
       <Helmet>
         <title>Onboard School</title>
         <meta name="description" content="" />
-        <meta property="og:title" content="Onboard Student" />
+        <meta property="og:title" content="Onboard School" />
         <meta property="og:description" content="" />
         <meta property="og:url" content="" />
       </Helmet>

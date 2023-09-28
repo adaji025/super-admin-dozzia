@@ -113,8 +113,8 @@ const SchoolDetails = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Management</title>
-        <meta property="og:title" content="Dashboard" />
+        <title>Student Details</title>
+        <meta property="og:title" content="Student" />
       </Helmet>
 
       <StudentDetails
