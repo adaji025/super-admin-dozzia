@@ -63,7 +63,7 @@ const Management = () => {
     <Fragment>
       <Helmet>
         <title>Management</title>
-        <meta property="og:title" content="Dashboard" />
+        <meta property="og:title" content="Management" />
       </Helmet>
 
       <LoadingOverlay visible={loading} />
