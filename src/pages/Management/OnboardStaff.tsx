@@ -320,7 +320,7 @@ const PersonalInfo = ({
   return (
     <div className="onboard-group">
       <div className="form">
-        <Box sx={{ maxWidth: 900 }}>
+        <Box>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <Divider
               mb="lg"
@@ -373,9 +373,7 @@ const PersonalInfo = ({
                 type="text"
                 {...form.getInputProps("first_name")}
               />
-            </div>
 
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 required
@@ -384,13 +382,37 @@ const PersonalInfo = ({
                 type="text"
                 {...form.getInputProps("last_name")}
               />
+            </div>
 
+            <div className="form-row">
               <TextInput
                 className="form-item"
                 label="Middle Name"
                 placeholder="Middle name"
                 type="text"
                 {...form.getInputProps("middle_name")}
+              />
+
+              <Select
+                className="form-item"
+                required
+                label="Gender"
+                placeholder="Gender"
+                data={[
+                  { value: "Male", label: "Male 🧑" },
+                  { value: "Female", label: "Female 👧" },
+                  { value: "Other", label: "Other" },
+                ]}
+                {...form.getInputProps("gender")}
+              />
+
+              <DatePicker
+                initialLevel="year"
+                className="form-item"
+                label="Date of Birth"
+                placeholder="Date of birth"
+                required
+                {...form.getInputProps("dob")}
               />
             </div>
 
@@ -410,44 +432,6 @@ const PersonalInfo = ({
                 {...form.getInputProps("marital_status")}
               />
 
-              <DatePicker
-                initialLevel="year"
-                className="form-item"
-                label="Date of Birth"
-                placeholder="Date of birth"
-                required
-                {...form.getInputProps("dob")}
-              />
-            </div>
-
-            <div className="form-row">
-              <Select
-                className="form-item"
-                required
-                label="Gender"
-                placeholder="Gender"
-                data={[
-                  { value: "Male", label: "Male 🧑" },
-                  { value: "Female", label: "Female 👧" },
-                  { value: "Other", label: "Other" },
-                ]}
-                {...form.getInputProps("gender")}
-              />
-
-              <Select
-                className="form-item"
-                label="Religion"
-                placeholder="Select religion"
-                data={[
-                  { value: "Christianity", label: "Christianity" },
-                  { value: "Islam", label: "Islam" },
-                  { value: "Other", label: "Other" },
-                ]}
-                {...form.getInputProps("religion")}
-              />
-            </div>
-
-            <div className="form-row">
               <TextInput
                 required
                 className="form-item"
@@ -471,6 +455,20 @@ const PersonalInfo = ({
                 }}
               />
 
+              <Select
+                className="form-item"
+                label="Religion"
+                placeholder="Select religion"
+                data={[
+                  { value: "Christianity", label: "Christianity" },
+                  { value: "Islam", label: "Islam" },
+                  { value: "Other", label: "Other" },
+                ]}
+                {...form.getInputProps("religion")}
+              />
+            </div>
+
+            <div className="form-row">
               <TextInput
                 className="form-item"
                 required
@@ -479,16 +477,7 @@ const PersonalInfo = ({
                 type="email"
                 {...form.getInputProps("email")}
               />
-            </div>
 
-            <Divider
-              mb="lg"
-              variant="dashed"
-              label="Address"
-              labelPosition="center"
-            />
-
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 label="House Address"
@@ -540,9 +529,7 @@ const PersonalInfo = ({
                 type="text"
                 {...form.getInputProps("next_of_kin_name")}
               />
-            </div>
 
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 label="Phone Number"
