@@ -266,7 +266,7 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
   return (
     <div className="onboard-group">
       <div className="form">
-        <Box sx={{ maxWidth: 900 }}>
+        <Box>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <Divider
               mb="lg"
@@ -293,24 +293,12 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 type="text"
                 {...form.getInputProps("last_name")}
               />
-            </div>
-
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 label="Middle Name"
                 placeholder="Middle name"
                 type="text"
                 {...form.getInputProps("middle_name")}
-              />
-
-              <DatePicker
-                initialLevel="year"
-                className="form-item"
-                label="Date of Birth"
-                placeholder="Date of birth"
-                required
-                {...form.getInputProps("dob")}
               />
             </div>
 
@@ -326,6 +314,23 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                   { value: "Other", label: "Other" },
                 ]}
                 {...form.getInputProps("gender")}
+              />
+
+              <DatePicker
+                initialLevel="year"
+                className="form-item"
+                label="Date of Birth"
+                placeholder="Date of birth"
+                required
+                {...form.getInputProps("dob")}
+              />
+
+              <TextInput
+                className="form-item"
+                label="Age"
+                placeholder="age"
+                type="text"
+                {...form.getInputProps("middle_name")}
               />
             </div>
 
@@ -349,9 +354,6 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
                 ]}
                 {...form.getInputProps("guardian_title")}
               />
-            </div>
-
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 required
@@ -371,39 +373,44 @@ const PersonalInfo = ({ nextStep, formData, clearData }: PersonalInfoProps) => {
               />
             </div>
 
-            <div className="form-row">
-              <TextInput
-                required
-                className="form-item"
-                label="Guardian’s Phone Number"
-                placeholder="Guardian’s phone number"
-                type="tel"
-                value={form.values.guardian_phone_number}
-                onKeyDown={(e) =>
-                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                }
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.value.length > 11) {
-                    return;
+            <Box sx={{ maxWidth: 690 }}>
+              <div className="form-row">
+                <TextInput
+                  required
+                  className="form-item"
+                  label="Guardian’s Phone Number"
+                  placeholder="Guardian’s phone number"
+                  type="tel"
+                  value={form.values.guardian_phone_number}
+                  onKeyDown={(e) =>
+                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
                   }
-                  if (
-                    e.target.value === "" ||
-                    /^[0-9\b]+$/.test(e.target.value)
-                  ) {
-                    form.setFieldValue("guardian_phone_number", e.target.value);
-                  }
-                }}
-              />
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.target.value.length > 11) {
+                      return;
+                    }
+                    if (
+                      e.target.value === "" ||
+                      /^[0-9\b]+$/.test(e.target.value)
+                    ) {
+                      form.setFieldValue(
+                        "guardian_phone_number",
+                        e.target.value
+                      );
+                    }
+                  }}
+                />
 
-              <TextInput
-                className="form-item"
-                required
-                label="Guardian’s Email"
-                placeholder="Guardian’s email"
-                type="email"
-                {...form.getInputProps("guardian_email")}
-              />
-            </div>
+                <TextInput
+                  className="form-item"
+                  required
+                  label="Guardian’s Email"
+                  placeholder="Guardian’s email"
+                  type="email"
+                  {...form.getInputProps("guardian_email")}
+                />
+              </div>
+            </Box>
 
             <Divider mb="lg" variant="dashed" />
 
@@ -498,7 +505,7 @@ const HealthHistory = ({
   return (
     <div className="onboard-group">
       <div className="form">
-        <Box sx={{ maxWidth: 900 }}>
+        <Box>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
               <NumberInput
@@ -516,9 +523,7 @@ const HealthHistory = ({
                 type="text"
                 {...form.getInputProps("weight")}
               />
-            </div>
 
-            <div className="form-row">
               <Select
                 className="form-item"
                 label="Blood Group"
@@ -535,7 +540,9 @@ const HealthHistory = ({
                 ]}
                 {...form.getInputProps("blood_group")}
               />
+            </div>
 
+            <div className="form-row">
               <Select
                 className="form-item"
                 label="Genotype"
@@ -549,9 +556,6 @@ const HealthHistory = ({
                 ]}
                 {...form.getInputProps("genotype")}
               />
-            </div>
-
-            <div className="form-row">
               <MultiSelect
                 className="form-item"
                 radius={8}
@@ -681,7 +685,7 @@ const AcademicHistory = ({
   return (
     <div className="onboard-group">
       <div className="form">
-        <Box sx={{ maxWidth: 900 }}>
+        <Box sx={{maxWidth: 900}}>
           <form onSubmit={form.onSubmit((values) => onSave(values))}>
             <div className="form-row">
               <Select
@@ -698,9 +702,7 @@ const AcademicHistory = ({
                 }))}
                 {...form.getInputProps("entry_class")}
               />
-            </div>
 
-            <div className="form-row">
               <NumberInput
                 required
                 className="form-item"
@@ -721,9 +723,7 @@ const AcademicHistory = ({
                 min={0}
                 {...form.getInputProps("entry_test_result")}
               />
-            </div>
 
-            <div className="form-row">
               <TextInput
                 className="form-item"
                 label="Previous School Name"
