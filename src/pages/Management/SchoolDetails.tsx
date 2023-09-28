@@ -164,8 +164,7 @@ const SchoolDetails = () => {
                 </Button>
               }
             >
-             
-             <Menu.Item>Jss 1</Menu.Item>
+              <Menu.Item>Jss 1</Menu.Item>
               <Menu.Item>Jss 2</Menu.Item>
             </Menu>
           )}
@@ -186,16 +185,20 @@ const SchoolDetails = () => {
                 </Button>
               }
             >
-               <Menu.Item>Teacher</Menu.Item>
+              <Menu.Item>Teacher</Menu.Item>
               <Menu.Item>School Admin</Menu.Item>
               <Menu.Item>Principal</Menu.Item>
             </Menu>
           )}
 
-          <Button size="md" color="dark" onClick={() => {
-            activeTab=== 0 && navigate("/onboard-student")
-            activeTab=== 1 && navigate("/onboard-staff")
-          }}>
+          <Button
+            size="md"
+            color="dark"
+            onClick={() => {
+              activeTab === 0 && navigate("/onboard-student");
+              activeTab === 1 && navigate("/onboard-staff");
+            }}
+          >
             Onboard {activeTab === 0 ? "Student" : "Staff"}
           </Button>
         </Group>
@@ -236,6 +239,13 @@ const SchoolDetails = () => {
                     <td>{element.guardian_name}</td>
                     <td>
                       <Menu>
+                        <Menu.Item>
+                          <Text weight={300} color="#495057">
+                            Menu
+                          </Text>
+                        </Menu.Item>
+
+                        <Divider />
                         <Menu.Item onClick={() => navigate("/onboard-student")}>
                           Edit student
                         </Menu.Item>
