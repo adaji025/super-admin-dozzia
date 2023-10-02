@@ -32,22 +32,23 @@ const Signin = () => {
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      navigate("/management");
+      navigate("/");
     }
+    console.log(localStorage.getItem("token"))
     //eslint-disable-next-line
   }, []);
 
   const form = useForm({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
-  const submit = (values: { username: string; password: string }) => {
+  const submit = (values: { email: string; password: string }) => {
     setLoading(true);
 
-    login(values.username, values.password)
+    login(values.email, values.password)
       .then((res: SigninResponse) => {
         if (res.required_new_password && res.reset_code) {
           showNotification({
@@ -128,7 +129,7 @@ const Signin = () => {
                   radius="md"
                   size="md"
                   disabled={loading}
-                  {...form.getInputProps("username")}
+                  {...form.getInputProps("email")}
                 />
 
                 <PasswordInput

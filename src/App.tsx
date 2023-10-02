@@ -25,9 +25,9 @@ import { ProfileType } from "./types/authTypes";
 
 function App() {
   const dispatch = useDispatch();
-  const loggedIn = useSelector((state: { user: UserState }) => {
-    return state.user.loggedIn;
-  });
+  // const loggedIn = useSelector((state: { user: UserState }) => {
+  //   return state.user.loggedIn;
+  // });
   const showLoader = useSelector((state: any) => {
     return state.utility.showLoader;
   });
@@ -38,6 +38,8 @@ function App() {
     defaultValue: "light",
   });
 
+  const loggedIn = localStorage.getItem("token");
+  
   useEffect(() => {
     if (loggedIn) {
       getProfile();

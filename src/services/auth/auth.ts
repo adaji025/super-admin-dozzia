@@ -4,15 +4,14 @@ import { ApiResponseType } from "../../types/utilityTypes";
 import { ProfileType, SigninResponse } from "../../types/authTypes";
 import { AxiosError } from "axios";
 
-export const login = (username: string, password: string) => {
+export const login = (email: string, password: string) => {
   return AxoisApi.post(`${APIS.AUTH.LOGIN}`, {
-    username,
+    email,
     password,
   }).then((res: { data: ApiResponseType<SigninResponse> }) => {
     if (res.data.data.access_token) {
       localStorage.setItem("token", res.data.data.access_token);
     }
-
     return res.data.data;
   });
 };

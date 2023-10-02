@@ -39,7 +39,9 @@ const AdminManagement = () => {
           <Text weight={600} size="lg">
             Administrators
           </Text>
-          <Button color="dark">Add Admin</Button>
+          <Button color="dark" onClick={() => setViewAdmin(true)}>
+            Add Admin
+          </Button>
         </Group>
 
         <div className="table-container">
