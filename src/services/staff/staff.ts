@@ -62,30 +62,6 @@ export const deleteStaff = (id: string) => {
   });
 };
 
-export const getSuspendedStaff = () => {
-  return new Promise<ApiResponseType<StaffType[]>>((resolve, reject) => {
-    AxoisApi.get(`${APIS.RECYCLE_BIN.LIST_SUSPENDED_STAFF}`)
-      .then((res) => {
-        resolve(res.data);
-      })
-      .catch((error: AxiosError) => {
-        reject(error);
-      });
-  });
-};
-
-export const restoreSuspendedStaff = (id: string) => {
-  return new Promise((resolve, reject) => {
-    AxoisApi.get(`${APIS.RECYCLE_BIN.RESTORE_STAFF(id)}`)
-      .then((res) => {
-        resolve(res.data);
-      })
-      .catch((error: AxiosError) => {
-        reject(error);
-      });
-  });
-};
-
 export const getStaffDetails = (id: string) => {
   return new Promise<ApiResponseType<StaffType>>((resolve, reject) => {
     AxoisApi.get(`${APIS.STAFF.GET_STAFF_DETAILS(id)}`)
