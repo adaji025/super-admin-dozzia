@@ -38,6 +38,7 @@ export type StudentsState = {
   dataFetched: boolean;
 };
 
+
 export type AddStudentData = {
   profile: {
     first_name: string;
@@ -46,6 +47,7 @@ export type AddStudentData = {
     gender: string;
     picture: File | null;
   };
+
   guardian: {
     email: string;
     first_name: string;
@@ -68,3 +70,4 @@ export type AddStudentData = {
     hereditary_health_condition: string[];
   };
 };
+

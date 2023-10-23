@@ -34,7 +34,7 @@ const Signin = () => {
     if (localStorage.getItem("token")) {
       navigate("/");
     }
-    console.log(localStorage.getItem("token"))
+    console.log(localStorage.getItem("token"));
     //eslint-disable-next-line
   }, []);
 
@@ -49,18 +49,13 @@ const Signin = () => {
     setLoading(true);
 
     login(values.email, values.password)
-      .then((res: SigninResponse) => {
-        if (res.required_new_password && res.reset_code) {
-          showNotification({
-            title: "Password reset required!",
-            message: `${"This is a one-time step."} 🥲`,
-            color: "yellow",
-          });
-
-          navigate(`/reset-password?code=${res?.reset_code}`);
-        } else {
-          getProfile(res.access_token);
-        }
+      .then(() => {
+        showNotification({
+          title: "Success",
+          message: `${"Logged in successfully"} 🥲`,
+          color: "green",
+        });
+        navigate(`/`);
       })
       .catch((error) => {
         handleError(error);
@@ -107,7 +102,11 @@ const Signin = () => {
         <div className="auth-main">
           <Box
             sx={
-              ExSmall ? { width: "", paddingInline: 8,  } : small ? { width: 300 } : { width: 389 }
+              ExSmall
+                ? { width: "", paddingInline: 8 }
+                : small
+                ? { width: 300 }
+                : { width: 389 }
             }
             mx="auto"
           >

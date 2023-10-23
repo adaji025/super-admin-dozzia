@@ -11,136 +11,95 @@ import {
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
-import moment from "moment";
-import {
-  UserCircle,
-  BuildingHospital,
-  School,
-  CircleCheck,
-} from "tabler-icons-react";
 import { useForm } from "@mantine/form";
-import { DatePicker } from "@mantine/dates";
-import Upload from "../../components/Upload/Upload";
 import { onboardStudent } from "../../services/student/student";
 import useClass from "../../hooks/useClass";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-import { useLocalStorage } from "@mantine/hooks";
 
-import { AddStudentData } from "../../types/studentTypes";
 import { objectToFormData } from "../../lib/util";
-import { ClassroomType } from "../../types/classTypes";
 import "./onboarding.scss";
+import { AddSchoolData } from "../../types/schoolTypes";
+import { onboardSchool } from "../../services/shcool/school";
 
 const OnboardSchool = () => {
   const { dark } = useTheme();
-  const [formData, setFormData] = useLocalStorage<any>({
-    key: "onboardStudent",
-    defaultValue: {},
-  });
-  const [file, setFile] = useState<any>(
-    formData?.image ? formData?.image : undefined
-  );
+
   const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
 
   const { getClassList, allClasses } = useClass();
 
-  useEffect(() => {
-    getClassList(1, 200, "", "", true);
-
-    //eslint-disable-next-line
-  }, []);
-
   const form = useForm({
     initialValues: {
-      first_name: formData?.first_name ? formData?.first_name : "",
-      last_name: formData?.last_name ? formData?.last_name : "",
-      middle_name: formData?.middle_name ? formData?.middle_name : "",
-      dob: formData?.dob ? new Date(formData?.dob) : "",
-      gender: formData?.gender ? formData?.gender : "",
-      guardian_title: formData?.guardian_title ? formData?.guardian_title : "",
-      guardian_first_name: formData?.guardian_first_name
-        ? formData?.guardian_first_name
-        : "",
-      guardian_last_name: formData?.guardian_last_name
-        ? formData?.guardian_last_name
-        : "",
-      guardian_phone_number: formData?.guardian_phone_number
-        ? formData?.guardian_phone_number
-        : "",
-      guardian_email: formData?.guardian_email ? formData?.guardian_email : "",
+      name: "",
+      address: "",
+      email: "",
+      reg_no: "",
+      code: "",
+
+      title: "",
+      first_name: "",
+      last_name: "",
+      middle_name: "",
+      gender: "",
+      phone_number: "",
+      staff_email: "",
+
+      school_logo: null,
     },
 
-    validate: {
-      first_name: (value) => (value === "" ? "Input first name" : null),
-      last_name: (value) => (value === "" ? "Input last name" : null),
-      dob: (value) => (value === "" ? "Enter date of birth" : null),
-      gender: (value) => (value === "" ? "Select student gender" : null),
-      guardian_title: (value) =>
-        value === "" ? "Select guardian title" : null,
-      guardian_first_name: (value) =>
-        value === "" ? "Input guardian first name" : null,
-      guardian_last_name: (value) =>
-        value === "" ? "Input guardian last name" : null,
-      guardian_phone_number: (value) =>
-        value.length !== 11 ? "Phone number must be 11 digits" : null,
-      guardian_email: (value) =>
-        /^\S+@\S+$/.test(value) ? null : "Invalid email",
-    },
+    // validate: {
+    //   name: (value) => (value === "" ? "Input name" : null),
+    //   address: (value) => (value === "" ? "Input address" : null),
+    //   gender: (value) => (value === "" ? "Select student gender" : null),
+    //   title: (value) => (value === "" ? "Select principal title" : null),
+    //   first_name: (value) =>
+    //     value === "" ? "Input principal first name" : null,
+    //   last_name: (value) => (value === "" ? "Input principa last name" : null),
+    //   phone_number: (value) =>
+    //     value.length !== 11 ? "Phone number must be 11 digits" : null,
+    //   email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
+    // },
   });
 
-  const handleSubmit = (values: Record<string, any>) => {
-    setLoading(true);
+  let formData = new FormData();
+  formData.append("name", form.values.email);
+  formData.append("email", form.values.email);
+  formData.append("address", form.values.address);
+  formData.append("reg_no", form.values.reg_no);
+  formData.append("code", form.values.code);
+  formData.append("title", form.values.title);
+  formData.append("first_name", form.values.first_name);
+  formData.append("last_name", form.values.last_name);
+  formData.append("middle_name", form.values.middle_name);
+  formData.append("gender", form.values.gender);
+  formData.append("phone_number", form.values.phone_number);
+  formData.append("staff_email", form.values.staff_email);
 
-    const data: AddStudentData = {
-      profile: {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        middle_name: values.middle_name,
-        gender: values.gender,
-        ...(values.image && { picture: values.image }),
-      },
-      guardian: {
-        email: values.guardian_email,
-        first_name: values.guardian_first_name,
-        last_name: values.guardian_last_name,
-        phone_number: values.guardian_phone_number,
-        title: values.guardian_title,
-      },
-      meta: {
-        dob: moment(values.dob).format("YYYY-MM-DD"),
-        state_disability: values.state_disability,
-        blood_group: values.blood_group,
-        genotype: values.genotype,
-        previous_school_name: values.previous_school_name,
-        entry_year: values.entry_year,
-        entry_test_result: values.entry_test_result,
-        weight: values.weight,
-        height: values.height,
-        entry_class: values.entry_class,
-        existing_medical_condition: values.existing_medical_condition,
-        hereditary_health_condition: values.hereditary_health_condition,
-      },
-    };
+  const data: AddSchoolData = {
+    school_details: {
+      name: form.values.name,
+      address: form.values.address,
+      email: form.values.email,
+      reg_no: form.values.reg_no,
+      code: form.values.code,
+    },
+    staff_details: {
+      title: form.values.title,
+      first_name: form.values.first_name,
+      last_name: form.values.last_name,
+      middle_name: form.values.middle_name,
+      staff_email: form.values.staff_email,
+      gender: form.values.gender,
+      phone_number: form.values.phone_number,
+    },
+    school_logo: form.values.school_logo,
+  };
 
-    const formData = objectToFormData(data);
-
-    onboardStudent(formData)
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: "Student added successfully 🤗",
-          color: "green",
-        });
-      })
-      .catch((error: AxiosError) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  const submit = (values: any) => {
+    onboardSchool(values);
   };
 
   return (
@@ -173,7 +132,7 @@ const OnboardSchool = () => {
               <div className="form">
                 <Box>
                   <form
-                    onSubmit={form.onSubmit((values) => console.log(values))}
+                    onSubmit={form.onSubmit(() => submit(data))}
                   >
                     <Divider
                       mb="lg"
@@ -189,7 +148,7 @@ const OnboardSchool = () => {
                         label="Scool Name"
                         placeholder="Enter school name"
                         type="text"
-                        {...form.getInputProps("first_name")}
+                        {...form.getInputProps("name")}
                       />
 
                       <TextInput
@@ -198,39 +157,27 @@ const OnboardSchool = () => {
                         label="School Address"
                         placeholder="Enter school address"
                         type="text"
-                        {...form.getInputProps("last_name")}
+                        {...form.getInputProps("address")}
                       />
 
                       <TextInput
                         className="form-item"
                         required
-                        label="School Website"
-                        placeholder="Enter school website"
+                        label="School Code"
+                        placeholder="Enter Code"
                         type="text"
-                        {...form.getInputProps("last_name")}
+                        {...form.getInputProps("code")}
                       />
                     </div>
 
                     <div className="form-row">
-                      <Select
-                        className="form-item"
-                        required
-                        label="School Category"
-                        placeholder="Choose category"
-                        data={[
-                          { value: "primary", label: "Primary school" },
-                          { value: "secondary", label: "Secondary school" },
-                        ]}
-                        {...form.getInputProps("gender")}
-                      />
-
                       <TextInput
                         className="form-item"
                         required
-                        label="School Phone Number"
-                        placeholder="Enter phone number"
+                        label="Registeration Number"
+                        placeholder="Enter school reg number"
                         type="text"
-                        {...form.getInputProps("last_name")}
+                        {...form.getInputProps("reg_no")}
                       />
 
                       <TextInput
@@ -239,7 +186,7 @@ const OnboardSchool = () => {
                         label="School email address"
                         placeholder="Enter email address"
                         type="text"
-                        {...form.getInputProps("last_name")}
+                        {...form.getInputProps("email")}
                       />
                     </div>
 
@@ -254,14 +201,14 @@ const OnboardSchool = () => {
                       <Select
                         className="form-item"
                         required
-                        label="Guardian Title"
+                        label="Principal Title"
                         placeholder="Principal Title"
                         data={[
                           { value: "Mr", label: "Mr 🧑" },
                           { value: "Mrs", label: "Mrs 👱‍♀️" },
                           { value: "Miss", label: "Miss 👩‍🦰" },
                         ]}
-                        {...form.getInputProps("guardian_title")}
+                        {...form.getInputProps("title")}
                       />
                       <TextInput
                         className="form-item"
@@ -269,7 +216,7 @@ const OnboardSchool = () => {
                         label="Principal First Name"
                         placeholder="Guardian’s first name"
                         type="text"
-                        {...form.getInputProps("guardian_first_name")}
+                        {...form.getInputProps("first_name")}
                       />
 
                       <TextInput
@@ -278,7 +225,7 @@ const OnboardSchool = () => {
                         label="Principal’s Last Name"
                         placeholder="Guardian’s last name"
                         type="text"
-                        {...form.getInputProps("guardian_last_name")}
+                        {...form.getInputProps("last_name")}
                       />
                     </div>
 
@@ -290,7 +237,7 @@ const OnboardSchool = () => {
                           label="Principal Phone Number"
                           placeholder="Principal phone number"
                           type="tel"
-                          value={form.values.guardian_phone_number}
+                          value={form.values.phone_number}
                           onKeyDown={(e) =>
                             ["e", "E", "+", "-"].includes(e.key) &&
                             e.preventDefault()
@@ -306,7 +253,7 @@ const OnboardSchool = () => {
                               /^[0-9\b]+$/.test(e.target.value)
                             ) {
                               form.setFieldValue(
-                                "guardian_phone_number",
+                                "phone_number",
                                 e.target.value
                               );
                             }
@@ -319,7 +266,7 @@ const OnboardSchool = () => {
                           label="Pricipal Email"
                           placeholder="Pricipal email"
                           type="email"
-                          {...form.getInputProps("guardian_email")}
+                          {...form.getInputProps("staff_email")}
                         />
                       </div>
                     </Box>
@@ -335,13 +282,6 @@ const OnboardSchool = () => {
                         >
                           Upload Image
                         </div>
-
-                        <Upload
-                          text={file ? file?.name : "Upload Image"}
-                          accept={["image/jpeg", "image/png", "image/jpg"]}
-                          extraClasses={`${file ? "file-selected" : ""}`}
-                          setFile={setFile}
-                        />
                       </div>
                     </div>
 
