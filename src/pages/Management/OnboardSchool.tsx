@@ -25,7 +25,7 @@ import UploadComponent from "../../components/Upload/Upload";
 const OnboardSchool = () => {
   const [file, setFile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [staffEmail, setStaffEmail] = useState("")
+  // const [staffEmail, setStaffEmail] = useState("")
   const { dark } = useTheme();
 
 
@@ -45,6 +45,7 @@ const OnboardSchool = () => {
       last_name: "",
       middle_name: "",
       gender: "",
+      staff_email: "",
       phone_number: "",
       school_logo: null,
     },
@@ -63,7 +64,7 @@ const OnboardSchool = () => {
       first_name: form.values.first_name,
       last_name: form.values.last_name,
       middle_name: form.values.middle_name,
-      email: staffEmail,
+      email: form.values.staff_email,
       gender: form.values.gender,
       phone_number: form.values.phone_number,
     },
@@ -258,7 +259,7 @@ const OnboardSchool = () => {
                         label="Pricipal Email"
                         placeholder="Pricipal email"
                         type="email"
-                        onChange={(e) => setStaffEmail(e.target.value)}
+                        {...form.getInputProps("staff_email")}
                       />
                     </div>
                     <div className="form-row one-col">
