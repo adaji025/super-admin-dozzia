@@ -1,6 +1,5 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useState } from "react";
 import { Helmet } from "react-helmet";
-import { useLocation, useNavigate } from "react-router-dom";
 import {
   PasswordInput,
   TextInput,
@@ -10,41 +9,17 @@ import {
   LoadingOverlay,
   Text,
 } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import queryString from "query-string";
 import Logo from "../../assets/svg/dozzia-dark.svg";
 
-import { resetPassword } from "../../services/auth/auth";
-import useNotification from "../../hooks/useNotification";
-import useTheme from "../../hooks/useTheme";
 import "./auth.scss";
 import { useMediaQuery } from "@mantine/hooks";
 
 const ResetPassword = () => {
   const small = useMediaQuery("(max-width: 450px)");
   const ExSmall = useMediaQuery("(max-width: 370px)");
-  const location: any = useLocation();
-  const navigate = useNavigate();
-  const [isNewUser, setIsNewUser] = useState<boolean>(false);
-  const [resetCode, setResetCode] = useState<string>("");
-  const [showLoader, setShowLoader] = useState<boolean>(false);
-  const { handleError } = useNotification();
-
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/management");
-    }
-
-    let parseddata: any = queryString.parse(location.search);
-
-    if (parseddata.code) {
-      const code: string = parseddata.code.toString();
-      setResetCode(code.toString());
-      setIsNewUser(true);
-    }
-    //eslint-disable-next-line
-  }, []);
+  const [isNewUser] = useState<boolean>(false);
+  const [showLoader] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -60,33 +35,6 @@ const ResetPassword = () => {
         value !== values.password ? "Passwords did not match" : null,
     },
   });
-
-  const submit = (values: {
-    password: string;
-    confirmPassword: string;
-    reset_code: string;
-  }) => {
-    setShowLoader(true);
-
-    const reset_code = isNewUser ? resetCode : values.reset_code;
-
-    resetPassword(reset_code, values.password, values.confirmPassword)
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: `${"Password reset successful. Login to contine."} 😊`,
-          color: "green",
-        });
-        localStorage.removeItem("reset_code");
-        navigate("/signin");
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setShowLoader(false);
-      });
-  };
 
   return (
     <Fragment>
@@ -121,7 +69,7 @@ const ResetPassword = () => {
           >
             <Text className="form-title">Create New Password</Text>
             <Box sx={{ maxWidth: 428 }} mx="auto" mt={20}>
-              <form onSubmit={form.onSubmit((values) => submit(values))}>
+              <form>
                 {!isNewUser && (
                   <TextInput
                     required

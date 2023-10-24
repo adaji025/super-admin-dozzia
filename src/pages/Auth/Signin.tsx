@@ -13,11 +13,9 @@ import {
 } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { login, getProfileInfo } from "../../services/auth/auth";
-import { setUserData } from "../../redux/user/user.actions";
+import { login } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
 import { useMediaQuery } from "@mantine/hooks";
-import { ProfileType, SigninResponse } from "../../types/authTypes";
 import DozziaLogo from "../../assets/svg/dozzia-dark.svg";
 
 import "./auth.scss";
@@ -63,28 +61,7 @@ const Signin = () => {
       });
   };
 
-  const getProfile = (token: string) => {
-    setLoading(true);
-
-    getProfileInfo(token, "role")
-      .then((res: ProfileType) => {
-        showNotification({
-          title: "Success",
-          message: `${"Login successful."} 😎`,
-          color: "green",
-        });
-
-        dispatch(setUserData(res));
-        navigate("/management");
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
+  
   return (
     <Fragment>
       <Helmet>

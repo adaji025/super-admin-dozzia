@@ -46,14 +46,14 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
           name: "Onboard School",
           route: "/onboard-school",
         },
-        {
-          name: "Onboard Staff",
-          route: "/onboard-staff",
-        },
-        {
-          name: "Onboard Student",
-          route: "/onboard-student",
-        },
+        // {
+        //   name: "Onboard Staff",
+        //   route: "/onboard-staff",
+        // },
+        // {
+        //   name: "Onboard Student",
+        //   route: "/onboard-student",
+        // },
       ],
     },
 

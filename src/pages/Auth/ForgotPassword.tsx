@@ -1,62 +1,28 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, } from "react";
 import { Helmet } from "react-helmet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, } from "react-router-dom";
 import {
   TextInput,
   Button,
   Group,
   Box,
-  LoadingOverlay,
   Text,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
 import Logo from "../../assets/svg/dozzia-dark.svg";
-import { forgotPassword } from "../../services/auth/auth";
-import useNotification from "../../hooks/useNotification";
 import { ArrowLeft } from "tabler-icons-react";
 import { useMediaQuery } from "@mantine/hooks";
+import { useForm } from "@mantine/form";
 
 const ForgotPassword = () => {
   const small = useMediaQuery("(max-width: 450px)");
   const ExSmall = useMediaQuery("(max-width: 370px)");
-  const navigate = useNavigate();
-  const [showLoader, setShowLoader] = useState<boolean>(false);
-  const { handleError } = useNotification();
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/management");
-    }
-    //eslint-disable-next-line
-  }, []);
 
   const form = useForm({
     initialValues: {
       username: "",
     },
   });
-
-  const submit = (values: { username: string }) => {
-    setShowLoader(true);
-
-    forgotPassword(values.username)
-      .then((res) => {
-        showNotification({
-          title: "Reset code sent.",
-          message: `${"Check your inbox or spam for request code"} 👀`,
-          color: "green",
-        });
-        localStorage.removeItem("reset_code");
-        navigate("/reset-password");
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setShowLoader(false);
-      });
-  };
 
   return (
     <Fragment>
@@ -69,7 +35,6 @@ const ForgotPassword = () => {
       </Helmet>
 
       <div className="auth-page">
-        <LoadingOverlay visible={showLoader} />
 
         <Group pt={80} position="center">
           <img src={Logo} alt="dozzia systems" />
@@ -78,13 +43,17 @@ const ForgotPassword = () => {
         <div className="auth-main">
           <Box
             sx={
-              ExSmall ? { width: "", paddingInline: 16 } : small ? { width: 300 } : { width: 389 }
+              ExSmall
+                ? { width: "", paddingInline: 16 }
+                : small
+                ? { width: 300 }
+                : { width: 389 }
             }
             mx="auto"
           >
             <Text className="form-title">Forgot Password</Text>
             <Box sx={{ maxWidth: 428 }} mx="auto" mt={20}>
-              <form onSubmit={form.onSubmit((values) => submit(values))}>
+              <form>
                 <TextInput
                   required
                   label="Username"
