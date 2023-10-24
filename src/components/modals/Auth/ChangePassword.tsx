@@ -1,20 +1,14 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   PasswordInput,
   Group,
   Divider,
-  LoadingOverlay,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { showNotification } from "@mantine/notifications";
 import { Lock } from "tabler-icons-react";
-import { changePassword } from "../../../services/auth/auth";
-import useNotification from "../../../hooks/useNotification";
 
 const ChangePassword = ({ closeModal }: any) => {
-  const { handleError } = useNotification();
-  const [loading, setLoading] = useState<boolean>(false);
 
   const form = useForm({
     initialValues: {
@@ -31,38 +25,11 @@ const ChangePassword = ({ closeModal }: any) => {
     },
   });
 
-  const submit = (values: any) => {
-    setLoading(true);
-
-    changePassword(
-      values.current_password,
-      values.password,
-      values.password_confirmation
-    )
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: `${"Password changed."} 🔒`,
-          color: "green",
-        });
-
-        closeModal();
-      })
-      .catch((error) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
-
   return (
     <div>
       <Divider mb="md" variant="dashed" />
 
-      <LoadingOverlay visible={loading} />
-
-      <form onSubmit={form.onSubmit((values) => submit(values))}>
+      <form>
         <PasswordInput
           required
           mt="sm"

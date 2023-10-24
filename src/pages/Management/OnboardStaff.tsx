@@ -1,5 +1,4 @@
 import { useState, useEffect, Fragment } from "react";
-import { AxiosError } from "axios";
 import {
   Stepper,
   Button,
@@ -14,7 +13,6 @@ import {
   Divider,
   LoadingOverlay,
 } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
 import moment from "moment";
 import {
@@ -26,55 +24,23 @@ import {
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import Upload from "../../components/Upload/Upload";
-import { getStaffRoleList, onboardStaff } from "../../services/staff/staff";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
-import { getStatesList } from "../../services/helper/helper";
-import {
-  ApiResponseType,
-  StaffRoleType,
-  StateType,
-} from "../../types/utilityTypes";
+import { StaffRoleType, StateType } from "../../types/utilityTypes";
 import { useLocalStorage } from "@mantine/hooks";
 import { objectToFormData } from "../../lib/util";
 
 const OnboardStaff = () => {
   const { dark } = useTheme();
-  const { handleError } = useNotification();
-  const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
+  const [staffRoles] = useState<StaffRoleType[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [states, setStates] = useState<StateType[]>([]);
+  const [states] = useState<StateType[]>([]);
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useLocalStorage<any>({
     key: "onboardStaff",
     defaultValue: {},
   });
-
-  useEffect(() => {
-    getStates();
-    getStaffRoles();
-
-    //eslint-disable-next-line
-  }, []);
-
-  const getStates = () => {
-    getStatesList()
-      .then((res: ApiResponseType<StateType[]>) => {
-        setStates(res.data);
-      })
-      .catch((err: AxiosError) => {
-        handleError(err);
-      });
-  };
-
-  const getStaffRoles = () => {
-    getStaffRoleList()
-      .then((res: ApiResponseType<StaffRoleType[]>) => {
-        setStaffRoles(res.data);
-      })
-      .catch((err: AxiosError) => handleError(err));
-  };
 
   const nextStep = (data: any) => {
     if (active === 2) {
@@ -144,22 +110,6 @@ const OnboardStaff = () => {
     };
 
     const formData = objectToFormData(data);
-
-    onboardStaff(formData)
-      .then(() => {
-        showNotification({
-          title: "Success",
-          message: "Staff added successfully 🤗",
-          color: "green",
-        });
-        clearData();
-      })
-      .catch((error: AxiosError) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
   };
 
   return (

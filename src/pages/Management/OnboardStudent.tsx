@@ -1,5 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
-import { AxiosError } from "axios";
+import { useState, Fragment } from "react";
 import {
   Stepper,
   Button,
@@ -14,7 +13,6 @@ import {
   Divider,
   LoadingOverlay,
 } from "@mantine/core";
-import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
 import moment from "moment";
 import {
@@ -26,9 +24,6 @@ import {
 import { useForm } from "@mantine/form";
 import { DatePicker } from "@mantine/dates";
 import Upload from "../../components/Upload/Upload";
-import { onboardStudent } from "../../services/student/student";
-import useClass from "../../hooks/useClass";
-import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import { useLocalStorage } from "@mantine/hooks";
@@ -39,20 +34,14 @@ import "./onboarding.scss";
 
 const OnboardStudent = () => {
   const { dark } = useTheme();
-  const { handleError } = useNotification();
   const [loading, setLoading] = useState<boolean>(false);
   const [active, setActive] = useState<number>(0);
   const [formData, setFormData] = useLocalStorage<any>({
     key: "onboardStudent",
     defaultValue: {},
   });
-  const { getClassList, allClasses } = useClass();
 
-  useEffect(() => {
-    getClassList(1, 200, "", "", true);
-
-    //eslint-disable-next-line
-  }, []);
+ 
 
   const nextStep = (data: any) => {
     if (active === 2) {
@@ -113,21 +102,7 @@ const OnboardStudent = () => {
 
     const formData = objectToFormData(data);
 
-    onboardStudent(formData)
-      .then((res) => {
-        showNotification({
-          title: "Success",
-          message: "Student added successfully 🤗",
-          color: "green",
-        });
-        clearData();
-      })
-      .catch((error: AxiosError) => {
-        handleError(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  
   };
 
   return (
@@ -186,9 +161,9 @@ const OnboardStudent = () => {
                 description="Final step"
                 allowStepSelect={false}
               >
-                <AcademicHistory
-                  {...{ formData, active, nextStep, prevStep, allClasses }}
-                />
+                {/* <AcademicHistory
+                  {...{ formData, active, nextStep, prevStep }}
+                /> */}
               </Stepper.Step>
             </Stepper>
           </div>
