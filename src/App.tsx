@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, } from "react-redux";
 import {
   ColorSchemeProvider,
   MantineProvider,
@@ -16,22 +16,13 @@ import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import LoggedinContainer from "./components/Loggedin";
 
-import { getProfileInfo } from "./services/auth/auth";
-import { setUserData } from "./redux/user/user.actions";
-import useNotification from "./hooks/useNotification";
 import "./App.scss";
-import { UserState } from "./redux/user/user.reducer";
-import { ProfileType } from "./types/authTypes";
 
 function App() {
-  const dispatch = useDispatch();
-  // const loggedIn = useSelector((state: { user: UserState }) => {
-  //   return state.user.loggedIn;
-  // });
+  
   const showLoader = useSelector((state: any) => {
     return state.utility.showLoader;
   });
-  const { handleError } = useNotification();
 
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
     key: "color-scheme",
@@ -39,10 +30,9 @@ function App() {
   });
 
   const loggedIn = localStorage.getItem("token");
-  
+
   useEffect(() => {
     if (loggedIn) {
-      getProfile();
     }
     //eslint-disable-next-line
   }, []);
@@ -52,16 +42,6 @@ function App() {
   };
 
   useHotkeys([["mod+J", () => toggleColorScheme()]]);
-
-  const getProfile = () => {
-    getProfileInfo()
-      .then((res: ProfileType) => {
-        dispatch(setUserData(res));
-      })
-      .catch((error) => {
-        handleError(error);
-      });
-  };
 
   return (
     <div className="App">
