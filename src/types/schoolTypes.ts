@@ -13,7 +13,7 @@ export type AddSchoolData = {
     middle_name: string | null;
     gender: string;
     phone_number: string;
-    staff_email: string;
+    email: string;
   };
   school_logo?: null;
 };
