@@ -1,5 +1,4 @@
-import { useState, useEffect, Fragment } from "react";
-import { AxiosError } from "axios";
+import { useState, Fragment } from "react";
 import {
   Button,
   Group,
@@ -12,8 +11,6 @@ import {
 import { showNotification } from "@mantine/notifications";
 import { Helmet } from "react-helmet";
 import { useForm } from "@mantine/form";
-import { onboardStudent } from "../../services/student/student";
-import useClass from "../../hooks/useClass";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
@@ -22,14 +19,18 @@ import { objectToFormData } from "../../lib/util";
 import "./onboarding.scss";
 import { AddSchoolData } from "../../types/schoolTypes";
 import { onboardSchool } from "../../services/shcool/school";
+import UploadComponent from "../../components/Upload/Upload";
+
 
 const OnboardSchool = () => {
+  const [file, setFile] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [staffEmail, setStaffEmail] = useState("")
   const { dark } = useTheme();
 
-  const { handleError } = useNotification();
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const { getClassList, allClasses } = useClass();
+  const { handleError } = useNotification();
+
 
   const form = useForm({
     initialValues: {
@@ -45,38 +46,9 @@ const OnboardSchool = () => {
       middle_name: "",
       gender: "",
       phone_number: "",
-      staff_email: "",
-
       school_logo: null,
     },
-
-    // validate: {
-    //   name: (value) => (value === "" ? "Input name" : null),
-    //   address: (value) => (value === "" ? "Input address" : null),
-    //   gender: (value) => (value === "" ? "Select student gender" : null),
-    //   title: (value) => (value === "" ? "Select principal title" : null),
-    //   first_name: (value) =>
-    //     value === "" ? "Input principal first name" : null,
-    //   last_name: (value) => (value === "" ? "Input principa last name" : null),
-    //   phone_number: (value) =>
-    //     value.length !== 11 ? "Phone number must be 11 digits" : null,
-    //   email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-    // },
   });
-
-  let formData = new FormData();
-  formData.append("name", form.values.email);
-  formData.append("email", form.values.email);
-  formData.append("address", form.values.address);
-  formData.append("reg_no", form.values.reg_no);
-  formData.append("code", form.values.code);
-  formData.append("title", form.values.title);
-  formData.append("first_name", form.values.first_name);
-  formData.append("last_name", form.values.last_name);
-  formData.append("middle_name", form.values.middle_name);
-  formData.append("gender", form.values.gender);
-  formData.append("phone_number", form.values.phone_number);
-  formData.append("staff_email", form.values.staff_email);
 
   const data: AddSchoolData = {
     school_details: {
@@ -91,15 +63,31 @@ const OnboardSchool = () => {
       first_name: form.values.first_name,
       last_name: form.values.last_name,
       middle_name: form.values.middle_name,
-      staff_email: form.values.staff_email,
+      email: staffEmail,
       gender: form.values.gender,
       phone_number: form.values.phone_number,
     },
-    school_logo: form.values.school_logo,
+    school_logo: null,
   };
 
+
   const submit = (values: any) => {
-    onboardSchool(values);
+    setLoading(true);
+    onboardSchool(values)
+      .then(() => {
+        showNotification({
+          title: "Success",
+          message: "School added successfully 🤗",
+          color: "green",
+        });
+      })
+      .catch((err) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        form.reset()
+      });
   };
 
   return (
@@ -132,7 +120,9 @@ const OnboardSchool = () => {
               <div className="form">
                 <Box>
                   <form
-                    onSubmit={form.onSubmit(() => submit(data))}
+                    onSubmit={form.onSubmit(() =>
+                      submit(objectToFormData({ ...data, school_logo: file, }))
+                    )}
                   >
                     <Divider
                       mb="lg"
@@ -170,7 +160,7 @@ const OnboardSchool = () => {
                       />
                     </div>
 
-                    <div className="form-row">
+                    <div className="form-row two-col">
                       <TextInput
                         className="form-item"
                         required
@@ -223,53 +213,67 @@ const OnboardSchool = () => {
                         className="form-item"
                         required
                         label="Principal’s Last Name"
-                        placeholder="Guardian’s last name"
+                        placeholder="Principal’s last name"
                         type="text"
                         {...form.getInputProps("last_name")}
                       />
                     </div>
 
-                    <Box sx={{ maxWidth: 690 }}>
-                      <div className="form-row">
-                        <TextInput
-                          required
-                          className="form-item"
-                          label="Principal Phone Number"
-                          placeholder="Principal phone number"
-                          type="tel"
-                          value={form.values.phone_number}
-                          onKeyDown={(e) =>
-                            ["e", "E", "+", "-"].includes(e.key) &&
-                            e.preventDefault()
+                    <div className="form-row">
+                      <TextInput
+                        className="form-item"
+                        required
+                        label="Principal’s middle Name"
+                        placeholder="Principal’s middle name"
+                        type="text"
+                        {...form.getInputProps("middle_name")}
+                      />
+                      <TextInput
+                        required
+                        className="form-item"
+                        label="Principal Phone Number"
+                        placeholder="Principal phone number"
+                        type="tel"
+                        value={form.values.phone_number}
+                        onKeyDown={(e) =>
+                          ["e", "E", "+", "-"].includes(e.key) &&
+                          e.preventDefault()
+                        }
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          if (e.target.value.length > 11) {
+                            return;
                           }
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            if (e.target.value.length > 11) {
-                              return;
-                            }
-                            if (
-                              e.target.value === "" ||
-                              /^[0-9\b]+$/.test(e.target.value)
-                            ) {
-                              form.setFieldValue(
-                                "phone_number",
-                                e.target.value
-                              );
-                            }
-                          }}
-                        />
+                          if (
+                            e.target.value === "" ||
+                            /^[0-9\b]+$/.test(e.target.value)
+                          ) {
+                            form.setFieldValue("phone_number", e.target.value);
+                          }
+                        }}
+                      />
 
-                        <TextInput
-                          className="form-item"
-                          required
-                          label="Pricipal Email"
-                          placeholder="Pricipal email"
-                          type="email"
-                          {...form.getInputProps("staff_email")}
-                        />
-                      </div>
-                    </Box>
+                      <TextInput
+                        className="form-item"
+                        required
+                        label="Pricipal Email"
+                        placeholder="Pricipal email"
+                        type="email"
+                        onChange={(e) => setStaffEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="form-row one-col">
+                      <Select
+                        className="form-item"
+                        required
+                        label="Gender"
+                        placeholder="Choose gender"
+                        data={[
+                          { value: "Male", label: "Male 🧑" },
+                          { value: "Female", label: "Female 👱‍♀️" },
+                        ]}
+                        {...form.getInputProps("gender")}
+                      />
+                    </div>
                     <Divider mb="lg" variant="dashed" />
 
                     <div className="form-row">
@@ -282,6 +286,13 @@ const OnboardSchool = () => {
                         >
                           Upload Image
                         </div>
+
+                        <UploadComponent
+                          text={file ? file?.name : "Upload Image"}
+                          accept={["image/jpeg", "image/png", "image/jpg"]}
+                          extraClasses={`${file ? "file-selected" : ""}`}
+                          setFile={setFile}
+                        />
                       </div>
                     </div>
 
