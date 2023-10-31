@@ -77,7 +77,6 @@ const Classes = () => {
     //eslint-disable-next-line
   }, [page, level, search]);
 
-  console.log(classes)
 
   return (
     <Fragment>
