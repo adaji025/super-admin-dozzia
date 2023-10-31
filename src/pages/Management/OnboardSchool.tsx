@@ -47,7 +47,6 @@ const OnboardSchool = () => {
       gender: "",
       staff_email: "",
       phone_number: "",
-      school_logo: null,
     },
   });
 
@@ -68,7 +67,7 @@ const OnboardSchool = () => {
       gender: form.values.gender,
       phone_number: form.values.phone_number,
     },
-    school_logo: null,
+    
   };
 
 
@@ -122,7 +121,7 @@ const OnboardSchool = () => {
                 <Box>
                   <form
                     onSubmit={form.onSubmit(() =>
-                      submit(objectToFormData({ ...data, school_logo: file, }))
+                      submit(objectToFormData({ ...data }))
                     )}
                   >
                     <Divider
@@ -222,8 +221,7 @@ const OnboardSchool = () => {
 
                     <div className="form-row">
                       <TextInput
-                        className="form-item"
-                        required
+                        className="form-item"                       
                         label="Principal’s middle Name"
                         placeholder="Principal’s middle name"
                         type="text"

@@ -7,5 +7,7 @@ export const APIS = {
   },
   SCHOOL: {
     ONBOARD_SCHOOL: `${api}/schools`,
+    LIST_SCHOOL: (perPage: number, page: number, search: string) =>
+      `${api}/schools?per_page=${perPage}&page=${page}&${search}`,
   },
 };

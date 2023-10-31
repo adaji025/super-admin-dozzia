@@ -12,3 +12,15 @@ export const onboardSchool = (data: any) => {
       });
   });
 };
+
+export const getSchoolList = (perPage: number, page: number, search: string) => {
+  return new Promise((resolve, reject) => {
+    AxoisApi.get(`${APIS.SCHOOL.LIST_SCHOOL(perPage, page, search)}`)
+      .then((res) => {
+        resolve(res);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};

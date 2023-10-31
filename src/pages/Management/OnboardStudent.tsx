@@ -27,9 +27,7 @@ import Upload from "../../components/Upload/Upload";
 import useTheme from "../../hooks/useTheme";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import { useLocalStorage } from "@mantine/hooks";
-import { AddStudentData } from "../../types/studentTypes";
 import { objectToFormData } from "../../lib/util";
-import { ClassroomType } from "../../types/classTypes";
 import "./onboarding.scss";
 
 const OnboardStudent = () => {
@@ -69,7 +67,7 @@ const OnboardStudent = () => {
   const handleSubmit = (values: Record<string, any>) => {
     setLoading(true);
 
-    const data: AddStudentData = {
+    const data: any = {
       profile: {
         first_name: values.first_name,
         last_name: values.last_name,
@@ -630,7 +628,7 @@ interface AcademicHistoryProps {
   nextStep: (values: any) => void;
   prevStep: (values: any) => void;
   formData: any;
-  allClasses: ClassroomType[];
+  allClasses: any[];
 }
 
 const AcademicHistory = ({
@@ -670,7 +668,7 @@ const AcademicHistory = ({
                 searchable
                 className="form-item"
                 nothingFound="No class found"
-                data={allClasses.map((item: ClassroomType) => ({
+                data={allClasses.map((item: any) => ({
                   key: item?.classroom_id,
                   value: item.classroom_id,
                   label: item.name,

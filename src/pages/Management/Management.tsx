@@ -7,19 +7,30 @@ import CloudIcon from "../../assets/svg/cloud.svg";
 
 import "./management.scss";
 import { useNavigate } from "react-router-dom";
-
-
+import { getSchoolList } from "../../services/shcool/school";
+import { SchoolTypes } from "../../types/schoolTypes";
 
 const Management = () => {
   const [loading] = useState<boolean>(false);
+  const [schoolList, setSchoolList] = useState<SchoolTypes[]>([]);
+  const [perPage] = useState(10);
+  const [page] = useState(1);
+  const [searchInput, setSearchInput] = useState<string>("");
 
-  const navigate = useNavigate()
+  console.log(schoolList)
+
+  const navigate = useNavigate();
 
   useEffect(() => {
+    handleGetSchoolList();
     //eslint-disable-next-line
   }, []);
 
- 
+  const handleGetSchoolList = () => {
+    getSchoolList(perPage, page, searchInput).then((res: any) => {
+      setSchoolList(res.data.data);
+    });
+  };
 
   const analyticsData = [
     {
@@ -44,20 +55,7 @@ const Management = () => {
     },
   ];
 
-  const tableData = [
-    {
-      name: "Grace field school",
-      address: "14, Kunle street Lagos",
-      date_onboarded: "Jun 13, 2023",
-      onboarded_by: "Kunle Remi"
-    },
-    {
-      name: "Grace field school",
-      address: "14, Kunle street Lagos",
-      date_onboarded: "Jun 13, 2023",
-      onboarded_by: "Kunle Remi"
-    },
-  ];
+  
 
   return (
     <Fragment>
@@ -89,13 +87,23 @@ const Management = () => {
               </tr>
             </thead>
             <tbody>
-              {tableData.map((element, index) => (
-                <tr key={element.name}>
+              {schoolList?.map((element) => (
+                <tr key={element.school_id}>
+                  <td>{element.name}</td>
                   <td>{element.address}</td>
-                  <td>{element.date_onboarded}</td>
-                  <td>{element.onboarded_by}</td>
-                  <td><Button color="dark" variant="outline"
-                  onClick={() => navigate("/school-details/1")}>Details</Button></td>
+                  <td>{element.created_at}</td>
+                  <td>onboarded_by</td>
+                  <td>
+                    <Button
+                      color="dark"
+                      variant="outline"
+                      onClick={() =>
+                        navigate(`/school-details/${element.school_id}`)
+                      }
+                    >
+                      Details
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
