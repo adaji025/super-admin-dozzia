@@ -25,6 +25,17 @@ export const onboardStaff = (data: any) => {
       });
   });
 };
+export const uploadStaff = (data: any) => {
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.STAFF.UPLOAD_SATFF}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
+};
 
 export const getStaffList = (data: {
   page: number;
