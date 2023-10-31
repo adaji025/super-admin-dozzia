@@ -6,48 +6,57 @@
     }
 
     .onboard-group {
-        margin-top: 50px;
-        @media only screen and (max-width: 768px) {
-          margin-top: 30px;
+      margin-top: 50px;
+      @media only screen and (max-width: 768px) {
+        margin-top: 30px;
+      }
+
+      .form-row {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 30px;
+        gap: 40px;
+
+        &.two-col {
+          width: 65%;
+        }
+        
+
+        @media only screen and (max-width: 576px) {
+          display: block;
+          margin-bottom: unset;
+
+          &.two-col,
+          &.one-col {
+            width: 100%;
+          }
         }
 
-        .form-row {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          margin-bottom: 30px;
-          gap: 40px;
-          
+        .form-item {
+          width: 47%;
           @media only screen and (max-width: 576px) {
-            display: block;
-            margin-bottom: unset;
+            width: 100%;
+            margin-bottom: 20px;
           }
 
-          .form-item {
-            width: 47%;
-            @media only screen and (max-width: 576px) {
+          &.upload {
+            @media only screen and (max-width: 696px) {
               width: 100%;
-              margin-bottom: 20px;
             }
+          }
 
-            &.upload {
-              @media only screen and (max-width: 696px) {
-                width: 100%;
-              }
-            }
+          .custom-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
 
-            .custom-title {
-              font-size: 14px;
-              font-weight: 500;
-              margin-bottom: 6px;
-
-              span {
-                color: #ff6b6b;
-              }
+            span {
+              color: #ff6b6b;
             }
           }
         }
       }
-      
+    }
   }
 }
