@@ -2,7 +2,7 @@ import AxoisApi from "../../api/index";
 import { APIS } from "../../api/api";
 import { AxiosError } from "axios";
 import { ApiResponseType, StaffRoleType } from "../../types/utilityTypes";
-import { StaffType } from "../../types/staffTypes";
+import { AddStaffData, StaffType } from "../../types/staffTypes";
 
 export const getStaffRoleList = () => {
   return new Promise<ApiResponseType<StaffRoleType[]>>((resolve, reject) => {
@@ -14,7 +14,7 @@ export const getStaffRoleList = () => {
   });
 };
 
-export const onboardStaff = (data: any) => {
+export const onboardStaff = (data: AddStaffData) => {
   return new Promise((resolve, reject) => {
     AxoisApi.post(`${APIS.STAFF.ONBOARD_STAFF}`, data)
       .then((res) => {

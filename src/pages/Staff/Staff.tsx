@@ -25,7 +25,6 @@ import { getStaffRoleList, uploadStaff } from "../../services/staff/staff";
 import { AxiosError } from "axios";
 import useNotification from "../../hooks/useNotification";
 import { StaffType } from "../../types/staffTypes";
-// import UploadStaff from "../../components/modals/Staff/uploadStaff";
 import AddStaffPrompt from "../../components/modals/Staff/AddStaffPrompt";
 import UploadStaff from "../../components/modals/Staff/UploadStaff";
 import { showNotification } from "@mantine/notifications";

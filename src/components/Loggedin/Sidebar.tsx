@@ -57,8 +57,6 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
     //eslint-disable-next-line
   }, []);
 
-  console.log(userdata.role?.name)
-
   const adminRoutes = [
     {
       icon: Dashboard,

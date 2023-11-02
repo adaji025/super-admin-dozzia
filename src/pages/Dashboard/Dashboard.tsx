@@ -135,7 +135,6 @@ const Dashboard = () => {
     },
   ];
 
-  console.log("Bills ==>", bills);
 
   return (
     <Fragment>
