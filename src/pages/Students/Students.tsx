@@ -22,6 +22,11 @@ import StudentDetails from "../../components/modals/Student/StudentDetails";
 import useStudent from "../../hooks/useStudent";
 import useClass from "../../hooks/useClass";
 import { StudentType } from "../../types/studentTypes";
+import AddStudentPrompt from "../../components/modals/Student/AddStudentPrompt";
+import UploadStudent from "../../components/modals/Student/UploadStudent";
+import { importStudent } from "../../services/student/student";
+import { showNotification } from "@mantine/notifications";
+import useNotification from "../../hooks/useNotification";
 
 const Students = () => {
   const { dark } = useTheme();
@@ -38,14 +43,43 @@ const Students = () => {
     studentId: string;
     username: string;
   } | null>(null);
+  const [opeExcelModal, setOpenExcelModal] = useState<boolean>(false);
+  const [addStudentPrompt, setAddStudentPrompt] = useState<boolean>(false);
+  const [excelFile, setExcelFile] = useState<any>(null);
   const deviceWidth = window.innerWidth;
   const { allClasses, getClassList } = useClass();
+
+  const { handleError } = useNotification();
 
   useEffect(() => {
     handleGetStudents(page, perPage, search);
     getClassList(1, 200, "", "", true);
     //eslint-disable-next-line
   }, [page, search]);
+
+  const handleUploadExcelFile = () => {
+    setLoading(true);
+
+    let formData = new FormData();
+    formData.append("file_import", excelFile);
+
+    importStudent(formData)
+      .then(() => {
+        setOpenExcelModal(false);
+        showNotification({
+          title: "Success",
+          message: "File uploaded Successfully",
+          color: "green",
+        });
+        handleGetStudents(page, perPage, search);
+      })
+      .catch((err) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   return (
     <Fragment>
@@ -98,6 +132,19 @@ const Students = () => {
         />
       </Modal>
 
+      <AddStudentPrompt
+        opened={addStudentPrompt}
+        close={() => setAddStudentPrompt(false)}
+        openNext={() => setOpenExcelModal(true)}
+      />
+      <UploadStudent
+        opened={opeExcelModal}
+        close={() => setOpenExcelModal(false)}
+        file={excelFile}
+        setFile={setExcelFile}
+        handleUploadExcelFile={handleUploadExcelFile}
+      />
+
       <div
         className="data-page-container"
         style={{
@@ -109,7 +156,7 @@ const Students = () => {
             <div className="d-p-h-left no-select">Students</div>
 
             <div className="d-p-h-right">
-              <Button component={Link} to="/add-student">
+              <Button onClick={() => setAddStudentPrompt(true)}>
                 Add Student
               </Button>
             </div>

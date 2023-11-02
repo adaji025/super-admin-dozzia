@@ -1,0 +1,29 @@
+.upload-container {
+  display: flex;
+  gap: 20px;
+  padding-block: 20px;
+
+  .upload-box {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-radius: 24px;
+    background: linear-gradient(90deg, #00d1ff 0.11%, #74ffbc 100.11%);
+    font-size: 16px;
+    font-weight: 500;
+    gap: 6px;
+    padding: 42px;
+    cursor: pointer;
+
+    .icon {
+      width: 20px;
+    }
+
+    @media (max-width: 567px) {
+        font-size: 14px;
+        padding: 24px;
+    }
+  }
+}

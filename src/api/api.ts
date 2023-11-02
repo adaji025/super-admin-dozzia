@@ -16,7 +16,7 @@ export const APIS = {
   },
   STAFF: {
     ONBOARD_STAFF: `${api}/staff`,
-    UPLOAD_SATFF: `${api}/staff/import-staff`,
+    UPLOAD_STAFF: `${api}/staff/import-staff`,
     GET_STAFF_LIST: (
       page: number,
       perPage: number,
@@ -29,6 +29,7 @@ export const APIS = {
   },
   STUDENT: {
     ONBOARD_STUDENT: `${api}/students`,
+    IMPORT_STUDENT: `${api}/students/import-student`,
     GET_STUDENT_LIST: (page: number, perPage: number, search: string) =>
       `${api}/students?per_page=${perPage}&page=${page}&search_query=${search}`,
     ADD_STUDENT_TO_CLASS: (studentId: string, classId: string) =>
