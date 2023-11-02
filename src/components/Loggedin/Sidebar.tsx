@@ -46,8 +46,8 @@ const Sidebar = ({ toggleSidebar, showSidebar }: SidebarProps) => {
 
   useEffect(() => {
     if (
-      userdata.role.name === Roles.Principal ||
-      userdata.role.name === Roles.SchoolAdmin
+      userdata?.role?.name === Roles.Principal ||
+      userdata?.role?.name === Roles.SchoolAdmin
     ) {
       setRoutes(adminRoutes);
     } else if (userdata?.role?.name === Roles.Teacher) {

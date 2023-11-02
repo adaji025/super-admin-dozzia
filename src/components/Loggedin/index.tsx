@@ -6,7 +6,6 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import Dashboard from "../../pages/Dashboard/Dashboard";
 import OnboardStudent from "../../pages/Onboard/OnboardStudent";
-import OnboardStaff from "../../pages/Onboard/OnboardStaff";
 import Settings from "../../pages/Settings/Settings";
 import Classes from "../../pages/Classes/Classes";
 import Subjects from "../../pages/Subjects/Subjects";
@@ -38,6 +37,7 @@ import { UserState } from "../../redux/user/user.reducer";
 import BillDetails from "../../pages/Wallet/BillDetails";
 import useTermsSessions from "../../hooks/useTermsSessions";
 import "./index.scss";
+import OnboardStaff from "../../pages/Onboard/OnboardStaff";
 
 const LoggedinContainer = () => {
   const { dark } = useTheme();

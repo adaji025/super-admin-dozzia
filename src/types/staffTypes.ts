@@ -68,34 +68,9 @@ export type AddStaffData = {
     title: string;
     first_name: string;
     last_name: string;
-    middle_name: string;
+    middle_name: null;
     gender: string;
-    phone_number: string;
+    phone_number: null | string;
     email: string;
-  };
-  meta: {
-    dob: string;
-    address: string;
-    state_of_origin: string;
-    religion: string;
-    postal_code: string;
-    height: number;
-    weight: number;
-    genotype: string;
-    blood_group: string;
-    state_disability: string | null;
-    years_of_experience: number;
-    existing_medical_condition: string[];
-    hereditary_health_condition: string[];
-  };
-  next_of_kin: {
-    full_name: string;
-    phone_number: string;
-    email: string | null;
-  };
-  guarantor: {
-    full_name: string;
-    employment_role: string;
-    phone_number: string;
   };
 };

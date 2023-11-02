@@ -16,6 +16,7 @@ export const APIS = {
   },
   STAFF: {
     ONBOARD_STAFF: `${api}/staff`,
+    UPLOAD_SATFF: `${api}/staff/import-staff`,
     GET_STAFF_LIST: (
       page: number,
       perPage: number,

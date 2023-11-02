@@ -9,6 +9,7 @@ import {
   Popover,
   Group,
   Menu,
+  Text,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
@@ -19,19 +20,22 @@ import useNotification from "../../hooks/useNotification";
 import { getReports } from "../../services/reports/reports";
 import { EventType, GetEventsResponse } from "../../types/eventTypes";
 import { getEvents } from "../../services/event/event";
-import { ReportStatusTypes } from "../../types/reportsTypes";
-import RemoveNote from "../../assets/svg/note-remove.svg";
-import Mountain from "../../assets/svg/mountains.svg";
-import Student from "../../assets/images/student.png";
-import CalendarIcon from "../../assets/svg/calendar.svg";
-import EmptyReportState from "../../assets/svg/EmptyState.svg";
-import "./dashboard.scss";
+import { ReportStatusTypes, ReportType } from "../../types/reportsTypes";
 import { getMetrics } from "../../services/metrics/metrics";
 import { GetMetricsResponse } from "../../types/metricsTypes";
 import useClass from "../../hooks/useClass";
 import { UserState } from "../../redux/user/user.reducer";
 import { ClassroomType } from "../../types/classTypes";
 import Chart from "../../components/Dashboard/Chart";
+import { ChevronRight } from "tabler-icons-react";
+
+import Mountain from "../../assets/svg/mountains.svg";
+import Student from "../../assets/images/student.png";
+import CalendarIcon from "../../assets/svg/calendar.svg";
+import EmptyReportState from "../../assets/svg/EmptyState.svg";
+import { ReactComponent as Note2 } from "../../assets/svg/note-2.svg";
+
+import "./dashboard.scss";
 
 const TeacherDashboard = () => {
   const [page] = useState<number>(1);
@@ -127,21 +131,31 @@ const TeacherDashboard = () => {
       });
   };
 
-  const callToAction = [
+  const analyticsData = [
     {
-      title: "You have 3 events",
-      btnText: "Create broadcast",
-      variant: "dark",
+      title: "Total Students",
+      value: 1200,
     },
     {
-      title: "Go to class wall",
-      btnText: "Class wall",
-      variant: "green",
+      title: "Total Staffs",
+      value: 300,
     },
     {
-      title: "Go to subjects",
-      btnText: "Subjects",
-      variant: "yellow",
+      title: "Total Classes",
+      value: 30,
+    },
+    {
+      title: "Active Bills",
+      value: 15,
+    },
+  ];
+
+  const bills = [
+    {
+      title: "School fees",
+      party: "All Parent",
+      amount: 300000,
+      date: "Sept 9, 2023",
     },
   ];
 
@@ -153,6 +167,34 @@ const TeacherDashboard = () => {
       </Helmet>
 
       <LoadingOverlay visible={loading} />
+
+      <div className="top">
+        <Group position="apart">
+          <Text weight={600}>Jss 1A</Text>
+          <Menu
+            gutter={15}
+            withArrow
+            size="sm"
+            control={<Button color="dark">Select Class</Button>}
+          >
+            {classList?.map((classItem: any) => (
+              <Menu.Item
+                onClick={() => {
+                  setClassId(classItem.classroom_id);
+                }}
+              >
+                {classItem.name}
+              </Menu.Item>
+            ))}
+          </Menu>
+        </Group>
+      </div>
+
+      <div className="analytics">
+        {analyticsData.map((item, index) => (
+          <AnalyticsCard item={item} index={index} key={index} />
+        ))}
+      </div>
 
       <div className="dashboard">
         <div className="left">
@@ -187,145 +229,128 @@ const TeacherDashboard = () => {
                     />
                   </Popover>
 
-                  <Menu
-                    gutter={15}
-                    withArrow
-                    size="sm"
-                    control={<Button color="dark">Class List</Button>}
-                  >
-                    {classList?.map((classItem: any) => (
-                      <Menu.Item
-                        onClick={() => {
-                          setClassId(classItem.classroom_id);
-                        }}
-                      >
-                        {classItem.name}
-                      </Menu.Item>
-                    ))}
-                  </Menu>
+                  <Button color="dark" onClick={() => navigate("/attendance")}>
+                    Take Attendance
+                  </Button>
                 </Group>
               </div>
             </div>
 
             {metrics && <Chart metric={metrics.chart.attendance_metrics} />}
           </div>
-          <div className="cards">
-            {callToAction.map((action) => (
-              <ActionCard key={action.title} {...{ action }} />
-            ))}
+
+          <div className="bottom">
+            <div className="events">
+              <div className="events-title" onClick={() => navigate("/events")}>
+                <span>Upcoming Events</span>
+                <FiChevronRight className="chevron" />
+              </div>
+
+              {events && events?.data.length > 0 && (
+                <ScrollArea type="auto" style={{ paddingBottom: 20 }}>
+                  <div className="events-row">
+                    {events?.data.map((event) => (
+                      <Event key={event.event_id} event={event} />
+                    ))}
+                  </div>
+                </ScrollArea>
+              )}
+
+              {events && events?.data.length === 0 && (
+                <Group py={16} position="center">
+                  <img src={CalendarIcon} alt="" />
+                  <Text align="center">You have no upcoming events</Text>
+                </Group>
+              )}
+            </div>
+            <div className="c-wall">
+              <Text weight={600}>Class wall</Text>
+              <div className="note-text">
+                <div className="box">
+                  <Note2 />
+                </div>
+                <Text size="xs">
+                  Manage your class activities on the class wall
+                </Text>
+              </div>
+              <Button
+                variant="outline"
+                color="dark"
+                mt={16}
+                onClick={() => navigate("/class-wall")}
+              >
+                Go to Class Wall
+              </Button>
+            </div>
           </div>
         </div>
+
         <div className="right">
           <div className="complaints">
-            <span className="title">Reports and complaints</span>
+            <Group grow>
+              <Group position="left">
+                <Text weight={500}>Active Bills</Text>
+              </Group>
+              <Group position="right">
+                <Button
+                  size="xs"
+                  color="gray"
+                  rightIcon={<ChevronRight size={12} />}
+                  variant="subtle"
+                >
+                  View all
+                </Button>
+              </Group>
+            </Group>
 
-            <div className="complaints-statistics">
-              <img src={RemoveNote} alt="remove note" />
-              <p>Unresolved Complaints</p>
-              <div className="count">{reports ? reports?.meta.total : "0"}</div>
-              <img src={Mountain} alt="mountain" className="mountain" />
+            <div className="bills">
+              {[...Array(2)].map((_, index) => (
+                <Bill key={index} />
+              ))}
             </div>
-            {reports?.data.length > 0 ? (
-              <div>
-                {reports.data.map((_: any, index: number) => (
-                  <ComplaintCard key={index} />
-                ))}
-              </div>
-            ) : (
-              <div className="empty-report">
-                <img
-                  src={EmptyReportState}
-                  alt=""
-                  className="empty-report-image"
-                />
-                <h2 className="empty-report-text">
-                  You have no upcoming events
-                </h2>
-                <span className="empty-report-desc">
-                  Recents unresolved complaints will be listed here
-                </span>
-              </div>
+            {bills.length === 0 && (
+              <EmptyState
+                title="You have no unresolved complains"
+                desc="Recents unresolved complaints will be listed here"
+              />
             )}
           </div>
 
-          <div className="events">
-            <div className="events-title" onClick={() => navigate("/events")}>
-              <span>Upcoming Events</span>
-              <FiChevronRight className="chevron" />
-            </div>
+          <div className="complaints reports">
+            <Group grow>
+              <Group grow position="left">
+                <Text size="sm" weight={500}>
+                  Report and Complaints
+                </Text>
+              </Group>
+              <Group position="right">
+                <Button
+                  size="xs"
+                  color="gray"
+                  rightIcon={<ChevronRight size={12} />}
+                  variant="subtle"
+                >
+                  View all
+                </Button>
+              </Group>
+            </Group>
 
-            {events && events?.data.length > 0 ? (
-              <ScrollArea type="auto" style={{ paddingBottom: 20 }}>
-                <div className="events-row">
-                  {events?.data.map((event) => (
-                    <Event key={event.event_id} event={event} />
-                  ))}
-                </div>
-              </ScrollArea>
-            ) : (
-              <div className="empty-event">
-                <div>
-                  <img src={CalendarIcon} alt="" />
-                  <h2>You have no upcoming events</h2>
-                </div>
-              </div>
+            <div className="bills">
+              {reports &&
+                reports?.data.map((report: ReportType) => (
+                  <ReportComplain report={report} key={report.id} />
+                ))}
+            </div>
+            {reports?.data.length === 0 && (
+              <EmptyState
+                title="You have no active bills"
+                desc="Active bills will be listed here"
+              />
             )}
           </div>
         </div>
       </div>
     </Fragment>
-  );
-};
-
-const ComplaintCard = () => {
-  return (
-    <div className="complaint-box">
-      <table>
-        <thead>
-          <tr>
-            <th className="c-title">Issue Number</th>
-            <th className="c-title">Title</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="c-desc">IS 012345</td>
-            <td className="c-desc">Noise making in class</td>
-          </tr>
-          <tr>
-            <td className="c-title date-status">Date</td>
-            <td className="c-title date-status">Status</td>
-          </tr>
-          <tr>
-            <td className="c-desc">Sept 9, 2023</td>
-            <td className="status">Unresolved</td>
-            <Button variant="subtle" rightIcon={<FiChevronRight />}>
-              View
-            </Button>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-interface ActionProps {
-  action: {
-    title: string;
-    btnText: string;
-    variant: string;
-  };
-}
-
-const ActionCard = ({ action }: ActionProps) => {
-  return (
-    <div className={`call-to-action card-${action.variant}`}>
-      <h2 className={`call-to-action-text card-${action.variant}`}>
-        {action.title}
-      </h2>
-      <Button className={`card-${action.variant}`}>{action.btnText}</Button>
-      <img src={Mountain} alt="mountains" />
-    </div>
   );
 };
 
@@ -341,14 +366,107 @@ const Event = ({ event }: EventProps) => {
       className="event-item"
       onClick={() => navigate(`/events?eventId=${event.event_id}`)}
     >
+      <div>
+        <Text weight={500} transform="capitalize" className="e-title">
+          {event.title}
+        </Text>
+        <Text size="xs" color="#495057">
+          {moment(event.start_at).format("MMM DD, YYYY")}
+        </Text>
+        <Text size="xs" underline mt={12}>
+          Learn More
+        </Text>
+      </div>
       <img src={!event.image ? Student : event.image} alt="" />
-      <div className="event-overlay">
-        <div className="overlay-content">
-          <span>{event.title.substring(0, 15) + "..."}</span>
-          <span>{moment(event.start_at).format("MMM DD, YYYY")}</span>
+    </div>
+  );
+};
+
+type AnalyticsProps = {
+  index: number;
+  item: {
+    title: string;
+    value: number;
+  };
+};
+
+const AnalyticsCard = ({ item, index }: AnalyticsProps) => {
+  return (
+    <div className={`analytic-card c-${index}`}>
+      <div className="a-title">{item.title}</div>
+      <div className="a-total">{item.value}</div>
+      <img src={Mountain} alt="mountains" />
+    </div>
+  );
+};
+
+const Bill = () => {
+  return (
+    <div className="bill">
+      <div className="report">
+        <div className="left">
+          <div>School Fees</div>
+        </div>
+        <div className="right">
+          <div className="desc">N300, 000</div>
         </div>
       </div>
-      <div className="event-overlay-2" />
+      <div className="report two">
+        <div className="left">
+          <div>All Parents </div>
+        </div>
+        <div className="right two">
+          <div className="rest"> Sept 9,2023</div>
+          <div className="rest more">
+            <span>More</span> <ChevronRight size={12} className="icon" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+type ReportProps = {
+  report: ReportType;
+};
+
+const ReportComplain = ({ report }: ReportProps) => {
+  return (
+    <div className="bill">
+      <div className="report">
+        <div className="left">
+          <div>{report.tracking_code}</div>
+        </div>
+        <div className="right">
+          <div className="desc"> {report.comment}</div>
+        </div>
+      </div>
+      <div className="report two">
+        <div className="left">
+          <div>{moment(report.date).format("MMM DD,YYYY")}</div>
+        </div>
+        <div className="right two">
+          <div className="rest unresolved"> {report.status}</div>
+          <div className="rest more">
+            <span>More</span> <ChevronRight size={12} className="icon" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+type EmptyStateProps = {
+  title: string;
+  desc: string;
+};
+
+const EmptyState = ({ title, desc }: EmptyStateProps) => {
+  return (
+    <div className="empty-report">
+      <img src={EmptyReportState} alt="" className="empty-report-image" />
+      <h2 className="empty-report-text">{title}</h2>
+      <span className="empty-report-desc">{desc}</span>
     </div>
   );
 };

@@ -34,6 +34,7 @@ const AddClass = ({ closeModal, submit, edit, modalActive }: AddClassProps) => {
       name: edit ? edit.name : "",
       staff_id: edit ? edit.class_teacher.staff_id : "",
       description: edit ? edit.description : "",
+      type: "",
     },
 
     validate: {
@@ -55,11 +56,15 @@ const AddClass = ({ closeModal, submit, edit, modalActive }: AddClassProps) => {
           }
         })}
       >
-        <TextInput
+        <Select
+          mt="md"
           required
-          mt="sm"
-          label="Classroom Name"
-          placeholder="Classroom name"
+          label="Classroom Level"
+          placeholder="Select class level"
+          data={[
+            { value: "jss", label: "JSS" },
+            { value: "sss", label: "SSS" },
+          ]}
           {...form.getInputProps("name")}
         />
 
@@ -72,15 +77,16 @@ const AddClass = ({ closeModal, submit, edit, modalActive }: AddClassProps) => {
             { value: "1", label: "1" },
             { value: "2", label: "2" },
             { value: "3", label: "3" },
-            { value: "4", label: "4" },
-            { value: "5", label: "5" },
-            { value: "6", label: "6" },
-            { value: "7", label: "7" },
-            { value: "8", label: "8" },
-            { value: "9", label: "9" },
-            { value: "10", label: "10" },
           ]}
           {...form.getInputProps("level")}
+        />
+
+        <TextInput
+          mt="md"
+          required
+          label="Classroom Type"
+        placeholder="e.g. A or B"
+          {...form.getInputProps("type")}
         />
 
         <Textarea
