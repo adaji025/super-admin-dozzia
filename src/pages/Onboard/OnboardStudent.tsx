@@ -6,68 +6,69 @@ import {
   Select,
   TextInput,
   LoadingOverlay,
+  Divider,
+  Box,
 } from "@mantine/core";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import { useForm } from "@mantine/form";
-import { getStaffRoleList, onboardStaff } from "../../services/staff/staff";
-import { ApiResponseType, StaffRoleType } from "../../types/utilityTypes";
 import useNotification from "../../hooks/useNotification";
-import { AxiosError } from "axios";
 import "./onboard.scss";
 import { showNotification } from "@mantine/notifications";
-import { importStudent } from "../../services/student/student";
-import { DatePicker } from "@mantine/dates";
+import { importStudent, onboardStudent } from "../../services/student/student";
+import useClass from "../../hooks/useClass";
+import { ClassroomType } from "../../types/classTypes";
 
 const OnboardStudent = () => {
-  const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
   const [loading, setLoading] = useState(false);
+  const { allClasses, getClassList } = useClass();
+
   const { handleError } = useNotification();
 
   useEffect(() => {
-    getStaffRoles();
+    getClassList(1, 200, "", "", true);
     // eslint-disable-next-line
   }, []);
 
-  const getStaffRoles = () => {
-    getStaffRoleList()
-      .then((res: ApiResponseType<StaffRoleType[]>) => {
-        setStaffRoles(res.data);
-      })
-      .catch((err: AxiosError) => handleError(err));
-  };
   const form = useForm({
     initialValues: {
-      role_id: "",
-      title: "",
+      classroom_id: "",
       first_name: "",
       last_name: "",
-      middle_name: null,
+      middle_name: "",
       gender: "",
-      phone_number: "",
+      picture: null,
+
       email: "",
-      dob: "",
+      g_first_name: "",
+      g_last_name: "",
+      phone_number: "",
+      title: "Mr",
     },
   });
 
   const data = {
     extra: {
-      role_id: form.values.role_id,
+      classroom_id: form.values.classroom_id,
     },
     profile: {
-      title: form.values.title,
       first_name: form.values.first_name,
       last_name: form.values.last_name,
       middle_name: form.values.middle_name,
       gender: form.values.gender,
+    },
+    guardian: {
+      title: form.values.title,
       phone_number: form.values.phone_number,
       email: form.values.email,
+      first_name: form.values.g_first_name,
+      last_name: form.values.g_last_name,
     },
   };
 
   const submit = () => {
     setLoading(true);
 
-    importStudent(data)
+    onboardStudent(data)
       .then(() => {
         showNotification({
           title: "Success",
@@ -102,31 +103,25 @@ const OnboardStudent = () => {
             desc="Let’s get to know your student 🤩"
           />
           <form className="onboard-group" onSubmit={form.onSubmit(submit)}>
+            <div className="form-row"></div>
+
             <div className="form-row">
               <Select
-                className="form-item"
+                mb={24}
                 required
-                label="Staff Role"
-                placeholder="Select role"
-                data={staffRoles.map((role: StaffRoleType) => ({
-                  key: role?.role_id,
-                  value: role?.role_id,
-                  label: role.name,
+                label="Class of Entry"
+                placeholder="Select class"
+                searchable
+                className="form-item"
+                nothingFound="No class found"
+                data={allClasses.map((item: ClassroomType) => ({
+                  key: item?.classroom_id,
+                  value: item.classroom_id,
+                  label: `${item.name} ${item.level} ${item.type}`,
                 }))}
-                {...form.getInputProps("role_id")}
+                {...form.getInputProps("classroom_id")}
               />
-              <Select
-                className="form-item"
-                required
-                label="Title"
-                placeholder="Title"
-                data={[
-                  { value: "Mr", label: "Mr 🧑" },
-                  { value: "Mrs", label: "Mrs 👱‍♀️" },
-                  { value: "Miss", label: "Miss 👩‍🦰" },
-                ]}
-                {...form.getInputProps("title")}
-              />
+
               <TextInput
                 className="form-item"
                 required
@@ -135,8 +130,7 @@ const OnboardStudent = () => {
                 type="text"
                 {...form.getInputProps("first_name")}
               />
-            </div>
-            <div className="form-row">
+
               <TextInput
                 className="form-item"
                 required
@@ -145,7 +139,9 @@ const OnboardStudent = () => {
                 type="text"
                 {...form.getInputProps("last_name")}
               />
+            </div>
 
+            <div className="form-row two-col">
               <TextInput
                 className="form-item"
                 label="Middle Name"
@@ -167,46 +163,80 @@ const OnboardStudent = () => {
                 {...form.getInputProps("gender")}
               />
             </div>
-            <div className="form-row two-col">
-              <TextInput
-                className="form-item"
-                label="Principal Phone Number"
-                placeholder="Phone number"
-                type="tel"
-                value={form.values.phone_number}
-                onKeyDown={(e) =>
-                  ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
-                }
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.value.length > 11) {
-                    return;
-                  }
-                  if (
-                    e.target.value === "" ||
-                    /^[0-9\b]+$/.test(e.target.value)
-                  ) {
-                    form.setFieldValue("phone_number", e.target.value);
-                  }
-                }}
+
+            <Box>
+              <Divider
+                mb="lg"
+                variant="dashed"
+                label="Guardian Info"
+                labelPosition="center"
               />
 
-              <TextInput
-                className="form-item"
-                required
-                label="School email address"
-                placeholder="Enter email address"
-                type="text"
-                {...form.getInputProps("email")}
-              />
-              <DatePicker
-                initialLevel="year"
-                className="form-item"
-                label="Date of Birth"
-                placeholder="Date of birth"
-                required
-                {...form.getInputProps("dob")}
-              />
-            </div>
+              <div className="form-row">
+                <Select
+                  className="form-item"
+                  required
+                  label="Title"
+                  placeholder="Title"
+                  data={[
+                    { value: "Mr", label: "Mr 🧑" },
+                    { value: "Mrs", label: "Mrs 👱‍♀️" },
+                    { value: "Miss", label: "Miss 👩‍🦰" },
+                  ]}
+                  {...form.getInputProps("title")}
+                />
+                <TextInput
+                  className="form-item"
+                  required
+                  label="First Name"
+                  placeholder="First name"
+                  type="text"
+                  {...form.getInputProps("g_first_name")}
+                />
+
+                <TextInput
+                  className="form-item"
+                  required
+                  label="Last Name"
+                  placeholder="Last name"
+                  type="text"
+                  {...form.getInputProps("g_last_name")}
+                />
+              </div>
+
+              <div className="form-row two-col">
+                <TextInput
+                  className="form-item"
+                  label="Guardian Phone Number"
+                  placeholder="Phone number"
+                  type="tel"
+                  value={form.values.phone_number}
+                  onKeyDown={(e) =>
+                    ["e", "E", "+", "-"].includes(e.key) && e.preventDefault()
+                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.target.value.length > 11) {
+                      return;
+                    }
+                    if (
+                      e.target.value === "" ||
+                      /^[0-9\b]+$/.test(e.target.value)
+                    ) {
+                      form.setFieldValue("phone_number", e.target.value);
+                    }
+                  }}
+                />
+
+                <TextInput
+                  className="form-item"
+                  required
+                  label="Guardian email address"
+                  placeholder="Enter email address"
+                  type="email"
+                  {...form.getInputProps("email")}
+                />
+              </div>
+            </Box>
 
             <Group position="right">
               <Button type="submit" color="dark">

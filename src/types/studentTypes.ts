@@ -53,18 +53,4 @@ export type AddStudentData = {
     phone_number: string;
     title: string;
   };
-  meta: {
-    dob: string;
-    state_disability: string | null;
-    blood_group: string;
-    genotype: string;
-    previous_school_name: string;
-    entry_year: string;
-    entry_test_result: number;
-    weight: number;
-    height: number;
-    entry_class: string;
-    existing_medical_condition: string[];
-    hereditary_health_condition: string[];
-  };
 };

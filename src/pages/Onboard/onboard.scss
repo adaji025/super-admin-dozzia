@@ -21,6 +21,10 @@
         &.two-col {
           width: 65%;
         }
+
+        &.one-col {
+          width: 30.33%;
+        }
         
 
         @media only screen and (max-width: 576px) {
