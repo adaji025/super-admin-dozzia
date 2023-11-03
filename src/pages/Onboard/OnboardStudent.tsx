@@ -16,6 +16,7 @@ import { AxiosError } from "axios";
 import "./onboard.scss";
 import { showNotification } from "@mantine/notifications";
 import { importStudent } from "../../services/student/student";
+import { DatePicker } from "@mantine/dates";
 
 const OnboardStudent = () => {
   const [staffRoles, setStaffRoles] = useState<StaffRoleType[]>([]);
@@ -44,6 +45,7 @@ const OnboardStudent = () => {
       gender: "",
       phone_number: "",
       email: "",
+      dob: "",
     },
   });
 
@@ -195,6 +197,14 @@ const OnboardStudent = () => {
                 placeholder="Enter email address"
                 type="text"
                 {...form.getInputProps("email")}
+              />
+              <DatePicker
+                initialLevel="year"
+                className="form-item"
+                label="Date of Birth"
+                placeholder="Date of birth"
+                required
+                {...form.getInputProps("dob")}
               />
             </div>
 

@@ -47,6 +47,7 @@ const Students = () => {
   const [addStudentPrompt, setAddStudentPrompt] = useState<boolean>(false);
   const [excelFile, setExcelFile] = useState<any>(null);
   const deviceWidth = window.innerWidth;
+  const [classId, setClassId] = useState("");
   const { allClasses, getClassList } = useClass();
 
   const { handleError } = useNotification();
@@ -57,11 +58,14 @@ const Students = () => {
     //eslint-disable-next-line
   }, [page, search]);
 
+  console.log("classId", classId);
+
   const handleUploadExcelFile = () => {
     setLoading(true);
 
     let formData = new FormData();
     formData.append("file_import", excelFile);
+    formData.append("classroom_id", classId);
 
     importStudent(formData)
       .then(() => {
@@ -143,6 +147,8 @@ const Students = () => {
         file={excelFile}
         setFile={setExcelFile}
         handleUploadExcelFile={handleUploadExcelFile}
+        allClasses={allClasses}
+        setClassId={setClassId}
       />
 
       <div

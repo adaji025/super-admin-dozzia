@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Modal, Button, Group } from "@mantine/core";
+import { Modal, Button, Group, Select } from "@mantine/core";
 import UploadComponent from "../../Upload/Upload";
 import { MIME_TYPES } from "@mantine/dropzone";
+import { ClassroomType } from "../../../types/classTypes";
 
 type Props = {
   opened: boolean;
@@ -9,6 +10,8 @@ type Props = {
   handleUploadExcelFile: () => void;
   file: any;
   setFile: React.Dispatch<any>;
+  allClasses: ClassroomType[];
+  setClassId: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const UploadStudent = ({
@@ -17,10 +20,29 @@ const UploadStudent = ({
   handleUploadExcelFile,
   file,
   setFile,
+  allClasses,
+  setClassId,
 }: Props) => {
   return (
     <div>
       <Modal centered opened={opened} onClose={close}>
+        <div>
+          <Select
+            mb={24}
+            required
+            label="Class of Entry"
+            placeholder="Select class"
+            searchable
+            className="form-item"
+            nothingFound="No class found"
+            data={allClasses.map((item: ClassroomType) => ({
+              key: item?.classroom_id,
+              value: item.classroom_id,
+              label: `${item.name} ${item.level} ${item.type}`,
+            }))}
+            onChange={(e: any) => setClassId(e)}
+          />
+        </div>
         <UploadComponent
           text={
             file

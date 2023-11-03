@@ -5,6 +5,7 @@ export type ClassroomType = {
   name: string;
   level: number;
   description: string | null;
+  type: string;
   class_teacher: ClassTeacherType;
 };
 
