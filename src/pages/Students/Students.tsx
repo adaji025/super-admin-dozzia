@@ -58,8 +58,6 @@ const Students = () => {
     //eslint-disable-next-line
   }, [page, search]);
 
-  console.log("classId", classId);
-
   const handleUploadExcelFile = () => {
     setLoading(true);
 
@@ -141,6 +139,7 @@ const Students = () => {
         close={() => setAddStudentPrompt(false)}
         openNext={() => setOpenExcelModal(true)}
       />
+
       <UploadStudent
         opened={opeExcelModal}
         close={() => setOpenExcelModal(false)}

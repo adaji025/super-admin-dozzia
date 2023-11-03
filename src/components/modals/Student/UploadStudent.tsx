@@ -43,6 +43,7 @@ const UploadStudent = ({
             onChange={(e: any) => setClassId(e)}
           />
         </div>
+        
         <UploadComponent
           text={
             file
@@ -53,6 +54,7 @@ const UploadStudent = ({
           extraClasses={`${file ? "file-selected" : ""}`}
           setFile={setFile}
         />
+
         <Group position="right" mt={20} onClick={handleUploadExcelFile}>
           <Button color="dark">Submit</Button>
         </Group>
