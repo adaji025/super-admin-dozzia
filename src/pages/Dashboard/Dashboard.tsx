@@ -9,6 +9,7 @@ import {
   Popover,
   Group,
   Text,
+  RingProgress,
 } from "@mantine/core";
 import { Calendar } from "@mantine/dates";
 import { FiChevronRight } from "react-icons/fi";
@@ -27,7 +28,7 @@ import { ReportStatusTypes, ReportType } from "../../types/reportsTypes";
 import { getMetrics } from "../../services/metrics/metrics";
 import { GetMetricsResponse } from "../../types/metricsTypes";
 import Chart from "../../components/Dashboard/Chart";
-import { ChevronRight } from "tabler-icons-react";
+import { ArrowNarrowRight, ChevronRight } from "tabler-icons-react";
 
 import Mountain from "../../assets/svg/mountains.svg";
 import Student from "../../assets/images/student.png";
@@ -230,6 +231,23 @@ const Dashboard = () => {
         </div>
 
         <div className="right">
+          <div className="progress">
+            <RingProgress
+              sections={[{ value: 40, color: "yellow" }]}
+              label={
+                <Text color="blue" weight={700} align="center" size="md">
+                  40%
+                </Text>
+              }
+            />
+            <div>
+              <Text weight={500}>Complete your profile</Text>
+              <div className="desc" onClick={() => navigate("/settings")}>
+                <div>Let’s get to know you better!</div>
+                <ArrowNarrowRight size={20} strokeWidth={2} color={"black"} />
+              </div>
+            </div>
+          </div>
           <div className="complaints">
             <Group grow>
               <Group position="left">
