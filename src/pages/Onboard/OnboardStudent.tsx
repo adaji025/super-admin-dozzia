@@ -14,7 +14,7 @@ import { useForm } from "@mantine/form";
 import useNotification from "../../hooks/useNotification";
 import "./onboard.scss";
 import { showNotification } from "@mantine/notifications";
-import { importStudent, onboardStudent } from "../../services/student/student";
+import { onboardStudent } from "../../services/student/student";
 import useClass from "../../hooks/useClass";
 import { ClassroomType } from "../../types/classTypes";
 
@@ -42,7 +42,7 @@ const OnboardStudent = () => {
       g_first_name: "",
       g_last_name: "",
       phone_number: "",
-      title: "Mr",
+      title: "",
     },
   });
 
