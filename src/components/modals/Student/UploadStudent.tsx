@@ -1,28 +1,51 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Modal, Button, Group, Select } from "@mantine/core";
 import UploadComponent from "../../Upload/Upload";
 import { MIME_TYPES } from "@mantine/dropzone";
 import { ClassroomType } from "../../../types/classTypes";
+import { importStudent } from "../../../services/student/student";
+import { showNotification } from "@mantine/notifications";
+import useNotification from "../../../hooks/useNotification";
 
 type Props = {
   opened: boolean;
   close: () => void;
-  handleUploadExcelFile: () => void;
-  file: any;
-  setFile: React.Dispatch<any>;
   allClasses: ClassroomType[];
-  setClassId: React.Dispatch<React.SetStateAction<string>>;
+  callback: () => void;
 };
 
-const UploadStudent = ({
-  opened,
-  close,
-  handleUploadExcelFile,
-  file,
-  setFile,
-  allClasses,
-  setClassId,
-}: Props) => {
+const UploadStudent = ({ opened, close, callback, allClasses }: Props) => {
+  const [file, setFile] = useState<any>(null);
+  const [classId, setClassId] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const { handleError } = useNotification();
+
+  const handleUploadExcelFile = () => {
+    setLoading(true);
+
+    let formData = new FormData();
+    formData.append("file_import", file);
+    formData.append("classroom_id", classId);
+
+    importStudent(formData)
+      .then(() => {
+        close();
+        showNotification({
+          title: "Success",
+          message: "File uploaded Successfully",
+          color: "green",
+        });
+        callback();
+      })
+      .catch((err) => {
+        handleError(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   return (
     <div>
       <Modal centered opened={opened} onClose={close}>
@@ -43,7 +66,7 @@ const UploadStudent = ({
             onChange={(e: any) => setClassId(e)}
           />
         </div>
-        
+
         <UploadComponent
           text={
             file
@@ -55,8 +78,14 @@ const UploadStudent = ({
           setFile={setFile}
         />
 
-        <Group position="right" mt={20} onClick={handleUploadExcelFile}>
-          <Button color="dark">Submit</Button>
+        <Group position="right" mt={20}>
+          <Button
+            color="dark"
+            loading={loading}
+            onClick={handleUploadExcelFile}
+          >
+            Submit
+          </Button>
         </Group>
       </Modal>
     </div>

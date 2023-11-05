@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Modal, Button, Group, LoadingOverlay } from "@mantine/core";
+import { Modal, Button, Group } from "@mantine/core";
 import UploadComponent from "../../Upload/Upload";
 import { MIME_TYPES } from "@mantine/dropzone";
 import { uploadStaff } from "../../../services/staff/staff";
