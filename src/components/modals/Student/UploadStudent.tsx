@@ -1,20 +1,23 @@
 import { useState } from "react";
-import { Modal, Button, Group } from "@mantine/core";
+import { Modal, Button, Group, Select } from "@mantine/core";
 import UploadComponent from "../../Upload/Upload";
 import { MIME_TYPES } from "@mantine/dropzone";
-import { uploadStaff } from "../../../services/staff/staff";
+import { ClassroomType } from "../../../types/classTypes";
+import { importStudent } from "../../../services/student/student";
 import { showNotification } from "@mantine/notifications";
 import useNotification from "../../../hooks/useNotification";
 
 type Props = {
   opened: boolean;
   close: () => void;
+  allClasses: ClassroomType[];
   callback: () => void;
 };
 
-const UploadStaff = ({ opened, close, callback }: Props) => {
-  const [loading, setLoading] = useState(false);
+const UploadStudent = ({ opened, close, callback, allClasses }: Props) => {
   const [file, setFile] = useState<any>(null);
+  const [classId, setClassId] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const { handleError } = useNotification();
 
@@ -23,8 +26,9 @@ const UploadStaff = ({ opened, close, callback }: Props) => {
 
     let formData = new FormData();
     formData.append("file_import", file);
+    formData.append("classroom_id", classId);
 
-    uploadStaff(formData)
+    importStudent(formData)
       .then(() => {
         close();
         showNotification({
@@ -41,10 +45,28 @@ const UploadStaff = ({ opened, close, callback }: Props) => {
         setLoading(false);
       });
   };
+
   return (
     <div>
-      {/* <LoadingOverlay visible={loading} zIndex={2076} /> */}
       <Modal centered opened={opened} onClose={close}>
+        <div>
+          <Select
+            mb={24}
+            required
+            label="Class of Entry"
+            placeholder="Select class"
+            searchable
+            className="form-item"
+            nothingFound="No class found"
+            data={allClasses.map((item: ClassroomType) => ({
+              key: item?.classroom_id,
+              value: item.classroom_id,
+              label: `${item.name} ${item.level} ${item.type}`,
+            }))}
+            onChange={(e: any) => setClassId(e)}
+          />
+        </div>
+
         <UploadComponent
           text={
             file
@@ -55,12 +77,19 @@ const UploadStaff = ({ opened, close, callback }: Props) => {
           extraClasses={`${file ? "file-selected" : ""}`}
           setFile={setFile}
         />
-        <Group position="right" mt={20} onClick={handleUploadExcelFile}>
-          <Button color="dark" loading={loading}>Submit</Button>
+
+        <Group position="right" mt={20}>
+          <Button
+            color="dark"
+            loading={loading}
+            onClick={handleUploadExcelFile}
+          >
+            Submit
+          </Button>
         </Group>
       </Modal>
     </div>
   );
 };
 
-export default UploadStaff;
+export default UploadStudent;

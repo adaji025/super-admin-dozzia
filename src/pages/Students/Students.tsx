@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import {
   Button,
@@ -22,6 +21,8 @@ import StudentDetails from "../../components/modals/Student/StudentDetails";
 import useStudent from "../../hooks/useStudent";
 import useClass from "../../hooks/useClass";
 import { StudentType } from "../../types/studentTypes";
+import AddStudentPrompt from "../../components/modals/Student/AddStudentPrompt";
+import UploadStudent from "../../components/modals/Student/UploadStudent";
 
 const Students = () => {
   const { dark } = useTheme();
@@ -38,8 +39,11 @@ const Students = () => {
     studentId: string;
     username: string;
   } | null>(null);
+  const [opeExcelModal, setOpenExcelModal] = useState<boolean>(false);
+  const [addStudentPrompt, setAddStudentPrompt] = useState<boolean>(false);
   const deviceWidth = window.innerWidth;
   const { allClasses, getClassList } = useClass();
+
 
   useEffect(() => {
     handleGetStudents(page, perPage, search);
@@ -98,6 +102,21 @@ const Students = () => {
         />
       </Modal>
 
+      <AddStudentPrompt
+        opened={addStudentPrompt}
+        close={() => setAddStudentPrompt(false)}
+        openNext={() => setOpenExcelModal(true)}
+      />
+
+      <UploadStudent
+        opened={opeExcelModal}
+        close={() => setOpenExcelModal(false)}
+        callback={() => {
+          handleGetStudents(page, perPage, search);
+        }}
+        allClasses={allClasses}
+      />
+
       <div
         className="data-page-container"
         style={{
@@ -109,7 +128,7 @@ const Students = () => {
             <div className="d-p-h-left no-select">Students</div>
 
             <div className="d-p-h-right">
-              <Button component={Link} to="/add-student">
+              <Button onClick={() => setAddStudentPrompt(true)}>
                 Add Student
               </Button>
             </div>

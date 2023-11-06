@@ -63,3 +63,15 @@ export const getStudentWithUsername = (username: string) => {
       });
   });
 };
+
+export const importStudent = (data: any) => {
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.STUDENT.IMPORT_STUDENT}`, data)
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((err: AxiosError) => {
+        reject(err);
+      });
+  });
+};

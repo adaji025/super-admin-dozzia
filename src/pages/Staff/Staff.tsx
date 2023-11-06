@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import {
   Button,
@@ -21,13 +20,13 @@ import useStaff from "../../hooks/useStaff";
 import Confirmation from "../../components/modals/Confirmation/Confirmation";
 import StaffDetails from "../../components/modals/Staff/StaffDetails";
 import { ApiResponseType, StaffRoleType } from "../../types/utilityTypes";
-import { getStaffRoleList, uploadStaff } from "../../services/staff/staff";
+import { getStaffRoleList } from "../../services/staff/staff";
 import { AxiosError } from "axios";
 import useNotification from "../../hooks/useNotification";
 import { StaffType } from "../../types/staffTypes";
 import AddStaffPrompt from "../../components/modals/Staff/AddStaffPrompt";
 import UploadStaff from "../../components/modals/Staff/UploadStaff";
-import { showNotification } from "@mantine/notifications";
+
 
 const Staff = () => {
   const { dark } = useTheme();
@@ -54,7 +53,6 @@ const Staff = () => {
     fullName: string;
     staffId: string;
   } | null>(null);
-  const [excelFile, setExcelFile] = useState<any>(null);
   const [addStaffPrompt, setAddStaffPrompt] = useState<boolean>(false);
   const [opeExcelModal, setOpenExcelModal] = useState<boolean>(false);
   const deviceWidth = window.innerWidth;
@@ -72,30 +70,6 @@ const Staff = () => {
       })
       .catch((err: AxiosError) => {
         handleError(err);
-      });
-  };
-
-  const handleUploadExcelFile = () => {
-    setLoading(true);
-
-    let formData = new FormData();
-    formData.append("file_import", excelFile);
-
-    uploadStaff(formData)
-      .then(() => {
-        setOpenExcelModal(false);
-        showNotification({
-          title: "Success",
-          message: "File uploaded Successfully",
-          color: "green",
-        });
-        handleGetStaffList(page, perPage, search, role ? role.name : "");
-      })
-      .catch((err) => {
-        handleError(err);
-      })
-      .finally(() => {
-        setLoading(false);
       });
   };
 
@@ -154,9 +128,9 @@ const Staff = () => {
       <UploadStaff
         opened={opeExcelModal}
         close={() => setOpenExcelModal(false)}
-        file={excelFile}
-        setFile={setExcelFile}
-        handleUploadExcelFile={handleUploadExcelFile}
+        callback={() =>
+          handleGetStaffList(page, perPage, search, role ? role.name : "")
+        }
       />
       <div
         className="data-page-container"

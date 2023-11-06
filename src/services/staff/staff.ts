@@ -25,9 +25,10 @@ export const onboardStaff = (data: AddStaffData) => {
       });
   });
 };
+
 export const uploadStaff = (data: any) => {
   return new Promise((resolve, reject) => {
-    AxoisApi.post(`${APIS.STAFF.UPLOAD_SATFF}`, data)
+    AxoisApi.post(`${APIS.STAFF.UPLOAD_STAFF}`, data)
       .then((res) => {
         resolve(res.data);
       })
