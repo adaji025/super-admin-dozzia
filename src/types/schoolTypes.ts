@@ -17,3 +17,22 @@ export type AddSchoolData = {
   };
   school_logo?: null;
 };
+
+export type SchoolTypes = {
+  school_id: string;
+  name: string;
+  logo: any;
+  address: string;
+  email: string;
+  postal_code: any;
+  code: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: any;
+};
+
+export type UpdateSchoolTypes = {
+  school_id: string;
+  name: string;
+  logo: any;
+};
