@@ -66,6 +66,24 @@ export const resetPassword = (
   });
 };
 
+export const verifyAccount = (
+  reset_code: string,
+  password: string,
+) => {
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.VERIFY_ACCOUNT}`, {
+      reset_code,
+      password,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
+};
+
 export const updateProfile = (
   first_name: string,
   last_name: string,

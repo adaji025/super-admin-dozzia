@@ -22,6 +22,7 @@ import useNotification from "./hooks/useNotification";
 import "./App.scss";
 import { UserState } from "./redux/user/user.reducer";
 import { ProfileType } from "./types/authTypes";
+import VerifyAccount from "./pages/Auth/VerifyAccount";
 
 function App() {
   const dispatch = useDispatch();
@@ -92,6 +93,7 @@ function App() {
                 <Route path="/signin" element={<Signin />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/verify-account" element={<VerifyAccount />} />
                 <Route
                   path="/*"
                   element={loggedIn ? <LoggedinContainer /> : <Signin />}
