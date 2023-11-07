@@ -30,3 +30,9 @@ export type SchoolTypes = {
   updated_at: string;
   deleted_at: any;
 };
+
+export type UpdateSchoolTypes = {
+  school_id: string;
+  name: string;
+  logo: any;
+};

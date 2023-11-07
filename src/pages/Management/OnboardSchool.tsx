@@ -21,16 +21,12 @@ import { AddSchoolData } from "../../types/schoolTypes";
 import { onboardSchool } from "../../services/shcool/school";
 import UploadComponent from "../../components/Upload/Upload";
 
-
 const OnboardSchool = () => {
   const [file, setFile] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  // const [staffEmail, setStaffEmail] = useState("")
   const { dark } = useTheme();
 
-
   const { handleError } = useNotification();
-
 
   const form = useForm({
     initialValues: {
@@ -47,6 +43,7 @@ const OnboardSchool = () => {
       gender: "",
       staff_email: "",
       phone_number: "",
+      school_logo: null,
     },
   });
 
@@ -67,9 +64,8 @@ const OnboardSchool = () => {
       gender: form.values.gender,
       phone_number: form.values.phone_number,
     },
-    
+    school_logo: file,
   };
-
 
   const submit = (values: any) => {
     setLoading(true);
@@ -80,15 +76,18 @@ const OnboardSchool = () => {
           message: "School added successfully 🤗",
           color: "green",
         });
+        form.reset();
+        setFile(null);
       })
       .catch((err) => {
         handleError(err);
       })
       .finally(() => {
         setLoading(false);
-        form.reset()
       });
   };
+
+ 
 
   return (
     <Fragment>
@@ -221,7 +220,7 @@ const OnboardSchool = () => {
 
                     <div className="form-row">
                       <TextInput
-                        className="form-item"                       
+                        className="form-item"
                         label="Principal’s middle Name"
                         placeholder="Principal’s middle name"
                         type="text"
@@ -296,7 +295,12 @@ const OnboardSchool = () => {
                     </div>
 
                     <Group position="apart" mt="xl">
-                      <Button size="md" type="submit" color="dark">
+                      <Button
+                        size="md"
+                        type="submit"
+                        color="dark"
+                        loading={loading}
+                      >
                         Submit
                       </Button>
                     </Group>

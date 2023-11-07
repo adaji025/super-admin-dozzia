@@ -290,6 +290,10 @@
         margin-bottom: 16px;
         padding: 5px;
 
+        .deleted {
+          color: red !important;
+        }
+
         td {
           border: none !important;
           margin-bottom: 16px !important;
@@ -319,12 +323,10 @@
               background: #fff5f5;
               color: #ff3a3a;
             }
-
-            
           }
           &.email {
             text-decoration: underline;
-            color: #201CFF;
+            color: #201cff;
           }
         }
 
@@ -363,5 +365,3 @@
     display: block;
   }
 }
-
-
