@@ -31,7 +31,7 @@ const Students = () => {
     useState<boolean>(false);
   const { students, handleGetStudents, loading, setLoading } = useStudent();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(20);
+  const [perPage] = useState<number>(10);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [studentInfo, setStudentInfo] = useState<{
@@ -43,7 +43,6 @@ const Students = () => {
   const [addStudentPrompt, setAddStudentPrompt] = useState<boolean>(false);
   const deviceWidth = window.innerWidth;
   const { allClasses, getClassList } = useClass();
-
 
   useEffect(() => {
     handleGetStudents(page, perPage, search);
@@ -283,7 +282,9 @@ const Students = () => {
                               borderBottom: `1px solid #0000`,
                             }}
                           >
-                            {item?.current_class?.classroom?.name ?? "--"}
+                            {item?.current_class?.classroom?.name + " " +
+                              item.current_class.classroom.level + 
+                              item.current_class.classroom.type ?? "--"}
                           </td>
 
                           <td
