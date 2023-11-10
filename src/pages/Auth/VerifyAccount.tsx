@@ -13,12 +13,12 @@ import { useForm } from "@mantine/form";
 import queryString from "query-string";
 import Logo from "../../assets/svg/dozzia-dark.svg";
 
-import { resetPassword, verifyAccount } from "../../services/auth/auth";
+import { verifyAccount } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import "./auth.scss";
 
-const ResetPassword = () => {
+const VerifyAccount = () => {
   const { dark } = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const ResetPassword = () => {
   const submit = (values: { password: string; confirmPassword: string }) => {
     setShowLoader(true);
 
-    resetPassword(resetCode, values.password)
+    verifyAccount(resetCode, values.password)
       .then(() => {
         showNotification({
           title: "Success",
@@ -130,4 +130,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default VerifyAccount;

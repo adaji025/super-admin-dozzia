@@ -129,7 +129,7 @@ const Signin = () => {
                     <TextInput
                       className="input-field"
                       required
-                      label="Username"
+                      label="Email or Username"
                       placeholder="Enter your username"
                       type="text"
                       radius="md"

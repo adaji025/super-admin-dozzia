@@ -44,7 +44,6 @@ const Students = () => {
   const deviceWidth = window.innerWidth;
   const { allClasses, getClassList } = useClass();
 
-
   useEffect(() => {
     handleGetStudents(page, perPage, search);
     getClassList(1, 200, "", "", true);
@@ -283,7 +282,9 @@ const Students = () => {
                               borderBottom: `1px solid #0000`,
                             }}
                           >
-                            {item?.current_class?.classroom?.name ?? "--"}
+                            {item?.current_class?.classroom?.name + " " +
+                              item.current_class.classroom.level + 
+                              item.current_class.classroom.type ?? "--"}
                           </td>
 
                           <td

@@ -12,14 +12,8 @@ import { ArrowLeft } from "tabler-icons-react";
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const [showLoader, setShowLoader] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("Forgot Password");
   const { handleError } = useNotification();
-
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/dashboard");
-    }
-    //eslint-disable-next-line
-  }, []);
 
   const form = useForm({
     initialValues: {
@@ -31,14 +25,14 @@ const ForgotPassword = () => {
     setShowLoader(true);
 
     forgotPassword(values.username)
-      .then((res) => {
+      .then(() => {
         showNotification({
           title: "Reset code sent.",
           message: `${"Check your inbox or spam for request code"} 👀`,
           color: "green",
         });
-        localStorage.removeItem("reset_code");
-        navigate("/reset-password");
+        setMessage("Check email for reset link");
+        form.reset();
       })
       .catch((error) => {
         handleError(error);
@@ -67,12 +61,12 @@ const ForgotPassword = () => {
           </div>
 
           <div className="form">
-            <div className="form-title">Forgot Password</div>
+            <div className="form-title">{message}</div>
             <Box sx={{ maxWidth: 428 }} mx="auto" mt={20}>
               <form onSubmit={form.onSubmit((values) => submit(values))}>
                 <TextInput
                   required
-                  label="Username"
+                  label="Email or Username"
                   placeholder="Enter your username"
                   size="md"
                   radius="md"

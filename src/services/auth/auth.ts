@@ -46,16 +46,26 @@ export const forgotPassword = (username: string) => {
   });
 };
 
-export const resetPassword = (
-  reset_code: string,
-  password: string,
-  password_confirmation: string
-) => {
+export const resetPassword = (reset_code: string, password: string) => {
   return new Promise((resolve, reject) => {
     AxoisApi.post(`${APIS.AUTH.RESET_PASSWORD}`, {
       reset_code,
       password,
-      password_confirmation,
+    })
+      .then((res) => {
+        resolve(res.data);
+      })
+      .catch((error: AxiosError) => {
+        reject(error);
+      });
+  });
+};
+
+export const verifyAccount = (reset_code: string, password: string) => {
+  return new Promise((resolve, reject) => {
+    AxoisApi.post(`${APIS.AUTH.VERIFY_ACCOUNT}`, {
+      reset_code,
+      password,
     })
       .then((res) => {
         resolve(res.data);

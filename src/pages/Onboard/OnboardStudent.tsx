@@ -17,6 +17,8 @@ import { showNotification } from "@mantine/notifications";
 import { onboardStudent } from "../../services/student/student";
 import useClass from "../../hooks/useClass";
 import { ClassroomType } from "../../types/classTypes";
+import { DatePicker } from "@mantine/dates";
+import moment from "moment";
 
 const OnboardStudent = () => {
   const [loading, setLoading] = useState(false);
@@ -37,6 +39,7 @@ const OnboardStudent = () => {
       middle_name: "",
       gender: "",
       picture: null,
+      dob: "",
 
       email: "",
       g_first_name: "",
@@ -47,14 +50,13 @@ const OnboardStudent = () => {
   });
 
   const data = {
-    extra: {
-      classroom_id: form.values.classroom_id,
-    },
+    classroom_id: form.values.classroom_id,
     profile: {
       first_name: form.values.first_name,
       last_name: form.values.last_name,
       middle_name: form.values.middle_name,
       gender: form.values.gender,
+      dob: moment(form.values.dob).format("YYYY-MM-DD"),
     },
     guardian: {
       title: form.values.title,
@@ -141,7 +143,7 @@ const OnboardStudent = () => {
               />
             </div>
 
-            <div className="form-row two-col">
+            <div className="form-row">
               <TextInput
                 className="form-item"
                 label="Middle Name"
@@ -161,6 +163,14 @@ const OnboardStudent = () => {
                   { value: "Other", label: "Other" },
                 ]}
                 {...form.getInputProps("gender")}
+              />
+
+              <DatePicker
+                className="form-item"
+                required
+                label="Date of birth"
+                placeholder="Date of birth"
+                {...form.getInputProps("dob")}
               />
             </div>
 

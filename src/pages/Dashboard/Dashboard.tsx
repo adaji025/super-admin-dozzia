@@ -233,9 +233,10 @@ const Dashboard = () => {
         <div className="right">
           <div className="progress">
             <RingProgress
+              size={100}
               sections={[{ value: 40, color: "yellow" }]}
               label={
-                <Text color="blue" weight={700} align="center" size="md">
+                <Text color="blue" weight={600} align="center" size="md">
                   40%
                 </Text>
               }
