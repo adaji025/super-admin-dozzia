@@ -31,7 +31,7 @@ const Students = () => {
     useState<boolean>(false);
   const { students, handleGetStudents, loading, setLoading } = useStudent();
   const [page, setPage] = useState<number>(1);
-  const [perPage] = useState<number>(10);
+  const [perPage] = useState<number>(20);
   const [searchInput, setSearchInput] = useState<string>("");
   const [search, setSearch] = useState<string>("");
   const [studentInfo, setStudentInfo] = useState<{
