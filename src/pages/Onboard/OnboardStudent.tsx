@@ -50,9 +50,7 @@ const OnboardStudent = () => {
   });
 
   const data = {
-    extra: {
-      classroom_id: form.values.classroom_id,
-    },
+    classroom_id: form.values.classroom_id,
     profile: {
       first_name: form.values.first_name,
       last_name: form.values.last_name,

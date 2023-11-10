@@ -13,29 +13,25 @@ import { useForm } from "@mantine/form";
 import queryString from "query-string";
 import Logo from "../../assets/svg/dozzia-dark.svg";
 
-import {  verifyAccount } from "../../services/auth/auth";
+import { verifyAccount } from "../../services/auth/auth";
 import useNotification from "../../hooks/useNotification";
 import useTheme from "../../hooks/useTheme";
 import "./auth.scss";
 
 const VerifyAccount = () => {
   const { dark } = useTheme();
-  const location: any = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
   const [resetCode, setResetCode] = useState<string>("");
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const { handleError } = useNotification();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      navigate("/dashboard");
-    }
-
-    let parseddata: any = queryString.parse(location.search);
+    let parseddata = queryString.parse(location.search);
 
     if (parseddata.token) {
       const token: string = parseddata.token.toString();
-      setResetCode(token.toString());
+      setResetCode(token);
     }
     //eslint-disable-next-line
   }, []);
@@ -44,7 +40,6 @@ const VerifyAccount = () => {
     initialValues: {
       password: "",
       confirmPassword: "",
-      reset_code: "",
     },
 
     validate: {
@@ -55,20 +50,14 @@ const VerifyAccount = () => {
     },
   });
 
-  const submit = (values: {
-    password: string;
-    confirmPassword: string;
-    reset_code: string;
-  }) => {
+  const submit = (values: { password: string; confirmPassword: string }) => {
     setShowLoader(true);
 
-    const reset_code = resetCode;
-
-    verifyAccount(reset_code, values.password)
+    verifyAccount(resetCode, values.password)
       .then(() => {
         showNotification({
           title: "Success",
-          message: `${"Password reset successful. Login to contine."} 😊`,
+          message: `Password reset successful. Login to contine. 😊`,
           color: "green",
         });
         localStorage.removeItem("reset_code");

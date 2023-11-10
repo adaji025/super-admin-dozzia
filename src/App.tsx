@@ -92,7 +92,7 @@ function App() {
               <Routes>
                 <Route path="/signin" element={<Signin />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/set-password" element={<ResetPassword />} />
                 <Route path="/verify-account" element={<VerifyAccount />} />
                 <Route
                   path="/*"
